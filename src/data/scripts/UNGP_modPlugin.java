@@ -3,6 +3,8 @@ package data.scripts;
 import com.fs.starfarer.api.BaseModPlugin;
 import com.fs.starfarer.api.Global;
 import data.scripts.campaign.UNGP_CampaignPlugin;
+import data.scripts.campaign.UNGP_InGameData;
+import data.scripts.campaign.UNGP_InheritData;
 
 import static com.fs.starfarer.api.Global.getSettings;
 
@@ -28,5 +30,15 @@ public class UNGP_modPlugin extends BaseModPlugin {
         if (!Global.getSector().hasScript(UNGP_CampaignPlugin.class)) {
             Global.getSector().addScript(new UNGP_CampaignPlugin());
         }
+    }
+
+    @Override
+    public void afterGameSave() {
+        UNGP_InGameData inGameData = UNGP_InGameData.getInstance();
+        if (inGameData.shouldDeleteRecordNextSave) {
+            inGameData.shouldDeleteRecordNextSave = false;
+            UNGP_InheritData.Delete();
+        }
+
     }
 }

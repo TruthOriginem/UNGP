@@ -9,6 +9,7 @@ public class UNGP_InGameData {
     boolean inherited = false;//是否已经继承了上个重生点
     boolean passedInheritTime = false;
     boolean isHardMode = false;
+    public boolean shouldDeleteRecordNextSave = false;
 
     public UNGP_InGameData() {
         Global.getSector().getPersistentData().put(KEY, this);

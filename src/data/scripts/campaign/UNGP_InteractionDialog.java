@@ -297,7 +297,7 @@ public class UNGP_InteractionDialog implements InteractionDialogPlugin {
         inGameData.inherited = true;
         inGameData.isHardMode = isHardMode;
 
-        UNGP_InheritData.Delete();
+        inGameData.shouldDeleteRecordNextSave = true;
     }
 
     @Override

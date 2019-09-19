@@ -13,7 +13,7 @@
     "d_hasPassedTime": "重生点可继承时间已过！",
     "d_hasInherited": "本存档已进行过继承。",
     "d_noInherit": "没有重生点！",
-    "d_deleteRecord": "重生点已被删除。",
+    "d_deleteRecord": "重生点将在存档成功后被删除。",
     "d_inheritCredits": "继承资金百分比",
     "d_inheritBPs": "继承蓝图数量百分比",
     "d_switchHardMode": "硬核模式",
