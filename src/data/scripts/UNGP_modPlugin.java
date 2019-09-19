@@ -5,6 +5,7 @@ import com.fs.starfarer.api.Global;
 import data.scripts.campaign.UNGP_CampaignPlugin;
 import data.scripts.campaign.UNGP_InGameData;
 import data.scripts.campaign.UNGP_InheritData;
+import data.scripts.utils.SimpleI18n;
 
 import static com.fs.starfarer.api.Global.getSettings;
 
@@ -18,7 +19,7 @@ public class UNGP_modPlugin extends BaseModPlugin {
     }
 
     @Override
-    public void onNewGame() {
+    public void onNewGameAfterTimePass() {
     }
 
     @Override

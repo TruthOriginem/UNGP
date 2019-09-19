@@ -105,7 +105,11 @@ public class UNGP_InheritData {
     }
 
     public static void Delete() {
-        if (Global.getSettings().fileExistsInCommon(FILE_NAME))
+        if (InheritDataExists())
             Global.getSettings().deleteTextFileFromCommon(FILE_NAME);
+    }
+
+    public static boolean InheritDataExists() {
+        return Global.getSettings().fileExistsInCommon(FILE_NAME);
     }
 }
