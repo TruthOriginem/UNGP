@@ -1,0 +1,10 @@
+{
+    "id": "ungp",
+    "name": "重生[UNGP]",
+    "author": "Originem",
+    "version": "0.1.0",
+    "description": "需要Lazylib作为前置\n满级后可以记录当前的无形资产例如各类蓝图，传递给下一个存档。具有奖励性质的多周目系统。",
+    "gameVersion": "0.9.1a",
+    "jars":["jars/ungp.jar"],
+    "modPlugin":"data.scripts.UNGP_modPlugin",
+}
