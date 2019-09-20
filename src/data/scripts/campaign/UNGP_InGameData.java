@@ -8,7 +8,7 @@ public class UNGP_InGameData {
     boolean isRecorded = false;//是否用这个记录了重生点
     boolean inherited = false;//是否已经继承了上个重生点
     boolean passedInheritTime = false;
-    boolean isHardMode = false;
+    public boolean isHardMode = false;
     public boolean shouldDeleteRecordNextSave = false;
 
     public UNGP_InGameData() {

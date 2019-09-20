@@ -13,24 +13,29 @@ public class UNGP_HardModeCombatPlugin extends BaseEveryFrameCombatPlugin {
     private static final String KEY = "ungp_hmc";
 
     private CombatEngineAPI engine;
-    private UNGP_InGameData inGameData;
     private boolean init = false;
     private float damageFactor;
     private float damageTakenFactor;
+    private boolean hasHardcoreMode = false;
 
     public void init(CombatEngineAPI engine) {
         this.engine = engine;
-        this.inGameData = UNGP_InGameData.getInstance();
-        damageFactor = inGameData.getDamageBuffFactor();
-        damageTakenFactor = inGameData.getDamageTakenBuffFactor();
+        if (engine.isInCampaign()) {
+            UNGP_InGameData inGameData = UNGP_InGameData.getInstance();
+            if (inGameData.isHardMode) {
+                hasHardcoreMode = true;
+                damageTakenFactor = inGameData.getDamageTakenBuffFactor();
+                damageFactor = inGameData.getDamageBuffFactor();
+            }
+        }
     }
 
     @Override
     public void advance(float amount, List<InputEventAPI> events) {
         if (!init) {
             init = true;
-
         }
+        if (!hasHardcoreMode) return;
 
         for (ShipAPI ship : engine.getShips()) {
             if (!ship.isAlive()) continue;
