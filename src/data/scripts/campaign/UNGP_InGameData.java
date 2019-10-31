@@ -25,6 +25,9 @@ public class UNGP_InGameData {
      */
     public boolean couldBeRecorded() {
         if (!isRecorded) {
+            if (Global.getSettings().getBoolean("noLevelLimit")) {
+                return true;
+            }
             return reachMaxLevel();
         }
         return false;

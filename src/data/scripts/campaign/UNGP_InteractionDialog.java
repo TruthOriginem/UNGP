@@ -122,17 +122,17 @@ public class UNGP_InteractionDialog implements InteractionDialogPlugin {
                     if (!inGameData.passedInheritTime && !inGameData.inherited) {
                         options.addSelector(i18n.get("inheritCredits"), inheritCreditsSelector,
                                 Misc.getButtonTextColor(), 250f, 50f,
-                                0f, 75f, ValueDisplayMode.VALUE, null);
+                                0f, 100f, ValueDisplayMode.VALUE, null);
                         options.addSelector(i18n.get("inheritBPs"), inheritBPSelector,
                                 Misc.getButtonTextColor(), 250f, 50f,
-                                0f, 75f, ValueDisplayMode.VALUE, null);
-                        if (lastInheritData.isHardMode) {
-                            isHardMode = true;
-                        }
+                                0f, 100f, ValueDisplayMode.VALUE, null);
+//                        if (lastInheritData.isHardMode) {
+//                            isHardMode = true;
+//                        }
                         options.addOption(i18n.get("switchHardMode") + "" + (isHardMode ? i18n.get("on") : i18n.get("off")), OptionID.SWITCH_MODE);
-                        if (lastInheritData.isHardMode) {
-                            options.setEnabled(OptionID.SWITCH_MODE, false);
-                        }
+//                        if (lastInheritData.isHardMode) {
+//                            options.setEnabled(OptionID.SWITCH_MODE, false);
+//                        }
                         options.addOption(i18n.get("startInherit"), OptionID.INHERIT);
                     } else {
                         if (inGameData.inherited) {
@@ -287,7 +287,8 @@ public class UNGP_InteractionDialog implements InteractionDialogPlugin {
                 lastInheritData.cycle - 1 + "");
         textPanel.setFontInsignia();
 
-        textPanel.addPara(i18n.get("hardModeYes"), Misc.getNegativeHighlightColor());
+        if (isHardMode)
+            textPanel.addPara(i18n.get("hardModeYes"), Misc.getNegativeHighlightColor());
 
         textPanel.addPara(i18n.get("deleteRecord"), Misc.getNegativeHighlightColor());
 

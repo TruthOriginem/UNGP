@@ -34,8 +34,10 @@ public class UNGP_CampaignPlugin implements EveryFrameScript {
     @Override
     public void advance(float amount) {
         if (!Global.getSector().isPaused()) {
+            //如果没有错过继承时间
             if (!inGameData.passedInheritTime) {
                 float days = Global.getSector().getClock().convertToDays(amount);
+                //在0.1天内弹出继承隔窗
                 if (!newGameChecked) {
                     if (newGameCheckDays > 0f) {
                         newGameCheckDays -= days;
@@ -51,6 +53,7 @@ public class UNGP_CampaignPlugin implements EveryFrameScript {
                         }
                     }
                 }
+                //一天后就算错过时间了
                 inheritChecker.advance(days);
                 if (inheritChecker.intervalElapsed()) {
                     inGameData.passedInheritTime = true;

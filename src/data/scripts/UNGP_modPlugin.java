@@ -5,7 +5,7 @@ import com.fs.starfarer.api.Global;
 import data.scripts.campaign.UNGP_CampaignPlugin;
 import data.scripts.campaign.UNGP_InGameData;
 import data.scripts.campaign.UNGP_InheritData;
-import data.scripts.utils.SimpleI18n;
+import data.scripts.utils.langCoreTest.MainLanguageModule;
 
 import static com.fs.starfarer.api.Global.getSettings;
 
@@ -16,6 +16,7 @@ public class UNGP_modPlugin extends BaseModPlugin {
         if (!hasLazyLib) {
             throw new RuntimeException("Unofficial New Game Plus requires LazyLib!");
         }
+        MainLanguageModule.Load();
     }
 
     @Override
@@ -27,7 +28,7 @@ public class UNGP_modPlugin extends BaseModPlugin {
         addScriptsIfNeeded();
     }
 
-    void addScriptsIfNeeded() {
+    private void addScriptsIfNeeded() {
         if (!Global.getSector().hasScript(UNGP_CampaignPlugin.class)) {
             Global.getSector().addScript(new UNGP_CampaignPlugin());
         }
