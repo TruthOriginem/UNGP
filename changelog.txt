@@ -1,6 +1,6 @@
 0.2.0
 可以继承0~100%的蓝图及星币了。
-专家模式可以随时关闭和开启。
+专家模式可以在继承时选择关闭和开启，而不是强制一直开启。
 可以通过更改data/settings.json里的switchLang来自由更换语言。（缺省值为default）
 Now could inherit 0~100% blue prints and credits.
 Specialist mode could be on and off freely.
