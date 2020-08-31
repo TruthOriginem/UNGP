@@ -1,6 +1,6 @@
 package data.scripts.utils;
 
-import data.scripts.utils.langCoreTest.MainLanguageModule;
+import com.fs.starfarer.api.Global;
 import de.unkrig.commons.nullanalysis.Nullable;
 
 public class SimpleI18n {
@@ -21,7 +21,7 @@ public class SimpleI18n {
         }
 
         public String get(String key) {
-            return MainLanguageModule.getString(category, keyPrefix + key);
+            return Global.getSettings().getString(category, keyPrefix + key);
         }
 
         public String nm_format(String key, @Nullable Object... args) {
@@ -33,7 +33,7 @@ public class SimpleI18n {
     public static String format(String category, String id, Object... args) {
         String result;
         try {
-            result = String.format(MainLanguageModule.getString(category, id), args);
+            result = String.format(Global.getSettings().getString(category, id), args);
         } catch (Exception e) {
             return null;
         }

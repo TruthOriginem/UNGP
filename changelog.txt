@@ -1,3 +1,16 @@
+1.0.0
+重生点在继承后不会再销毁了。
+现在可以最多记录三个重生点。
+专家模式完全重置。
+取消更换语言的设定(仍然可以通过mod目录下的swapLangFile进行语言切换)
+设置文件扩充。
+
+Save point wouldn't be deleted after inherited.
+Now there are 3 slots of savepoints.
+Specialist mode totally reworked.
+Cancelled the settings that could switch language.(Still could run swapLangFile in mod folder to switch language)
+There are more options for settings.json.
+
 0.2.0
 可以继承0~100%的蓝图及星币了。
 专家模式可以在继承时选择关闭和开启，而不是强制一直开启。

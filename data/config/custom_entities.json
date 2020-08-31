@@ -1,0 +1,21 @@
+{
+	"ungp_ui":{
+		"defaultName":"GET OFF MY WAY", # used if name=null in addCustomEntity()
+		"defaultRadius":0, # used if radius<0 in addCustomEntity()
+		"iconWidth":1,
+		"iconHeight":1,
+		"renderShadow":false,
+		"useLightColor":true,
+		"showInCampaign":true,
+		"showIconOnMap":false,
+		"showNameOnMap":false,
+		"scaleNameWithZoom":false,
+		"scaleIconWithZoom":true,
+		"layers":[ABOVE], # what layer(s) to render in. See CampaignEngineLayers.java for possible values
+		"renderCircleIndicator":false,
+		"renderCircleIndicatorSelectionFlash":false,
+		"pluginClass":"data.scripts.utils.UNGP_UIEntityPlugin",
+	},
+}
+
+

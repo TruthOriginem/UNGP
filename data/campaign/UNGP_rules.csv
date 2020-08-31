@@ -1,0 +1,24 @@
+id,name,short,desc,cost,isBonus,spritePath,effectPlugin,extra1,extra2,spriteAuthor
+edamage_increase,海军竞争,提高敌方输出,敌方输出伤害 x %s,3,FALSE,graphics/icons/ungp/edamage_increase.png,data.scripts.ungprules.impl.combat.UNGP_EnemyDamageIncrease,,,议长√
+edamage_decrease,近卫军团,提高敌方抗性,敌方承受伤害 x %s,4,FALSE,graphics/icons/ungp/edamage_decrease.png,data.scripts.ungprules.impl.combat.UNGP_EnemyDamageTakenReduction,,,和莱√
+low_repairtech,低效维修技术,削弱舰船维护,舰船的维修与战备恢复速度 - %s,1,FALSE,graphics/icons/ungp/low_repairtech.png,data.scripts.ungprules.impl.member.UNGP_LowRepairTech,,,和莱√
+techlock,科技封锁,降低装配点数,舰船装配点数 - %s,3,FALSE,graphics/icons/ungp/techlock.png,data.scripts.ungprules.impl.character.UNGP_TechLock,,,影之光√
+ancient_threat,远古威胁,"在余辉星系时,降低最大战备","在余辉星系时, 舰船最大战备 -%s",1,FALSE,graphics/icons/ungp/ancient_threat.png,data.scripts.ungprules.impl.fleet.UNGP_AncientThreat,,,和莱√
+naval_treaty,海军条约,"舰船混搭时,降低最大战备","舰队舰船设计类型超过{%s}种时,每超出一种将使最大战备降低{%s}",4,FALSE,graphics/icons/ungp/naval_treaty.png,data.scripts.ungprules.impl.fleet.UNGP_NavalTreaty,,,和莱√
+dangerous_sector,危险星域,增强特殊地形负面效果,因特殊地形造成的战备CR下降效果x %s,1,FALSE,graphics/icons/ungp/dangerous_sector.png,data.scripts.ungprules.impl.member.UNGP_DangerousSector,,,影之光√
+low_interchangeability ,低互换性,提高武器及引擎维修时间,我方舰船武器和引擎下线后所需维修时间 x %s,2,FALSE,graphics/icons/skills/field_repairs.png,data.scripts.ungprules.impl.combat.UNGP_LowIInterchangeability,,,和莱√
+work_hard,好好干活!,你是一名资本家,"陆战队与船员数量比率低于{%s}时,每天有{%s}的概率发生暴动,随机战舰战备损失{%s}",2,FALSE,graphics/icons/skills/combat_endurance2.png,data.scripts.ungprules.impl.other.UNGP_WorkHard,船员发生了暴动! %s 遭殃了!,,和莱
+wholesale_shells,批发炮弹,部分弹药受潮,武器发射非激光/等离子类型射弹时有 %s 概率伤害 x %s,1,FALSE,graphics/icons/ungp/wholesale_shells.png,data.scripts.ungprules.impl.combat.UNGP_WholeShells,我方合计伤害减少:,,议长√
+twice_the_effort,整倍功半,整备速率影响战机性能,"战机伤害及抗性取决于航母整备速率,整备速率为{%s}时性能下降最高 %s",2,FALSE,graphics/icons/ungp/twice_the_effort.png,data.scripts.ungprules.impl.combat.UNGP_TwiceTheEffort,当前战机性能:,,议长√
+,,,,,,,,,,
+salvaging,优化残骸整理工序,强化垃圾佬,+ %s 打捞的收益(包括稀有物资),-2,TRUE,graphics/icons/ungp/salvaging.png,data.scripts.ungprules.impl.fleet.UNGP_Salvaging,,,和莱√
+efficient_fuel,远洋专长,提高航行距离,舰队燃油消耗 x %s,-2,TRUE,graphics/icons/ungp/efficient_fuel.png,data.scripts.ungprules.impl.fleet.UNGP_EfficientFuel,,,影之光√
+more_logistics,超额后勤改造,提高后勤插件上限,后勤插件上限 + %s,-1,TRUE,graphics/icons/ungp/more_logistics.png,data.scripts.ungprules.impl.member.UNGP_MoreLogistics,,,和莱√
+storm_rider,风暴骑手,"""狂风!听我号令!""",你的舰队不会在超空间风暴中受损,-2,TRUE,graphics/icons/terrain/hyperspace_storm.png,data.scripts.ungprules.impl.fleet.UNGP_StormRider,,,和莱
+tech_revolution,科技革命,提高装配点数,舰船装配点数 + %s,-4,TRUE,graphics/icons/ungp/tech_revolution.png,data.scripts.ungprules.impl.character.UNGP_TechRevolution,,,影之光√
+lobster_perday,优质海鲜,龙虾之主,"货舱未满时,每天获得一个蓝龙虾",0,TRUE,graphics/icons/cargo/lobster.png,data.scripts.ungprules.impl.other.UNGP_LobsterPerDay,,,[-<虾王>-]
+infighting_book,接近战进阶教本,增强低射程射弹武器,舰船实时射程低于550的射弹武器伤害 + %s,-4,TRUE,graphics/icons/ungp/infighting_book.png,data.scripts.ungprules.impl.combat.UNGP_InfightingBook,,,和莱√
+take_highland,我占有高地!,提高在信标附近的射程,在信标点附近{%s}距离的我方战舰武器射程+{%s},-3,TRUE,graphics/icons/ungp/take_highland.png,data.scripts.ungprules.impl.combat.UNGP_TakeHighLand,"附近存在信标, +20% 射程",,影之光√
+wide_radar,广域雷达,提高感应器强度,舰船感应器强度 + %s,-1,TRUE,graphics/icons/ungp/wide_radar.png,data.scripts.ungprules.impl.member.UNGP_WideRadar,,,影之光√
+elite_reserves,精英预备队,额外船员能提供最大战备,"超出必要船员的船员数额外提供最大战备,最多提供{%s}",-3,TRUE,graphics/icons/ungp/elite_reserves.png,data.scripts.ungprules.impl.member.UNGP_EliteReserves,,,和莱√
+bustling_fungus,爆裂真菌,原地不动时休整舰队,"大地图中,舰队静止不动{%s}天后,舰船维修速度+{%s},每月维护补给-{%s}",-1,TRUE,graphics/icons/ungp/bustling_fungus.png,data.scripts.ungprules.impl.fleet.UNGP_BustlingFungus,开始休整...,,议长√

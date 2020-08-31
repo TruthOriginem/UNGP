@@ -1,14 +1,10 @@
 {
     "id": "ungp",
-    "name": "Unofficial New Game Plus",
-    "author": "Originem, Translated By RUA",
-    "version": "0.2.0",
-    "description": "Requires Lazylib\nA mod with a similar 'new game plus' function.\n Left ctrl+P to call the menu",
+    "name": "重生[UNGP]",
+    "author": "主创:Originem\n翻译:RUA\n建议及创意:海鲜群的诸位\n感谢:Game-icons.net",
+    "version": "1.0.0 DEV1",
+    "description": "需要Lazylib作为前置\n满级后可以记录当前的无形资产例如各类蓝图，传递给下一个存档。\n全方面给游戏添加新规则的专家模式。\n左ctrl+P呼出菜单",
     "gameVersion": "0.9.1a",
     "jars":["jars/ungp.jar"],
     "modPlugin":"data.scripts.UNGP_modPlugin",
-    "lang": {
-        "name": "重生[UNGP]",
-        "description": "需要Lazylib作为前置\n满级后可以记录当前的无形资产例如各类蓝图，传递给下一个存档。具有奖励性质的多周目系统。\n左ctrl+P呼出菜单"
-    }
 }

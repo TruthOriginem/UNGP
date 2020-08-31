@@ -1,0 +1,5 @@
+{
+  "UNGP_fungus_activate": [
+    {"file": "sounds/fx/trigger/UNGP_fungus_activate.ogg", "pitch": 1, "volume": 1},
+  ]
+}

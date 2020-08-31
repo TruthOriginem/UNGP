@@ -1,0 +1,2 @@
+name,id,tags,rarity,base price,stack size,cargo space,icon,sound id,sound id drop,plugin,plugin params,desc,order
+RuleItem,ungp_ruleitem,,,0,1,1,graphics/icons/cargo/UNGP_ruleItemBG.png,ui_chip_pickup,ui_ship_bp_drop,data.scripts.campaign.items.UNGP_RuleItem,,,0

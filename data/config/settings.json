@@ -1,10 +1,15 @@
 {
-  "switchLang": "default",# default is "default"(English),
-  "noLevelLimit": false,# set true to cancel the record level limit
+  "noLevelLimit": false, # set true to cancel the record level limit
+  "noTimesLimit": false, # set true to make record could be done for unlimited times,
+  "noDifficultyLimit": false; # set true to make max difficulty always equals 20
   "plugins": {
-    "UNGP_HardModeCombatPlugin": "data.scripts.plugins.UNGP_HardModeCombatPlugin",
+    "UNGP_SpecialistCombatPlugin": "data.scripts.plugins.UNGP_SpecialistCombatPlugin",
   },
-  "graphics":{
+  "graphics": {
+    "icons": {
+      "UNGP_hmlogo": "graphics/icons/UNGP_hmode_logo.png",
+      "UNGP_sdimlogo": "graphics/icons/UNGP_hmode_dim.png"
+    },
     "illustrations": {
       "UNGP_logo": "graphics/illustrations/UNGP_logo.png"
     }

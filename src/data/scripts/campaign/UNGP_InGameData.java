@@ -2,21 +2,60 @@ package data.scripts.campaign;
 
 import com.fs.starfarer.api.Global;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import static data.scripts.campaign.hardmode.UNGP_RulesManager.ALL_RULES;
+import static data.scripts.campaign.hardmode.UNGP_RulesManager.URule;
+
+/**
+ * 记录在游戏中
+ */
 public class UNGP_InGameData {
-    private static final String KEY = "UNGP_igd";
     int curCycle = 1;
+    int difficultyLevel = 0;
     boolean isRecorded = false;//是否用这个记录了重生点
     boolean inherited = false;//是否已经继承了上个重生点
     boolean passedInheritTime = false;
+    private List<String> activatedRuleIDs = new ArrayList<>();
     public boolean isHardMode = false;
-    public boolean shouldDeleteRecordNextSave = false;
+    private int timesToChangeSpecialistMode = 0;
 
-    public UNGP_InGameData() {
-        Global.getSector().getPersistentData().put(KEY, this);
+    /**
+     * 一年一度可以获得一次专家规则更改的能力
+     * @return
+     */
+    public int getTimesToChangeSpecialistMode() {
+        return timesToChangeSpecialistMode;
     }
 
-    public static UNGP_InGameData getInstance() {
-        return (UNGP_InGameData) Global.getSector().getPersistentData().get(KEY);
+    public void reduceTimesToChangeSpecialistMode() {
+        timesToChangeSpecialistMode--;
+    }
+
+    public void addTimesToChangeSpecialistMode() {
+        timesToChangeSpecialistMode++;
+    }
+
+    public UNGP_InGameData() {
+    }
+
+
+    public void loadActivatedRules(List<URule> rules) {
+        activatedRuleIDs.clear();
+        for (URule rule : rules) {
+            activatedRuleIDs.add(rule.getId());
+        }
+    }
+
+    public List<URule> loadActivatedRules() {
+        List<URule> results = new ArrayList<>();
+        for (URule rule : ALL_RULES) {
+            if (activatedRuleIDs.contains(rule.getId())) {
+                results.add(rule);
+            }
+        }
+        return results;
     }
 
     /***
@@ -28,24 +67,12 @@ public class UNGP_InGameData {
             if (Global.getSettings().getBoolean("noLevelLimit")) {
                 return true;
             }
-            return reachMaxLevel();
+            return UNGP_Settings.reachMaxLevel();
         }
-        return false;
+        return Global.getSettings().getBoolean("noTimesLimit");
     }
 
-    public boolean reachMaxLevel() {
-        int playerLevel = Global.getSector().getPlayerStats().getLevel();
-        int maxLevel = Global.getSettings().getLevelupPlugin().getMaxLevel();
-        return playerLevel >= maxLevel;
+    public int getDifficultyLevel() {
+        return difficultyLevel;
     }
-
-    public float getDamageBuffFactor() {
-        return 1f + curCycle * 0.1f;
-    }
-
-    public float getDamageTakenBuffFactor() {
-        float factor = Math.max(0.5f, 1f - curCycle * 0.05f);
-        return factor;
-    }
-
 }
