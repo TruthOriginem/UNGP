@@ -7,19 +7,23 @@ import com.fs.starfarer.api.campaign.*;
 import com.fs.starfarer.api.campaign.rules.MemoryAPI;
 import com.fs.starfarer.api.combat.EngagementResultAPI;
 import com.fs.starfarer.api.combat.ShipHullSpecAPI;
+import com.fs.starfarer.api.graphics.SpriteAPI;
 import com.fs.starfarer.api.impl.campaign.rulecmd.AddRemoveCommodity;
+import com.fs.starfarer.api.input.InputEventAPI;
 import com.fs.starfarer.api.loading.FighterWingSpecAPI;
 import com.fs.starfarer.api.loading.HullModSpecAPI;
 import com.fs.starfarer.api.loading.WeaponSpecAPI;
+import com.fs.starfarer.api.ui.PositionAPI;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.ui.ValueDisplayMode;
 import com.fs.starfarer.api.util.Misc;
 import com.fs.starfarer.api.util.WeightedRandomPicker;
-import data.scripts.campaign.intel.UNGP_SpecialistIntel;
 import data.scripts.campaign.hardmode.UNGP_RulePickListener;
 import data.scripts.campaign.hardmode.UNGP_RulesManager;
 import data.scripts.campaign.hardmode.UNGP_RulesManager.URule;
 import data.scripts.campaign.hardmode.UNGP_SpecialistSettings;
+import data.scripts.campaign.intel.UNGP_SpecialistIntel;
+import org.lwjgl.opengl.Display;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -91,7 +95,40 @@ public class UNGP_InteractionDialog implements InteractionDialogPlugin {
         initMenu();
         dialog.setOptionOnEscape(null, OptionID.LEAVE);
         dialog.setBackgroundDimAmount(0.4f);
-        visual.showImagePortion("illustrations", "UNGP_logo", 400f, 300f, 0f, 0f, 400f, 300f);
+        visual.showCustomPanel(400f, 300f, new CustomUIPanelPlugin() {
+            private SpriteAPI sprite = Global.getSettings().getSprite("illustrations", "UNGP_logo");
+
+            @Override
+            public void positionChanged(PositionAPI position) {
+
+            }
+
+            @Override
+            public void render(float alphaMult) {
+                sprite.setAlphaMult(alphaMult);
+                float screenWidth = Global.getSettings().getScreenWidth() / Display.getPixelScaleFactor();
+                float screenHeight = Global.getSettings().getScreenHeight() / Display.getPixelScaleFactor();
+                float preferX = screenWidth * 0.55f;
+                float preferY = screenHeight * 0.5f;
+                if (preferX + sprite.getWidth() > screenWidth) {
+                    preferX = screenWidth - sprite.getWidth();
+                }
+                if (preferY + sprite.getHeight() > screenHeight) {
+                    preferY = screenHeight - sprite.getHeight();
+                }
+                sprite.render(preferX, preferY);
+            }
+
+            @Override
+            public void advance(float amount) {
+
+            }
+
+            @Override
+            public void processInput(List<InputEventAPI> events) {
+
+            }
+        });
     }
 
     private void initMenu() {

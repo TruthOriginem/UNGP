@@ -15,7 +15,7 @@ oppressive_distance,Overwhelming Vision,Increase enemy weapon & sensor range,Ene
 salvaging,Optimised Derelict Dealing Process,Strengthen salvaging,"Increases the resources gained from salvaging abandoned stations, derelicts, floating hulks, and others by %s (Including rare items))",-2,TRUE,graphics/icons/ungp/salvaging.png,data.scripts.ungprules.impl.fleet.UNGP_Salvaging,,
 efficient_fuel,Oceangoing Ability,Sail farer,Fuel consumption x %s,-2,TRUE,graphics/icons/ungp/efficient_fuel.png,data.scripts.ungprules.impl.fleet.UNGP_EfficientFuel,,
 more_logistics,Over Logistical Convert,Increase Max Logistical Hullmod,Max Logistics Hullmod + %s,-1,TRUE,graphics/icons/ungp/more_logistics.png,data.scripts.ungprules.impl.member.UNGP_MoreLogistics,,
-storm_rider,Strom Rider,"""Storm in my command!""",Your fleet would not be damaged by hyperspace storm,-2,TRUE,graphics/icons/ungp/storm_rider.png,data.scripts.ungprules.impl.fleet.UNGP_StormRider,,
+storm_rider,Strom Rider,"""Storm in my command!""",Your fleet would not be damaged by hyperspace storm,-1,TRUE,graphics/icons/ungp/storm_rider.png,data.scripts.ungprules.impl.fleet.UNGP_StormRider,,
 tech_revolution,Technology Revolution,Increase OP,OP + %s,-4,TRUE,graphics/icons/ungp/tech_revolution.png,data.scripts.ungprules.impl.character.UNGP_TechRevolution,,
 lobster_perday,Great Seafood,The master of lobster,Get a lobster every day when cargo is not full,0,TRUE,graphics/icons/cargo/lobster.png,data.scripts.ungprules.impl.other.UNGP_LobsterPerDay,,
 infighting_book,Close Fighting Drill Manual,Strengthen ships' low-range weapon,Weapon + %s damage while its realtime range is lower than 550,-4,TRUE,graphics/icons/ungp/infighting_book.png,data.scripts.ungprules.impl.combat.UNGP_InfightingBook,,

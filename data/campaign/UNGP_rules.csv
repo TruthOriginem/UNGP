@@ -15,7 +15,7 @@ oppressive_distance,高压视距,提高敌方射程及侦测范围,敌方武器�
 salvaging,优化残骸整理工序,强化垃圾佬,+ %s 打捞的收益(包括稀有物资),-2,TRUE,graphics/icons/ungp/salvaging.png,data.scripts.ungprules.impl.fleet.UNGP_Salvaging,,,和莱√
 efficient_fuel,远洋专长,提高航行距离,舰队燃油消耗 x %s,-2,TRUE,graphics/icons/ungp/efficient_fuel.png,data.scripts.ungprules.impl.fleet.UNGP_EfficientFuel,,,影之光√
 more_logistics,超额后勤改造,提高后勤插件上限,后勤插件上限 + %s,-1,TRUE,graphics/icons/ungp/more_logistics.png,data.scripts.ungprules.impl.member.UNGP_MoreLogistics,,,和莱√
-storm_rider,风暴骑手,"""狂风!听我号令!""",你的舰队不会在超空间风暴中受损,-2,TRUE,graphics/icons/ungp/storm_rider.png,data.scripts.ungprules.impl.fleet.UNGP_StormRider,,,和莱√
+storm_rider,风暴骑手,"""狂风!听我号令!""",你的舰队不会在超空间风暴中受损,-1,TRUE,graphics/icons/ungp/storm_rider.png,data.scripts.ungprules.impl.fleet.UNGP_StormRider,,,和莱√
 tech_revolution,科技革命,提高装配点数,舰船装配点数 + %s,-4,TRUE,graphics/icons/ungp/tech_revolution.png,data.scripts.ungprules.impl.character.UNGP_TechRevolution,,,影之光√
 lobster_perday,优质海鲜,龙虾之主,"货舱未满时,每天获得一个蓝龙虾",0,TRUE,graphics/icons/cargo/lobster.png,data.scripts.ungprules.impl.other.UNGP_LobsterPerDay,,,[-<虾王>-]
 infighting_book,接近战进阶教本,增强低射程射弹武器,舰船实时射程低于550的射弹武器伤害 + %s,-4,TRUE,graphics/icons/ungp/infighting_book.png,data.scripts.ungprules.impl.combat.UNGP_InfightingBook,,,和莱√

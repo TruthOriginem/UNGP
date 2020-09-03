@@ -15,6 +15,7 @@ public class UNGP_InfightingBook extends UNGP_BaseRuleEffect implements UNGP_Com
         multiplier = getValueByDifficulty(0, difficulty);
     }
 
+    //15%~25%
     @Override
     public float getValueByDifficulty(int index, int difficulty) {
         if (index == 0) return 0.13f + 0.02f * (float) Math.pow(difficulty, 0.598);
