@@ -2,7 +2,7 @@
     "id": "ungp",
     "name": "Unofficial New Game Plus",
     "author": "Originem\nTranslated By RUA\nIdeas from Haixian Group",
-    "version": "1.0.0 DEV3",
+    "version": "1.0.0",
     "description": "Requires Lazylib\nA mod with a similar 'new game plus' function.\n Left ctrl+P to call the menu",
     "gameVersion": "0.9.1a",
     "jars":["jars/ungp.jar"],
