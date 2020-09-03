@@ -1,6 +1,5 @@
 package data.scripts.campaign.hardmode;
 
-import com.fs.starfarer.api.GameState;
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.CampaignFleetAPI;
 import com.fs.starfarer.api.campaign.CargoAPI;
@@ -8,17 +7,18 @@ import com.fs.starfarer.api.campaign.SpecialItemData;
 import com.fs.starfarer.api.characters.MutableCharacterStatsAPI;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
+import data.scripts.UNGP_modPlugin;
 import data.scripts.campaign.UNGP_CampaignPlugin;
 import data.scripts.campaign.UNGP_InGameData;
 import data.scripts.campaign.hardmode.UNGP_RuleInfos.UNGP_RuleInfo;
 import data.scripts.campaign.items.UNGP_RuleItem;
 import data.scripts.ungprules.UNGP_RuleEffectAPI;
+import data.scripts.ungprules.tags.UNGP_CombatTag;
 import data.scripts.utils.SimpleI18n.I18nSection;
 
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.EnumSet;
 import java.util.List;
 
 public class UNGP_RulesManager {
@@ -26,11 +26,16 @@ public class UNGP_RulesManager {
     private static final Color BONUS_COLOR = new Color(50, 255, 50);
     private static final Color NOT_BONUS_COLOR = new Color(255, 50, 50);
 
-    public static final List<URule> ALL_RULES = new ArrayList<>();
-    public static final List<URule> ACTIVATED_RULES_IN_THIS_GAME = new ArrayList<>();
-    public static int ShownDifficultyLevel = 1;
-    public static boolean IsSpecialistMode = false;
+    private static List<URule> ALL_RULES = new ArrayList<>();
+    public static List<URule> ACTIVATED_RULES_IN_THIS_GAME = new ArrayList<>();
+    public static List<URule> COMBAT_RULES_IN_THIS_GAME = new ArrayList<>();
+    public static List<URule> CAMPAIGN_RULES_IN_THIS_GAME = new ArrayList<>();
+    private static boolean IsSpecialistMode = false;
+    private static int ShownDifficultyLevel = 1;
 
+    /**
+     * Called on {@link UNGP_modPlugin}
+     */
     public static void initOrReloadRules() {
         loadAllRules(UNGP_RuleInfos.LoadAllInfos());
     }
@@ -46,16 +51,20 @@ public class UNGP_RulesManager {
         if (inGameData != null) {
             //清理已生效的Rules
             ACTIVATED_RULES_IN_THIS_GAME.clear();
+            COMBAT_RULES_IN_THIS_GAME.clear();
+            CAMPAIGN_RULES_IN_THIS_GAME.clear();
             List<URule> activatedRules = inGameData.loadActivatedRules();
             CampaignFleetAPI playerFleet = Global.getSector().getPlayerFleet();
             MutableCharacterStatsAPI playerStats = Global.getSector().getPlayerStats();
+            //unapply All stats
             for (URule rule : ALL_RULES) {
                 UNGP_RuleEffectAPI effect = rule.getRuleEffect();
                 if (playerFleet != null) effect.unapplyPlayerFleetStats(playerFleet);
                 if (playerStats != null) effect.unapplyPlayerCharacterStats(playerStats);
                 effect.unapplyGlobalStats();
-                rule.setSelected(false);
             }
+
+            //apply stats
             for (URule rule : activatedRules) {
                 ACTIVATED_RULES_IN_THIS_GAME.add(rule);
                 UNGP_RuleEffectAPI effect = rule.getRuleEffect();
@@ -63,17 +72,37 @@ public class UNGP_RulesManager {
                 if (playerFleet != null) effect.applyPlayerFleetStats(playerFleet);
                 if (playerStats != null) effect.applyPlayerCharacterStats(playerStats);
                 effect.applyGlobalStats();
-                rule.setSelected(true);
+                if (effect instanceof UNGP_CombatTag) {
+                    COMBAT_RULES_IN_THIS_GAME.add(rule);
+                } else {
+                    CAMPAIGN_RULES_IN_THIS_GAME.add(rule);
+                }
             }
-            ShownDifficultyLevel = inGameData.getDifficultyLevel();
-            IsSpecialistMode = inGameData.isHardMode;
+            setShownDifficultyLevel(inGameData.getDifficultyLevel());
+            setSpecialistMode(inGameData.isHardMode);
         }
     }
+
+    public static int getShownDifficultyLevel() {
+        return ShownDifficultyLevel;
+    }
+
+    public static boolean isSpecialistMode() {
+        return IsSpecialistMode;
+    }
+
+    public static void setSpecialistMode(boolean isSpecialistMode) {
+        IsSpecialistMode = isSpecialistMode;
+    }
+
+    public static List<URule> getAllRules() {
+        return ALL_RULES;
+    }
+
 
     public static class URule {
         private String buffID;
         private UNGP_RuleInfo ruleInfo;
-        private boolean isSelected;
 
         URule(UNGP_RuleInfo info) {
             this.buffID = "ungp_" + info.getId();
@@ -101,17 +130,13 @@ public class UNGP_RulesManager {
             return ruleInfo.isBonus();
         }
 
-        public EnumSet<GameState> getUseStates() {
-            return getRuleEffect().getEffectiveState();
-        }
-
         public void addName(TooltipMakerAPI tooltip, float pad) {
             tooltip.addPara(getName(), getBorderColor(), pad);
         }
 
         public void addPreDesc(TooltipMakerAPI tooltip, float pad) {
             tooltip.addPara(getBonusString(isBonus()), getBorderColor(), pad * 0.5f);
-            tooltip.addPara(rules_i18n.get("front_desc"), pad * 0.5f, Misc.getHighlightColor(), ShownDifficultyLevel + "");
+            tooltip.addPara(rules_i18n.get("front_desc"), pad * 0.5f, Misc.getHighlightColor(), getShownDifficultyLevel() + "");
         }
 
         public Color getBorderColor() {
@@ -136,7 +161,7 @@ public class UNGP_RulesManager {
         }
 
         public void addDesc(TooltipMakerAPI tooltip, float pad, String prefix) {
-            addDesc(tooltip, pad, prefix, ShownDifficultyLevel);
+            addDesc(tooltip, pad, prefix, getShownDifficultyLevel());
         }
 
         public void addDesc(TooltipMakerAPI tooltip, float pad) {
@@ -192,14 +217,6 @@ public class UNGP_RulesManager {
             }
             return null;
         }
-
-        public boolean isSelected() {
-            return isSelected;
-        }
-
-        public void setSelected(boolean selected) {
-            isSelected = selected;
-        }
     }
 
     /**
@@ -232,6 +249,11 @@ public class UNGP_RulesManager {
         ShownDifficultyLevel = level;
     }
 
+    /**
+     * 创建包含所有规则的货舱
+     *
+     * @return
+     */
     public static CargoAPI createAllRulesCargo() {
         CargoAPI cargo = Global.getFactory().createCargo(true);
         List<URule> sortedRules = new ArrayList<>(ALL_RULES);

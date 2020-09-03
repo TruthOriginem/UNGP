@@ -1,7 +1,7 @@
 package data.scripts.ungprules.impl.character;
 
 import com.fs.starfarer.api.characters.MutableCharacterStatsAPI;
-import data.scripts.ungprules.UNGP_BaseRuleEffect;
+import data.scripts.ungprules.impl.UNGP_BaseRuleEffect;
 
 public class UNGP_TechLock extends UNGP_BaseRuleEffect {
     private float reduction;

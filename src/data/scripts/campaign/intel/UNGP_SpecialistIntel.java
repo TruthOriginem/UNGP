@@ -1,6 +1,5 @@
 package data.scripts.campaign.intel;
 
-import com.fs.starfarer.api.GameState;
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.comm.IntelInfoPlugin;
 import com.fs.starfarer.api.impl.campaign.intel.BaseIntelPlugin;
@@ -150,18 +149,18 @@ public class UNGP_SpecialistIntel extends BaseIntelPlugin {
         List<URule> combatRules = new ArrayList<>();
         List<URule> campaignRules = new ArrayList<>();
         for (URule rule : bonusRules) {
-            if (rule.getUseStates().contains(GameState.CAMPAIGN)) {
+            if (CAMPAIGN_RULES_IN_THIS_GAME.contains(rule)) {
                 campaignRules.add(rule);
             }
-            if (rule.getUseStates().contains(GameState.COMBAT)) {
+            if (COMBAT_RULES_IN_THIS_GAME.contains(rule)) {
                 combatRules.add(rule);
             }
         }
         for (URule rule : notBonusRules) {
-            if (rule.getUseStates().contains(GameState.CAMPAIGN)) {
+            if (CAMPAIGN_RULES_IN_THIS_GAME.contains(rule)) {
                 campaignRules.add(rule);
             }
-            if (rule.getUseStates().contains(GameState.COMBAT)) {
+            if (COMBAT_RULES_IN_THIS_GAME.contains(rule)) {
                 combatRules.add(rule);
             }
         }

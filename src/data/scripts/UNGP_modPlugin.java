@@ -5,13 +5,12 @@ import com.fs.starfarer.api.Global;
 import com.thoughtworks.xstream.XStream;
 import data.scripts.campaign.UNGP_CampaignPlugin;
 import data.scripts.campaign.hardmode.UNGP_RulesManager;
-import data.scripts.utils.UNGPFont;
 
 import static com.fs.starfarer.api.Global.getSettings;
 
 public class UNGP_modPlugin extends BaseModPlugin {
     @Override
-    public void onApplicationLoad() throws Exception {
+    public void onApplicationLoad() {
         boolean hasLazyLib = getSettings().getModManager().isModEnabled("lw_lazylib");
         if (!hasLazyLib) {
             throw new RuntimeException("Unofficial New Game Plus requires LazyLib!");
@@ -27,7 +26,6 @@ public class UNGP_modPlugin extends BaseModPlugin {
     public void onGameLoad(boolean newGame) {
         addScriptsIfNeeded();
         UNGP_RulesManager.refreshRulesCache();
-        UNGPFont.Load();
         UNGP_CampaignPlugin.loadUIEntity();
     }
 

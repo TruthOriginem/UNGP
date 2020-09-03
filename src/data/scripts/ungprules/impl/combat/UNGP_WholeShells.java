@@ -1,20 +1,19 @@
 package data.scripts.ungprules.impl.combat;
 
-import com.fs.starfarer.api.GameState;
 import com.fs.starfarer.api.combat.CombatEngineAPI;
 import com.fs.starfarer.api.combat.DamagingProjectileAPI;
 import com.fs.starfarer.api.combat.ShipAPI;
 import com.fs.starfarer.api.loading.ProjectileSpawnType;
 import com.fs.starfarer.api.util.IntervalUtil;
-import data.scripts.ungprules.UNGP_BaseRuleEffect;
+import data.scripts.ungprules.impl.UNGP_BaseRuleEffect;
+import data.scripts.ungprules.tags.UNGP_CombatTag;
 import data.scripts.utils.UNGPUtils;
 
 import java.util.ArrayList;
-import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.List;
 
-public class UNGP_WholeShells extends UNGP_BaseRuleEffect {
+public class UNGP_WholeShells extends UNGP_BaseRuleEffect implements UNGP_CombatTag {
     private static final String LIST_ID = "UNGP_WholeShells";
     private static final IntervalUtil checkInterval = new IntervalUtil(0.1f, 0.1f);
     private static final float DAMAGE_MULTIPLIER = 0.5f;
@@ -89,8 +88,4 @@ public class UNGP_WholeShells extends UNGP_BaseRuleEffect {
         return getDescriptionParams(index);
     }
 
-    @Override
-    public EnumSet<GameState> getEffectiveState() {
-        return EnumSet.of(GameState.COMBAT);
-    }
 }

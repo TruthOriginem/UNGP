@@ -1,6 +1,5 @@
-package data.scripts.ungprules;
+package data.scripts.ungprules.impl;
 
-import com.fs.starfarer.api.GameState;
 import com.fs.starfarer.api.campaign.CampaignFleetAPI;
 import com.fs.starfarer.api.characters.MutableCharacterStatsAPI;
 import com.fs.starfarer.api.combat.CombatEngineAPI;
@@ -8,9 +7,9 @@ import com.fs.starfarer.api.combat.MutableShipStatsAPI;
 import com.fs.starfarer.api.combat.ShipAPI;
 import com.fs.starfarer.api.fleet.FleetMemberAPI;
 import data.scripts.campaign.UNGP_CampaignPlugin;
+import data.scripts.ungprules.UNGP_RuleEffectAPI;
 
 import java.math.BigDecimal;
-import java.util.EnumSet;
 import java.util.Random;
 
 import static data.scripts.campaign.hardmode.UNGP_RulesManager.URule;
@@ -33,7 +32,9 @@ public abstract class UNGP_BaseRuleEffect implements UNGP_RuleEffectAPI {
     }
 
     @Override
-    public abstract void refreshDifficultyCache(int difficulty);
+    public void refreshDifficultyCache(int difficulty) {
+
+    }
 
     @Override
     public abstract float getValueByDifficulty(int index, int difficulty);
@@ -98,11 +99,6 @@ public abstract class UNGP_BaseRuleEffect implements UNGP_RuleEffectAPI {
     @Override
     public void unapplyGlobalStats() {
 
-    }
-
-    @Override
-    public EnumSet<GameState> getEffectiveState() {
-        return EnumSet.of(GameState.CAMPAIGN);
     }
 
     /**

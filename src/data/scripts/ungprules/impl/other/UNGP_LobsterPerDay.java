@@ -5,7 +5,7 @@ import com.fs.starfarer.api.campaign.CampaignFleetAPI;
 import com.fs.starfarer.api.campaign.CargoAPI;
 import com.fs.starfarer.api.impl.campaign.ids.Commodities;
 import data.scripts.campaign.UNGP_CampaignPlugin;
-import data.scripts.ungprules.UNGP_BaseRuleEffect;
+import data.scripts.ungprules.impl.UNGP_BaseRuleEffect;
 
 public class UNGP_LobsterPerDay extends UNGP_BaseRuleEffect {
 

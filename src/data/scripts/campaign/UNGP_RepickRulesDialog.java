@@ -90,7 +90,7 @@ public class UNGP_RepickRulesDialog implements InteractionDialogPlugin {
 
         if (optionData == OptionConfirm) {
             if (!pickedList.isEmpty() && couldRepick) {
-                inGameData.loadActivatedRules(pickedList);
+                inGameData.recordActivatedRules(pickedList);
                 UNGP_RulesManager.refreshRulesCache();
                 inGameData.reduceTimesToChangeSpecialistMode();
             }

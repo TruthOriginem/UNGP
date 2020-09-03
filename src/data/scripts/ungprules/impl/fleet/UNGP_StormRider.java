@@ -1,7 +1,7 @@
 package data.scripts.ungprules.impl.fleet;
 
 import com.fs.starfarer.api.campaign.CampaignFleetAPI;
-import data.scripts.ungprules.UNGP_BaseRuleEffect;
+import data.scripts.ungprules.impl.UNGP_BaseRuleEffect;
 
 public class UNGP_StormRider extends UNGP_BaseRuleEffect {
 

@@ -15,11 +15,11 @@ import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.ui.ValueDisplayMode;
 import com.fs.starfarer.api.util.Misc;
 import com.fs.starfarer.api.util.WeightedRandomPicker;
+import data.scripts.campaign.intel.UNGP_SpecialistIntel;
 import data.scripts.campaign.hardmode.UNGP_RulePickListener;
 import data.scripts.campaign.hardmode.UNGP_RulesManager;
 import data.scripts.campaign.hardmode.UNGP_RulesManager.URule;
 import data.scripts.campaign.hardmode.UNGP_SpecialistSettings;
-import data.scripts.campaign.intel.UNGP_SpecialistIntel;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -352,13 +352,6 @@ public class UNGP_InteractionDialog implements InteractionDialogPlugin {
                 textPanel.addPara(d_i18n.get("recordSuccess"));
                 addLeaveButton();
                 break;
-//            case START_RECORD:
-//                inGameData.isRecorded = true;
-//                UNGP_InheritData.Save(toRecordInheritData);
-//                Global.getSoundPlayer().playUISound("ui_rep_raise", 1, 1);
-//                textPanel.addPara(i18n.get("recordSuccess"));
-//                addLeaveButton();
-//                break;
             case BACK_TO_MENU:
                 initMenu();
                 break;
@@ -482,7 +475,7 @@ public class UNGP_InteractionDialog implements InteractionDialogPlugin {
         inGameData.isHardMode = isHardMode;
         if (isHardMode) {
             inGameData.difficultyLevel = difficultyValue;
-            inGameData.loadActivatedRules(selectedRules);
+            inGameData.recordActivatedRules(selectedRules);
             UNGP_RulesManager.refreshRulesCache();
             UNGP_SpecialistIntel intel = UNGP_SpecialistIntel.getInstance();
             Global.getSector().getIntelManager().addIntelToTextPanel(intel, textPanel);

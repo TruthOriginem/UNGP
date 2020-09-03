@@ -2,7 +2,7 @@ package data.scripts.ungprules.impl.member;
 
 import com.fs.starfarer.api.campaign.CampaignFleetAPI;
 import com.fs.starfarer.api.fleet.FleetMemberAPI;
-import data.scripts.ungprules.UNGP_BaseRuleEffect;
+import data.scripts.ungprules.impl.UNGP_BaseRuleEffect;
 
 public class UNGP_EliteReserves extends UNGP_BaseRuleEffect {
     private float maxBonus;

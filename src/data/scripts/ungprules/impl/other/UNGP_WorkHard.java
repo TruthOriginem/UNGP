@@ -3,13 +3,17 @@ package data.scripts.ungprules.impl.other;
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.CampaignFleetAPI;
 import com.fs.starfarer.api.fleet.FleetMemberAPI;
+import com.fs.starfarer.api.util.Misc;
 import com.fs.starfarer.api.util.WeightedRandomPicker;
 import data.scripts.campaign.UNGP_CampaignPlugin.TempCampaignParams;
-import data.scripts.ungprules.UNGP_BaseRuleEffect;
+import data.scripts.ungprules.impl.UNGP_BaseRuleEffect;
+
+import java.awt.*;
 
 import static data.scripts.campaign.intel.UNGP_SpecialistIntel.RuleMessage;
 
 public class UNGP_WorkHard extends UNGP_BaseRuleEffect {
+    private static final String MEM_CHECK_WORK = "$UNGP_WorkHard";
     private static final float STRIKE_CHANCE_PER_DAY = 0.05f;
     private static final float CR_LOSS = 0.50f;
     private float ratio;
@@ -28,12 +32,13 @@ public class UNGP_WorkHard extends UNGP_BaseRuleEffect {
     @Override
     public void advanceInCampaign(float amount, TempCampaignParams params) {
         if (params.isOneDayPassed()) {
-            if (Math.random() < STRIKE_CHANCE_PER_DAY) {
-                CampaignFleetAPI fleet = Global.getSector().getPlayerFleet();
-                float crew = fleet.getCargo().getCrew();
-                crew = crew < 1 ? 1f : crew;
-                float marine = fleet.getCargo().getMarines();
-                if (marine / crew < ratio) {
+            CampaignFleetAPI fleet = Global.getSector().getPlayerFleet();
+            float crew = fleet.getCargo().getCrew();
+            crew = crew < 1 ? 1f : crew;
+            float marine = fleet.getCargo().getMarines();
+            float neededMarine = crew * ratio - marine;
+            if (neededMarine > 0) {
+                if (Math.random() < STRIKE_CHANCE_PER_DAY) {
                     WeightedRandomPicker<FleetMemberAPI> picker = new WeightedRandomPicker<>();
                     for (FleetMemberAPI member : fleet.getFleetData().getMembersListCopy()) {
                         if (!member.isMothballed()) {
@@ -45,6 +50,15 @@ public class UNGP_WorkHard extends UNGP_BaseRuleEffect {
                     RuleMessage message = new RuleMessage(rule, rule.getRuleInfo().getExtra1(), notWorkHard.getShipName());
                     message.send();
                 }
+                if (!fleet.getMemoryWithoutUpdate().contains(MEM_CHECK_WORK)) {
+                    fleet.getMemoryWithoutUpdate().set(MEM_CHECK_WORK, true, 3f);
+                    String neededMarineString = (int) neededMarine + "";
+                    Color negative = Misc.getNegativeHighlightColor();
+                    Color highlight = Misc.getHighlightColor();
+                    Global.getSector().getCampaignUI().addMessage(String.format(rule.getRuleInfo().getExtra2(), neededMarineString),
+                            negative, neededMarineString, "", highlight, highlight);
+                }
+
             }
         }
     }

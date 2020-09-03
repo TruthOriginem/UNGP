@@ -4,7 +4,7 @@ import com.fs.starfarer.api.campaign.BuffManagerAPI;
 import com.fs.starfarer.api.campaign.CampaignFleetAPI;
 import com.fs.starfarer.api.fleet.FleetMemberAPI;
 import com.fs.starfarer.api.impl.campaign.ids.Tags;
-import data.scripts.ungprules.UNGP_BaseRuleEffect;
+import data.scripts.ungprules.impl.UNGP_BaseRuleEffect;
 import data.scripts.utils.UNGP_BaseBuff;
 
 public class UNGP_AncientThreat extends UNGP_BaseRuleEffect {

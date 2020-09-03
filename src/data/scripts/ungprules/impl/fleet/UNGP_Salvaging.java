@@ -2,7 +2,7 @@ package data.scripts.ungprules.impl.fleet;
 
 import com.fs.starfarer.api.campaign.CampaignFleetAPI;
 import com.fs.starfarer.api.impl.campaign.ids.Stats;
-import data.scripts.ungprules.UNGP_BaseRuleEffect;
+import data.scripts.ungprules.impl.UNGP_BaseRuleEffect;
 
 public class UNGP_Salvaging extends UNGP_BaseRuleEffect {
     private float bonus;
@@ -12,9 +12,10 @@ public class UNGP_Salvaging extends UNGP_BaseRuleEffect {
         bonus = getValueByDifficulty(0, difficulty);
     }
 
+    //15~30%
     @Override
     public float getValueByDifficulty(int index, int difficulty) {
-        if (index == 0) return 0.05f + 0.1f * (float) Math.pow(difficulty, 0.5021);
+        if (index == 0) return 0.05f + 0.1f * (float) Math.pow(difficulty, 0.3059);
         return 0;
     }
 

@@ -1,19 +1,17 @@
 package data.scripts.ungprules.impl.combat;
 
-import com.fs.starfarer.api.GameState;
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.combat.BattleObjectiveAPI;
 import com.fs.starfarer.api.combat.CombatEngineAPI;
 import com.fs.starfarer.api.combat.MutableShipStatsAPI;
 import com.fs.starfarer.api.combat.ShipAPI;
-import data.scripts.ungprules.UNGP_BaseRuleEffect;
+import data.scripts.ungprules.impl.UNGP_BaseRuleEffect;
+import data.scripts.ungprules.tags.UNGP_CombatTag;
 import data.scripts.utils.UNGPUtils;
 import org.lazywizard.lazylib.MathUtils;
 import org.lwjgl.util.vector.Vector2f;
 
-import java.util.EnumSet;
-
-public class UNGP_TakeHighLand extends UNGP_BaseRuleEffect {
+public class UNGP_TakeHighLand extends UNGP_BaseRuleEffect implements UNGP_CombatTag {
     private static final float RANGE_BONUS = 20f;
     private float range;
 
@@ -70,8 +68,4 @@ public class UNGP_TakeHighLand extends UNGP_BaseRuleEffect {
         return getDescriptionParams(index);
     }
 
-    @Override
-    public EnumSet<GameState> getEffectiveState() {
-        return EnumSet.of(GameState.COMBAT);
-    }
 }

@@ -6,7 +6,7 @@ import com.fs.starfarer.api.campaign.CampaignFleetAPI;
 import com.fs.starfarer.api.fleet.FleetMemberAPI;
 import com.fs.starfarer.api.loading.CampaignPingSpec;
 import data.scripts.campaign.UNGP_CampaignPlugin;
-import data.scripts.ungprules.UNGP_BaseRuleEffect;
+import data.scripts.ungprules.impl.UNGP_BaseRuleEffect;
 import data.scripts.utils.UNGP_BaseBuff;
 
 import java.awt.*;

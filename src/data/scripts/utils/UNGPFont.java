@@ -6,14 +6,21 @@ import org.lazywizard.lazylib.ui.LazyFont.DrawableString;
 
 public class UNGPFont {
     public static DrawableString ORBITRON;
+    private static LazyFont orbitronFont;
 
-    public static void Load() {
+    static {
         try {
-            LazyFont fontdraw = LazyFont.loadFont("graphics/fonts/ungp_orbitron.fnt");
-            ORBITRON = fontdraw.createText();
+            orbitronFont = LazyFont.loadFont("graphics/fonts/ungp_orbitron.fnt");
+            ORBITRON = getOrbitronFont().createText();
         } catch (FontException ex) {
         }
     }
 
+    public static LazyFont getOrbitronFont() {
+        return orbitronFont;
+    }
 
+    public static DrawableString getORBITRON() {
+        return ORBITRON;
+    }
 }

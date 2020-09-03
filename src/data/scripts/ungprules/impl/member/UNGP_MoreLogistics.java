@@ -2,7 +2,7 @@ package data.scripts.ungprules.impl.member;
 
 import com.fs.starfarer.api.fleet.FleetMemberAPI;
 import com.fs.starfarer.api.impl.campaign.ids.Stats;
-import data.scripts.ungprules.UNGP_BaseRuleEffect;
+import data.scripts.ungprules.impl.UNGP_BaseRuleEffect;
 
 public class UNGP_MoreLogistics extends UNGP_BaseRuleEffect {
     private float bonus;
@@ -14,7 +14,7 @@ public class UNGP_MoreLogistics extends UNGP_BaseRuleEffect {
 
     @Override
     public float getValueByDifficulty(int index, int difficulty) {
-        if (index == 0) return (int) (Math.pow(difficulty, 0.37));
+        if (index == 0) return (int) (Math.pow(difficulty, 0.235));
         return 0;
     }
 

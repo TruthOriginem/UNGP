@@ -2,7 +2,7 @@ package data.scripts.ungprules.impl.member;
 
 import com.fs.starfarer.api.fleet.FleetMemberAPI;
 import com.fs.starfarer.api.impl.campaign.ids.Stats;
-import data.scripts.ungprules.UNGP_BaseRuleEffect;
+import data.scripts.ungprules.impl.UNGP_BaseRuleEffect;
 
 public class UNGP_DangerousSector extends UNGP_BaseRuleEffect {
     private float multiplier;

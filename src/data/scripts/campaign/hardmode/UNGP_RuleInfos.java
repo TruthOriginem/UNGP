@@ -1,7 +1,7 @@
 package data.scripts.campaign.hardmode;
 
 import com.fs.starfarer.api.Global;
-import data.scripts.ungprules.UNGP_BaseRuleEffect;
+import data.scripts.ungprules.impl.UNGP_BaseRuleEffect;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UNGP_RuleInfos {
-    public static final UNGP_RuleInfo EMPTY_RULE_INFO = new UNGP_RuleInfo();
     private static final String EMPTY = "[EMPTY]";
     private static final String FILE_PATH = "data/campaign/UNGP_rules.csv";
     private static final List<UNGP_RuleInfo> Loaded_Infos = new ArrayList<>();
@@ -134,7 +133,7 @@ public class UNGP_RuleInfos {
             for (int i = 0; i < ruleInfos.length(); i++) {
                 JSONObject row = ruleInfos.getJSONObject(i);
                 String id = row.optString("id", EMPTY);
-                if (id.isEmpty() || id.equals(EMPTY)) continue;
+                if (isEmpty(id)) continue;
                 String name = row.optString("name", EMPTY);
                 String shortDesc = row.optString("short", EMPTY);
                 String desc = row.optString("desc", EMPTY);
@@ -162,5 +161,9 @@ public class UNGP_RuleInfos {
         }
 
         return Loaded_Infos;
+    }
+
+    private static boolean isEmpty(String target) {
+        return target == null || target.isEmpty() || target.equals(EMPTY);
     }
 }

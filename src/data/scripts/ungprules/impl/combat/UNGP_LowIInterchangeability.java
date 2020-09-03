@@ -1,13 +1,11 @@
 package data.scripts.ungprules.impl.combat;
 
-import com.fs.starfarer.api.GameState;
 import com.fs.starfarer.api.combat.MutableShipStatsAPI;
 import com.fs.starfarer.api.combat.ShipAPI;
-import data.scripts.ungprules.UNGP_BaseRuleEffect;
+import data.scripts.ungprules.impl.UNGP_BaseRuleEffect;
+import data.scripts.ungprules.tags.UNGP_CombatTag;
 
-import java.util.EnumSet;
-
-public class UNGP_LowIInterchangeability extends UNGP_BaseRuleEffect {
+public class UNGP_LowIInterchangeability extends UNGP_BaseRuleEffect implements UNGP_CombatTag {
     private float multiplier;
 
     @Override
@@ -40,8 +38,4 @@ public class UNGP_LowIInterchangeability extends UNGP_BaseRuleEffect {
         return null;
     }
 
-    @Override
-    public EnumSet<GameState> getEffectiveState() {
-        return EnumSet.of(GameState.COMBAT);
-    }
 }

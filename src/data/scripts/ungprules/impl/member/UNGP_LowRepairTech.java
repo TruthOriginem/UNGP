@@ -1,7 +1,7 @@
 package data.scripts.ungprules.impl.member;
 
 import com.fs.starfarer.api.fleet.FleetMemberAPI;
-import data.scripts.ungprules.UNGP_BaseRuleEffect;
+import data.scripts.ungprules.impl.UNGP_BaseRuleEffect;
 
 public class UNGP_LowRepairTech extends UNGP_BaseRuleEffect {
     private float reduction;

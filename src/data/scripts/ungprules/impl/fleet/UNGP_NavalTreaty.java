@@ -3,7 +3,7 @@ package data.scripts.ungprules.impl.fleet;
 import com.fs.starfarer.api.campaign.BuffManagerAPI;
 import com.fs.starfarer.api.campaign.CampaignFleetAPI;
 import com.fs.starfarer.api.fleet.FleetMemberAPI;
-import data.scripts.ungprules.UNGP_BaseRuleEffect;
+import data.scripts.ungprules.impl.UNGP_BaseRuleEffect;
 import data.scripts.utils.UNGP_BaseBuff;
 
 import java.util.ArrayList;

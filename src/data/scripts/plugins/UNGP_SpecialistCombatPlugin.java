@@ -1,6 +1,5 @@
 package data.scripts.plugins;
 
-import com.fs.starfarer.api.GameState;
 import com.fs.starfarer.api.combat.BaseEveryFrameCombatPlugin;
 import com.fs.starfarer.api.combat.CombatEngineAPI;
 import com.fs.starfarer.api.combat.ShipAPI;
@@ -8,11 +7,12 @@ import com.fs.starfarer.api.input.InputEventAPI;
 import data.scripts.campaign.UNGP_CampaignPlugin;
 import data.scripts.campaign.UNGP_InGameData;
 import data.scripts.utils.SimpleI18n;
+import data.scripts.utils.UNGPUtils;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static data.scripts.campaign.hardmode.UNGP_RulesManager.ACTIVATED_RULES_IN_THIS_GAME;
+import static data.scripts.campaign.hardmode.UNGP_RulesManager.COMBAT_RULES_IN_THIS_GAME;
 import static data.scripts.campaign.hardmode.UNGP_RulesManager.URule;
 
 public class UNGP_SpecialistCombatPlugin extends BaseEveryFrameCombatPlugin {
@@ -34,11 +34,7 @@ public class UNGP_SpecialistCombatPlugin extends BaseEveryFrameCombatPlugin {
             if (inGameData != null && inGameData.isHardMode) {
                 isHardMode = true;
                 difficultyLevel = inGameData.getDifficultyLevel();
-                for (URule rule : ACTIVATED_RULES_IN_THIS_GAME) {
-                    if (rule.getUseStates().contains(GameState.COMBAT)) {
-                        activatedRules.add(rule);
-                    }
-                }
+                activatedRules.addAll(COMBAT_RULES_IN_THIS_GAME);
             }
         }
     }
@@ -62,11 +58,10 @@ public class UNGP_SpecialistCombatPlugin extends BaseEveryFrameCombatPlugin {
 
         for (ShipAPI ship : engine.getShips()) {
             if (!ship.isAlive()) continue;
-            if (ship.isAlly() || ship.getOwner() == 0) {
-                if (ship.getOwner() == 0)
-                    for (URule rule : activatedRules) {
-                        rule.getRuleEffect().applyPlayerShipInCombat(amount, engine, ship);
-                    }
+            if (UNGPUtils.isPlayerShip(ship)) {
+                for (URule rule : activatedRules) {
+                    rule.getRuleEffect().applyPlayerShipInCombat(amount, engine, ship);
+                }
             } else {
                 for (URule rule : activatedRules) {
                     rule.getRuleEffect().applyEnemyShipInCombat(amount, ship);

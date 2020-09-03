@@ -14,8 +14,7 @@ import data.scripts.campaign.hardmode.UNGP_PlayerFleetMemberBuff;
 import data.scripts.utils.SimpleI18n;
 import org.lwjgl.input.Keyboard;
 
-import static data.scripts.campaign.hardmode.UNGP_RulesManager.ACTIVATED_RULES_IN_THIS_GAME;
-import static data.scripts.campaign.hardmode.UNGP_RulesManager.URule;
+import static data.scripts.campaign.hardmode.UNGP_RulesManager.*;
 
 public class UNGP_CampaignPlugin implements EveryFrameScript, CampaignEventListener {
     private static final String KEY = "UNGP_cam";
@@ -26,7 +25,7 @@ public class UNGP_CampaignPlugin implements EveryFrameScript, CampaignEventListe
     /***
      * 源头
      */
-    public UNGP_InGameData inGameData;
+    private UNGP_InGameData inGameData;
 
     private IntervalUtil inheritChecker = new IntervalUtil(1f, 1f);
     private int oneDayChecker = -1;
@@ -149,7 +148,7 @@ public class UNGP_CampaignPlugin implements EveryFrameScript, CampaignEventListe
             amount = 0;
         }
 
-        for (URule rule : ACTIVATED_RULES_IN_THIS_GAME) {
+        for (URule rule : CAMPAIGN_RULES_IN_THIS_GAME) {
             rule.getRuleEffect().advanceInCampaign(amount, params);
         }
 
@@ -157,7 +156,7 @@ public class UNGP_CampaignPlugin implements EveryFrameScript, CampaignEventListe
         CampaignFleetAPI playerFleet = Global.getSector().getPlayerFleet();
         if (playerFleet == null) return;
         //对玩家舰队的增益
-        for (URule rule : ACTIVATED_RULES_IN_THIS_GAME) {
+        for (URule rule : CAMPAIGN_RULES_IN_THIS_GAME) {
             rule.getRuleEffect().applyPlayerFleetStats(playerFleet);
         }
 

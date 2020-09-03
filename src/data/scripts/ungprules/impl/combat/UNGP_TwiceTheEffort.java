@@ -1,15 +1,13 @@
 package data.scripts.ungprules.impl.combat;
 
-import com.fs.starfarer.api.GameState;
 import com.fs.starfarer.api.combat.CombatEngineAPI;
 import com.fs.starfarer.api.combat.FighterWingAPI;
 import com.fs.starfarer.api.combat.MutableShipStatsAPI;
 import com.fs.starfarer.api.combat.ShipAPI;
-import data.scripts.ungprules.UNGP_BaseRuleEffect;
+import data.scripts.ungprules.impl.UNGP_BaseRuleEffect;
+import data.scripts.ungprules.tags.UNGP_CombatTag;
 
-import java.util.EnumSet;
-
-public class UNGP_TwiceTheEffort extends UNGP_BaseRuleEffect {
+public class UNGP_TwiceTheEffort extends UNGP_BaseRuleEffect implements UNGP_CombatTag {
     private static final float REPLACEMENT_THRESHOLD = 0.5f;
     private float multiplier;
 
@@ -64,10 +62,5 @@ public class UNGP_TwiceTheEffort extends UNGP_BaseRuleEffect {
     public String getDescriptionParams(int index, int difficulty) {
         if (index == 1) return getPercentString(getValueByDifficulty(0, difficulty) * 100f);
         return getDescriptionParams(index);
-    }
-
-    @Override
-    public EnumSet<GameState> getEffectiveState() {
-        return EnumSet.of(GameState.COMBAT);
     }
 }

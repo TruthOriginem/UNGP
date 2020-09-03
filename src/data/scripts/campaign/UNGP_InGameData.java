@@ -1,11 +1,11 @@
 package data.scripts.campaign;
 
 import com.fs.starfarer.api.Global;
+import data.scripts.campaign.hardmode.UNGP_RulesManager;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static data.scripts.campaign.hardmode.UNGP_RulesManager.ALL_RULES;
 import static data.scripts.campaign.hardmode.UNGP_RulesManager.URule;
 
 /**
@@ -23,6 +23,7 @@ public class UNGP_InGameData {
 
     /**
      * 一年一度可以获得一次专家规则更改的能力
+     *
      * @return
      */
     public int getTimesToChangeSpecialistMode() {
@@ -41,7 +42,7 @@ public class UNGP_InGameData {
     }
 
 
-    public void loadActivatedRules(List<URule> rules) {
+    public void recordActivatedRules(List<URule> rules) {
         activatedRuleIDs.clear();
         for (URule rule : rules) {
             activatedRuleIDs.add(rule.getId());
@@ -50,7 +51,7 @@ public class UNGP_InGameData {
 
     public List<URule> loadActivatedRules() {
         List<URule> results = new ArrayList<>();
-        for (URule rule : ALL_RULES) {
+        for (URule rule : UNGP_RulesManager.getAllRules()) {
             if (activatedRuleIDs.contains(rule.getId())) {
                 results.add(rule);
             }
