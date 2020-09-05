@@ -28,7 +28,7 @@
     "d_rulepick_desc": "请遵循以下指示:\n -正面规则消耗Cost点\n -负面规则增加Cost点\n -剩余Cost大于等于0才能开启专家模式\n -使用的规则数目必须大于0\n -按Shift切换信息显示模式",
     "d_rulepick_level": "专家等级: %s",
     "d_rulepick_cost": "剩余Cost点: %s",
-    "d_rulepick_ruleAmount": "规则数目: %s / %s (最低规则数: %s)",
+    "d_rulepick_ruleAmount": "规则数目: %s / %s \n最低规则数: %s",
     "d_rulepick_notMeet": "未达到开启条件!",
     "d_hardModeYes": "开启专家模式！我太难了！",
     "d_startInherit": "开始继承",

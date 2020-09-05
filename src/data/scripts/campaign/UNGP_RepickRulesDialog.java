@@ -71,9 +71,7 @@ public class UNGP_RepickRulesDialog implements InteractionDialogPlugin {
                     for (URule rule : pickedList) {
                         TooltipMakerAPI imageMaker = tooltip.beginImageWithText(rule.getSpritePath(), 32f);
                         imageMaker.addPara(rule.getName(), rule.getBorderColor(), 0f);
-                        imageMaker.setParaInsigniaLarge();
                         rule.addDesc(imageMaker, 0f);
-                        imageMaker.setParaFontDefault();
                         tooltip.addImageWithText(3f);
                     }
                     couldRepick = true;

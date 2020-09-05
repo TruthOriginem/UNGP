@@ -355,9 +355,7 @@ public class UNGP_InteractionDialog implements InteractionDialogPlugin {
                         for (URule rule : selectedRules) {
                             TooltipMakerAPI imageMaker = tooltip.beginImageWithText(rule.getSpritePath(), 32f);
                             imageMaker.addPara(rule.getName(), rule.getBorderColor(), 0f);
-                            imageMaker.setParaInsigniaLarge();
                             rule.addDesc(imageMaker, 0f);
-                            imageMaker.setParaFontDefault();
                             tooltip.addImageWithText(3f);
                         }
                         if (!UNGP_SpecialistSettings.rulesMeetCondition(selectedRules, difficultyValue)) {
