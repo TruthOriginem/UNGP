@@ -1,8 +1,8 @@
 {
     "id": "ungp",
     "name": "重生[UNGP]",
-    "author": "主创:Originem\n翻译:RUA\n建议及创意:海鲜群的诸位\n感谢:Game-icons.net",
-    "version": "1.0.0",
+    "author": "主创:Originem\n翻译:RUA,Fax\n图标提供:Originem,影之光,和莱\n建议及创意:海鲜群的诸位\n感谢:Game-icons.net",
+    "version": "1.0.1",
     "description": "需要Lazylib作为前置\n满级后可以记录当前的无形资产例如各类蓝图，传递给下一个存档。\n全方面给游戏添加新规则的专家模式。\n左ctrl+P呼出菜单",
     "gameVersion": "0.9.1a",
     "jars":["jars/ungp.jar"],

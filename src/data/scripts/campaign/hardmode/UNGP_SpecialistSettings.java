@@ -13,8 +13,14 @@ public class UNGP_SpecialistSettings {
         return Math.min(20, (cycle - 1) * 5);
     }
 
-    public static int getMaxRulesAmount(int difficutlyLevel) {
-        return (int) (3 + Math.pow(difficutlyLevel, 0.65));
+    //3~10
+    public static int getMaxRulesAmount(int difficutlylevel) {
+        return (int) (3 + Math.pow(difficutlylevel, 0.65));
+    }
+
+    //1~5
+    public static int getMinRulesAmount(int difficutlylevel) {
+        return (int) (Math.pow(difficutlylevel, 0.54));
     }
 
     public static boolean rulesMeetCondition(List<URule> rules, int difficultyLevel) {
@@ -24,7 +30,9 @@ public class UNGP_SpecialistSettings {
             cost += rule.getCost();
         }
         if (cost < 0) return false;
-        return rules.size() <= getMaxRulesAmount(difficultyLevel);
+        int size = rules.size();
+        return size <= getMaxRulesAmount(difficultyLevel) &&
+                size >= getMinRulesAmount(difficultyLevel);
     }
 
     public static String getSpecialistModeIconPath() {

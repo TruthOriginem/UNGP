@@ -1,3 +1,8 @@
+1.0.1
+专家模式现在有最低规则数限制了。
+
+Specialist Mode have the limitation of minimum amount of rules now.
+
 1.0.0
 重生点在继承后不会再销毁了。
 现在可以最多记录三个重生点。

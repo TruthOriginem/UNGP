@@ -1,8 +1,8 @@
 {
     "id": "ungp",
     "name": "Unofficial New Game Plus",
-    "author": "Originem\nTranslated By RUA\nIdeas from Haixian Group",
-    "version": "1.0.0",
+    "author": "Originem\nTranslated By RUA,Fax\nSprites by Originem, Light of Shadow, Helai\nIdeas from Haixian Group\nSpecial Thanks: Game-icons.net",
+    "version": "1.0.1",
     "description": "Requires Lazylib\nA mod with a similar 'new game plus' function.\n Left ctrl+P to call the menu",
     "gameVersion": "0.9.1a",
     "jars":["jars/ungp.jar"],

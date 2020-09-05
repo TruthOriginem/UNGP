@@ -91,8 +91,9 @@ public class UNGP_RulePickListener implements CargoPickerListener {
         Color color = cost >= 0 ? highlight : negative;
         panel.addPara(d_i18n.get("rulepick_cost"), pad, color, cost + "");
         int maxAmount = UNGP_SpecialistSettings.getMaxRulesAmount(difficultyValue);
+        int minAmount = UNGP_SpecialistSettings.getMinRulesAmount(difficultyValue);
         color = amount <= maxAmount ? highlight : negative;
-        panel.addPara(d_i18n.get("rulepick_ruleAmount"), pad, color, amount + "", maxAmount + "");
+        panel.addPara(d_i18n.get("rulepick_ruleAmount"), pad, color, amount + "", maxAmount + "", minAmount + "");
         panel.setParaFontDefault();
 
         Collections.sort(bonusRules, new UNGP_RuleSorter());
