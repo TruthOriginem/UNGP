@@ -9,7 +9,7 @@ import java.util.List;
 import static data.scripts.campaign.hardmode.UNGP_RulesManager.URule;
 
 /**
- * 记录在游戏中
+ * 记录在游戏中,基本为存档信息
  */
 public class UNGP_InGameData {
     int curCycle = 1;
@@ -41,14 +41,21 @@ public class UNGP_InGameData {
     public UNGP_InGameData() {
     }
 
-
-    public void recordActivatedRules(List<URule> rules) {
+    /**
+     * Save rule ids
+     * @param rules
+     */
+    public void saveActivatedRules(List<URule> rules) {
         activatedRuleIDs.clear();
         for (URule rule : rules) {
             activatedRuleIDs.add(rule.getId());
         }
     }
 
+    /**
+     * Load rule ids
+     * @return
+     */
     public List<URule> loadActivatedRules() {
         List<URule> results = new ArrayList<>();
         for (URule rule : UNGP_RulesManager.getAllRules()) {

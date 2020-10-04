@@ -64,6 +64,8 @@
     "isBonus": "Positive Rule",
     "notBonus": "Negative Rule",
     "cost_point": "Cost: %s",
-    "repick_desc": "You can gain one chance to repick your rules every cycle and you have an additional chance at first."
+    "repick_desc": "You can gain one chance to repick your rules every cycle and you have an additional chance at first.",
+    "halved": "halved"
+
   }
 }

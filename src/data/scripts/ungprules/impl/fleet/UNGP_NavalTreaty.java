@@ -4,12 +4,13 @@ import com.fs.starfarer.api.campaign.BuffManagerAPI;
 import com.fs.starfarer.api.campaign.CampaignFleetAPI;
 import com.fs.starfarer.api.fleet.FleetMemberAPI;
 import data.scripts.ungprules.impl.UNGP_BaseRuleEffect;
+import data.scripts.ungprules.tags.UNGP_PlayerFleetTag;
 import data.scripts.utils.UNGP_BaseBuff;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class UNGP_NavalTreaty extends UNGP_BaseRuleEffect {
+public class UNGP_NavalTreaty extends UNGP_BaseRuleEffect implements UNGP_PlayerFleetTag {
     private static final int THRESHOLD_DESIGN_TYPE_AMOUNT = 2;
     private static final float MAX_CR_REDUCTION_PER_TYPE = 0.15f;
 
@@ -34,7 +35,7 @@ public class UNGP_NavalTreaty extends UNGP_BaseRuleEffect {
     }
 
     @Override
-    public void refreshDifficultyCache(int difficulty) {
+    public void updateDifficultyCache(int difficulty) {
 
     }
 
@@ -50,6 +51,7 @@ public class UNGP_NavalTreaty extends UNGP_BaseRuleEffect {
         final List<FleetMemberAPI> members = fleet.getFleetData().getMembersListCopy();
         for (FleetMemberAPI member : members) {
             String designType = member.getHullSpec().getManufacturer();
+            if (member.isMothballed()) continue;
             if (!designTypes.contains(designType)) {
                 designTypes.add(designType);
             }

@@ -5,9 +5,10 @@ import com.fs.starfarer.api.campaign.CampaignFleetAPI;
 import com.fs.starfarer.api.fleet.FleetMemberAPI;
 import com.fs.starfarer.api.impl.campaign.ids.Tags;
 import data.scripts.ungprules.impl.UNGP_BaseRuleEffect;
+import data.scripts.ungprules.tags.UNGP_PlayerFleetTag;
 import data.scripts.utils.UNGP_BaseBuff;
 
-public class UNGP_AncientThreat extends UNGP_BaseRuleEffect {
+public class UNGP_AncientThreat extends UNGP_BaseRuleEffect implements UNGP_PlayerFleetTag {
     private class ThreatBuff extends UNGP_BaseBuff {
 
         public ThreatBuff(String id, float dur) {
@@ -23,7 +24,7 @@ public class UNGP_AncientThreat extends UNGP_BaseRuleEffect {
     private float reduction;
 
     @Override
-    public void refreshDifficultyCache(int difficulty) {
+    public void updateDifficultyCache(int difficulty) {
         reduction = getValueByDifficulty(0, difficulty);
     }
 

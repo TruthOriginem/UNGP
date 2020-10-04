@@ -11,9 +11,12 @@ import com.fs.starfarer.api.combat.EngagementResultAPI;
 import com.fs.starfarer.api.fleet.FleetMemberAPI;
 import com.fs.starfarer.api.util.IntervalUtil;
 import data.scripts.campaign.hardmode.UNGP_PlayerFleetMemberBuff;
+import data.scripts.ungprules.tags.UNGP_CampaignTag;
+import data.scripts.ungprules.tags.UNGP_PlayerFleetTag;
 import data.scripts.utils.SimpleI18n;
 import org.lwjgl.input.Keyboard;
 
+import static com.fs.starfarer.api.campaign.BuffManagerAPI.Buff;
 import static data.scripts.campaign.hardmode.UNGP_RulesManager.*;
 
 public class UNGP_CampaignPlugin implements EveryFrameScript, CampaignEventListener {
@@ -45,6 +48,9 @@ public class UNGP_CampaignPlugin implements EveryFrameScript, CampaignEventListe
         }
     }
 
+    /**
+     * The entity loaded has a custom plugin {@link data.scripts.utils.UNGP_UIEntityPlugin}
+     */
     public static void loadUIEntity() {
         UNGP_CampaignPlugin plugin = UNGP_CampaignPlugin.getInstance();
         plugin.ui_entity = Global.getSector().getEntityById(ENTITY_ID);
@@ -63,8 +69,11 @@ public class UNGP_CampaignPlugin implements EveryFrameScript, CampaignEventListe
     }
 
     public void init() {
+        //clear the listener
         Global.getSector().getListenerManager().removeListenerOfClass(UNGP_CampaignPlugin.class);
         Global.getSector().removeScriptsOfClass(UNGP_CampaignPlugin.class);
+
+        //add listener
         Global.getSector().getListenerManager().addListener(this);
         Global.getSector().addScript(this);
         Global.getSector().getPersistentData().put(KEY, this);
@@ -123,6 +132,7 @@ public class UNGP_CampaignPlugin implements EveryFrameScript, CampaignEventListe
         //以下专家模式才可触发
         if (!inGameData.isHardMode) return;
 
+        //调整专家模式UI的位置
         if (!ui_entity.isInCurrentLocation()) {
             LocationAPI loc = Global.getSector().getCurrentLocation();
             ui_entity.getContainingLocation().removeEntity(ui_entity);
@@ -148,36 +158,37 @@ public class UNGP_CampaignPlugin implements EveryFrameScript, CampaignEventListe
             amount = 0;
         }
 
-        for (URule rule : CAMPAIGN_RULES_IN_THIS_GAME) {
-            rule.getRuleEffect().advanceInCampaign(amount, params);
+        //生涯通用效果
+        for (UNGP_CampaignTag tag : CAMPAIGN_TAGS_ITG) {
+            tag.advanceInCampaign(amount, params);
         }
 
         //玩家舰队
         CampaignFleetAPI playerFleet = Global.getSector().getPlayerFleet();
         if (playerFleet == null) return;
-        //对玩家舰队的增益
-        for (URule rule : CAMPAIGN_RULES_IN_THIS_GAME) {
-            rule.getRuleEffect().applyPlayerFleetStats(playerFleet);
+
+        //对玩家舰队的效果
+        for (UNGP_PlayerFleetTag tag : PLAYER_FLEET_TAGS_ITG) {
+            tag.applyPlayerFleetStats(playerFleet);
         }
 
-//        int mouseX = Mouse.getY();
-//        playerFleet.getCargo().getCredits().set(mouseX);
-        String buffId = BUFF_ID;
-        float buffDur = 0.1f;
-        boolean needsSync = false;
-        for (FleetMemberAPI member : playerFleet.getFleetData().getMembersListCopy()) {
-            BuffManagerAPI.Buff test = member.getBuffManager().getBuff(buffId);
-            if (test instanceof UNGP_PlayerFleetMemberBuff) {
-                UNGP_PlayerFleetMemberBuff buff = (UNGP_PlayerFleetMemberBuff) test;
-                buff.setDur(buffDur);
-            } else {
-                member.getBuffManager().addBuff(new UNGP_PlayerFleetMemberBuff(buffId, buffDur));
-                needsSync = true;
+        //玩家舰队成员效果
+        if (!PLAYER_FLEET_MEMBER_TAGS_ITG.isEmpty()) {
+            float buffDur = 0.1f;
+            boolean needsSync = false;
+            for (FleetMemberAPI member : playerFleet.getFleetData().getMembersListCopy()) {
+                Buff test = member.getBuffManager().getBuff(BUFF_ID);
+                if (test instanceof UNGP_PlayerFleetMemberBuff) {
+                    UNGP_PlayerFleetMemberBuff buff = (UNGP_PlayerFleetMemberBuff) test;
+                    buff.setDur(buffDur);
+                } else {
+                    member.getBuffManager().addBuff(new UNGP_PlayerFleetMemberBuff(BUFF_ID, buffDur));
+                    needsSync = true;
+                }
             }
-        }
-
-        if (needsSync) {
-            playerFleet.forceSync();
+            if (needsSync) {
+                playerFleet.forceSync();
+            }
         }
     }
 

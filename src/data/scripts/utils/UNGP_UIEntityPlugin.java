@@ -81,7 +81,7 @@ public class UNGP_UIEntityPlugin extends BaseCustomEntityPlugin {
         if (layer != CampaignEngineLayers.ABOVE) {
             return;
         }
-        DrawableString levelString = UNGPFont.getOrbitronFont().createText(getShownDifficultyLevel() + "");
+        DrawableString levelString = UNGPFont.getOrbitronFont().createText(getCurrentDifficultyLevel() + "");
 
         float amount = getDeltaTime();
 
@@ -140,7 +140,7 @@ public class UNGP_UIEntityPlugin extends BaseCustomEntityPlugin {
         float textHeight = levelString.getHeight();
         float textWidth = levelString.getWidth();
 //        LazyFont.DrawableString drawableString = UNGPFont.fontdraw.createText(ShownDifficultyLevel + "");
-        levelString.setColor(Misc.interpolateColor(LEVEL_COLOR, Color.red, Math.min(1f, UNGP_RulesManager.getShownDifficultyLevel() / 20f)));
+        levelString.setColor(Misc.interpolateColor(LEVEL_COLOR, Color.red, Math.min(1f, UNGP_RulesManager.getCurrentDifficultyLevel() / 20f)));
         levelString.draw(SpecialistIconRect.getX() + SpecialistIconRect.getWidth() * 0.5f - textWidth * 0.5f,
                 SpecialistIconRect.getY() + SpecialistIconRect.getHeight() * 0.5f + textHeight * 0.5f);
 

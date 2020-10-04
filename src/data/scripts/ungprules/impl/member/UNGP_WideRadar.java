@@ -2,12 +2,13 @@ package data.scripts.ungprules.impl.member;
 
 import com.fs.starfarer.api.fleet.FleetMemberAPI;
 import data.scripts.ungprules.impl.UNGP_BaseRuleEffect;
+import data.scripts.ungprules.tags.UNGP_PlayerFleetMemberTag;
 
-public class UNGP_WideRadar extends UNGP_BaseRuleEffect {
+public class UNGP_WideRadar extends UNGP_BaseRuleEffect implements UNGP_PlayerFleetMemberTag {
     private float bonus;
 
     @Override
-    public void refreshDifficultyCache(int difficulty) {
+    public void updateDifficultyCache(int difficulty) {
         bonus = getValueByDifficulty(0, difficulty);
     }
 
@@ -20,7 +21,7 @@ public class UNGP_WideRadar extends UNGP_BaseRuleEffect {
 
     @Override
     public void applyPlayerFleetMemberInCampaign(FleetMemberAPI member) {
-        member.getStats().getSensorStrength().modifyPercent(rule.getBuffID(), bonus * 100f);
+        member.getStats().getSensorStrength().modifyMult(rule.getBuffID(), 1f + bonus);
     }
 
     @Override

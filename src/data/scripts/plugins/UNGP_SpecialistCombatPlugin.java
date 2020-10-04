@@ -6,6 +6,7 @@ import com.fs.starfarer.api.combat.ShipAPI;
 import com.fs.starfarer.api.input.InputEventAPI;
 import data.scripts.campaign.UNGP_CampaignPlugin;
 import data.scripts.campaign.UNGP_InGameData;
+import data.scripts.ungprules.tags.UNGP_CombatTag;
 import data.scripts.utils.SimpleI18n;
 import data.scripts.utils.UNGPUtils;
 
@@ -24,7 +25,7 @@ public class UNGP_SpecialistCombatPlugin extends BaseEveryFrameCombatPlugin {
     private int difficultyLevel = 0;
     private boolean isHardMode = false;
 
-    private List<URule> activatedRules = new ArrayList<>();
+    private List<URule> combatRules = new ArrayList<>();
 
     public void init(CombatEngineAPI engine) {
         this.engine = engine;
@@ -34,7 +35,11 @@ public class UNGP_SpecialistCombatPlugin extends BaseEveryFrameCombatPlugin {
             if (inGameData != null && inGameData.isHardMode) {
                 isHardMode = true;
                 difficultyLevel = inGameData.getDifficultyLevel();
-                activatedRules.addAll(COMBAT_RULES_IN_THIS_GAME);
+                for (URule rule : COMBAT_RULES_IN_THIS_GAME) {
+                    if (rule.getRuleEffect() instanceof UNGP_CombatTag) {
+                        combatRules.add(rule);
+                    }
+                }
             }
         }
     }
@@ -44,7 +49,7 @@ public class UNGP_SpecialistCombatPlugin extends BaseEveryFrameCombatPlugin {
         if (!init) {
             init = true;
             if (isHardMode) {
-                for (URule rule : activatedRules) {
+                for (URule rule : combatRules) {
                     engine.getCombatUI().addMessage(0, rule.getDesc(difficultyLevel));
                 }
                 engine.getCombatUI().addMessage(0, i18n.get("start"));
@@ -52,19 +57,19 @@ public class UNGP_SpecialistCombatPlugin extends BaseEveryFrameCombatPlugin {
         }
 
         if (!isHardMode) return;
-        for (URule rule : activatedRules) {
-            rule.getRuleEffect().advanceInCombat(engine, amount);
+        for (URule rule : combatRules) {
+            ((UNGP_CombatTag) rule.getRuleEffect()).advanceInCombat(engine, amount);
         }
 
         for (ShipAPI ship : engine.getShips()) {
             if (!ship.isAlive()) continue;
             if (UNGPUtils.isPlayerShip(ship)) {
-                for (URule rule : activatedRules) {
-                    rule.getRuleEffect().applyPlayerShipInCombat(amount, engine, ship);
+                for (URule rule : combatRules) {
+                    ((UNGP_CombatTag) rule.getRuleEffect()).applyPlayerShipInCombat(amount, engine, ship);
                 }
             } else {
-                for (URule rule : activatedRules) {
-                    rule.getRuleEffect().applyEnemyShipInCombat(amount, ship);
+                for (URule rule : combatRules) {
+                    ((UNGP_CombatTag) rule.getRuleEffect()).applyEnemyShipInCombat(amount, ship);
                 }
             }
         }

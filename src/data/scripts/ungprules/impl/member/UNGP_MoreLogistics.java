@@ -3,12 +3,13 @@ package data.scripts.ungprules.impl.member;
 import com.fs.starfarer.api.fleet.FleetMemberAPI;
 import com.fs.starfarer.api.impl.campaign.ids.Stats;
 import data.scripts.ungprules.impl.UNGP_BaseRuleEffect;
+import data.scripts.ungprules.tags.UNGP_PlayerFleetMemberTag;
 
-public class UNGP_MoreLogistics extends UNGP_BaseRuleEffect {
+public class UNGP_MoreLogistics extends UNGP_BaseRuleEffect implements UNGP_PlayerFleetMemberTag {
     private float bonus;
 
     @Override
-    public void refreshDifficultyCache(int difficulty) {
+    public void updateDifficultyCache(int difficulty) {
         bonus = getValueByDifficulty(0, difficulty);
     }
 

@@ -6,11 +6,12 @@ import com.fs.starfarer.api.campaign.CargoAPI;
 import com.fs.starfarer.api.impl.campaign.ids.Commodities;
 import data.scripts.campaign.UNGP_CampaignPlugin;
 import data.scripts.ungprules.impl.UNGP_BaseRuleEffect;
+import data.scripts.ungprules.tags.UNGP_CampaignTag;
 
-public class UNGP_LobsterPerDay extends UNGP_BaseRuleEffect {
+public class UNGP_LobsterPerDay extends UNGP_BaseRuleEffect implements UNGP_CampaignTag {
 
     @Override
-    public void refreshDifficultyCache(int difficulty) {
+    public void updateDifficultyCache(int difficulty) {
 
     }
 

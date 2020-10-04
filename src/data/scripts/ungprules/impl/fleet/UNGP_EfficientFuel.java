@@ -2,12 +2,13 @@ package data.scripts.ungprules.impl.fleet;
 
 import com.fs.starfarer.api.campaign.CampaignFleetAPI;
 import data.scripts.ungprules.impl.UNGP_BaseRuleEffect;
+import data.scripts.ungprules.tags.UNGP_PlayerFleetTag;
 
-public class UNGP_EfficientFuel extends UNGP_BaseRuleEffect {
+public class UNGP_EfficientFuel extends UNGP_BaseRuleEffect implements UNGP_PlayerFleetTag {
     private float bonus;
 
     @Override
-    public void refreshDifficultyCache(int difficulty) {
+    public void updateDifficultyCache(int difficulty) {
         bonus = getValueByDifficulty(0, difficulty);
     }
 

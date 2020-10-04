@@ -62,7 +62,7 @@ public class UNGP_RepickRulesDialog implements InteractionDialogPlugin {
             pickedList.clear();
             couldRepick = false;
             final int difficultyValue = inGameData.getDifficultyLevel();
-            UNGP_RulesManager.setShownDifficultyLevel(difficultyValue);
+            UNGP_RulesManager.setDifficultyLevel(difficultyValue);
             UNGP_RulePickListener pickListener = new UNGP_RulePickListener(pickedList, difficultyValue, new Script() {
                 @Override
                 public void run() {
@@ -88,8 +88,8 @@ public class UNGP_RepickRulesDialog implements InteractionDialogPlugin {
 
         if (optionData == OptionConfirm) {
             if (!pickedList.isEmpty() && couldRepick) {
-                inGameData.recordActivatedRules(pickedList);
-                UNGP_RulesManager.refreshRulesCache();
+                inGameData.saveActivatedRules(pickedList);
+                UNGP_RulesManager.updateRulesCache();
                 inGameData.reduceTimesToChangeSpecialistMode();
             }
             dialog.dismiss();

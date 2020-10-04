@@ -6,9 +6,11 @@ import data.scripts.campaign.hardmode.UNGP_RulesManager.URule;
 import java.util.List;
 
 public class UNGP_SpecialistSettings {
+    public static final int MAX_DIFFICULTY = 20;
+
     public static int getMaxDifficultyLevel(int cycle) {
         if (Global.getSettings().getBoolean("noDifficultyLimit")) {
-            return 20;
+            return MAX_DIFFICULTY;
         }
         return Math.min(20, (cycle - 1) * 5);
     }

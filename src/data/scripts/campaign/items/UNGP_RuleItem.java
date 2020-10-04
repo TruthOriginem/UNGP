@@ -28,7 +28,6 @@ public class UNGP_RuleItem extends BaseSpecialItemPlugin {
     @Override
     public void createTooltip(TooltipMakerAPI tooltip, boolean expanded, CargoTransferHandlerAPI transferHandler, Object stackSource, boolean useGray) {
         float opad = 10f;
-
         if (rule == null) return;
         tooltip.setTitleOrbitronLarge();
         tooltip.addTitle(rule.getName());
@@ -36,7 +35,7 @@ public class UNGP_RuleItem extends BaseSpecialItemPlugin {
         Color c = Misc.getTextColor();
         rule.addPreDesc(tooltip, opad);
 
-        rule.addDesc(tooltip, opad * 2f,"        ");
+        rule.addDesc(tooltip, opad * 2f, "        ");
 
         rule.addCost(tooltip, opad * 2f);
 //        tooltip.addPara()

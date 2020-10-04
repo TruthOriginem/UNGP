@@ -25,7 +25,7 @@ public class UNGP_modPlugin extends BaseModPlugin {
     @Override
     public void onGameLoad(boolean newGame) {
         addScriptsIfNeeded();
-        UNGP_RulesManager.refreshRulesCache();
+        UNGP_RulesManager.updateRulesCache();
         UNGP_CampaignPlugin.loadUIEntity();
     }
 

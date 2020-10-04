@@ -19,6 +19,16 @@ public class UNGP_CloseFormation extends UNGP_BaseRuleEffect implements UNGP_Com
     }
 
     @Override
+    public void advanceInCombat(CombatEngineAPI engine, float amount) {
+
+    }
+
+    @Override
+    public void applyEnemyShipInCombat(float amount, ShipAPI enemy) {
+
+    }
+
+    @Override
     public void applyPlayerShipInCombat(float amount, CombatEngineAPI engine, ShipAPI ship) {
         boolean isEffective = false;
         List<ShipAPI> nearbyShips = CombatUtils.getShipsWithinRange(ship.getLocation(), RANGE);

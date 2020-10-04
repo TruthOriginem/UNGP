@@ -345,7 +345,7 @@ public class UNGP_InteractionDialog implements InteractionDialogPlugin {
                 break;
             case PICK_RULES:
                 selectedRules.clear();
-                UNGP_RulesManager.setShownDifficultyLevel(difficultyValue);
+                UNGP_RulesManager.setDifficultyLevel(difficultyValue);
                 UNGP_RulePickListener pickListener = new UNGP_RulePickListener(selectedRules, difficultyValue, new Script() {
                     @Override
                     public void run() {
@@ -510,8 +510,8 @@ public class UNGP_InteractionDialog implements InteractionDialogPlugin {
         inGameData.isHardMode = isHardMode;
         if (isHardMode) {
             inGameData.difficultyLevel = difficultyValue;
-            inGameData.recordActivatedRules(selectedRules);
-            UNGP_RulesManager.refreshRulesCache();
+            inGameData.saveActivatedRules(selectedRules);
+            UNGP_RulesManager.updateRulesCache();
             UNGP_SpecialistIntel intel = UNGP_SpecialistIntel.getInstance();
             Global.getSector().getIntelManager().addIntelToTextPanel(intel, textPanel);
         }

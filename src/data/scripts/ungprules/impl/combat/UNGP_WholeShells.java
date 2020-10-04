@@ -22,7 +22,7 @@ public class UNGP_WholeShells extends UNGP_BaseRuleEffect implements UNGP_Combat
     private float total_damageReduction = 0f;
 
     @Override
-    public void refreshDifficultyCache(int difficulty) {
+    public void updateDifficultyCache(int difficulty) {
         chance = getValueByDifficulty(0, difficulty);
     }
 
@@ -74,6 +74,16 @@ public class UNGP_WholeShells extends UNGP_BaseRuleEffect implements UNGP_Combat
         }
     }
 
+    @Override
+    public void applyEnemyShipInCombat(float amount, ShipAPI enemy) {
+        
+    }
+
+    @Override
+    public void applyPlayerShipInCombat(float amount, CombatEngineAPI engine, ShipAPI ship) {
+
+    }
+
 
     @Override
     public String getDescriptionParams(int index) {
@@ -87,5 +97,4 @@ public class UNGP_WholeShells extends UNGP_BaseRuleEffect implements UNGP_Combat
         if (index == 0) return getPercentString(getValueByDifficulty(index, difficulty) * 100f);
         return getDescriptionParams(index);
     }
-
 }

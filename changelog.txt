@@ -1,3 +1,20 @@
+1.1.0
+高压视距:敌方增加射程10%~30%->10%~20%
+好好干活:触发系数20%~40%->15%~30%,触发概率5%->8%,触发时战舰降低战备50%->75%,并且该船上将有50%的船员死于暴动。
+科技革命:舰船装配点数 +5%~10% -> 5% .
+海军条约:现在将不计入封存的舰船
+接近战进阶教本:cost点数-4 -> -3
+
+增加正面规则: 重商主义，GLaDos，工业开发区
+
+Overwhelming Vision: Enemy weapon and sensor range + 10%~30% -> 10%~20%
+Work Hard!:Marine: crew lower than 20%~40% -> 15%~30% might cause a riot by a chance of 5%->8%, it will cause a random ship loss its combat readiness by 50%->75%, and there will be 50% of crews die from this riot
+Tech revolution now only +5% OP.
+Naval Treaty: Mothballed ships that will now be included
+Close Fighting Drill Manual: Tweaked cost point from -4 to -3
+
+Add new positive rules: Mercantilism, GLaDos, Industrial Zone
+
 1.0.1
 专家模式现在有最低规则数限制了。
 

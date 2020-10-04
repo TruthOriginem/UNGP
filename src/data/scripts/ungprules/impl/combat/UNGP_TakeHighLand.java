@@ -16,7 +16,7 @@ public class UNGP_TakeHighLand extends UNGP_BaseRuleEffect implements UNGP_Comba
     private float range;
 
     @Override
-    public void refreshDifficultyCache(int difficulty) {
+    public void updateDifficultyCache(int difficulty) {
         range = getValueByDifficulty(0, difficulty);
     }
 
@@ -24,6 +24,16 @@ public class UNGP_TakeHighLand extends UNGP_BaseRuleEffect implements UNGP_Comba
     public float getValueByDifficulty(int index, int difficulty) {
         if (index == 0) return (int) (1500f + 500f * (float) Math.pow(difficulty, 0.3669));
         return 1f;
+    }
+
+    @Override
+    public void advanceInCombat(CombatEngineAPI engine, float amount) {
+
+    }
+
+    @Override
+    public void applyEnemyShipInCombat(float amount, ShipAPI enemy) {
+
     }
 
     @Override

@@ -1,5 +1,6 @@
 package data.scripts.ungprules.impl.combat;
 
+import com.fs.starfarer.api.combat.CombatEngineAPI;
 import com.fs.starfarer.api.combat.MutableShipStatsAPI;
 import com.fs.starfarer.api.combat.ShipAPI;
 import data.scripts.ungprules.impl.UNGP_BaseRuleEffect;
@@ -9,7 +10,7 @@ public class UNGP_LowIInterchangeability extends UNGP_BaseRuleEffect implements 
     private float multiplier;
 
     @Override
-    public void refreshDifficultyCache(int difficulty) {
+    public void updateDifficultyCache(int difficulty) {
         multiplier = getValueByDifficulty(0, difficulty);
     }
 
@@ -20,10 +21,20 @@ public class UNGP_LowIInterchangeability extends UNGP_BaseRuleEffect implements 
     }
 
     @Override
+    public void advanceInCombat(CombatEngineAPI engine, float amount) {
+
+    }
+
+    @Override
     public void applyEnemyShipInCombat(float amount, ShipAPI enemy) {
         MutableShipStatsAPI stats = enemy.getMutableStats();
         stats.getCombatEngineRepairTimeMult().modifyMult(rule.getBuffID(), multiplier);
         stats.getCombatWeaponRepairTimeMult().modifyMult(rule.getBuffID(), multiplier);
+    }
+
+    @Override
+    public void applyPlayerShipInCombat(float amount, CombatEngineAPI engine, ShipAPI ship) {
+
     }
 
     @Override

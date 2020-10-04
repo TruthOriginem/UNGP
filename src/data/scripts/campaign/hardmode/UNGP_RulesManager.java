@@ -9,11 +9,12 @@ import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
 import data.scripts.UNGP_modPlugin;
 import data.scripts.campaign.UNGP_CampaignPlugin;
+import data.scripts.campaign.hardmode.economy.UNGP_EconomyListener;
 import data.scripts.campaign.UNGP_InGameData;
 import data.scripts.campaign.hardmode.UNGP_RuleInfos.UNGP_RuleInfo;
 import data.scripts.campaign.items.UNGP_RuleItem;
 import data.scripts.ungprules.UNGP_RuleEffectAPI;
-import data.scripts.ungprules.tags.UNGP_CombatTag;
+import data.scripts.ungprules.tags.*;
 import data.scripts.utils.SimpleI18n.I18nSection;
 
 import java.awt.*;
@@ -28,10 +29,15 @@ public class UNGP_RulesManager {
 
     private static List<URule> ALL_RULES = new ArrayList<>();
     public static List<URule> ACTIVATED_RULES_IN_THIS_GAME = new ArrayList<>();
+
     public static List<URule> COMBAT_RULES_IN_THIS_GAME = new ArrayList<>();
     public static List<URule> CAMPAIGN_RULES_IN_THIS_GAME = new ArrayList<>();
+    public static List<UNGP_EconomyTag> ECONOMY_TAGS_ITG = new ArrayList<>();
+    public static List<UNGP_CampaignTag> CAMPAIGN_TAGS_ITG = new ArrayList<>();
+    public static List<UNGP_PlayerFleetTag> PLAYER_FLEET_TAGS_ITG = new ArrayList<>();
+    public static List<UNGP_PlayerFleetMemberTag> PLAYER_FLEET_MEMBER_TAGS_ITG = new ArrayList<>();
     private static boolean IsSpecialistMode = false;
-    private static int ShownDifficultyLevel = 1;
+    private static int CurrentDifficultyLevel = 1;
 
     /**
      * Called on {@link UNGP_modPlugin}
@@ -42,49 +48,88 @@ public class UNGP_RulesManager {
 
 
     /**
+     * ***主要入口***
      * 刷新Rule当前缓存，游戏载入时需要调用
      * 1.通过当前游戏启用的规则，刷新 启用状态 和 内部数值
      * 2.刷新玩家状态
      */
-    public static void refreshRulesCache() {
+    public static void updateRulesCache() {
         UNGP_InGameData inGameData = UNGP_CampaignPlugin.getInGameData();
         if (inGameData != null) {
             //清理已生效的Rules
             ACTIVATED_RULES_IN_THIS_GAME.clear();
             COMBAT_RULES_IN_THIS_GAME.clear();
             CAMPAIGN_RULES_IN_THIS_GAME.clear();
+            CAMPAIGN_TAGS_ITG.clear();
+            ECONOMY_TAGS_ITG.clear();
+            PLAYER_FLEET_TAGS_ITG.clear();
             List<URule> activatedRules = inGameData.loadActivatedRules();
             CampaignFleetAPI playerFleet = Global.getSector().getPlayerFleet();
             MutableCharacterStatsAPI playerStats = Global.getSector().getPlayerStats();
             //unapply All stats
             for (URule rule : ALL_RULES) {
                 UNGP_RuleEffectAPI effect = rule.getRuleEffect();
-                if (playerFleet != null) effect.unapplyPlayerFleetStats(playerFleet);
-                if (playerStats != null) effect.unapplyPlayerCharacterStats(playerStats);
                 effect.unapplyGlobalStats();
+                if (effect instanceof UNGP_PlayerFleetTag) {
+                    if (playerFleet != null)
+                        ((UNGP_PlayerFleetTag) effect).unapplyPlayerFleetStats(playerFleet);
+                }
+                if (effect instanceof UNGP_CharacterTag) {
+                    if (playerStats != null)
+                        ((UNGP_CharacterTag) effect).unapplyPlayerCharacterStats(playerStats);
+                }
+                if (effect instanceof UNGP_EconomyTag) {
+                    UNGP_EconomyListener.unapplyMarkets((UNGP_EconomyTag) effect);
+                }
             }
 
             //apply stats
             for (URule rule : activatedRules) {
                 ACTIVATED_RULES_IN_THIS_GAME.add(rule);
+
                 UNGP_RuleEffectAPI effect = rule.getRuleEffect();
-                effect.refreshDifficultyCache(inGameData.getDifficultyLevel());
-                if (playerFleet != null) effect.applyPlayerFleetStats(playerFleet);
-                if (playerStats != null) effect.applyPlayerCharacterStats(playerStats);
                 effect.applyGlobalStats();
+                effect.updateDifficultyCache(inGameData.getDifficultyLevel());
+
+                //如果不是战斗效果，那就是生涯效果
                 if (effect instanceof UNGP_CombatTag) {
                     COMBAT_RULES_IN_THIS_GAME.add(rule);
                 } else {
                     CAMPAIGN_RULES_IN_THIS_GAME.add(rule);
                 }
+
+                if (effect instanceof UNGP_PlayerFleetTag) {
+                    if (playerFleet != null) {
+                        ((UNGP_PlayerFleetTag) effect).applyPlayerFleetStats(playerFleet);
+                        PLAYER_FLEET_TAGS_ITG.add((UNGP_PlayerFleetTag) effect);
+                    }
+                }
+                if (effect instanceof UNGP_CharacterTag) {
+                    if (playerStats != null) {
+                        ((UNGP_CharacterTag) effect).applyPlayerCharacterStats(playerStats);
+                    }
+                }
+                if (effect instanceof UNGP_PlayerFleetMemberTag) {
+                    PLAYER_FLEET_MEMBER_TAGS_ITG.add((UNGP_PlayerFleetMemberTag) effect);
+                }
+                if (effect instanceof UNGP_EconomyTag) {
+                    ECONOMY_TAGS_ITG.add((UNGP_EconomyTag) effect);
+                }
+                if (effect instanceof UNGP_CampaignTag) {
+                    CAMPAIGN_TAGS_ITG.add((UNGP_CampaignTag) effect);
+                }
             }
-            setShownDifficultyLevel(inGameData.getDifficultyLevel());
+            if (!ECONOMY_TAGS_ITG.isEmpty()) {
+                UNGP_EconomyListener.addListener();
+                UNGP_EconomyListener.applyMarkets();
+            }
+            setDifficultyLevel(inGameData.getDifficultyLevel());
             setSpecialistMode(inGameData.isHardMode);
         }
     }
 
-    public static int getShownDifficultyLevel() {
-        return ShownDifficultyLevel;
+    public static int getCurrentDifficultyLevel() {
+        return CurrentDifficultyLevel;
     }
 
     public static boolean isSpecialistMode() {
@@ -136,7 +181,7 @@ public class UNGP_RulesManager {
 
         public void addPreDesc(TooltipMakerAPI tooltip, float pad) {
             tooltip.addPara(getBonusString(isBonus()), getBorderColor(), pad * 0.5f);
-            tooltip.addPara(rules_i18n.get("front_desc"), pad * 0.5f, Misc.getHighlightColor(), getShownDifficultyLevel() + "");
+            tooltip.addPara(rules_i18n.get("front_desc"), pad * 0.5f, Misc.getHighlightColor(), getCurrentDifficultyLevel() + "");
         }
 
         public Color getBorderColor() {
@@ -161,7 +206,7 @@ public class UNGP_RulesManager {
         }
 
         public void addDesc(TooltipMakerAPI tooltip, float pad, String prefix) {
-            addDesc(tooltip, pad, prefix, getShownDifficultyLevel());
+            addDesc(tooltip, pad, prefix, getCurrentDifficultyLevel());
         }
 
         public void addDesc(TooltipMakerAPI tooltip, float pad) {
@@ -245,8 +290,8 @@ public class UNGP_RulesManager {
         }
     }
 
-    public static void setShownDifficultyLevel(int level) {
-        ShownDifficultyLevel = level;
+    public static void setDifficultyLevel(int level) {
+        CurrentDifficultyLevel = level;
     }
 
     /**

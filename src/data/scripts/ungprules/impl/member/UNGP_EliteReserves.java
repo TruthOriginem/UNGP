@@ -3,13 +3,15 @@ package data.scripts.ungprules.impl.member;
 import com.fs.starfarer.api.campaign.CampaignFleetAPI;
 import com.fs.starfarer.api.fleet.FleetMemberAPI;
 import data.scripts.ungprules.impl.UNGP_BaseRuleEffect;
+import data.scripts.ungprules.tags.UNGP_PlayerFleetMemberTag;
+import data.scripts.ungprules.tags.UNGP_PlayerFleetTag;
 
-public class UNGP_EliteReserves extends UNGP_BaseRuleEffect {
+public class UNGP_EliteReserves extends UNGP_BaseRuleEffect implements UNGP_PlayerFleetTag, UNGP_PlayerFleetMemberTag {
     private float maxBonus;
     private float curBonus;
 
     @Override
-    public void refreshDifficultyCache(int difficulty) {
+    public void updateDifficultyCache(int difficulty) {
         maxBonus = getValueByDifficulty(0, difficulty);
         curBonus = 0f;
     }
@@ -28,6 +30,11 @@ public class UNGP_EliteReserves extends UNGP_BaseRuleEffect {
         float level = (crew - minCrew) / minCrew;
         level = Math.min(1, Math.max(0, level));
         curBonus = level * maxBonus;
+    }
+
+    @Override
+    public void unapplyPlayerFleetStats(CampaignFleetAPI fleet) {
+
     }
 
     @Override

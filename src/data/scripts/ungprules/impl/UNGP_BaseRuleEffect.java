@@ -1,13 +1,11 @@
 package data.scripts.ungprules.impl;
 
-import com.fs.starfarer.api.campaign.CampaignFleetAPI;
-import com.fs.starfarer.api.characters.MutableCharacterStatsAPI;
 import com.fs.starfarer.api.combat.CombatEngineAPI;
 import com.fs.starfarer.api.combat.MutableShipStatsAPI;
-import com.fs.starfarer.api.combat.ShipAPI;
-import com.fs.starfarer.api.fleet.FleetMemberAPI;
-import data.scripts.campaign.UNGP_CampaignPlugin;
+import data.scripts.campaign.hardmode.UNGP_RulesManager;
+import data.scripts.campaign.hardmode.UNGP_SpecialistSettings;
 import data.scripts.ungprules.UNGP_RuleEffectAPI;
+import data.scripts.utils.SimpleI18n.I18nSection;
 
 import java.math.BigDecimal;
 import java.util.Random;
@@ -32,7 +30,7 @@ public abstract class UNGP_BaseRuleEffect implements UNGP_RuleEffectAPI {
     }
 
     @Override
-    public void refreshDifficultyCache(int difficulty) {
+    public void updateDifficultyCache(int difficulty) {
 
     }
 
@@ -48,50 +46,6 @@ public abstract class UNGP_BaseRuleEffect implements UNGP_RuleEffectAPI {
     }
 
     @Override
-    public void advanceInCombat(CombatEngineAPI engine, float amount) {
-
-    }
-
-    @Override
-    public void advanceInCampaign(float amount, UNGP_CampaignPlugin.TempCampaignParams params) {
-
-    }
-
-    @Override
-    public void applyEnemyShipInCombat(float amount, ShipAPI enemy) {
-
-    }
-
-    @Override
-    public void applyPlayerShipInCombat(float amount, CombatEngineAPI engine, ShipAPI ship) {
-    }
-
-    @Override
-    public void applyPlayerFleetMemberInCampaign(FleetMemberAPI member) {
-
-    }
-
-    @Override
-    public void applyPlayerCharacterStats(MutableCharacterStatsAPI stats) {
-
-    }
-
-    @Override
-    public void unapplyPlayerCharacterStats(MutableCharacterStatsAPI stats) {
-
-    }
-
-    @Override
-    public void applyPlayerFleetStats(CampaignFleetAPI fleet) {
-
-    }
-
-    @Override
-    public void unapplyPlayerFleetStats(CampaignFleetAPI fleet) {
-
-    }
-
-    @Override
     public void applyGlobalStats() {
 
     }
@@ -99,6 +53,27 @@ public abstract class UNGP_BaseRuleEffect implements UNGP_RuleEffectAPI {
     @Override
     public void unapplyGlobalStats() {
 
+    }
+
+    /**
+     * Get linear value
+     *
+     * @param min
+     * @param max
+     * @param difficulty
+     * @param maxDifficulty
+     * @return
+     */
+    protected float getLinearValue(float min, float max, int difficulty, int maxDifficulty) {
+        return min + (max - min) / (maxDifficulty - 1) * (difficulty - 1);
+    }
+
+    protected float getLinearValue(float min, float max, int difficulty) {
+        return getLinearValue(min, max, difficulty, UNGP_SpecialistSettings.MAX_DIFFICULTY);
+    }
+
+    protected I18nSection i18n() {
+        return UNGP_RulesManager.rules_i18n;
     }
 
     /**

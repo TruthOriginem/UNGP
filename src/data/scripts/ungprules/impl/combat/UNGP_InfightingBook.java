@@ -11,7 +11,7 @@ public class UNGP_InfightingBook extends UNGP_BaseRuleEffect implements UNGP_Com
     private float multiplier;
 
     @Override
-    public void refreshDifficultyCache(int difficulty) {
+    public void updateDifficultyCache(int difficulty) {
         multiplier = getValueByDifficulty(0, difficulty);
     }
 
@@ -20,6 +20,16 @@ public class UNGP_InfightingBook extends UNGP_BaseRuleEffect implements UNGP_Com
     public float getValueByDifficulty(int index, int difficulty) {
         if (index == 0) return 0.13f + 0.02f * (float) Math.pow(difficulty, 0.598);
         return 1f;
+    }
+
+    @Override
+    public void advanceInCombat(CombatEngineAPI engine, float amount) {
+
+    }
+
+    @Override
+    public void applyEnemyShipInCombat(float amount, ShipAPI enemy) {
+
     }
 
     @Override

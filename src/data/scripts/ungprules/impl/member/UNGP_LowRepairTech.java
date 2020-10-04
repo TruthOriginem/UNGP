@@ -2,12 +2,13 @@ package data.scripts.ungprules.impl.member;
 
 import com.fs.starfarer.api.fleet.FleetMemberAPI;
 import data.scripts.ungprules.impl.UNGP_BaseRuleEffect;
+import data.scripts.ungprules.tags.UNGP_PlayerFleetMemberTag;
 
-public class UNGP_LowRepairTech extends UNGP_BaseRuleEffect {
+public class UNGP_LowRepairTech extends UNGP_BaseRuleEffect implements UNGP_PlayerFleetMemberTag {
     private float reduction;
 
     @Override
-    public void refreshDifficultyCache(int difficulty) {
+    public void updateDifficultyCache(int difficulty) {
         reduction = getValueByDifficulty(0, difficulty);
     }
 

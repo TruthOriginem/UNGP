@@ -7,11 +7,12 @@ import com.fs.starfarer.api.fleet.FleetMemberAPI;
 import com.fs.starfarer.api.loading.CampaignPingSpec;
 import data.scripts.campaign.UNGP_CampaignPlugin;
 import data.scripts.ungprules.impl.UNGP_BaseRuleEffect;
+import data.scripts.ungprules.tags.UNGP_CampaignTag;
 import data.scripts.utils.UNGP_BaseBuff;
 
 import java.awt.*;
 
-public class UNGP_BustlingFungus extends UNGP_BaseRuleEffect {
+public class UNGP_BustlingFungus extends UNGP_BaseRuleEffect implements UNGP_CampaignTag {
     private static final String STAY_MEM = "$ungp_fungus_elapsed";
     private static final Color NOTICE_COLOR = new Color(0, 213, 140, 255);
     private static final float WAIT_DAY = 1;
@@ -33,7 +34,7 @@ public class UNGP_BustlingFungus extends UNGP_BaseRuleEffect {
 
 
     @Override
-    public void refreshDifficultyCache(int difficulty) {
+    public void updateDifficultyCache(int difficulty) {
 
     }
 

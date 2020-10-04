@@ -2,12 +2,13 @@ package data.scripts.ungprules.impl.character;
 
 import com.fs.starfarer.api.characters.MutableCharacterStatsAPI;
 import data.scripts.ungprules.impl.UNGP_BaseRuleEffect;
+import data.scripts.ungprules.tags.UNGP_CharacterTag;
 
-public class UNGP_TechLock extends UNGP_BaseRuleEffect {
+public class UNGP_TechLock extends UNGP_BaseRuleEffect implements UNGP_CharacterTag {
     private float reduction;
 
     @Override
-    public void refreshDifficultyCache(int difficulty) {
+    public void updateDifficultyCache(int difficulty) {
         reduction = getValueByDifficulty(0, difficulty);
     }
 
