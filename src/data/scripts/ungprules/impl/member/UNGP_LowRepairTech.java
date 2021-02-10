@@ -1,10 +1,9 @@
 package data.scripts.ungprules.impl.member;
 
 import com.fs.starfarer.api.fleet.FleetMemberAPI;
-import data.scripts.ungprules.impl.UNGP_BaseRuleEffect;
-import data.scripts.ungprules.tags.UNGP_PlayerFleetMemberTag;
+import data.scripts.ungprules.impl.UNGP_MemberBuffRuleEffect;
 
-public class UNGP_LowRepairTech extends UNGP_BaseRuleEffect implements UNGP_PlayerFleetMemberTag {
+public class UNGP_LowRepairTech extends UNGP_MemberBuffRuleEffect {
     private float reduction;
 
     @Override
@@ -14,7 +13,7 @@ public class UNGP_LowRepairTech extends UNGP_BaseRuleEffect implements UNGP_Play
 
     @Override
     public float getValueByDifficulty(int index, int difficulty) {
-        if (index == 0) return 0.05f + 0.05f * (float) Math.pow(difficulty, 0.5373);
+        if (index == 0) return getLinearValue(0.15f, 0.3f, difficulty);
         return 0;
     }
 

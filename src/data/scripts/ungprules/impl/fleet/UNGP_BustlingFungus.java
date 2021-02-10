@@ -5,7 +5,7 @@ import com.fs.starfarer.api.campaign.BuffManagerAPI;
 import com.fs.starfarer.api.campaign.CampaignFleetAPI;
 import com.fs.starfarer.api.fleet.FleetMemberAPI;
 import com.fs.starfarer.api.loading.CampaignPingSpec;
-import data.scripts.campaign.UNGP_CampaignPlugin;
+import data.scripts.campaign.everyframe.UNGP_CampaignPlugin;
 import data.scripts.ungprules.impl.UNGP_BaseRuleEffect;
 import data.scripts.ungprules.tags.UNGP_CampaignTag;
 import data.scripts.utils.UNGP_BaseBuff;
@@ -77,7 +77,7 @@ public class UNGP_BustlingFungus extends UNGP_BaseRuleEffect implements UNGP_Cam
                         playerFleet.getMemoryWithoutUpdate().set(STAY_MEM, elapsed);
                         //只会运行一次
                         if (elapsed >= WAIT_DAY) {
-                            playerFleet.addFloatingText(rule.getRuleInfo().getExtra1(), NOTICE_COLOR, 1f);
+                            playerFleet.addFloatingText(rule.getExtra1(), NOTICE_COLOR, 1f);
                             CampaignPingSpec custom = new CampaignPingSpec();
                             custom.setColor(NOTICE_COLOR);
                             custom.setWidth(10);

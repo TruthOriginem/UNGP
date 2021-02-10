@@ -12,5 +12,4 @@ public class UNGP_Settings {
         int maxLevel = Global.getSettings().getLevelupPlugin().getMaxLevel();
         return playerLevel >= maxLevel;
     }
-
 }

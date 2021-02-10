@@ -1,3 +1,30 @@
+1.2.0 2021/2/10
+本次更新存档不兼容，请先继承后再更新。
+
+广域雷达：感应器强度15%~30%->25%~50%
+低效维修技术：降低维修/战备回复速度 10%~30%->15%~30%
+低互换性：武器引擎维修时间x1.5~2.0 -> 1.1~1.25，同时武器和引擎受到伤害x1.1~1.25
+
+新规则：黄金规则，正面规则的一种，同一时间黄金规则只能选择一种。
+增加正面规则：HSS Phoenix(黄金),临危不惧(黄金),护盾专精(黄金),阳,试验性分流管
+增加负面规则：深空恐惧,阴,裁军协定,无路可退,祸不单行
+
+优化UI。
+注意：代码结构及内容有较大变化。
+
+Not save compatible, please inherit the data before loading the new version.
+
+Wide-area Radar: Sensor strength +15~30%->25%~50%
+Low Efficiency Repair: Fleetwide repair and combat readiness recover rate -10%~30%->15%~30%
+Low Interchangeability: Engine and weapon repair time x 1.5~2.0 -> 1.1~1.25, in the same time engine and weapon's taken damage x 1.1~1.25
+
+Add new rule type : Golden Rule, one type of positive rule, Golden Rule could only be chosen once at the same time.
+Add new positive rules: HSS Phoenix(Golden), Stay Calm(Golden), Shield Specialization(Golden), Yang, Experimental Shunt
+Add new negative rules: Deep Space Fear, Ying, Disarmament Agreement, No Way Back, When it rains it pours
+
+Optimized the UI.
+Attention: Code structures and contents have been changed.
+
 1.1.0
 高压视距:敌方增加射程10%~30%->10%~20%
 好好干活:触发系数20%~40%->15%~30%,触发概率5%->8%,触发时战舰降低战备50%->75%,并且该船上将有50%的船员死于暴动。

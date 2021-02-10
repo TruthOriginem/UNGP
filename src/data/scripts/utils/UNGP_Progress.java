@@ -20,4 +20,8 @@ public class UNGP_Progress {
     public void reset() {
         elapsed = 0f;
     }
+
+    public boolean isDone() {
+        return elapsed >= targetTime;
+    }
 }

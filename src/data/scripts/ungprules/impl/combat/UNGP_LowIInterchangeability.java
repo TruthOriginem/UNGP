@@ -16,7 +16,7 @@ public class UNGP_LowIInterchangeability extends UNGP_BaseRuleEffect implements 
 
     @Override
     public float getValueByDifficulty(int index, int difficulty) {
-        if (index == 0) return 0.5f + (float) Math.pow(difficulty, 0.23138);
+        if (index == 0) return getLinearValue(1.1f, 1.25f, difficulty);
         return 1f;
     }
 
@@ -27,14 +27,17 @@ public class UNGP_LowIInterchangeability extends UNGP_BaseRuleEffect implements 
 
     @Override
     public void applyEnemyShipInCombat(float amount, ShipAPI enemy) {
-        MutableShipStatsAPI stats = enemy.getMutableStats();
-        stats.getCombatEngineRepairTimeMult().modifyMult(rule.getBuffID(), multiplier);
-        stats.getCombatWeaponRepairTimeMult().modifyMult(rule.getBuffID(), multiplier);
+
     }
 
     @Override
     public void applyPlayerShipInCombat(float amount, CombatEngineAPI engine, ShipAPI ship) {
-
+        MutableShipStatsAPI stats = ship.getMutableStats();
+        final String id = rule.getBuffID();
+        stats.getCombatEngineRepairTimeMult().modifyMult(id, multiplier);
+        stats.getCombatWeaponRepairTimeMult().modifyMult(id, multiplier);
+        stats.getEngineDamageTakenMult().modifyMult(id, multiplier);
+        stats.getWeaponDamageTakenMult().modifyMult(id, multiplier);
     }
 
     @Override

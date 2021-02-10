@@ -1,2 +1,4 @@
 name,id,tags,rarity,base price,stack size,cargo space,icon,sound id,sound id drop,plugin,plugin params,desc,order
-RuleItem,ungp_ruleitem,,,0,1,1,graphics/icons/cargo/UNGP_ruleItemBG.png,ui_chip_pickup,ui_ship_bp_drop,data.scripts.campaign.items.UNGP_RuleItem,,,0
+RuleItem,ungp_ruleitem_golden,,,0,1,1,,ui_golden_pickup,ui_golden_drop,data.scripts.campaign.specialist.items.UNGP_RuleItem,,,1500.2
+RuleItem,ungp_ruleitem_negative,,,0,1,1,,ui_negative_pickup,ui_negative_drop,data.scripts.campaign.specialist.items.UNGP_RuleItem,,,1500.1
+RuleItem,ungp_ruleitem_positive,,,0,1,1,,ui_positive_pickup,ui_positive_drop,data.scripts.campaign.specialist.items.UNGP_RuleItem,,,1500.3

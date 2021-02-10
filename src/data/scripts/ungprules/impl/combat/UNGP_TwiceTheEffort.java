@@ -26,6 +26,7 @@ public class UNGP_TwiceTheEffort extends UNGP_BaseRuleEffect implements UNGP_Com
     @Override
     public void advanceInCombat(CombatEngineAPI engine, float amount) {
 
+
     }
 
     @Override
@@ -55,7 +56,7 @@ public class UNGP_TwiceTheEffort extends UNGP_BaseRuleEffect implements UNGP_Com
                 engine.maintainStatusForPlayerShip(rule.getBuffID(),
                         rule.getSpritePath(),
                         rule.getName(),
-                        rule.getRuleInfo().getExtra1() + (int) ((1f - multiplier * level) * 100f) + "%",
+                        rule.getExtra1() + (int) ((1f - multiplier * level) * 100f) + "%",
                         true);
             }
         }

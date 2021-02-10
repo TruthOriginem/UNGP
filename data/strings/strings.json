@@ -25,7 +25,7 @@
     "d_hardmodeDes": "你选中的专家模式规则如下:(选择完毕后无法再调整难度等级)",
     "d_rulepick_button": "选择专家模式规则",
     "d_rulepick_title": "专家模式规则选择",
-    "d_rulepick_desc": "请遵循以下指示:\n -正面规则消耗Cost点\n -负面规则增加Cost点\n -剩余Cost大于等于0才能开启专家模式\n -使用的规则数目必须大于0\n -按Shift切换信息显示模式",
+    "d_rulepick_desc": "请遵循以下指示:\n -%s 消耗Cost点\n -%s 增加Cost点\n -%s 同一时间只能存在一种\n -剩余Cost大于等于0才能开启专家模式\n -使用的规则数目必须大于0\n -按Shift切换信息显示模式",
     "d_rulepick_level": "专家等级: %s",
     "d_rulepick_cost": "剩余Cost点: %s",
     "d_rulepick_ruleAmount": "规则数目: %s / %s \n最低规则数: %s",
@@ -33,7 +33,7 @@
     "d_hardModeYes": "开启专家模式！我太难了！",
     "d_startInherit": "开始继承",
     "d_inheritConfirmInfo0": "您将获得{%s}星币与总计大约{%s}个蓝图，您目前就拥有的及因未加载mod而缺失的蓝图不会额外计算数目。",
-    "d_inheritConfirmInfo1": "您即将开启专家模式，这将在之后本周目游戏内都无法变更，请谨慎选择！",
+    "d_inheritConfirmInfo1": "您即将开启专家模式，专家等级在本次游戏内都无法变更，请谨慎选择！",
     "d_inheritedBP": "您获得了:\n %s 个舰船蓝图\n %s 个战机蓝图\n %s 个武器蓝图\n %s 个船体插件蓝图",
     "d_inheritedPoints": "您获得了 %s 个技能点",
     "d_on": "开启",
@@ -60,11 +60,15 @@
     "current_cycle": "当前星历年:",
     "current_times_to_refresh": "你拥有的 %s 的次数:",
     "repick_rules": "重选专家规则",
-    "front_desc": "当前专家等级: %s \n\n效果如下:",
+    "front_desc": "当专家等级为 %s 时效果如下:",
     "isBonus": "正面规则",
     "notBonus": "负面规则",
+    "golden_rule": "黄金规则",
     "cost_point": "Cost点数: %s",
     "repick_desc": "每年你都会获得一次机会，重新选取你的专家规则。一开始，你会获得一次额外的机会。",
+    "rule_source": "这条规则来源于:"
+  },
+  "UNGP_rule_impl": {
     "halved": "减半"
   }
 }

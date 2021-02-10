@@ -39,4 +39,8 @@ public class UNGP_BaseBuff implements BuffManagerAPI.Buff {
     public void setDur(float dur) {
         this.dur = dur;
     }
+
+    public UNGP_BaseBuff init(String id, float dur) {
+        return new UNGP_BaseBuff(id, dur);
+    }
 }

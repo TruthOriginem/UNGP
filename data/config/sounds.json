@@ -1,5 +1,32 @@
 {
   "UNGP_fungus_activate": [
     {"file": "sounds/fx/trigger/UNGP_fungus_activate.ogg", "pitch": 1, "volume": 1},
-  ]
+  ],
+  "UNGP_staycalm_start": [
+    {"file": "sounds/fx/trigger/UNGP_staycalm_start.ogg", "pitch": 1, "volume": 1},
+  ],
+  "UNGP_staycalm_end": [
+    {"file": "sounds/fx/trigger/UNGP_staycalm_end.ogg", "pitch": 1, "volume": 1},
+  ],
+  "ui_golden_pickup": [
+    {"file": "sounds/fx/rule_item/ui_golden_pickup.ogg", "pitch": 1, "volume": 0.6},
+  ],
+  "ui_golden_drop": [
+    {"file": "sounds/fx/rule_item/ui_golden_drop.ogg", "pitch": 1, "volume": 0.6},
+  ],
+  "ui_negative_pickup": [
+    {"file": "sounds/fx/rule_item/ui_negative_pickup.ogg", "pitch": 1, "volume": 0.6},
+  ],
+  "ui_negative_drop": [
+    {"file": "sounds/fx/rule_item/ui_negative_drop.ogg", "pitch": 1, "volume": 0.6},
+  ],
+  "ui_positive_pickup": [
+    {"file": "sounds/fx/rule_item/ui_positive_pickup.ogg", "pitch": 1, "volume": 0.6},
+  ],
+  "ui_positive_drop": [
+    {"file": "sounds/fx/rule_item/ui_positive_drop.ogg", "pitch": 1, "volume": 0.6},
+  ],
+  "ui_specialist_on": [
+    {"file": "sounds/fx/rule_item/ui_specialist_on.ogg", "pitch": 1, "volume": 0.6},
+  ],
 }

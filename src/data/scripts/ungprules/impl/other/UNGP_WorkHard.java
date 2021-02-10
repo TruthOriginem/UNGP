@@ -5,13 +5,13 @@ import com.fs.starfarer.api.campaign.CampaignFleetAPI;
 import com.fs.starfarer.api.fleet.FleetMemberAPI;
 import com.fs.starfarer.api.util.Misc;
 import com.fs.starfarer.api.util.WeightedRandomPicker;
-import data.scripts.campaign.UNGP_CampaignPlugin.TempCampaignParams;
+import data.scripts.campaign.everyframe.UNGP_CampaignPlugin.TempCampaignParams;
 import data.scripts.ungprules.impl.UNGP_BaseRuleEffect;
 import data.scripts.ungprules.tags.UNGP_CampaignTag;
 
 import java.awt.*;
 
-import static data.scripts.campaign.intel.UNGP_SpecialistIntel.RuleMessage;
+import static data.scripts.campaign.specialist.intel.UNGP_SpecialistIntel.RuleMessage;
 
 public class UNGP_WorkHard extends UNGP_BaseRuleEffect implements UNGP_CampaignTag {
     private static final String MEM_CHECK_WORK = "$UNGP_WorkHard";
@@ -45,7 +45,7 @@ public class UNGP_WorkHard extends UNGP_BaseRuleEffect implements UNGP_CampaignT
                     String neededMarineString = (int) neededMarine + "";
                     Color negative = Misc.getNegativeHighlightColor();
                     Color highlight = Misc.getHighlightColor();
-                    Global.getSector().getCampaignUI().addMessage(String.format(rule.getRuleInfo().getExtra2(), neededMarineString),
+                    Global.getSector().getCampaignUI().addMessage(String.format(rule.getExtra2(), neededMarineString),
                             negative, neededMarineString, "", highlight, highlight);
                 }
 
@@ -68,7 +68,7 @@ public class UNGP_WorkHard extends UNGP_BaseRuleEffect implements UNGP_CampaignT
                     deadCrew = Math.max(1, (int) (deadCrew * CREW_LOSS));
                     notWorkHard.getRepairTracker().applyCREvent(-CR_LOSS, rule.getName());
                     fleet.getCargo().removeCrew(deadCrew);
-                    RuleMessage message = new RuleMessage(rule, rule.getRuleInfo().getExtra1(), notWorkHard.getShipName(), deadCrew + "");
+                    RuleMessage message = new RuleMessage(rule, rule.getExtra1(), notWorkHard.getShipName(), deadCrew + "");
                     message.send();
                 }
             }

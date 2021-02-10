@@ -2,10 +2,9 @@ package data.scripts.ungprules.impl.member;
 
 import com.fs.starfarer.api.fleet.FleetMemberAPI;
 import com.fs.starfarer.api.impl.campaign.ids.Stats;
-import data.scripts.ungprules.impl.UNGP_BaseRuleEffect;
-import data.scripts.ungprules.tags.UNGP_PlayerFleetMemberTag;
+import data.scripts.ungprules.impl.UNGP_MemberBuffRuleEffect;
 
-public class UNGP_DangerousSector extends UNGP_BaseRuleEffect implements UNGP_PlayerFleetMemberTag {
+public class UNGP_DangerousSector extends UNGP_MemberBuffRuleEffect {
     private float multiplier;
 
     @Override

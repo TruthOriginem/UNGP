@@ -7,8 +7,8 @@ import com.fs.starfarer.api.combat.ViewportAPI;
 import com.fs.starfarer.api.graphics.SpriteAPI;
 import com.fs.starfarer.api.impl.campaign.BaseCustomEntityPlugin;
 import com.fs.starfarer.api.util.Misc;
-import data.scripts.campaign.hardmode.UNGP_RuleSorter;
-import data.scripts.campaign.hardmode.UNGP_RulesManager;
+import data.scripts.campaign.specialist.rules.UNGP_RuleSorter;
+import data.scripts.campaign.specialist.rules.UNGP_RulesManager;
 import org.lazywizard.lazylib.ui.LazyFont.DrawableString;
 import org.lwjgl.Sys;
 import org.lwjgl.input.Mouse;
@@ -21,7 +21,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import static data.scripts.campaign.hardmode.UNGP_RulesManager.*;
+import static data.scripts.campaign.specialist.rules.UNGP_RulesManager.*;
 import static org.lwjgl.opengl.GL11.*;
 
 public class UNGP_UIEntityPlugin extends BaseCustomEntityPlugin {

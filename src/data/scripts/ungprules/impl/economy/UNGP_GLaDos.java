@@ -40,9 +40,8 @@ public class UNGP_GLaDos extends UNGP_BaseRuleEffect implements UNGP_EconomyTag 
     @Override
     public void unapplyPlayerMarket(MarketAPI market) {
         for (Industry industry : market.getIndustries()) {
-            for (MutableCommodityQuantity mutableCommodityQuantity : industry.getAllSupply()) {
+            for (MutableCommodityQuantity mutableCommodityQuantity : industry.getAllSupply())
                 mutableCommodityQuantity.getQuantity().unmodify(rule.getBuffID());
-            }
         }
     }
 

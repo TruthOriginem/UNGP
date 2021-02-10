@@ -39,7 +39,7 @@ public class UNGP_Mercantilism extends UNGP_BaseRuleEffect implements UNGP_Econo
     public String getDescriptionParams(int index) {
         if (index == 0) return getPercentString(bonus * 100f);
         if (index == 1) return getPercentString(ACCESS_THRESHOLD * 100f);
-        if (index == 2) return i18n().get("halved");
+        if (index == 2) return i18n.get("halved");
         return null;
     }
 

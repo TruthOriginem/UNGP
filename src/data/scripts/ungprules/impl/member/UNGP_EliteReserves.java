@@ -2,11 +2,10 @@ package data.scripts.ungprules.impl.member;
 
 import com.fs.starfarer.api.campaign.CampaignFleetAPI;
 import com.fs.starfarer.api.fleet.FleetMemberAPI;
-import data.scripts.ungprules.impl.UNGP_BaseRuleEffect;
-import data.scripts.ungprules.tags.UNGP_PlayerFleetMemberTag;
+import data.scripts.ungprules.impl.UNGP_MemberBuffRuleEffect;
 import data.scripts.ungprules.tags.UNGP_PlayerFleetTag;
 
-public class UNGP_EliteReserves extends UNGP_BaseRuleEffect implements UNGP_PlayerFleetTag, UNGP_PlayerFleetMemberTag {
+public class UNGP_EliteReserves extends UNGP_MemberBuffRuleEffect implements UNGP_PlayerFleetTag {
     private float maxBonus;
     private float curBonus;
 

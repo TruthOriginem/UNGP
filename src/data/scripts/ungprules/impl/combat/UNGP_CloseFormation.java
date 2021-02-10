@@ -49,7 +49,7 @@ public class UNGP_CloseFormation extends UNGP_BaseRuleEffect implements UNGP_Com
                 engine.maintainStatusForPlayerShip(rule.getBuffID(),
                         rule.getSpritePath(),
                         rule.getName(),
-                        rule.getRuleInfo().getExtra1() + getFactorString(MULTIPLIER),
+                        rule.getExtra1() + getFactorString(MULTIPLIER),
                         false);
             }
         } else {

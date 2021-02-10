@@ -69,7 +69,7 @@ public class UNGP_WholeShells extends UNGP_BaseRuleEffect implements UNGP_Combat
             engine.maintainStatusForPlayerShip(rule.getBuffID(),
                     "graphics/icons/hullsys/ammo_feeder.png",
                     rule.getName() + "(" + decrease_amount + ")",
-                    rule.getRuleInfo().getExtra1() + (int) (total_damageReduction),
+                    rule.getExtra1() + (int) (total_damageReduction),
                     true);
         }
     }

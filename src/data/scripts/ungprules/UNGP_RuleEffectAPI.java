@@ -1,6 +1,6 @@
 package data.scripts.ungprules;
 
-import data.scripts.campaign.hardmode.UNGP_RulesManager.URule;
+import data.scripts.campaign.specialist.rules.UNGP_RulesManager.URule;
 
 /**
  *

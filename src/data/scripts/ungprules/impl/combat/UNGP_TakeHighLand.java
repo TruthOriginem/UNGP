@@ -55,7 +55,7 @@ public class UNGP_TakeHighLand extends UNGP_BaseRuleEffect implements UNGP_Comba
                     engine.maintainStatusForPlayerShip(rule,
                             "graphics/icons/sensor_array.png",
                             rule.getName(),
-                            rule.getRuleInfo().getExtra1(),
+                            rule.getExtra1(),
                             false);
                 }
             } else {

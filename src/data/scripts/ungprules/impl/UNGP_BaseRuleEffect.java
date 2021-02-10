@@ -1,19 +1,21 @@
 package data.scripts.ungprules.impl;
 
+import com.fs.starfarer.api.Global;
+import com.fs.starfarer.api.campaign.CampaignClockAPI;
 import com.fs.starfarer.api.combat.CombatEngineAPI;
 import com.fs.starfarer.api.combat.MutableShipStatsAPI;
-import data.scripts.campaign.hardmode.UNGP_RulesManager;
-import data.scripts.campaign.hardmode.UNGP_SpecialistSettings;
+import data.scripts.campaign.specialist.UNGP_SpecialistSettings;
 import data.scripts.ungprules.UNGP_RuleEffectAPI;
 import data.scripts.utils.SimpleI18n.I18nSection;
 
 import java.math.BigDecimal;
 import java.util.Random;
 
-import static data.scripts.campaign.hardmode.UNGP_RulesManager.URule;
+import static data.scripts.campaign.specialist.rules.UNGP_RulesManager.URule;
 
 public abstract class UNGP_BaseRuleEffect implements UNGP_RuleEffectAPI {
     protected static final Random RANDOM = new Random();
+    protected static final I18nSection i18n = new I18nSection("UNGP_rule_impl", "", false);
     protected URule rule;
 
     public UNGP_BaseRuleEffect() {
@@ -72,9 +74,10 @@ public abstract class UNGP_BaseRuleEffect implements UNGP_RuleEffectAPI {
         return getLinearValue(min, max, difficulty, UNGP_SpecialistSettings.MAX_DIFFICULTY);
     }
 
-    protected I18nSection i18n() {
-        return UNGP_RulesManager.rules_i18n;
-    }
+/*
+    public static float smooth(float x) {
+        return 0.5f - ((float) (FastTrig.cos(Math.min(1, Math.max(0, x)) * MathUtils.FPI) / 2));
+    }*/
 
     /**
      * value should be 0~100
@@ -121,5 +124,12 @@ public abstract class UNGP_BaseRuleEffect implements UNGP_RuleEffectAPI {
         float multiplier = memberStats.getMaxCombatReadiness().computeMultMod();
         float toDecrease = Math.min(flat, curMaxCR / multiplier);
         memberStats.getMaxCombatReadiness().modifyFlat(id, -toDecrease, desc);
+    }
+
+    protected Random getRandom() {
+        final CampaignClockAPI clock = Global.getSector().getClock();
+        String sb = Global.getSector().getSeedString() + rule.getId() +
+                String.format("%d%d", clock.getCycle(), clock.getMonth());
+        return new Random(sb.hashCode());
     }
 }
