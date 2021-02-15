@@ -125,6 +125,7 @@ public class UNGP_StayCalm extends UNGP_BaseRuleEffect implements UNGP_CombatTag
                     float damage = 0f;
                     for (Iterator<Object> iter = engine.getMissileGrid().getCheckIterator(player.getLocation(), 3000f, 3000f); iter.hasNext(); ) {
                         final MissileAPI tmp = (MissileAPI) iter.next();
+                        if (tmp.didDamage() || tmp.isFizzling() || tmp.getOwner() == player.getOwner()) continue;
                         Vector2f predicted = new Vector2f(tmp.getVelocity());
                         predicted.scale(PREDICT_TIME);
                         Vector2f.add(predicted, tmp.getLocation(), predicted);

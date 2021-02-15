@@ -65,6 +65,7 @@ public class UNGP_RulesManager {
             ECONOMY_TAGS_ITG.clear();
             PLAYER_FLEET_TAGS_ITG.clear();
             PLAYER_FLEET_MEMBER_TAGS_ITG.clear();
+            // 已生效的规则，在最后会重新保存
             List<URule> activatedRules = inGameData.getActivatedRules();
             CampaignFleetAPI playerFleet = Global.getSector().getPlayerFleet();
             MutableCharacterStatsAPI playerStats = Global.getSector().getPlayerStats();
@@ -143,6 +144,7 @@ public class UNGP_RulesManager {
             }
             setDifficultyLevel(inGameData.getDifficultyLevel());
             setSpecialistMode(inGameData.isHardMode());
+            inGameData.saveActivatedRules(activatedRules);
         }
     }
 

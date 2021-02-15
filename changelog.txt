@@ -1,3 +1,10 @@
+1.2.1 2021/2/15
+修复临危不惧的部分bug。
+修复随机规则不会被正确记录的bug。
+
+Fixed several bugs of Stay Calm.
+Fixed the incorrect record bugs of rules contains random content.
+
 1.2.0 2021/2/10
 本次更新存档不兼容，请先继承后再更新。
 
