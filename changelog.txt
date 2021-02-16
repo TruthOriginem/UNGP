@@ -1,3 +1,8 @@
+1.2.2 2021/2/16
+修复祸不单行重选规则时的bug.
+
+Fixed the bug of When it rains it pours.
+
 1.2.1 2021/2/15
 修复临危不惧的部分bug。
 修复随机规则不会被正确记录的bug。

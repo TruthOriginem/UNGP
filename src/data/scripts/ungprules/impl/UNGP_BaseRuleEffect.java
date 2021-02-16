@@ -2,8 +2,11 @@ package data.scripts.ungprules.impl;
 
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.CampaignClockAPI;
+import com.fs.starfarer.api.campaign.CampaignUIAPI;
+import com.fs.starfarer.api.campaign.InteractionDialogAPI;
 import com.fs.starfarer.api.combat.CombatEngineAPI;
 import com.fs.starfarer.api.combat.MutableShipStatsAPI;
+import com.fs.starfarer.api.impl.campaign.intel.MessageIntel;
 import data.scripts.campaign.specialist.UNGP_SpecialistSettings;
 import data.scripts.ungprules.UNGP_RuleEffectAPI;
 import data.scripts.utils.SimpleI18n.I18nSection;
@@ -99,6 +102,23 @@ public abstract class UNGP_BaseRuleEffect implements UNGP_RuleEffectAPI {
     protected String getFactorString(float value) {
         BigDecimal number = new BigDecimal(String.format("%.2f", value));
         return number.stripTrailingZeros().toPlainString();
+    }
+
+    /**
+     * 在文本框和生涯界面都显示信息
+     *
+     * @param intel
+     */
+    protected void showMessage(MessageIntel intel) {
+        final CampaignUIAPI campaignUI = Global.getSector().getCampaignUI();
+        if (campaignUI == null) return;
+        if (campaignUI.isShowingDialog()) {
+            InteractionDialogAPI dialog = campaignUI.getCurrentInteractionDialog();
+            if (dialog != null && dialog.getTextPanel() != null)
+                Global.getSector().getIntelManager().addIntelToTextPanel(intel,
+                        dialog.getTextPanel());
+        }
+        campaignUI.addMessage(intel);
     }
 
     /**

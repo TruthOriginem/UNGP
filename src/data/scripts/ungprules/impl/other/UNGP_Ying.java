@@ -1,6 +1,5 @@
 package data.scripts.ungprules.impl.other;
 
-import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.impl.campaign.intel.MessageIntel;
 import com.fs.starfarer.api.util.Misc;
 import com.fs.starfarer.api.util.WeightedRandomPicker;
@@ -55,11 +54,7 @@ public class UNGP_Ying extends UNGP_BaseRuleEffect implements UNGP_TweakBeforeAp
             MessageIntel intel = new MessageIntel(rule.getName(), rolled.getCorrectColor());
             intel.setIcon(rolled.getSpritePath());
             intel.addLine(rule.getExtra1(), Misc.getTextColor(), new String[]{rolled.getName()}, rolled.getCorrectColor());
-            if (Global.getSector().getCampaignUI().isShowingDialog()) {
-                Global.getSector().getIntelManager().addIntelToTextPanel(intel,
-                        Global.getSector().getCampaignUI().getCurrentInteractionDialog().getTextPanel());
-            }
-            Global.getSector().getCampaignUI().addMessage(intel);
+            showMessage(intel);
         }
         activeRules.remove(rule);
     }
