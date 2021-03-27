@@ -1,3 +1,10 @@
+1.3.0 2021/3/27
+适配095a。
+使用旧版本重生点的方法:移动旧Starsector文件夹内的saves/common文件夹到新Starsector文件夹的相同位置
+
+Compatible with 0.95a.
+How to use saving point in old Starsector: Move the "saves/common" folder in the root of old starsector to the root of new starsector.
+
 1.2.2 2021/2/16
 修复祸不单行重选规则时的bug.
 

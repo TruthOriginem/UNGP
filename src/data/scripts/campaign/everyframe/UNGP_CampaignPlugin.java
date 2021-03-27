@@ -211,7 +211,7 @@ public class UNGP_CampaignPlugin implements EveryFrameScript, CampaignEventListe
 
 
     private boolean showUNGPDialog() {
-        return Global.getSector().getCampaignUI().showInteractionDialog(new UNGP_InteractionDialog(inGameData), null);
+        return Global.getSector().getCampaignUI().showInteractionDialog(new UNGP_InteractionDialog(inGameData), Global.getSector().getPlayerFleet());
     }
 
     public UNGP_InGameData getInGameData() {

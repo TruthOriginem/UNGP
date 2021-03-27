@@ -40,6 +40,7 @@ public class UNGP_HssPhoenix extends UNGP_MemberBuffRuleEffect {
         stats.getMaxCombatReadiness().modifyFlat(id, CR_BONUS * 0.01f, rule.getName());
     }
 
+
     @Override
     public boolean canApply(FleetMemberAPI member) {
         return member.isFlagship() && member.getHullId().contains("onslaught");

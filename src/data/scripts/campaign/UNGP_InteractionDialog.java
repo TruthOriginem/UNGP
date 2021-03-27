@@ -106,6 +106,11 @@ public class UNGP_InteractionDialog implements InteractionDialogPlugin {
             }
 
             @Override
+            public void renderBelow(float alphaMult) {
+
+            }
+
+            @Override
             public void render(float alphaMult) {
                 sprite.setAlphaMult(alphaMult);
                 float screenWidth = Global.getSettings().getScreenWidth() / Display.getPixelScaleFactor();
@@ -150,14 +155,14 @@ public class UNGP_InteractionDialog implements InteractionDialogPlugin {
             }
         }
         textPanel.addPara(d_i18n.get("inGameData"),
-                Misc.getHighlightColor(),
-                "" + (inGameData.getCurCycle()),
-                Misc.getDGSCredits(toRecordInheritData.inheritCredits),
-                "" + toRecordInheritData.ships.size(),
-                "" + toRecordInheritData.fighters.size(),
-                "" + toRecordInheritData.weapons.size(),
-                "" + toRecordInheritData.hullmods.size(),
-                toRecordInheritData.isHardMode ? "Yes" : "No");
+                          Misc.getHighlightColor(),
+                          "" + (inGameData.getCurCycle()),
+                          Misc.getDGSCredits(toRecordInheritData.inheritCredits),
+                          "" + toRecordInheritData.ships.size(),
+                          "" + toRecordInheritData.fighters.size(),
+                          "" + toRecordInheritData.weapons.size(),
+                          "" + toRecordInheritData.hullmods.size(),
+                          toRecordInheritData.isHardMode ? "Yes" : "No");
         if (inGameData.isHardMode()) {
             textPanel.addPara(d_i18n.get("hardmodeLevel") + ": %s", Misc.getHighlightColor(), inGameData.getDifficultyLevel() + "");
         }
@@ -187,31 +192,31 @@ public class UNGP_InteractionDialog implements InteractionDialogPlugin {
                 textPanel.addPara(d_i18n.get("inheritName"), Misc.getHighlightColor(), lastInheritData.lastPlayerName);
             }
             textPanel.addPara(d_i18n.get("inheritData"),
-                    Misc.getHighlightColor(),
-                    "" + (lastInheritData.cycle - 1),
-                    Misc.getDGSCredits(lastInheritData.inheritCredits),
-                    "" + lastInheritData.ships.size(),
-                    "" + lastInheritData.fighters.size(),
-                    "" + lastInheritData.weapons.size(),
-                    "" + lastInheritData.hullmods.size());
+                              Misc.getHighlightColor(),
+                              "" + (lastInheritData.cycle - 1),
+                              Misc.getDGSCredits(lastInheritData.inheritCredits),
+                              "" + lastInheritData.ships.size(),
+                              "" + lastInheritData.fighters.size(),
+                              "" + lastInheritData.weapons.size(),
+                              "" + lastInheritData.hullmods.size());
 
             //如果没有继承过或者没有超过时限
             if (!inGameData.isPassedInheritTime() && !inGameData.isInherited()) {
                 options.addSelector(d_i18n.get("inheritCredits"), inheritCreditsSelector,
-                        Misc.getHighlightColor(), 270f, 30f,
-                        0f, 100f, ValueDisplayMode.PERCENT, null);
+                                    Misc.getHighlightColor(), 270f, 30f,
+                                    0f, 100f, ValueDisplayMode.PERCENT, null);
                 options.setSelectorValue(inheritCreditsSelector, creditsSelecterValue);
 
                 options.addSelector(d_i18n.get("inheritBPs"), inheritBPSelector,
-                        Misc.getHighlightColor(), 270f, 30f,
-                        0f, 100f, ValueDisplayMode.PERCENT, null);
+                                    Misc.getHighlightColor(), 270f, 30f,
+                                    0f, 100f, ValueDisplayMode.PERCENT, null);
                 options.setSelectorValue(inheritBPSelector, bpSelecterValue);
 
                 //专家模式
                 if (isHardMode) {
                     options.addSelector(d_i18n.get("hardmodeLevel"), inheritDifficultySelector,
-                            Misc.getNegativeHighlightColor(), 270f, 30f,
-                            1, UNGP_SpecialistSettings.getMaxDifficultyLevel(lastInheritData.cycle + 1), ValueDisplayMode.VALUE, null);
+                                        Misc.getNegativeHighlightColor(), 270f, 30f,
+                                        1, UNGP_SpecialistSettings.getMaxDifficultyLevel(lastInheritData.cycle + 1), ValueDisplayMode.VALUE, null);
                     options.setSelectorValue(inheritDifficultySelector, difficultyValue);
                 }
                 options.addOption(d_i18n.get("switchHardMode") + "" + (isHardMode ? d_i18n.get("on") : d_i18n.get("off")), OptionID.SWITCH_MODE);
@@ -297,14 +302,14 @@ public class UNGP_InteractionDialog implements InteractionDialogPlugin {
             case CHECK_RECORD: {
                 textPanel.addPara(d_i18n.get("recordInfo"));
                 textPanel.addPara(d_i18n.get("inGameData"),
-                        Misc.getHighlightColor(),
-                        "" + inGameData.getCurCycle(),
-                        Misc.getDGSCredits(toRecordInheritData.inheritCredits),
-                        "" + toRecordInheritData.ships.size(),
-                        "" + toRecordInheritData.fighters.size(),
-                        "" + toRecordInheritData.weapons.size(),
-                        "" + toRecordInheritData.hullmods.size(),
-                        toRecordInheritData.isHardMode ? "Yes" : "No");
+                                  Misc.getHighlightColor(),
+                                  "" + inGameData.getCurCycle(),
+                                  Misc.getDGSCredits(toRecordInheritData.inheritCredits),
+                                  "" + toRecordInheritData.ships.size(),
+                                  "" + toRecordInheritData.fighters.size(),
+                                  "" + toRecordInheritData.weapons.size(),
+                                  "" + toRecordInheritData.hullmods.size(),
+                                  toRecordInheritData.isHardMode ? "Yes" : "No");
                 textPanel.addPara(d_i18n.get("checkRecordSlot"));
                 UNGP_InheritData curSlot = UNGP_InheritManager.InheritData_slot0;
                 if (curSlot == null) {
@@ -373,7 +378,7 @@ public class UNGP_InteractionDialog implements InteractionDialogPlugin {
                     }
                 });
                 dialog.showCargoPickerDialog(d_i18n.get("rulepick_title"), d_i18n.get("confirm"), d_i18n.get("cancel"), false,
-                        280, UNGP_RulesManager.createAllRulesCargo(), pickListener);
+                                             280, UNGP_RulesManager.createAllRulesCargo(), pickListener);
                 options.setEnabled(inheritDifficultySelector, false);
                 break;
             case INHERIT:
@@ -491,14 +496,20 @@ public class UNGP_InteractionDialog implements InteractionDialogPlugin {
 
         textPanel.setFontSmallInsignia();
         textPanel.addPara(d_i18n.get("inheritedBP"), Misc.getPositiveHighlightColor(), Misc.getHighlightColor(),
-                "" + inheritedShip,
-                "" + inheritedFighter,
-                "" + inheritedWeapon,
-                "" + inheritedHullmod);
+                          "" + inheritedShip,
+                          "" + inheritedFighter,
+                          "" + inheritedWeapon,
+                          "" + inheritedHullmod);
 
-        sector.getPlayerStats().addPoints(lastInheritData.cycle - 1);
+        // Add points: skill points/story points
+        int addSkillPoints = (int) Math.sqrt(lastInheritData.cycle - 1);
+        int addStoryPoints = addSkillPoints * 2;
         textPanel.addPara(d_i18n.get("inheritedPoints"), Misc.getPositiveHighlightColor(), Misc.getHighlightColor(),
-                lastInheritData.cycle - 1 + "");
+                          addSkillPoints + "");
+        sector.getPlayerStats().addPoints(addSkillPoints);
+        sector.getPlayerStats().addStoryPoints(addStoryPoints, textPanel, true);
+
+
         textPanel.setFontInsignia();
 
         if (isHardMode)

@@ -40,6 +40,8 @@ public class UNGP_LowIInterchangeability extends UNGP_BaseRuleEffect implements 
         stats.getWeaponDamageTakenMult().modifyMult(id, multiplier);
     }
 
+
+
     @Override
     public String getDescriptionParams(int index) {
         if (index == 0) return getFactorString(multiplier);

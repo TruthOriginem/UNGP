@@ -34,6 +34,7 @@ public class UNGP_WholeShells extends UNGP_BaseRuleEffect implements UNGP_Combat
 
     @Override
     public void advanceInCombat(CombatEngineAPI engine, float amount) {
+
         checkInterval.advance(amount);
         if (checkInterval.intervalElapsed()) {
             List<DamagingProjectileAPI> recordedProjectile = getDataInEngine(engine, LIST_ID);

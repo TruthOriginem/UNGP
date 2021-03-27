@@ -48,7 +48,7 @@ public class UNGP_BlockedFluxConduits extends UNGP_BaseRuleEffect implements UNG
             MutableShipStatsAPI stats = ship.getMutableStats();
             String id = rule.getBuffID();
             if (ship.getShield().isOn()) {
-                stats.getFluxDissipation().modifyMult(id, fluxMultiplier);
+                stats.getFluxDissipation().modifyMult(id, 1f - fluxMultiplier*0.01f);
                 if (engine.getPlayerShip() == ship) {
                     engine.maintainStatusForPlayerShip(id, rule.getSpritePath(),
                             rule.getName(),

@@ -53,10 +53,10 @@ public class UNGP_TakeHighLand extends UNGP_BaseRuleEffect implements UNGP_Comba
                 stats.getEnergyWeaponRangeBonus().modifyPercent(rule.getBuffID(), RANGE_BONUS);
                 if (ship == engine.getPlayerShip()) {
                     engine.maintainStatusForPlayerShip(rule,
-                            "graphics/icons/sensor_array.png",
-                            rule.getName(),
-                            rule.getExtra1(),
-                            false);
+                                                       "graphics/icons/sensor_array.png",
+                                                       rule.getName(),
+                                                       rule.getExtra1(),
+                                                       false);
                 }
             } else {
                 stats.getBallisticWeaponRangeBonus().unmodify(rule.getBuffID());
