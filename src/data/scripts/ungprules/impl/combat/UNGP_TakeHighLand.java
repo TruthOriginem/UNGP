@@ -7,7 +7,6 @@ import com.fs.starfarer.api.combat.MutableShipStatsAPI;
 import com.fs.starfarer.api.combat.ShipAPI;
 import data.scripts.ungprules.impl.UNGP_BaseRuleEffect;
 import data.scripts.ungprules.tags.UNGP_CombatTag;
-import data.scripts.utils.UNGPUtils;
 import org.lazywizard.lazylib.MathUtils;
 import org.lwjgl.util.vector.Vector2f;
 
@@ -38,30 +37,28 @@ public class UNGP_TakeHighLand extends UNGP_BaseRuleEffect implements UNGP_Comba
 
     @Override
     public void applyPlayerShipInCombat(float amount, CombatEngineAPI engine, ShipAPI ship) {
-        if (UNGPUtils.isPlayerShip(ship)) {
-            Vector2f shipLoc = ship.getLocation();
-            boolean takeEffect = false;
-            for (BattleObjectiveAPI tmp : Global.getCombatEngine().getObjectives()) {
-                if (MathUtils.isWithinRange(tmp.getLocation(), shipLoc, range)) {
-                    takeEffect = true;
-                    break;
-                }
+        Vector2f shipLoc = ship.getLocation();
+        boolean takeEffect = false;
+        for (BattleObjectiveAPI tmp : Global.getCombatEngine().getObjectives()) {
+            if (MathUtils.isWithinRange(tmp.getLocation(), shipLoc, range)) {
+                takeEffect = true;
+                break;
             }
-            MutableShipStatsAPI stats = ship.getMutableStats();
-            if (takeEffect) {
-                stats.getBallisticWeaponRangeBonus().modifyPercent(rule.getBuffID(), RANGE_BONUS);
-                stats.getEnergyWeaponRangeBonus().modifyPercent(rule.getBuffID(), RANGE_BONUS);
-                if (ship == engine.getPlayerShip()) {
-                    engine.maintainStatusForPlayerShip(rule,
-                                                       "graphics/icons/sensor_array.png",
-                                                       rule.getName(),
-                                                       rule.getExtra1(),
-                                                       false);
-                }
-            } else {
-                stats.getBallisticWeaponRangeBonus().unmodify(rule.getBuffID());
-                stats.getEnergyWeaponRangeBonus().unmodify(rule.getBuffID());
+        }
+        MutableShipStatsAPI stats = ship.getMutableStats();
+        if (takeEffect) {
+            stats.getBallisticWeaponRangeBonus().modifyPercent(rule.getBuffID(), RANGE_BONUS);
+            stats.getEnergyWeaponRangeBonus().modifyPercent(rule.getBuffID(), RANGE_BONUS);
+            if (ship == engine.getPlayerShip()) {
+                engine.maintainStatusForPlayerShip(rule,
+                                                   "graphics/icons/sensor_array.png",
+                                                   rule.getName(),
+                                                   rule.getExtra1(),
+                                                   false);
             }
+        } else {
+            stats.getBallisticWeaponRangeBonus().unmodify(rule.getBuffID());
+            stats.getEnergyWeaponRangeBonus().unmodify(rule.getBuffID());
         }
     }
 

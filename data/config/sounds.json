@@ -2,6 +2,9 @@
   "UNGP_fungus_activate": [
     {"file": "sounds/fx/trigger/UNGP_fungus_activate.ogg", "pitch": 1, "volume": 1},
   ],
+  "UNGP_birthdaypresent_activate": [
+    {"file": "sounds/fx/trigger/UNGP_birthdaypresent_activate.ogg", "pitch": 1, "volume": 1},
+  ],
   "UNGP_staycalm_start": [
     {"file": "sounds/fx/trigger/UNGP_staycalm_start.ogg", "pitch": 1, "volume": 1},
   ],

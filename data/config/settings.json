@@ -13,7 +13,8 @@
       "UNGP_itemBG_mask": "graphics/icons/cargo/UNGP_ruleItemBG_mask.png",
       "rule_negative": "graphics/icons/negative_icon.png",
       "rule_positive": "graphics/icons/positive_icon.png",
-      "rule_golden": "graphics/icons/golden_icon.png"
+      "rule_golden": "graphics/icons/golden_icon.png",
+      "rule_default": "graphics/icons/ungp/default.png"
     },
     "illustrations": {
       "UNGP_logo": "graphics/illustrations/UNGP_logo.png"

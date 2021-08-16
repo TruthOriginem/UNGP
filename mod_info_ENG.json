@@ -1,13 +1,13 @@
 {
-    "id": "ungp",
-    "name": "重生[UNGP]",
-    "author": "主创:Originem\n翻译:RUA,Fax\n图标提供:Originem,影之光,和莱\n建议及创意:海鲜群的诸位\n感谢:Game-icons.net",
-    "version": {"major": 1, "minor": 3, "patch": 0},
-    "dependencies": [
-        {"id": "lw_lazylib", "name": "LazyLib", "version": "2.6"},
-    ],
-    "description": "需要Lazylib作为前置\n满级后可以记录当前的无形资产例如各类蓝图，传递给下一个存档。\n全方面给游戏添加新规则的专家模式。\n左ctrl+P呼出菜单",
-    "gameVersion": "0.95a-RC9",
-    "jars":["jars/ungp.jar"],
-    "modPlugin":"data.scripts.UNGP_modPlugin",
+  "id": "ungp",
+  "name": "Unofficial New Game Plus",
+  "author": "Originem\nTranslated By RUA,Fax,ILLEXIUS\nSprites by Originem, Light of Shadow, Helai\nIdeas from Haixian Group\nSpecial Thanks: Game-icons.net",
+  "version": {"major": 1, "minor": 4, "patch": "0"},
+  "dependencies": [
+    {"id": "lw_lazylib", "name": "LazyLib", "version": "2.6"},
+  ],
+  "description": "A mod with a similar 'new game plus' function.\n Left ctrl+P to call the menu",
+  "gameVersion": "0.95a-RC15",
+  "jars": ["jars/ungp.jar"],
+  "modPlugin": "data.scripts.UNGP_modPlugin",
 }

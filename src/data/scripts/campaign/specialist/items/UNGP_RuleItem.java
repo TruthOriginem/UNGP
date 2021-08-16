@@ -10,12 +10,15 @@ import com.fs.starfarer.api.util.Misc;
 import data.scripts.campaign.everyframe.UNGP_UITimeScript;
 import data.scripts.campaign.specialist.rules.UNGP_RulesManager;
 import data.scripts.campaign.specialist.rules.UNGP_RulesManager.URule;
+import data.scripts.utils.UNGPFont;
+import org.lazywizard.lazylib.FastTrig;
 import org.lazywizard.lazylib.MathUtils;
+import org.lazywizard.lazylib.ui.LazyFont.DrawableString;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
 
-import static data.scripts.utils.UNGPFont.ORBITRON;
+import static data.scripts.utils.UNGPFont.*;
 
 public class UNGP_RuleItem extends BaseSpecialItemPlugin {
     private static SpriteAPI BG_NORMAL_SPRITE;
@@ -34,6 +37,7 @@ public class UNGP_RuleItem extends BaseSpecialItemPlugin {
     }
 
     protected URule rule;
+
 
     @Override
     public void init(CargoStackAPI stack) {
@@ -65,20 +69,12 @@ public class UNGP_RuleItem extends BaseSpecialItemPlugin {
         final SpriteAPI mask = BG_MASK_SPRITE;
         float cx = x + w / 2f;
         float cy = y + h / 2f;
-        float fontSize = ORBITRON.getFontSize();
         float frameFactor = UNGP_UITimeScript.getFactor("2secs");
 
         boolean isGoldenRule = rule.isGolden();
-        ORBITRON.setText(rule.getCostString());
-        ORBITRON.setMaxWidth(32f);
-        ORBITRON.setMaxHeight(32f);
-        ORBITRON.setColor(rule.getCostColor());
-        ORBITRON.draw(cx + 24, cy - 24);
-        ORBITRON.setColor(rule.getCorrectColor());
-        ORBITRON.setText(rule.getRuleTypeCharacter());
-        ORBITRON.draw(cx - 22 - fontSize, cy + 22 + fontSize);
-
         float speedUpBy2FrameFactor = (frameFactor % 0.5f) / 0.5f;
+
+
 //        sprite = Global.getSettings().getSprite(getBackgroundSpriteNameByFrame((int) Math.floor(frameFactor * 23.99f)));
         if (sprite != null) {
             Color baseColor;
@@ -129,17 +125,31 @@ public class UNGP_RuleItem extends BaseSpecialItemPlugin {
             }
         }
 
+        frameFactor = UNGP_UITimeScript.getFactor("6secs");
+
+        frameFactor = (float) (FastTrig.cos(2f * Math.PI * frameFactor) + 1f) / 2f;
+        float upCap = 0.6f;
+        float downCap = 0.05f;
+        if (frameFactor > upCap) {
+            frameFactor = 1f;
+        } else if (frameFactor < downCap) {
+            frameFactor = 0f;
+        } else {
+            frameFactor = (frameFactor - downCap) / (upCap - downCap);
+        }
+
         // 渲染图标
         SpriteAPI icon = Global.getSettings().getSprite(rule.getSpritePath());
         if (icon != null) {
             icon.setSize(64f, 64f);
             icon.setNormalBlend();
-            icon.setAlphaMult(alphaMult);
+            icon.setAlphaMult(alphaMult * (0.3f + 0.7f * (frameFactor)));
             icon.renderAtCenter(cx, cy);
             // 扫描效果
             if (isGoldenRule) {
                 icon.setColor(UNGP_RulesManager.getGoldenColor());
                 icon.setAdditiveBlend();
+
                 float tmp_h = 0.075f; // 扫描条的宽度
                 float tmp_y = 1f + tmp_h - (1f + 2f * tmp_h) * speedUpBy2FrameFactor;
                 float th = tmp_h;
@@ -153,7 +163,46 @@ public class UNGP_RuleItem extends BaseSpecialItemPlugin {
                 icon.renderRegionAtCenter(cx, cy, 0f, ty, 1f, th);
             }
         }
+
+
+        float nameAlpha = 1f - frameFactor;
+        if (nameAlpha != 0) {
+            float fontSize = 20f;
+            float maxWidth;
+            float maxHeight;
+            String ruleName = rule.getName();
+            DrawableString drawableName;
+            if (!notOnlyEN(ruleName)) {
+                if (ruleName.length() > 5) {
+                    fontSize = 16f;
+                }
+                drawableName = ORBITRON_BOLD;
+                maxWidth = fontSize * 5;
+                maxHeight = fontSize * 5;
+            } else {
+                fontSize = 16f;
+                drawableName = ORBITRON;
+                maxWidth = 100;
+                maxHeight = 100;
+            }
+            drawableName.setText(ruleName);
+            drawableName.setFontSize(fontSize);
+            drawableName.setMaxWidth(maxWidth);
+            drawableName.setMaxHeight(maxHeight);
+            Color color = Misc.scaleColor(Color.BLACK, 1f - frameFactor);
+            drawableName.setColor(color);
+            UNGPFont.drawShadow(drawableName, cx - drawableName.getWidth() * 0.5f, cy + drawableName.getHeight() * 0.5f, 2);
+            color = Misc.scaleColor(rule.getCorrectColor(), 1f - frameFactor);
+            drawableName.setColor(color);
+            drawableName.draw((int) (cx - drawableName.getWidth() * 0.5f), cy + drawableName.getHeight() * 0.5f);
+        }
+        final DrawableString drawableCost = UNGPFont.getDynamicDrawable(rule.getCostString(), rule.getCostColor());
+        drawableCost.draw(cx + 24, cy - 24);
+
+        final DrawableString drawableRuleType = UNGPFont.getDynamicDrawable(rule.getRuleTypeCharacter(), rule.getCorrectColor());
+        drawableRuleType.draw(cx - 42, cy + 42);
     }
+
 
     @Override
     public String getDesignType() {

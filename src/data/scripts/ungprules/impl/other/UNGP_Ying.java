@@ -41,7 +41,7 @@ public class UNGP_Ying extends UNGP_BaseRuleEffect implements UNGP_TweakBeforeAp
         //如果有另一个就全可以选
         for (URule tmp : rulesToPick) {
             if (tmp == rule) continue;
-            if (tmp.hasTag(URule.Tags.NO_ROLL)) continue;
+            if (!tmp.isRollable()) continue;
             if (containsYang) {
                 picker.add(tmp);
             } else if (!tmp.isBonus()) {

@@ -1,3 +1,15 @@
+1.4.0 2021/7/31
+增加正面规则：致命一击，引力干涉仪(黄金)，生日礼物
+增加负面规则：间谍渗透，贸易封锁
+
+提高最小/最大规则数量。
+优化UI的显示方式。
+
+Add new positive rule: Critical Hit, Gravity Disruptor(Golden), Birthday Present
+Add new negative rules: Spy, Trade Embargo
+Increase the minimum/maximum amount of rules.
+Optimized the UI.
+
 1.3.0 2021/3/27
 适配095a。
 使用旧版本重生点的方法:移动旧Starsector文件夹内的saves/common文件夹到新Starsector文件夹的相同位置

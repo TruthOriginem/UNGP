@@ -29,6 +29,9 @@ public class UNGP_RulesManager {
     // 全规则
     private static List<URule> ALL_RULES = new ArrayList<>();
 
+    /**
+     * Suggest using {@link UNGP_InGameData#getActivatedRules()} to get real active rules.
+     */
     public static List<URule> ACTIVATED_RULES_IN_THIS_GAME = new ArrayList<>();
 
     public static List<URule> COMBAT_RULES_IN_THIS_GAME = new ArrayList<>();
@@ -37,14 +40,22 @@ public class UNGP_RulesManager {
     public static List<UNGP_CampaignTag> CAMPAIGN_TAGS_ITG = new ArrayList<>();
     public static List<UNGP_PlayerFleetTag> PLAYER_FLEET_TAGS_ITG = new ArrayList<>();
     public static List<UNGP_PlayerFleetMemberTag> PLAYER_FLEET_MEMBER_TAGS_ITG = new ArrayList<>();
-    private static boolean IsSpecialistMode = false;
-    private static int CurrentDifficultyLevel = 1;
+    public static boolean needUpdateCache = false;
+    private static boolean isSpecialistMode = false;
+    private static int globalDifficultyLevel = 1;
 
     /**
      * Called on {@link UNGP_modPlugin}
      */
     public static void initOrReloadRules() {
         loadAllRules(UNGP_RuleInfoLoader.LoadAllInfos());
+    }
+
+    /**
+     * Used when you need to update rules in rule plugin.
+     */
+    public static void updateCacheNextFrame() {
+        needUpdateCache = true;
     }
 
 
@@ -148,16 +159,16 @@ public class UNGP_RulesManager {
         }
     }
 
-    public static int getCurrentDifficultyLevel() {
-        return CurrentDifficultyLevel;
+    public static int getGlobalDifficultyLevel() {
+        return globalDifficultyLevel;
     }
 
     public static boolean isSpecialistMode() {
-        return IsSpecialistMode;
+        return isSpecialistMode;
     }
 
     public static void setSpecialistMode(boolean isSpecialistMode) {
-        IsSpecialistMode = isSpecialistMode;
+        UNGP_RulesManager.isSpecialistMode = isSpecialistMode;
     }
 
     public static List<URule> getAllRules() {
@@ -253,7 +264,7 @@ public class UNGP_RulesManager {
                 tooltip.addPara(rules_i18n.get("rule_source") + ruleInfo.getSource(), Misc.getGrayColor(), pad * 0.5f);
                 tooltip.setParaFontDefault();
             }
-            tooltip.addPara(rules_i18n.get("front_desc"), pad * 0.5f, Misc.getBasePlayerColor(), Misc.getHighlightColor(), getCurrentDifficultyLevel() + "");
+            tooltip.addPara(rules_i18n.get("front_desc"), pad * 0.5f, Misc.getBasePlayerColor(), Misc.getHighlightColor(), getGlobalDifficultyLevel() + "");
         }
 
         public void addDesc(TooltipMakerAPI tooltip, float pad, String prefix, int difficulty) {
@@ -263,10 +274,13 @@ public class UNGP_RulesManager {
             }
             Color highlightColor = isBonus() ? Misc.getHighlightColor() : Misc.getNegativeHighlightColor();
             tooltip.addPara(prefix + ruleInfo.getDesc(), pad, highlightColor, values);
+            if (!isRollable()) {
+                tooltip.addPara(prefix + rules_i18n.get("not_rollable"), Misc.getGrayColor(), 10f);
+            }
         }
 
         public void addDesc(TooltipMakerAPI tooltip, float pad, String prefix) {
-            addDesc(tooltip, pad, prefix, getCurrentDifficultyLevel());
+            addDesc(tooltip, pad, prefix, getGlobalDifficultyLevel());
         }
 
         public void addDesc(TooltipMakerAPI tooltip, float pad) {
@@ -348,6 +362,10 @@ public class UNGP_RulesManager {
             return null;
         }
 
+        public boolean isRollable() {
+            return !hasTag(Tags.NO_ROLL);
+        }
+
     }
 
     /**
@@ -414,7 +432,7 @@ public class UNGP_RulesManager {
     }
 
     public static void setDifficultyLevel(int level) {
-        CurrentDifficultyLevel = level;
+        globalDifficultyLevel = level;
     }
 
     /**

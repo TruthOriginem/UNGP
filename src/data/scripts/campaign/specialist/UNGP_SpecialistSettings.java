@@ -17,12 +17,12 @@ public final class UNGP_SpecialistSettings {
 
     //3~10
     public static int getMaxRulesAmount(int difficultly) {
-        return (int) (3 + Math.pow(difficultly, 0.65));
+        return (int) (4.42f + difficultly * 1.58f);
     }
 
     //1~5
     public static int getMinRulesAmount(int difficultly) {
-        return (int) (Math.pow(difficultly, 0.54));
+        return (int) (3f + difficultly * 0.3f);
     }
 
     /**

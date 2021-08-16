@@ -11,7 +11,7 @@ import java.util.List;
 import static data.scripts.campaign.specialist.rules.UNGP_RulesManager.URule;
 
 /**
- * 记录在游戏中,基本为存档信息,不建议随时调用
+ * 记录在游戏中,基本为存档信息
  */
 public final class UNGP_InGameData {
     private int curCycle = 1;
@@ -70,7 +70,7 @@ public final class UNGP_InGameData {
     }
 
     /**
-     * Load rule ids
+     * Load rule ids, modify the list will not affect the true one
      *
      * @return
      */

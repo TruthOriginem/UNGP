@@ -12,4 +12,12 @@ public class UNGP_Settings {
         int maxLevel = Global.getSettings().getLevelupPlugin().getMaxLevel();
         return playerLevel >= maxLevel;
     }
+
+    public static int getBonusSkillPoints(int cycle) {
+        return (int) Math.sqrt(cycle - 1);
+    }
+
+    public static int getBonusStoryPoints(int cycle) {
+        return (int) Math.sqrt(cycle - 1) * 2;
+    }
 }

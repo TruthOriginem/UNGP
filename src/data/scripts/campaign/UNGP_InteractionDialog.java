@@ -13,9 +13,7 @@ import com.fs.starfarer.api.input.InputEventAPI;
 import com.fs.starfarer.api.loading.FighterWingSpecAPI;
 import com.fs.starfarer.api.loading.HullModSpecAPI;
 import com.fs.starfarer.api.loading.WeaponSpecAPI;
-import com.fs.starfarer.api.ui.PositionAPI;
-import com.fs.starfarer.api.ui.TooltipMakerAPI;
-import com.fs.starfarer.api.ui.ValueDisplayMode;
+import com.fs.starfarer.api.ui.*;
 import com.fs.starfarer.api.util.Misc;
 import com.fs.starfarer.api.util.WeightedRandomPicker;
 import data.scripts.campaign.inherit.UNGP_InheritData;
@@ -86,17 +84,18 @@ public class UNGP_InteractionDialog implements InteractionDialogPlugin {
     @Override
     public void init(InteractionDialogAPI dialog) {
         this.dialog = dialog;
+        dialog.setPromptText("");
+        dialog.setBackgroundDimAmount(0.4f);
         textPanel = dialog.getTextPanel();
         options = dialog.getOptionPanel();
         visual = dialog.getVisualPanel();
         sector = Global.getSector();
         //lastInheritData = UNGP_InheritData.Load();
 
-        toRecordInheritData = UNGP_InheritData.CreateInheritData(inGameData);
+        toRecordInheritData = UNGP_InheritData.createInheritData(inGameData);
         UNGP_InheritManager.LoadAllSlots();
         initMenu();
         dialog.setOptionOnEscape(null, OptionID.LEAVE);
-        dialog.setBackgroundDimAmount(0.4f);
         visual.showCustomPanel(400f, 300f, new CustomUIPanelPlugin() {
             private SpriteAPI sprite = Global.getSettings().getSprite("illustrations", "UNGP_logo");
 
@@ -154,18 +153,13 @@ public class UNGP_InteractionDialog implements InteractionDialogPlugin {
                 textPanel.addPara(d_i18n.get("notMaxLevel"), Misc.getNegativeHighlightColor());
             }
         }
-        textPanel.addPara(d_i18n.get("inGameData"),
-                          Misc.getHighlightColor(),
-                          "" + (inGameData.getCurCycle()),
-                          Misc.getDGSCredits(toRecordInheritData.inheritCredits),
-                          "" + toRecordInheritData.ships.size(),
-                          "" + toRecordInheritData.fighters.size(),
-                          "" + toRecordInheritData.weapons.size(),
-                          "" + toRecordInheritData.hullmods.size(),
-                          toRecordInheritData.isHardMode ? "Yes" : "No");
+        TooltipMakerAPI toRecordInfo = textPanel.beginTooltip();
+        int difficulty = 0;
         if (inGameData.isHardMode()) {
-            textPanel.addPara(d_i18n.get("hardmodeLevel") + ": %s", Misc.getHighlightColor(), inGameData.getDifficultyLevel() + "");
+            difficulty = inGameData.getDifficultyLevel();
         }
+        toRecordInheritData.addRecordTooltip(toRecordInfo, difficulty);
+        textPanel.addTooltip();
         options.addOption(d_i18n.get("help"), OptionID.HELP);
         addLeaveButton();
     }
@@ -185,30 +179,24 @@ public class UNGP_InteractionDialog implements InteractionDialogPlugin {
                 slotID = 2;
                 break;
         }
+        Color hl = Misc.getHighlightColor();
+
         lastInheritData = UNGP_InheritManager.Get(slotID);
         if (lastInheritData != null) {
             choseInheritSlotOptionID = option;
-            if (!lastInheritData.lastPlayerName.equals(UNGP_InheritData.DEFAULT_NAME)) {
-                textPanel.addPara(d_i18n.get("inheritName"), Misc.getHighlightColor(), lastInheritData.lastPlayerName);
-            }
-            textPanel.addPara(d_i18n.get("inheritData"),
-                              Misc.getHighlightColor(),
-                              "" + (lastInheritData.cycle - 1),
-                              Misc.getDGSCredits(lastInheritData.inheritCredits),
-                              "" + lastInheritData.ships.size(),
-                              "" + lastInheritData.fighters.size(),
-                              "" + lastInheritData.weapons.size(),
-                              "" + lastInheritData.hullmods.size());
+            TooltipMakerAPI inheritDataInfo = textPanel.beginTooltip();
+            lastInheritData.addInheritTooltip(inheritDataInfo);
+            textPanel.addTooltip();
 
             //如果没有继承过或者没有超过时限
             if (!inGameData.isPassedInheritTime() && !inGameData.isInherited()) {
                 options.addSelector(d_i18n.get("inheritCredits"), inheritCreditsSelector,
-                                    Misc.getHighlightColor(), 270f, 30f,
+                                    hl, 270f, 30f,
                                     0f, 100f, ValueDisplayMode.PERCENT, null);
                 options.setSelectorValue(inheritCreditsSelector, creditsSelecterValue);
 
                 options.addSelector(d_i18n.get("inheritBPs"), inheritBPSelector,
-                                    Misc.getHighlightColor(), 270f, 30f,
+                                    hl, 270f, 30f,
                                     0f, 100f, ValueDisplayMode.PERCENT, null);
                 options.setSelectorValue(inheritBPSelector, bpSelecterValue);
 
@@ -219,7 +207,7 @@ public class UNGP_InteractionDialog implements InteractionDialogPlugin {
                                         1, UNGP_SpecialistSettings.getMaxDifficultyLevel(lastInheritData.cycle + 1), ValueDisplayMode.VALUE, null);
                     options.setSelectorValue(inheritDifficultySelector, difficultyValue);
                 }
-                options.addOption(d_i18n.get("switchHardMode") + "" + (isHardMode ? d_i18n.get("on") : d_i18n.get("off")), OptionID.SWITCH_MODE);
+                options.addOption(d_i18n.get("specialistMode") + " : " + (isHardMode ? d_i18n.get("on") : d_i18n.get("off")), OptionID.SWITCH_MODE);
                 if (isHardMode) {
                     options.addOption(d_i18n.get("rulepick_button"), OptionID.PICK_RULES);
                     selectedRules.clear();
@@ -300,36 +288,30 @@ public class UNGP_InteractionDialog implements InteractionDialogPlugin {
                 addBackButton(OptionID.CHECK_INHERIT_DATA);
                 break;
             case CHECK_RECORD: {
+                TooltipMakerAPI recordInfo = textPanel.beginTooltip();
                 textPanel.addPara(d_i18n.get("recordInfo"));
-                textPanel.addPara(d_i18n.get("inGameData"),
-                                  Misc.getHighlightColor(),
-                                  "" + inGameData.getCurCycle(),
-                                  Misc.getDGSCredits(toRecordInheritData.inheritCredits),
-                                  "" + toRecordInheritData.ships.size(),
-                                  "" + toRecordInheritData.fighters.size(),
-                                  "" + toRecordInheritData.weapons.size(),
-                                  "" + toRecordInheritData.hullmods.size(),
-                                  toRecordInheritData.isHardMode ? "Yes" : "No");
+                toRecordInheritData.addRecordTooltip(recordInfo, inGameData.getDifficultyLevel());
+                textPanel.addTooltip();
                 textPanel.addPara(d_i18n.get("checkRecordSlot"));
                 UNGP_InheritData curSlot = UNGP_InheritManager.InheritData_slot0;
                 if (curSlot == null) {
                     options.addOption(d_i18n.get("emptySlot"), OptionID.CHOOSE_RECORD_SLOT_0);
                 } else {
-                    options.addOption(d_i18n.format("slotDes", curSlot.cycle + "", curSlot.lastPlayerName)
+                    options.addOption(d_i18n.format("slotDes", curSlot.cycle - 1 + "", curSlot.lastPlayerName)
                             , OptionID.CHOOSE_RECORD_SLOT_0);
                 }
                 curSlot = UNGP_InheritManager.InheritData_slot1;
                 if (curSlot == null) {
                     options.addOption(d_i18n.get("emptySlot"), OptionID.CHOOSE_RECORD_SLOT_1);
                 } else {
-                    options.addOption(d_i18n.format("slotDes", curSlot.cycle + "", curSlot.lastPlayerName)
+                    options.addOption(d_i18n.format("slotDes", curSlot.cycle - 1 + "", curSlot.lastPlayerName)
                             , OptionID.CHOOSE_RECORD_SLOT_1);
                 }
                 curSlot = UNGP_InheritManager.InheritData_slot2;
                 if (curSlot == null) {
                     options.addOption(d_i18n.get("emptySlot"), OptionID.CHOOSE_RECORD_SLOT_2);
                 } else {
-                    options.addOption(d_i18n.format("slotDes", curSlot.cycle + "", curSlot.lastPlayerName)
+                    options.addOption(d_i18n.format("slotDes", curSlot.cycle - 1 + "", curSlot.lastPlayerName)
                             , OptionID.CHOOSE_RECORD_SLOT_2);
                 }
                 options.addOptionConfirmation(OptionID.CHOOSE_RECORD_SLOT_0, d_i18n.get("recordConfirmInfo"), d_i18n.get("confirm"), d_i18n.get("cancel"));
@@ -351,6 +333,7 @@ public class UNGP_InteractionDialog implements InteractionDialogPlugin {
                 optionSelected(null, choseInheritSlotOptionID);
                 break;
             case PICK_RULES:
+                final List<URule> oldList = new ArrayList<>(selectedRules);
                 selectedRules.clear();
                 UNGP_RulesManager.setDifficultyLevel(difficultyValue);
                 UNGP_RulePickListener pickListener = new UNGP_RulePickListener(selectedRules, difficultyValue, new Script() {
@@ -367,14 +350,15 @@ public class UNGP_InteractionDialog implements InteractionDialogPlugin {
                         }
                         if (!UNGP_SpecialistSettings.rulesMeetCondition(selectedRules, difficultyValue)) {
                             tooltip.addPara(d_i18n.get("rulepick_notMeet"), Misc.getNegativeHighlightColor(), 5f);
-                        }
+                        }  //                            options.addOptionConfirmation(OptionID.PICK_RULES, d_i18n.get("rulepick_warning"), d_i18n.get("confirm"), d_i18n.get("cancel"));
                         textPanel.addTooltip();
                         lockedDifficultyValue = true;
                     }
                 }, new Script() {
                     @Override
                     public void run() {
-                        optionSelected(null, choseInheritSlotOptionID);
+//                        optionSelected(null, choseInheritSlotOptionID);
+                        selectedRules.addAll(oldList);
                     }
                 });
                 dialog.showCargoPickerDialog(d_i18n.get("rulepick_title"), d_i18n.get("confirm"), d_i18n.get("cancel"), false,
@@ -502,8 +486,8 @@ public class UNGP_InteractionDialog implements InteractionDialogPlugin {
                           "" + inheritedHullmod);
 
         // Add points: skill points/story points
-        int addSkillPoints = (int) Math.sqrt(lastInheritData.cycle - 1);
-        int addStoryPoints = addSkillPoints * 2;
+        int addSkillPoints = UNGP_Settings.getBonusSkillPoints(lastInheritData.cycle);
+        int addStoryPoints = UNGP_Settings.getBonusStoryPoints(lastInheritData.cycle);
         textPanel.addPara(d_i18n.get("inheritedPoints"), Misc.getPositiveHighlightColor(), Misc.getHighlightColor(),
                           addSkillPoints + "");
         sector.getPlayerStats().addPoints(addSkillPoints);
@@ -516,7 +500,7 @@ public class UNGP_InteractionDialog implements InteractionDialogPlugin {
             textPanel.addPara(d_i18n.get("hardModeYes"), Misc.getNegativeHighlightColor());
 
 
-        Global.getSoundPlayer().playUISound("ui_acquired_blueprint", 1, 1);
+//        Global.getSoundPlayer().playUISound("ui_acquired_blueprint", 1, 1);
 
         inGameData.setCurCycle(lastInheritData.cycle);
         inGameData.setInherited(true);
@@ -536,8 +520,6 @@ public class UNGP_InteractionDialog implements InteractionDialogPlugin {
     }
 
     private void setHardModeToolTip() {
-//        String enemyDamageMultiplier = String.format("%.2f", inGameData.getEnemyDamageMultiplier(difficultyValue));
-//        String enemyDamageTakenMultiplier = String.format("%.2f", inGameData.getEnemyDamageTakenMultiplier(difficultyValue));
         if (options.hasOption(OptionID.INHERIT)) {
             if (!selectedRules.isEmpty()) {
                 String[] ruleNames = new String[selectedRules.size()];
@@ -559,6 +541,8 @@ public class UNGP_InteractionDialog implements InteractionDialogPlugin {
 
     @Override
     public void advance(float amount) {
+//        Global.getSoundPlayer().playCustomMusic(1, 1, "ApproLight_unos_music", true);
+
         if (options.hasSelector(inheritCreditsSelector)) {
             float newValue = options.getSelectorValue(inheritCreditsSelector);
             if (newValue != creditsSelecterValue) {
@@ -592,13 +576,95 @@ public class UNGP_InteractionDialog implements InteractionDialogPlugin {
 
     private void changeInheritConfirmationTooltip() {
         if (options.hasOption(OptionID.INHERIT)) {
-            int creditsInherited = (int) (lastInheritData.inheritCredits * creditsSelecterValue * 0.01f);
-            int bpInherited = (int) ((lastInheritData.ships.size() + lastInheritData.fighters.size() + lastInheritData.weapons.size() + lastInheritData.hullmods.size()) * bpSelecterValue * 0.01f);
-            String confirmText = d_i18n.format("inheritConfirmInfo0", "" + creditsInherited, "" + bpInherited);
-            if (isHardMode) {
-                confirmText += d_i18n.get("inheritConfirmInfo1");
-            }
-            options.addOptionConfirmation(OptionID.INHERIT, confirmText, d_i18n.get("confirm"), d_i18n.get("cancel"));
+            final int creditsInherited = (int) (lastInheritData.inheritCredits * creditsSelecterValue * 0.01f);
+            final int bpInherited = (int) ((lastInheritData.ships.size() + lastInheritData.fighters.size() + lastInheritData.weapons.size() + lastInheritData.hullmods.size()) * bpSelecterValue * 0.01f);
+            final int addSkillPoints = UNGP_Settings.getBonusSkillPoints(lastInheritData.cycle);
+            final int addStoryPoints = UNGP_Settings.getBonusStoryPoints(lastInheritData.cycle);
+            final boolean isHd = isHardMode;
+            // 确认
+            options.addOptionConfirmation(OptionID.INHERIT, new BaseStoryPointActionDelegate() {
+                @Override
+                public String getTitle() {
+                    return d_i18n.get("startInherit");
+                }
+
+                @Override
+                public boolean withDescription() {
+                    return true;
+                }
+
+                @Override
+                public boolean withSPInfo() {
+                    return false;
+                }
+
+                @Override
+                public void createDescription(TooltipMakerAPI info) {
+                    float pad = 10f;
+                    String credits = Misc.getDGSCredits(creditsInherited);
+                    Color hl = Misc.getHighlightColor();
+                    Color negative = Misc.getNegativeHighlightColor();
+                    info.addPara(d_i18n.get("inheritConfirmInfo0"), 0f, hl, credits, "" + bpInherited);
+                    info.addSpacer(pad);
+                    info.addPara(d_i18n.get("inheritConfirmTip_p1"), 0f, Misc.getBasePlayerColor(), hl, addSkillPoints + "");
+                    info.addPara(d_i18n.get("inheritConfirmTip_p2"), 0f, Misc.getStoryOptionColor(), hl, addStoryPoints + "");
+                    if (isHd) {
+                        info.addPara(d_i18n.get("inheritConfirmInfo1"), negative, 0f);
+                    }
+                    if (isHd) {
+                        info.addSectionHeading(d_i18n.format("rulepick_level", difficultyValue), hl, Misc.scaleAlpha(negative, 0.2f), Alignment.MID, pad * 0.5f);
+                        float width = info.getPrev().getPosition().getWidth();
+                        int ruleSize = selectedRules.size();
+                        int itemsPerRow = (int) (width / 64f);
+                        int page = Math.max(0, ruleSize - 1) / itemsPerRow;
+
+                        for (int i = 0; i <= page; i++) {
+                            List<String> ruleSprites = new ArrayList<>();
+                            for (int j = i * itemsPerRow; j < (i + 1) * itemsPerRow; j++) {
+                                if (j < ruleSize) {
+                                    ruleSprites.add(selectedRules.get(j).getSpritePath());
+                                }
+                            }
+                            if (!ruleSprites.isEmpty()) {
+                                String[] array = ruleSprites.toArray(new String[0]);
+                                info.addImages(width, 64f, 0f, 4f, array);
+                            }
+                        }
+//                        for (URule rule : selectedRules) {
+//                            TooltipMakerAPI imageMaker = info.beginImageWithText(rule.getSpritePath(), 32f);
+//                            imageMaker.addPara(rule.getName(), rule.getCorrectColor(), 0f);
+//                            rule.addDesc(imageMaker, 0f);
+//                            info.addImageWithText(3f);
+//                        }
+                    }
+                }
+
+                @Override
+                public float getBonusXPFraction() {
+                    return 0;
+                }
+
+                @Override
+                public TextPanelAPI getTextPanel() {
+                    if (dialog == null) return null;
+                    return textPanel;
+                }
+
+                @Override
+                public String getConfirmSoundId() {
+                    return "ui_acquired_blueprint";
+                }
+
+                @Override
+                public int getRequiredStoryPoints() {
+                    return 0;
+                }
+
+                @Override
+                public String getLogText() {
+                    return null;
+                }
+            });
         }
     }
 

@@ -25,6 +25,9 @@ import java.util.List;
 import static com.fs.starfarer.api.campaign.BuffManagerAPI.Buff;
 import static data.scripts.campaign.specialist.rules.UNGP_RulesManager.*;
 
+/**
+ * 主要战役逻辑所在地
+ */
 public class UNGP_CampaignPlugin implements EveryFrameScript, CampaignEventListener {
     private static final String KEY = "UNGP_cam";
     private static final String ENTITY_ID = "ungp_ui_entity";
@@ -70,7 +73,7 @@ public class UNGP_CampaignPlugin implements EveryFrameScript, CampaignEventListe
         init();
     }
 
-    public void init() {
+    public UNGP_CampaignPlugin init() {
         //clear the listener
         Global.getSector().getListenerManager().removeListenerOfClass(UNGP_CampaignPlugin.class);
         Global.getSector().removeScriptsOfClass(UNGP_CampaignPlugin.class);
@@ -79,6 +82,7 @@ public class UNGP_CampaignPlugin implements EveryFrameScript, CampaignEventListe
         Global.getSector().addScript(this);
         Global.getSector().addListener(this);
         Global.getSector().getPersistentData().put(KEY, this);
+        return this;
     }
 
     @Override
@@ -94,6 +98,10 @@ public class UNGP_CampaignPlugin implements EveryFrameScript, CampaignEventListe
 
     @Override
     public void advance(float amount) {
+        if (needUpdateCache) {
+            needUpdateCache = false;
+            updateRulesCache();
+        }
         // 初始变量设定
         final boolean isPaused = Global.getSector().isPaused();
         final SectorAPI sector = Global.getSector();
@@ -219,6 +227,9 @@ public class UNGP_CampaignPlugin implements EveryFrameScript, CampaignEventListe
     }
 
 
+    /**
+     * Just some parameters that rules may used many times
+     */
     public static class TempCampaignParams {
         private boolean oneDayPassed = false;
         private boolean oneYearPassed = false;

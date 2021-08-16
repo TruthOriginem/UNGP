@@ -10,7 +10,6 @@ import com.fs.starfarer.api.util.Misc;
 import data.scripts.campaign.specialist.rules.UNGP_RuleSorter;
 import data.scripts.campaign.specialist.rules.UNGP_RulesManager;
 import org.lazywizard.lazylib.ui.LazyFont.DrawableString;
-import org.lwjgl.Sys;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
@@ -29,8 +28,9 @@ public class UNGP_UIEntityPlugin extends BaseCustomEntityPlugin {
     private static final Color LEVEL_COLOR = new Color(255, 148, 89, 255);
     private static final Rectangle SpecialistIconRect;
     transient private SpriteAPI icon;
-    transient private long lastTime;
     transient private UNGP_Progress moveOverAndWaitProgress;
+    transient private DrawableString drawableLevel;
+    transient private int levelToRender = -1;
 
     static {
         int width = (int) (Global.getSettings().getScreenWidth() * Display.getPixelScaleFactor());
@@ -46,23 +46,12 @@ public class UNGP_UIEntityPlugin extends BaseCustomEntityPlugin {
     }
 
     Object readResolve() {
-        lastTime = getTime();
+        levelToRender = -1;
         moveOverAndWaitProgress = new UNGP_Progress(0.2f);
         icon = Global.getSettings().getSprite("icons", "UNGP_sdimlogo");
         return this;
     }
 
-    //milli
-    public long getTime() {
-        return (Sys.getTime() * 1000) / Sys.getTimerResolution();
-    }
-
-    public float getDeltaTime() {
-        long thisTime = getTime();
-        int deltaTime = (int) (thisTime - lastTime);
-        lastTime = thisTime;
-        return deltaTime / 1000f;
-    }
 
     @Override
     public void advance(float amount) {
@@ -81,9 +70,15 @@ public class UNGP_UIEntityPlugin extends BaseCustomEntityPlugin {
         if (layer != CampaignEngineLayers.ABOVE) {
             return;
         }
-        DrawableString levelString = UNGPFont.getOrbitronFont().createText(getCurrentDifficultyLevel() + "");
-
-        float amount = getDeltaTime();
+        if (drawableLevel == null) {
+            drawableLevel = UNGPFont.getOrbitronMod().createText();
+        }
+        if (getGlobalDifficultyLevel() != levelToRender) {
+            levelToRender = getGlobalDifficultyLevel();
+            drawableLevel.setText(levelToRender + "");
+            drawableLevel.setColor(Misc.interpolateColor(LEVEL_COLOR, Color.red, Math.min(1f, UNGP_RulesManager.getGlobalDifficultyLevel() / 20f)));
+        }
+        float amount = UNGPUtils.getDeltaTime();
 
         int width = (int) (Global.getSettings().getScreenWidth() * Display.getPixelScaleFactor());
         int height = (int) (Global.getSettings().getScreenHeight() * Display.getPixelScaleFactor());
@@ -137,12 +132,10 @@ public class UNGP_UIEntityPlugin extends BaseCustomEntityPlugin {
         icon.setAlphaMult(alphaMult);
         icon.render(SpecialistIconRect.getX(), SpecialistIconRect.getY());
 
-        float textHeight = levelString.getHeight();
-        float textWidth = levelString.getWidth();
-//        LazyFont.DrawableString drawableString = UNGPFont.fontdraw.createText(ShownDifficultyLevel + "");
-        levelString.setColor(Misc.interpolateColor(LEVEL_COLOR, Color.red, Math.min(1f, UNGP_RulesManager.getCurrentDifficultyLevel() / 20f)));
-        levelString.draw(SpecialistIconRect.getX() + SpecialistIconRect.getWidth() * 0.5f - textWidth * 0.5f,
-                SpecialistIconRect.getY() + SpecialistIconRect.getHeight() * 0.5f + textHeight * 0.5f);
+        float textHeight = drawableLevel.getHeight();
+        float textWidth = drawableLevel.getWidth();
+        drawableLevel.draw(SpecialistIconRect.getX() + SpecialistIconRect.getWidth() * 0.5f - textWidth * 0.5f,
+                           SpecialistIconRect.getY() + SpecialistIconRect.getHeight() * 0.5f + textHeight * 0.5f);
 
         GL11.glMatrixMode(GL11.GL_MODELVIEW);
         GL11.glPopMatrix();
@@ -151,32 +144,6 @@ public class UNGP_UIEntityPlugin extends BaseCustomEntityPlugin {
         GL11.glMatrixMode(GL11.GL_PROJECTION);
         GL11.glPopMatrix();
         GL11.glPopAttrib();
-
-        levelString.dispose();
-        //数字
-//        GL11.glPushAttrib(GL_ALL_ATTRIB_BITS);
-//        GL11.glMatrixMode(GL11.GL_PROJECTION);
-//        GL11.glPushMatrix();
-//        GL11.glViewport(0, 0, width, height);
-//        GL11.glLoadIdentity();
-//
-//        GL11.glMatrixMode(GL11.GL_MODELVIEW);
-//        GL11.glPushMatrix();
-//
-//        GL11.glOrtho(0.0, width, 0.0, height, -1.0, 1.0);
-
-//        int bindedTexture = glGetInteger(GL_TEXTURE_BINDING_2D);
-
-//        ORBITRON.setText(UNGP_RulesManager.ShownDifficultyLevel + "");
-
-
-//        GL11.glEnable(GL11.GL_TEXTURE_2D);
-//        glBindTexture(GL_TEXTURE_2D, icon.getTextureId());
-
-//        GL11.glPopMatrix();
-//        GL11.glMatrixMode(GL11.GL_PROJECTION);
-//        GL11.glPopMatrix();
-//        GL11.glPopAttrib();
     }
 
     private void renderIcons(List<URule> bonusRules, float y) {

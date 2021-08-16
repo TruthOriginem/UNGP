@@ -9,6 +9,7 @@ import data.scripts.campaign.everyframe.UNGP_UITimeScript;
 import data.scripts.campaign.specialist.UNGP_PlayerFleetMemberBuff;
 import data.scripts.campaign.specialist.items.UNGP_RuleItem;
 import data.scripts.campaign.specialist.rules.UNGP_RulesManager;
+import data.scripts.utils.UNGPFont;
 import data.scripts.utils.UNGP_LoadingChecker;
 
 import static com.fs.starfarer.api.Global.getSettings;
@@ -22,6 +23,7 @@ public class UNGP_modPlugin extends BaseModPlugin {
         if (!hasLazyLib) {
             throw new RuntimeException("Unofficial New Game Plus requires LazyLib!");
         }
+        UNGPFont.init();
         UNGP_RulesManager.initOrReloadRules();
         UNGP_RuleItem.loadSprite();
     }
@@ -60,17 +62,13 @@ public class UNGP_modPlugin extends BaseModPlugin {
         x.alias("ungp_ut", UNGP_UITimeScript.class);
 
         x.alias("ungp_igd", UNGP_InGameData.class);
+        x.aliasAttribute(UNGP_InGameData.class, "curCycle", "cC");
+        x.aliasAttribute(UNGP_InGameData.class, "difficultyLevel", "dL");
+        x.aliasAttribute(UNGP_InGameData.class, "passedInheritTime", "pIT");
+        x.aliasAttribute(UNGP_InGameData.class, "isRecorded", "iR");
+        x.aliasAttribute(UNGP_InGameData.class, "inherited", "ied");
+        x.aliasAttribute(UNGP_InGameData.class, "isHardMode", "iHM");
         x.aliasAttribute(UNGP_InGameData.class, "timesToChangeSpecialistMode", "tTCSM");
         x.aliasAttribute(UNGP_InGameData.class, "changeTimeStat", "cTS");
-//        x.aliasAttribute(UNGP_InGameData.class, "curCycle", "cC");
     }
-
-    //    @Override
-//    public void afterGameSave() {
-//        UNGP_InGameData inGameData = UNGP_InGameData.getInstance();
-//        if (inGameData.shouldDeleteRecordNextSave) {
-//            inGameData.shouldDeleteRecordNextSave = false;
-//            UNGP_InheritData.Delete();
-//        }
-//    }
 }

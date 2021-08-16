@@ -25,6 +25,14 @@ public abstract class UNGP_BaseRuleEffect implements UNGP_RuleEffectAPI {
 
     }
 
+    public boolean roll(float chance) {
+        return RANDOM.nextFloat() < chance;
+    }
+
+    public boolean roll2() {
+        return RANDOM.nextBoolean();
+    }
+
     public void setRule(URule rule) {
         this.rule = rule;
     }
@@ -116,7 +124,7 @@ public abstract class UNGP_BaseRuleEffect implements UNGP_RuleEffectAPI {
             InteractionDialogAPI dialog = campaignUI.getCurrentInteractionDialog();
             if (dialog != null && dialog.getTextPanel() != null)
                 Global.getSector().getIntelManager().addIntelToTextPanel(intel,
-                        dialog.getTextPanel());
+                                                                         dialog.getTextPanel());
         }
         campaignUI.addMessage(intel);
     }
