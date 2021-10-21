@@ -21,16 +21,20 @@ public class UNGP_EconomyListener implements EconomyUpdateListener {
     }
 
 
-    public static void unapplyMarkets(UNGP_EconomyTag effect) {
+    public static void unapplyMarkets(UNGP_EconomyTag tag) {
         for (MarketAPI market : Global.getSector().getEconomy().getMarketsCopy()) {
+            tag.unapplyAllMarket(market);
             if (!market.isPlayerOwned()) continue;
-            effect.unapplyPlayerMarket(market);
+            tag.unapplyPlayerMarket(market);
         }
     }
 
     public static void applyMarkets() {
         List<MarketAPI> markets = Global.getSector().getEconomy().getMarketsCopy();
         for (MarketAPI market : markets) {
+            for (UNGP_EconomyTag tag : ECONOMY_TAGS_ITG) {
+                tag.applyAllMarket(market);
+            }
             if (!market.isPlayerOwned()) continue;
             for (UNGP_EconomyTag tag : ECONOMY_TAGS_ITG) {
                 tag.applyPlayerMarket(market);

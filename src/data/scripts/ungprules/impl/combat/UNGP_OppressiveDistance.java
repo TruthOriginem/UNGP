@@ -17,7 +17,7 @@ public class UNGP_OppressiveDistance extends UNGP_BaseRuleEffect implements UNGP
     //10~20
     @Override
     public float getValueByDifficulty(int index, int difficulty) {
-        if (index == 0) return 0.05f + 0.05f * (float) Math.pow(difficulty, 0.3668);
+        if (index == 0) return getLinearValue(0.1f, 0.15f, difficulty);
         return 1f;
     }
 
@@ -38,12 +38,6 @@ public class UNGP_OppressiveDistance extends UNGP_BaseRuleEffect implements UNGP
     @Override
     public void applyPlayerShipInCombat(float amount, CombatEngineAPI engine, ShipAPI ship) {
 
-    }
-
-    @Override
-    public String getDescriptionParams(int index) {
-        if (index == 0) getPercentString(factor * 100f);
-        return null;
     }
 
     @Override

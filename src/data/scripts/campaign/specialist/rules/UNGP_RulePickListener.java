@@ -5,7 +5,9 @@ import com.fs.starfarer.api.Script;
 import com.fs.starfarer.api.campaign.CargoAPI;
 import com.fs.starfarer.api.campaign.CargoPickerListener;
 import com.fs.starfarer.api.campaign.CargoStackAPI;
-import com.fs.starfarer.api.ui.*;
+import com.fs.starfarer.api.ui.Alignment;
+import com.fs.starfarer.api.ui.LabelAPI;
+import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.IntervalUtil;
 import com.fs.starfarer.api.util.Misc;
 import data.scripts.campaign.everyframe.UNGP_UITimeScript;
@@ -66,11 +68,13 @@ public class UNGP_RulePickListener implements CargoPickerListener {
     }
 
     private void initUIData() {
+        Global.getSoundPlayer().playCustomMusic(1, 1, "UNGP_rulepicker_bgm", true);
         UNGP_UITimeScript.addInterval("2secs", new IntervalUtil(2f, 2f));
         UNGP_UITimeScript.addInterval("6secs", new IntervalUtil(6f, 6f));
     }
 
     private void clearUIData() {
+        Global.getSoundPlayer().pauseCustomMusic();
         UNGP_UITimeScript.removeInterval("2secs");
         UNGP_UITimeScript.removeInterval("6secs");
         UNGPFont.clearDynamicDrawable();

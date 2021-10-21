@@ -56,10 +56,15 @@ public class UNGP_RuleItem extends BaseSpecialItemPlugin {
 
         rule.addPreDesc(tooltip, opad * 2f);
 
-        rule.addDesc(tooltip, opad * 2f, "        ");
+        String prefix = "        ";
+
+        rule.addDesc(tooltip, opad * 2f, prefix);
+
+        rule.addRollDesc(tooltip, opad * 22f, prefix);
+
+        rule.addChallengeRelatedDesc(tooltip, opad * 2f, prefix);
 
         rule.addCost(tooltip, opad * 2f);
-//        tooltip.addPara()
     }
 
     @Override
@@ -78,8 +83,8 @@ public class UNGP_RuleItem extends BaseSpecialItemPlugin {
 //        sprite = Global.getSettings().getSprite(getBackgroundSpriteNameByFrame((int) Math.floor(frameFactor * 23.99f)));
         if (sprite != null) {
             Color baseColor;
-            if (rule.getId().equals("lobster_perday")) {
-                baseColor = UNGP_RulesManager.getGoldenColor();
+            if (rule.isMileStone()) {
+                baseColor = UNGP_RulesManager.getMilestoneColor();
                 isGoldenRule = true;
             } else {
                 baseColor = rule.getCorrectColor();

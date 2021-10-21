@@ -15,14 +15,16 @@ public final class UNGP_SpecialistSettings {
         return Math.min(20, (cycle - 1) * 5);
     }
 
-    //3~10
     public static int getMaxRulesAmount(int difficultly) {
         return (int) (4.42f + difficultly * 1.58f);
     }
 
-    //1~5
     public static int getMinRulesAmount(int difficultly) {
         return (int) (3f + difficultly * 0.3f);
+    }
+
+    public static int getMinDifficultyLevelOfChallenge() {
+        return MAX_DIFFICULTY;
     }
 
     /**

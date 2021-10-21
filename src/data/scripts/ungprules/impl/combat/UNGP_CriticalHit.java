@@ -27,6 +27,12 @@ public class UNGP_CriticalHit extends UNGP_BaseRuleEffect implements UNGP_Combat
     }
 
     @Override
+    public String getDescriptionParams(int index, int difficulty) {
+        if (index == 0) return getPercentString(CRITICAL_HIT_CHANCE * 100f);
+        return super.getDescriptionParams(index, difficulty);
+    }
+
+    @Override
     public void advanceInCombat(CombatEngineAPI engine, float amount) {
 
     }

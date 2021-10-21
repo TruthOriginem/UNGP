@@ -6,6 +6,7 @@ import com.fs.starfarer.api.combat.ShipAPI;
 import com.fs.starfarer.api.input.InputEventAPI;
 import data.scripts.campaign.UNGP_InGameData;
 import data.scripts.ungprules.UNGP_RuleEffectAPI;
+import data.scripts.ungprules.tags.UNGP_CombatInitTag;
 import data.scripts.ungprules.tags.UNGP_CombatTag;
 import data.scripts.utils.SimpleI18n.I18nSection;
 import data.scripts.utils.UNGPUtils;
@@ -38,6 +39,10 @@ public class UNGP_SpecialistCombatPlugin extends BaseEveryFrameCombatPlugin {
                     UNGP_RuleEffectAPI ruleEffect = rule.getRuleEffect();
                     if (ruleEffect instanceof UNGP_CombatTag) {
                         tags.add((UNGP_CombatTag) ruleEffect);
+                        hdStrings.add(rule.getDesc(difficultyLevel));
+                    }
+                    if (ruleEffect instanceof UNGP_CombatInitTag) {
+                        ((UNGP_CombatInitTag) ruleEffect).init(engine);
                         hdStrings.add(rule.getDesc(difficultyLevel));
                     }
                 }

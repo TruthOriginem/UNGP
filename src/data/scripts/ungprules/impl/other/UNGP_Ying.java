@@ -7,11 +7,10 @@ import data.scripts.campaign.specialist.rules.UNGP_RulesManager;
 import data.scripts.ungprules.impl.UNGP_BaseRuleEffect;
 import data.scripts.ungprules.tags.UNGP_TweakBeforeApplyTag;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static data.scripts.campaign.specialist.rules.UNGP_RulesManager.URule;
-import static data.scripts.campaign.specialist.rules.UNGP_RulesManager.getAllRules;
+import static data.scripts.campaign.specialist.rules.UNGP_RulesManager.getAllRulesCopy;
 
 public class UNGP_Ying extends UNGP_BaseRuleEffect implements UNGP_TweakBeforeApplyTag {
     @Override
@@ -20,7 +19,7 @@ public class UNGP_Ying extends UNGP_BaseRuleEffect implements UNGP_TweakBeforeAp
     }
 
     @Override
-    public String getDescriptionParams(int index) {
+    public String getDescriptionParams(int index,int difficulty) {
         if (index == 0) return UNGP_RulesManager.getBonusString(false);
         if (index == 1) return UNGP_RulesManager.getBonusString(true);
         return null;
@@ -36,7 +35,7 @@ public class UNGP_Ying extends UNGP_BaseRuleEffect implements UNGP_TweakBeforeAp
             }
         }
         WeightedRandomPicker<URule> picker = new WeightedRandomPicker<>(getRandom());
-        List<URule> rulesToPick = new ArrayList<>(getAllRules());
+        List<URule> rulesToPick = getAllRulesCopy();
         rulesToPick.removeAll(originalActiveRules);
         //如果有另一个就全可以选
         for (URule tmp : rulesToPick) {

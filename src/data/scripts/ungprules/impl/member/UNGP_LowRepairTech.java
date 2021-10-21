@@ -13,7 +13,7 @@ public class UNGP_LowRepairTech extends UNGP_MemberBuffRuleEffect {
 
     @Override
     public float getValueByDifficulty(int index, int difficulty) {
-        if (index == 0) return getLinearValue(0.15f, 0.3f, difficulty);
+        if (index == 0) return getLinearValue(0.15f, 0.25f, difficulty);
         return 0;
     }
 

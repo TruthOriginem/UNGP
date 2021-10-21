@@ -16,18 +16,24 @@ wholesale_shells,批发炮弹,部分弹药受潮,武器发射非激光/等离子
 twice_the_effort,整倍功半,整备速率影响战机性能,"战机伤害及抗性取决于航母整备速率,整备速率为{%s}时性能下降最高{%s}",2,FALSE,,graphics/icons/ungp/twice_the_effort.png,data.scripts.ungprules.impl.combat.UNGP_TwiceTheEffort,当前战机性能:,,,,议长√
 oppressive_distance,高压视距,提高敌方射程及侦测范围,敌方武器射程及侦测范围 + %s,3,FALSE,,graphics/icons/ungp/oppressive_distance.png,data.scripts.ungprules.impl.combat.UNGP_OppressiveDistance,,,,,议长√
 blocked_flux_conduits,幅能导流阻塞,开启护盾时幅能耗散下降,"我方舰船开启护盾时,幅能耗散 -{%s}",3,FALSE,,graphics/icons/ungp/blocked_flux_conduits.png,data.scripts.ungprules.impl.combat.UNGP_BlockedFluxConduits,幅能耗散 - ,,,,议长√
+century_war,世纪战争,加强敌方空间站,敌方空间站承受伤害降低{%s}，射程提高{%s},1,FALSE,,graphics/icons/ungp/century_war.png,data.scripts.ungprules.impl.combat.UNGP_CenturyWar,,,,,议长√
+fragment_graveyard,破片坟场,"飞溅的碎片, 阴魂不散","敌我舰船被摧毁时产生的残骸提速{%s}, 且质量增加{%s}。",1,FALSE,,graphics/icons/ungp/fragment_graveyard.png,data.scripts.ungprules.impl.combat.UNGP_FragmentGraveyard,,,,,议长√
+order66,Order 66,停火!这里是友军!,我方友军互相造成的伤害 +{%s},1,FALSE,,graphics/icons/ungp/order66.png,data.scripts.ungprules.impl.combat.UNGP_Order66,,,,,议长√
 ,,,,,,,,,,,,,
 trade_embargo,贸易封锁,流通性受阻,玩家殖民地附近{%s}光年内与玩家敌对的每个市场都会使该殖民地降低{%s}流通性,1,FALSE,,graphics/icons/ungp/trade_embargo.png,data.scripts.ungprules.impl.economy.UNGP_TradeEmbargo,,,,,议长√
 spy,间谍渗透,稳定性受阻,玩家殖民地附近{%s}光年内与玩家敌对的每个市场都会使该殖民地降低{%s}稳定性,1,FALSE,,graphics/icons/ungp/spy.png,data.scripts.ungprules.impl.economy.UNGP_Spy,,,,,议长√
 ,,,,,,,,,,,,,
 no_way_back,无路可退,减少规则重选次数,"确认规则后,专家规则重选次数的获得速率 x {%s} (每年一次变为每{%s}年一次)",1,FALSE,,graphics/icons/ungp/no_way_back.png,data.scripts.ungprules.impl.other.UNGP_NoWayBack,,,,,议长√
 work_hard,好好干活!,你是一名资本家,"陆战队与船员数量比率低于{%s}时,每天有{%s}的概率发生暴动,随机战舰战备损失{%s},并且该船上{%s}的船员将会死于暴动。",2,FALSE,,graphics/icons/ungp/work_hard.png,data.scripts.ungprules.impl.other.UNGP_WorkHard,"船员发生了暴动, %s 遭殃了! 一共有 %s 名船员不幸离世...","当前陆战队员数量不足,你还需要{%s}名陆战队才能遏制暴动的发生.",,,和莱√
+monotonous_teller,穷编剧的剧本,持续损失故事点,每{%s}天损失{%s}点故事点，直至其归零,2,FALSE,,graphics/icons/ungp/monotonous_teller.png,data.scripts.ungprules.impl.other.UNGP_MonotonousTeller,"上层叙事的观众认为你的故事仍不够精彩, 扣除了你 %s 点故事点...",,,,议长√
 ,,,,,,,,,,,,,
-tech_revolution,科技革命,提高装配点数,舰船装配点数 + %s ,-4,TRUE,TRUE,graphics/icons/ungp/tech_revolution.png,data.scripts.ungprules.impl.character.UNGP_TechRevolution,,,,,影之光√
+tech_revolution,科技革命,提高装配点数,舰船装配点数 + %s ,-3,TRUE,TRUE,graphics/icons/ungp/tech_revolution.png,data.scripts.ungprules.impl.character.UNGP_TechRevolution,,,,,影之光√
 hss_phoenix,HSS Phoenix,提高旗舰:攻势的性能,"当旗舰为攻势系列战舰(id带有onslaught),该舰船获得{%s}结构,装甲,幅能加成,{%s}速度与机动加成及{%s}最大战备值",-4,TRUE,TRUE,graphics/icons/ungp/hss_phoenix.png,data.scripts.ungprules.impl.member.UNGP_HssPhoenix,,,,,议长√
 shield_specialization,护盾专精,提高护盾能力,"舰船护盾抗性,护盾转向/展开速率提高{%s},护盾维持降低{%s}",-4,TRUE,TRUE,graphics/icons/ungp/shield_specialization.png,data.scripts.ungprules.impl.member.UNGP_ShieldSpecialization,,,,,议长√
 stay_calm,临危不惧,即将被高伤导弹击中时开启子弹时间,"即将在{%s}秒内命中旗舰的导弹/鱼雷总伤害超过最大结构的{%s}时,时间流速变为{%s},持续{%s}秒.这个效果每{%s}秒才能触发一次.",-2,TRUE,TRUE,graphics/icons/ungp/stay_calm.png,data.scripts.ungprules.impl.combat.UNGP_StayCalm,还剩下 %s 秒,%s 秒后冷却完毕,,,议长√
 gravity_disruptor,引力干涉仪,干扰时间流速,"我方舰船时间流速+{%s},敌方舰船时间流速-{%s}",-3,TRUE,TRUE,graphics/icons/ungp/gravity_disruptor.png,data.scripts.ungprules.impl.combat.UNGP_GravityDisruptor,现在你的时间流速为 %s 倍,,,,议长√
+,,,,,,,,,,,,,
+ew_smog,电子烟幕,提升电子战强度上限,我方电子战强度上限 +{%s},-4,TRUE,,graphics/icons/ungp/ew_smog.png,data.scripts.ungprules.impl.character.UNGP_EwSmog,,,,,议长√
 ,,,,,,,,,,,,,
 salvaging,优化残骸整理工序,强化垃圾佬,+ %s 打捞的收益(包括稀有物资),-2,TRUE,,graphics/icons/ungp/salvaging.png,data.scripts.ungprules.impl.fleet.UNGP_Salvaging,,,,,和莱√
 efficient_fuel,远洋专长,提高航行距离,舰队燃油消耗 x %s,-2,TRUE,,graphics/icons/ungp/efficient_fuel.png,data.scripts.ungprules.impl.fleet.UNGP_EfficientFuel,,,,,影之光√
@@ -43,13 +49,17 @@ take_highland,我占有高地!,提高在信标附近的射程,在信标点附近
 close_formation,密集阵型,舰船聚集时提高护盾抗性及耗散,"舰船相距{%s}以内时, 护盾抗性及幅能耗散x %s",-2,TRUE,,graphics/icons/ungp/close_formation.png,data.scripts.ungprules.impl.combat.UNGP_CloseFormation,护盾抗性及幅能耗散 x,,,,议长√
 experimental_shunt,试验性分流管,提供硬幅能耗散能力,我方舰船在战斗中获得{%s}的硬幅能耗散能力,-1,TRUE,,graphics/icons/ungp/experimental_shunt.png,data.scripts.ungprules.impl.combat.UNGP_ExperimentalShunt,,,,,议长√
 critical_hit,致命一击,旗舰伤害概率翻倍,旗舰的任意伤害都有{%s}的概率翻倍(仅在原伤害高于100时显示提示),-2,TRUE,,graphics/icons/ungp/critical_hit.png,data.scripts.ungprules.impl.combat.UNGP_CriticalHit,,,,,议长√
+seer,伏击艺术家,揭开他们的面纱,"每冷却{%s}秒, 就清除战场中的战争迷雾{%s}秒",-1,TRUE,,graphics/icons/ungp/seer.png,data.scripts.ungprules.impl.combat.UNGP_Seer,,,,,议长√
+,,,,,,,,,,,,,
+collector,收集者,旗舰斩杀低结构舰船,旗舰对当前结构小于等于{%s}的敌方舰船结构造成伤害时，处决该舰船，并获得{%s}，对战机无效。,-1,TRUE,,graphics/icons/ungp/collector.png,data.scripts.ungprules.impl.combat.UNGP_Collector,,,英仙座联盟,,议长√
 ,,,,,,,,,,,,,
 mercantilism,重商主义,提高殖民地流通性,提高殖民地{%s}流通性， 若流通性超出{%s}则加成{%s},-2,TRUE,,graphics/icons/ungp/mercantilism.png,data.scripts.ungprules.impl.economy.UNGP_Mercantilism,,,,,议长√
 glados,GLaDos,提高Alpha核心的增益,装载Alpha核心的工厂产量+ {%s},-2,TRUE,,graphics/icons/ungp/glados.png,data.scripts.ungprules.impl.economy.UNGP_GLaDos,,,,,议长√
 industrial_zone,工业开发区,提高工业设施上限,"工业设施上限+{%s},但殖民地规模小于等于{%s}时,额外的工业设施会导致产出-{%s}",-3,TRUE,,graphics/icons/ungp/industrial_zone.png,data.scripts.ungprules.impl.economy.UNGP_IndustrialZone,,,,,议长√
+black_in_black,黑市鬼才,畅游黑市,所有势力在黑市方面对你保持最低怀疑度,-2,TRUE,,graphics/icons/ungp/black_in_black.png,data.scripts.ungprules.impl.economy.UNGP_BlackInBlack,,,,,议长√
 ,,,,,,,,,,,,,
-lobster_perday,优质海鲜,龙虾之主,"货舱未满时,每天获得一个蓝龙虾",0,TRUE,,graphics/icons/cargo/lobster.png,data.scripts.ungprules.impl.other.UNGP_LobsterPerDay,,,潜伏的混沌,,[-<虾王>-]
-birthday_present,生日礼物,一年后获得随机正面规则,在选择本规则后，{%s}年后随机获得一个正面规则并失去本规则。(中途更换规则时，只要不舍弃本规则，获得礼物的时间就不会改变),-1,TRUE,,graphics/icons/ungp/birthday_present.png,data.scripts.ungprules.impl.other.UNGP_BirthdayPresent,生日快乐！您随机获得了{%s},,你忠实的部下/家人/爱人,,议长√
+lobster_perday,优质海鲜,龙虾之主,"货舱未满时,每天获得一个蓝龙虾",0,TRUE,,graphics/icons/cargo/lobster.png,data.scripts.ungprules.impl.other.UNGP_LobsterPerDay,,,潜伏的混沌,milestone,[-<虾王>-]
+birthday_present,生日礼物,一年后获得随机正面规则,在选择本规则后，{%s}年后随机获得一个正面规则并失去本规则。(中途更换规则时，只要不舍弃本规则，获得礼物的时间就不会改变),0,TRUE,,graphics/icons/ungp/milestones/birthday_present.png,data.scripts.ungprules.impl.other.UNGP_BirthdayPresent,生日快乐！您随机获得了{%s},,你忠实的部下/家人/爱人,milestone,议长√
 ,,,,,,,,,,,,,
 ying,阴,随机选择负面规则,"专家模式规则选择完毕并确认后,删除该规则,随机添加一个未被选中的{%s}.当选择了""阳""时,也会随机到未被选中的{%s}.",2,FALSE,,graphics/icons/ungp/ying.png,data.scripts.ungprules.impl.other.UNGP_Ying,您随机获得了{%s},,,no_roll,议长√
 yang,阳,随机选择正面规则,"专家模式规则选择完毕并确认后,删除该规则,随机添加一个未被选中的{%s}.当选择了""阴""时,也会随机到未被选中的{%s}.",-2,TRUE,,graphics/icons/ungp/yang.png,data.scripts.ungprules.impl.other.UNGP_Yang,您随机获得了{%s},,,no_roll,议长√

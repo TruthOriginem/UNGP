@@ -4,9 +4,12 @@ import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.combat.MutableStat;
 import data.scripts.campaign.everyframe.UNGP_CampaignPlugin;
 import data.scripts.campaign.specialist.rules.UNGP_RulesManager;
+import data.scripts.utils.UNGPUtils;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import static data.scripts.campaign.specialist.rules.UNGP_RulesManager.URule;
 
@@ -23,6 +26,7 @@ public final class UNGP_InGameData {
     private float timesToChangeSpecialistMode = 0f;
     private MutableStat changeTimeStat = new MutableStat(1f); // 用于标明每年可以获得多少次重启次数
     private List<String> activatedRuleIDs = new ArrayList<>();
+    private List<String> completedChallenges = new ArrayList<>();
 
 
     /**
@@ -57,16 +61,25 @@ public final class UNGP_InGameData {
     public UNGP_InGameData() {
     }
 
+    public void completeChallenge(String id) {
+        completedChallenges.add(id);
+        UNGPUtils.clearDuplicatedIdsInList(completedChallenges);
+    }
+
     /**
+     * 保存现有规则，应该在之后更新缓存{@link UNGP_RulesManager}
      * Save rule ids
      *
-     * @param rules
+     * @param newRules
      */
-    public void saveActivatedRules(List<URule> rules) {
+    public void saveActivatedRules(List<URule> newRules) {
         activatedRuleIDs.clear();
-        for (URule rule : rules) {
-            activatedRuleIDs.add(rule.getId());
+        Set<String> ruleSet = new HashSet<>();
+        // Avoid duplicated
+        for (URule rule : newRules) {
+            ruleSet.add(rule.getId());
         }
+        activatedRuleIDs.addAll(ruleSet);
     }
 
     /**
@@ -76,7 +89,7 @@ public final class UNGP_InGameData {
      */
     public List<URule> getActivatedRules() {
         List<URule> results = new ArrayList<>();
-        for (URule rule : UNGP_RulesManager.getAllRules()) {
+        for (URule rule : UNGP_RulesManager.getAllRulesCopy()) {
             if (activatedRuleIDs.contains(rule.getId())) {
                 results.add(rule);
             }
@@ -148,5 +161,9 @@ public final class UNGP_InGameData {
 
     public MutableStat getChangeTimeStat() {
         return changeTimeStat;
+    }
+
+    public List<String> getCompletedChallenges() {
+        return completedChallenges;
     }
 }

@@ -50,8 +50,10 @@ public abstract class UNGP_BaseRuleEffect implements UNGP_RuleEffectAPI {
     @Override
     public abstract float getValueByDifficulty(int index, int difficulty);
 
-    @Override
-    public abstract String getDescriptionParams(int index);
+    @Deprecated
+    public String getDescriptionParams(int index) {
+        return null;
+    }
 
     @Override
     public String getDescriptionParams(int index, int difficulty) {
@@ -84,6 +86,7 @@ public abstract class UNGP_BaseRuleEffect implements UNGP_RuleEffectAPI {
     protected float getLinearValue(float min, float max, int difficulty) {
         return getLinearValue(min, max, difficulty, UNGP_SpecialistSettings.MAX_DIFFICULTY);
     }
+
 
 /*
     public static float smooth(float x) {
@@ -158,6 +161,13 @@ public abstract class UNGP_BaseRuleEffect implements UNGP_RuleEffectAPI {
         final CampaignClockAPI clock = Global.getSector().getClock();
         String sb = Global.getSector().getSeedString() + rule.getId() +
                 String.format("%d%d", clock.getCycle(), clock.getMonth());
+        return new Random(sb.hashCode());
+    }
+
+    protected Random getRandomByDay() {
+        final CampaignClockAPI clock = Global.getSector().getClock();
+        String sb = Global.getSector().getSeedString() + rule.getId() +
+                String.format("%d%d%d", clock.getCycle(), clock.getMonth(), clock.getDay());
         return new Random(sb.hashCode());
     }
 }

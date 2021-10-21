@@ -41,7 +41,8 @@ public class UNGP_CampaignPlugin implements EveryFrameScript, CampaignEventListe
 
     private IntervalUtil inheritChecker = new IntervalUtil(1f, 1f);
     private int oneDayChecker = -1;
-    private int oneYearChecker = 207;
+    private int oneYearChecker = -1;
+    private int oneMonthChecker = -1;
     private float newGameCheckDays = 0.1f;
     private boolean newGameChecked = false;
     private boolean shouldShowDialog = false;
@@ -71,6 +72,10 @@ public class UNGP_CampaignPlugin implements EveryFrameScript, CampaignEventListe
     public UNGP_CampaignPlugin() {
         inGameData = new UNGP_InGameData();
         init();
+        final CampaignClockAPI clock = Global.getSector().getClock();
+        oneDayChecker = clock.getDay();
+        oneMonthChecker = clock.getMonth();
+        oneYearChecker = clock.getCycle();
     }
 
     public UNGP_CampaignPlugin init() {
@@ -117,7 +122,7 @@ public class UNGP_CampaignPlugin implements EveryFrameScript, CampaignEventListe
                         newGameCheckDays -= days;
                     } else {
                         newGameChecked = true;
-                        if (UNGP_InheritManager.SavePointsExist()) {
+                        if (UNGP_InheritManager.savePointsExist()) {
                             sector.getCampaignUI().showConfirmDialog(i18n.get("message"), i18n.get("yes"), i18n.get("no"), new Script() {
                                 @Override
                                 public void run() {
@@ -158,11 +163,17 @@ public class UNGP_CampaignPlugin implements EveryFrameScript, CampaignEventListe
 
         int currentDay = clock.getDay();
         int currentYear = clock.getCycle();
+        int currentMonth = clock.getMonth();
         TempCampaignParams params = new TempCampaignParams();
         // 每日一触发
         if (currentDay != oneDayChecker) {
             oneDayChecker = currentDay;
             params.oneDayPassed = true;
+        }
+        // 每月一触发
+        if (currentMonth != oneMonthChecker) {
+            oneMonthChecker = currentMonth;
+            params.oneMonthPassed = true;
         }
         // 每年一触发
         if (currentYear != oneYearChecker) {
@@ -232,10 +243,15 @@ public class UNGP_CampaignPlugin implements EveryFrameScript, CampaignEventListe
      */
     public static class TempCampaignParams {
         private boolean oneDayPassed = false;
+        private boolean oneMonthPassed = false;
         private boolean oneYearPassed = false;
 
         public boolean isOneYearPassed() {
             return oneYearPassed;
+        }
+
+        public boolean isOneMonthPassed() {
+            return oneMonthPassed;
         }
 
         public boolean isOneDayPassed() {

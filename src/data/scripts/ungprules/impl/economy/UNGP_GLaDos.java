@@ -46,6 +46,16 @@ public class UNGP_GLaDos extends UNGP_BaseRuleEffect implements UNGP_EconomyTag 
     }
 
     @Override
+    public void applyAllMarket(MarketAPI market) {
+
+    }
+
+    @Override
+    public void unapplyAllMarket(MarketAPI market) {
+
+    }
+
+    @Override
     public String getDescriptionParams(int index) {
         if (index == 0) return getFactorString(1);
         return null;

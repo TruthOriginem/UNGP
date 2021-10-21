@@ -13,16 +13,22 @@ import com.fs.starfarer.api.input.InputEventAPI;
 import com.fs.starfarer.api.loading.FighterWingSpecAPI;
 import com.fs.starfarer.api.loading.HullModSpecAPI;
 import com.fs.starfarer.api.loading.WeaponSpecAPI;
-import com.fs.starfarer.api.ui.*;
+import com.fs.starfarer.api.ui.Alignment;
+import com.fs.starfarer.api.ui.PositionAPI;
+import com.fs.starfarer.api.ui.TooltipMakerAPI;
+import com.fs.starfarer.api.ui.ValueDisplayMode;
 import com.fs.starfarer.api.util.Misc;
 import com.fs.starfarer.api.util.WeightedRandomPicker;
 import data.scripts.campaign.inherit.UNGP_InheritData;
 import data.scripts.campaign.inherit.UNGP_InheritManager;
+import data.scripts.campaign.specialist.UNGP_SpecialistSettings;
+import data.scripts.campaign.specialist.challenges.UNGP_ChallengeInfo;
+import data.scripts.campaign.specialist.challenges.UNGP_ChallengeManager;
+import data.scripts.campaign.specialist.intel.UNGP_ChallengeIntel;
+import data.scripts.campaign.specialist.intel.UNGP_SpecialistIntel;
 import data.scripts.campaign.specialist.rules.UNGP_RulePickListener;
 import data.scripts.campaign.specialist.rules.UNGP_RulesManager;
 import data.scripts.campaign.specialist.rules.UNGP_RulesManager.URule;
-import data.scripts.campaign.specialist.UNGP_SpecialistSettings;
-import data.scripts.campaign.specialist.intel.UNGP_SpecialistIntel;
 import org.lwjgl.opengl.Display;
 
 import java.awt.*;
@@ -240,12 +246,12 @@ public class UNGP_InteractionDialog implements InteractionDialogPlugin {
                 slotID = 2;
                 break;
         }
-        UNGP_InheritManager.Save(dataToRecord, slotID);
+        UNGP_InheritManager.save(dataToRecord, slotID);
     }
 
     @Override
     public void optionSelected(String optionText, Object optionData) {
-        OptionID selectedOption = (OptionID) optionData;
+        final OptionID selectedOption = (OptionID) optionData;
         if (selectedOption != OptionID.PICK_RULES) {
             options.clearOptions();
             textPanel.clear();
@@ -293,6 +299,7 @@ public class UNGP_InteractionDialog implements InteractionDialogPlugin {
                 toRecordInheritData.addRecordTooltip(recordInfo, inGameData.getDifficultyLevel());
                 textPanel.addTooltip();
                 textPanel.addPara(d_i18n.get("checkRecordSlot"));
+                // 三个重生槽位
                 UNGP_InheritData curSlot = UNGP_InheritManager.InheritData_slot0;
                 if (curSlot == null) {
                     options.addOption(d_i18n.get("emptySlot"), OptionID.CHOOSE_RECORD_SLOT_0);
@@ -348,21 +355,29 @@ public class UNGP_InteractionDialog implements InteractionDialogPlugin {
                             rule.addDesc(imageMaker, 0f);
                             tooltip.addImageWithText(3f);
                         }
+                        // 如果满足规则
                         if (!UNGP_SpecialistSettings.rulesMeetCondition(selectedRules, difficultyValue)) {
                             tooltip.addPara(d_i18n.get("rulepick_notMeet"), Misc.getNegativeHighlightColor(), 5f);
-                        }  //                            options.addOptionConfirmation(OptionID.PICK_RULES, d_i18n.get("rulepick_warning"), d_i18n.get("confirm"), d_i18n.get("cancel"));
+                        } else {
+                            List<UNGP_ChallengeInfo> runnableChallenges = UNGP_ChallengeManager.getRunnableChallenges(difficultyValue, selectedRules, lastInheritData.completedChallenges);
+                            if (!runnableChallenges.isEmpty()) {
+                                tooltip.addPara(d_i18n.get("rulepick_runnableChallenges"), 10f);
+                                for (UNGP_ChallengeInfo challenge : runnableChallenges) {
+                                    challenge.createTooltip(tooltip, 5f, 0);
+                                }
+                            }
+                        }
                         textPanel.addTooltip();
                         lockedDifficultyValue = true;
                     }
                 }, new Script() {
                     @Override
                     public void run() {
-//                        optionSelected(null, choseInheritSlotOptionID);
                         selectedRules.addAll(oldList);
                     }
                 });
                 dialog.showCargoPickerDialog(d_i18n.get("rulepick_title"), d_i18n.get("confirm"), d_i18n.get("cancel"), false,
-                                             280, UNGP_RulesManager.createAllRulesCargo(), pickListener);
+                                             280, UNGP_RulesManager.createRulesCargoBasedOnChallenges(lastInheritData.completedChallenges), pickListener);
                 options.setEnabled(inheritDifficultySelector, false);
                 break;
             case INHERIT:
@@ -510,6 +525,10 @@ public class UNGP_InteractionDialog implements InteractionDialogPlugin {
             inGameData.saveActivatedRules(selectedRules);
             UNGP_SpecialistIntel intel = UNGP_SpecialistIntel.getInstance();
             Global.getSector().getIntelManager().addIntelToTextPanel(intel, textPanel);
+            UNGP_ChallengeIntel challengeIntel = UNGP_ChallengeManager.confirmChallenges(inGameData);
+            if (challengeIntel != null) {
+                Global.getSector().getIntelManager().addIntelToTextPanel(challengeIntel, textPanel);
+            }
             UNGP_RulesManager.updateRulesCache();
         }
     }
@@ -630,12 +649,6 @@ public class UNGP_InteractionDialog implements InteractionDialogPlugin {
                                 info.addImages(width, 64f, 0f, 4f, array);
                             }
                         }
-//                        for (URule rule : selectedRules) {
-//                            TooltipMakerAPI imageMaker = info.beginImageWithText(rule.getSpritePath(), 32f);
-//                            imageMaker.addPara(rule.getName(), rule.getCorrectColor(), 0f);
-//                            rule.addDesc(imageMaker, 0f);
-//                            info.addImageWithText(3f);
-//                        }
                     }
                 }
 

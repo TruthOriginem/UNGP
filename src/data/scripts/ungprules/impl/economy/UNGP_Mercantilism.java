@@ -36,6 +36,16 @@ public class UNGP_Mercantilism extends UNGP_BaseRuleEffect implements UNGP_Econo
     }
 
     @Override
+    public void applyAllMarket(MarketAPI market) {
+
+    }
+
+    @Override
+    public void unapplyAllMarket(MarketAPI market) {
+
+    }
+
+    @Override
     public String getDescriptionParams(int index) {
         if (index == 0) return getPercentString(bonus * 100f);
         if (index == 1) return getPercentString(ACCESS_THRESHOLD * 100f);

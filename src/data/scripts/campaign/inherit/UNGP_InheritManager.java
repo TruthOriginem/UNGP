@@ -19,9 +19,9 @@ public class UNGP_InheritManager {
 
 
     public static void LoadAllSlots() {
-        InheritData_slot0 = Load(0);
-        InheritData_slot1 = Load(1);
-        InheritData_slot2 = Load(2);
+        InheritData_slot0 = load(0);
+        InheritData_slot1 = load(1);
+        InheritData_slot2 = load(2);
     }
 
     public static void ClearSlots() {
@@ -52,7 +52,7 @@ public class UNGP_InheritManager {
      * @param inheritData
      * @param slotID
      */
-    public static void Save(UNGP_InheritData inheritData, int slotID) {
+    public static void save(UNGP_InheritData inheritData, int slotID) {
         try {
             JSONUtils.CommonDataJSONObject jsonObject = new JSONUtils.CommonDataJSONObject(getSaveFileName(slotID));
             jsonObject.put("ungp_id", inheritData.ungp_id);
@@ -60,6 +60,7 @@ public class UNGP_InheritManager {
             jsonObject.put("cycle", inheritData.cycle);
             jsonObject.put("isHardMode", inheritData.isHardMode);
             jsonObject.put("inheritCredits", inheritData.inheritCredits);
+            jsonObject.put("completedChallenges", inheritData.completedChallenges);
             jsonObject.put("ships", inheritData.ships);
             jsonObject.put("fighters", inheritData.fighters);
             jsonObject.put("weapons", inheritData.weapons);
@@ -75,7 +76,7 @@ public class UNGP_InheritManager {
      * @param slotID
      * @return
      */
-    public static UNGP_InheritData Load(int slotID) {
+    public static UNGP_InheritData load(int slotID) {
         UNGP_InheritData inheritData = new UNGP_InheritData();
         try {
             JSONUtils.CommonDataJSONObject jsonObject = JSONUtils.loadCommonJSON(getSaveFileName(slotID));
@@ -87,37 +88,48 @@ public class UNGP_InheritManager {
             inheritData.cycle = jsonObject.getInt("cycle");
             inheritData.isHardMode = jsonObject.getBoolean("isHardMode");
             inheritData.inheritCredits = jsonObject.getInt("inheritCredits");
+
+            inheritData.completedChallenges = new ArrayList<>();
+            inheritData.ships = new ArrayList<>();
+            inheritData.fighters = new ArrayList<>();
+            inheritData.weapons = new ArrayList<>();
+            inheritData.hullmods = new ArrayList<>();
+
             JSONArray array;
-            ArrayList<String> arrayList;
-
-            array = jsonObject.getJSONArray("ships");
-            arrayList = new ArrayList<>();
-            for (int i = 0; i < array.length(); i++) {
-                arrayList.add(array.getString(i));
+            array = jsonObject.optJSONArray("completedChallenges");
+            if (array != null) {
+                for (int i = 0; i < array.length(); i++) {
+                    inheritData.completedChallenges.add(array.getString(i));
+                }
             }
-            inheritData.ships = new ArrayList<>(arrayList);
 
-            array = jsonObject.getJSONArray("fighters");
-            arrayList = new ArrayList<>();
-            for (int i = 0; i < array.length(); i++) {
-                arrayList.add(array.getString(i));
+            array = jsonObject.optJSONArray("ships");
+            if (array != null) {
+                for (int i = 0; i < array.length(); i++) {
+                    inheritData.ships.add(array.getString(i));
+                }
             }
-            inheritData.fighters = new ArrayList<>(arrayList);
 
-            array = jsonObject.getJSONArray("weapons");
-            arrayList = new ArrayList<>();
-            for (int i = 0; i < array.length(); i++) {
-                arrayList.add(array.getString(i));
+            array = jsonObject.optJSONArray("fighters");
+            if (array != null) {
+                for (int i = 0; i < array.length(); i++) {
+                    inheritData.fighters.add(array.getString(i));
+                }
             }
-            inheritData.weapons = new ArrayList<>(arrayList);
 
-
-            array = jsonObject.getJSONArray("hullmods");
-            arrayList = new ArrayList<>();
-            for (int i = 0; i < array.length(); i++) {
-                arrayList.add(array.getString(i));
+            array = jsonObject.optJSONArray("weapons");
+            if (array != null) {
+                for (int i = 0; i < array.length(); i++) {
+                    inheritData.weapons.add(array.getString(i));
+                }
             }
-            inheritData.hullmods = new ArrayList<>(arrayList);
+
+            array = jsonObject.optJSONArray("hullmods");
+            if (array != null) {
+                for (int i = 0; i < array.length(); i++) {
+                    inheritData.hullmods.add(array.getString(i));
+                }
+            }
 
             return inheritData;
 
@@ -126,7 +138,7 @@ public class UNGP_InheritManager {
         }
     }
 
-    public static boolean SavePointsExist() {
+    public static boolean savePointsExist() {
         return Global.getSettings().fileExistsInCommon(getSaveFileName(0)) ||
                 Global.getSettings().fileExistsInCommon(getSaveFileName(1)) ||
                 Global.getSettings().fileExistsInCommon(getSaveFileName(2));
@@ -139,4 +151,5 @@ public class UNGP_InheritManager {
         }
         return fileName;
     }
+
 }

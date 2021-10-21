@@ -1,3 +1,32 @@
+1.5.0 2021/10/19
+本次更新不能中途加入存档，建议先保存重生点。
+
+增加正面规则：收集者，电子烟幕，黑手鬼才，伏击艺术家
+增加负面规则：世纪战争，Order 66，穷编剧的剧本
+
+科技革命:Cost点数需求降低1.
+高压视距:敌方增加射程10%~20%->10%~15%
+低效维修技术：数值调整 15%~30%->15%~25%
+
+选择专家模式时播放特殊BGM。
+现在专家模式默认可选1~20级。
+更新UNGP_EconomyTag。
+增加新机制：成就规则。
+    开局选定指定规则，专家等级20级，且满足指定条件时，自动开启挑战。维持这些规则达一定时间或者玩家满级后，视作挑战完成，该存档下次专家模式可以使用新的规则。
+
+Add new positive rules: Collector, EW Smog, Black in Black, Seer
+Add new negative rules: Century War, Order 66, Monotonous Teller
+
+Tech Revolution: Decrease the cost by 1.
+Overwhelming Vision: Enemy weapon and sensor range + 10%~20% -> 10%~15%
+Low Efficiency Repair: Fleetwide repair and combat readiness recover rate -15%~30%->15%~25%
+
+Play custom bgm while picking the rules of Specialist mode.
+Now you could pick the level of Specialist Mode from 1 to 20 by default.
+Update UNGP_EconomyTag.
+Add new system: Milestone Rule.
+    You could pick specific rules at the beginning, if you meet the condition and difficulty level, the Specialist Challenges would be started. The challenges may be completed if you keep these rules for long time, or after you reach the max level. Then the challenge will make a new milestone rule available, in the next game cycle, you could pick the new milestone rule.
+
 1.4.0 2021/7/31
 增加正面规则：致命一击，引力干涉仪(黄金)，生日礼物
 增加负面规则：间谍渗透，贸易封锁
@@ -5,7 +34,7 @@
 提高最小/最大规则数量。
 优化UI的显示方式。
 
-Add new positive rule: Critical Hit, Gravity Disruptor(Golden), Birthday Present
+Add new positive rules: Critical Hit, Gravity Disruptor(Golden), Birthday Present
 Add new negative rules: Spy, Trade Embargo
 Increase the minimum/maximum amount of rules.
 Optimized the UI.

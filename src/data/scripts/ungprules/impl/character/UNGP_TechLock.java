@@ -14,7 +14,7 @@ public class UNGP_TechLock extends UNGP_BaseRuleEffect implements UNGP_Character
 
     @Override
     public float getValueByDifficulty(int index, int difficulty) {
-        if (index == 0) return 0.04f + 0.01f * (float) Math.pow(difficulty, 0.598);
+        if (index == 0) return getLinearValue(0.05f, 0.1f, difficulty);
         return 0;
     }
 
@@ -27,12 +27,6 @@ public class UNGP_TechLock extends UNGP_BaseRuleEffect implements UNGP_Character
     public void unapplyPlayerCharacterStats(MutableCharacterStatsAPI stats) {
         stats.getShipOrdnancePointBonus().unmodify(rule.getBuffID());
 
-    }
-
-    @Override
-    public String getDescriptionParams(int index) {
-        if (index == 0) return getPercentString(reduction * 100f);
-        return null;
     }
 
     @Override

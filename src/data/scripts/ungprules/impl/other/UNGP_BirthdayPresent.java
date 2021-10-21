@@ -14,7 +14,7 @@ import data.scripts.ungprules.tags.UNGP_CampaignTag;
 import java.util.List;
 
 import static data.scripts.campaign.specialist.rules.UNGP_RulesManager.URule;
-import static data.scripts.campaign.specialist.rules.UNGP_RulesManager.getAllRules;
+import static data.scripts.campaign.specialist.rules.UNGP_RulesManager.getAllRulesCopy;
 
 public class UNGP_BirthdayPresent extends UNGP_BaseRuleEffect implements UNGP_CampaignTag {
     @Override
@@ -37,7 +37,7 @@ public class UNGP_BirthdayPresent extends UNGP_BaseRuleEffect implements UNGP_Ca
                 if (clock.getCycle() == giftTime[0] && clock.getMonth() == giftTime[1] && clock.getDay() == giftTime[2]) {
                     UNGP_InGameData inGameData = UNGP_InGameData.getDataInSave();
                     List<URule> activatedRules = inGameData.getActivatedRules();
-                    List<URule> allRules = getAllRules();
+                    List<URule> allRules = getAllRulesCopy();
                     WeightedRandomPicker<URule> picker = new WeightedRandomPicker<>(Misc.getRandom(clock.getCycle() + clock.getMonth() + clock.getDay(), inGameData.getCurCycle()));
                     for (URule uRule : allRules) {
                         if (!uRule.isBonus() || activatedRules.contains(uRule)) continue;

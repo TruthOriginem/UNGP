@@ -26,6 +26,7 @@ public class UNGP_InheritData {
     public List<String> ships;
     public List<String> weapons;
     public List<String> hullmods;
+    public List<String> completedChallenges;
 
 
     /**
@@ -46,6 +47,7 @@ public class UNGP_InheritData {
         inheritData.fighters = new ArrayList<>(playerFaction.getKnownFighters());
         inheritData.weapons = new ArrayList<>(playerFaction.getKnownWeapons());
         inheritData.hullmods = new ArrayList<>(playerFaction.getKnownHullMods());
+        inheritData.completedChallenges = new ArrayList<>(inGameData.getCompletedChallenges());
 
         return inheritData;
     }

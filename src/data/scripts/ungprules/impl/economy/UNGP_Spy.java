@@ -36,4 +36,14 @@ public class UNGP_Spy extends UNGP_BaseRuleEffect implements UNGP_EconomyTag {
     public void unapplyPlayerMarket(MarketAPI market) {
         market.getStability().unmodify(rule.getBuffID());
     }
+
+    @Override
+    public void applyAllMarket(MarketAPI market) {
+
+    }
+
+    @Override
+    public void unapplyAllMarket(MarketAPI market) {
+
+    }
 }

@@ -1,6 +1,7 @@
 package data.scripts.campaign.specialist.rules;
 
 import com.fs.starfarer.api.Global;
+import com.fs.starfarer.api.graphics.SpriteAPI;
 import data.scripts.ungprules.impl.UNGP_BaseRuleEffect;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -143,8 +144,8 @@ public final class UNGP_RuleInfoLoader {
                 if (isEmpty(spritePath)) {
                     spritePath = "graphics/ui/icons/64x_xcircle.png";
                 }
-                if (Global.getSettings().getSprite(spritePath) == null ||
-                        Global.getSettings().getSprite(spritePath).getHeight() < 1) {
+                final SpriteAPI sprite = Global.getSettings().getSprite(spritePath);
+                if (sprite == null || sprite.getHeight() < 1) {
                     Global.getSettings().loadTexture(spritePath);
                 }
                 UNGP_RuleInfo info = new UNGP_RuleInfo(id, name, shortDesc, desc, cost, isBonus, isGolden, spritePath, extra1, extra2, source, ruleEffect, tagList);

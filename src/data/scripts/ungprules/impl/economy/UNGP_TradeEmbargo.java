@@ -36,4 +36,14 @@ public class UNGP_TradeEmbargo extends UNGP_BaseRuleEffect implements UNGP_Econo
     public void unapplyPlayerMarket(MarketAPI market) {
         market.getAccessibilityMod().unmodify(rule.getBuffID());
     }
+
+    @Override
+    public void applyAllMarket(MarketAPI market) {
+
+    }
+
+    @Override
+    public void unapplyAllMarket(MarketAPI market) {
+
+    }
 }

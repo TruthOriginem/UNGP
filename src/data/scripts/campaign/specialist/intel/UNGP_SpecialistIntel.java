@@ -7,6 +7,7 @@ import com.fs.starfarer.api.ui.*;
 import com.fs.starfarer.api.util.Misc;
 import data.scripts.campaign.UNGP_InGameData;
 import data.scripts.campaign.specialist.UNGP_SpecialistSettings;
+import data.scripts.campaign.specialist.challenges.UNGP_ChallengeManager;
 import data.scripts.campaign.specialist.rules.UNGP_RepickRulesDialog;
 import data.scripts.campaign.specialist.rules.UNGP_RuleSorter;
 import data.scripts.campaign.specialist.rules.UNGP_RulesManager;
@@ -187,9 +188,15 @@ public class UNGP_SpecialistIntel extends BaseIntelPlugin {
         float buttonHeight = contentHeight * 0.2f;
         TooltipMakerAPI buttonTooltip = panel.createUIElement(detailedWidth, buttonHeight, false);
         buttonTooltip.addPara(rules_i18n.get("current_cycle") + "%s", 0f, positiveColor, Global.getSector().getClock().getCycle() + "");
-        buttonTooltip.addPara(rules_i18n.get("current_times_to_refresh") + "%s", 0f, positiveColor, rules_i18n.get("repick_rules"), inGameData.getTimesToChangeSpecialistMode() + "");
+        boolean lockedBecauseOfChallenges = UNGP_ChallengeManager.isRepickLockedByChallenges();
+        if (lockedBecauseOfChallenges) {
+            buttonTooltip.addPara(rules_i18n.get("repick_blocked"), Misc.getNegativeHighlightColor(), 0f);
+        } else {
+            buttonTooltip.addPara(rules_i18n.get("current_times_to_refresh") + "%s", 0f, positiveColor, rules_i18n.get("repick_rules"), inGameData.getTimesToChangeSpecialistMode() + "");
+        }
         ButtonAPI button = buttonTooltip.addButton(rules_i18n.get("repick_rules"), KEY, detailedWidth * 0.5f, buttonHeight * 0.3f, 10f);
-        button.setEnabled(inGameData.getTimesToChangeSpecialistMode() > 0);
+        // 设置重选
+        button.setEnabled(!lockedBecauseOfChallenges && inGameData.getTimesToChangeSpecialistMode() > 0);
         panel.addUIElement(buttonTooltip).inBR(detailedRightMargin, marginTopBottom);
     }
 

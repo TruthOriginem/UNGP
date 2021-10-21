@@ -1,7 +1,7 @@
 {
   "noLevelLimit": false, # set true to cancel the record level limit
   "noTimesLimit": false, # set true to make record could be done for unlimited times,
-  "noDifficultyLimit": false; # set true to make max difficulty always equals 20
+  "noDifficultyLimit": true, # set true to make max difficulty always equals 20
   "plugins": {
     "UNGP_SpecialistCombatPlugin": "data.scripts.plugins.UNGP_SpecialistCombatPlugin",
   },
@@ -14,6 +14,7 @@
       "rule_negative": "graphics/icons/negative_icon.png",
       "rule_positive": "graphics/icons/positive_icon.png",
       "rule_golden": "graphics/icons/golden_icon.png",
+      "rule_milestone": "graphics/icons/milestone_icon.png",
       "rule_default": "graphics/icons/ungp/default.png"
     },
     "illustrations": {

@@ -57,6 +57,16 @@ public class UNGP_IndustrialZone extends UNGP_BaseRuleEffect implements UNGP_Eco
     }
 
     @Override
+    public void applyAllMarket(MarketAPI market) {
+
+    }
+
+    @Override
+    public void unapplyAllMarket(MarketAPI market) {
+
+    }
+
+    @Override
     public String getDescriptionParams(int index) {
         if (index == 0) return getFactorString(1);
         if (index == 1) return getFactorString(SIZE_THRESHOLD);

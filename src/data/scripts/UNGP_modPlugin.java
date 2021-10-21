@@ -7,6 +7,7 @@ import data.scripts.campaign.UNGP_InGameData;
 import data.scripts.campaign.everyframe.UNGP_CampaignPlugin;
 import data.scripts.campaign.everyframe.UNGP_UITimeScript;
 import data.scripts.campaign.specialist.UNGP_PlayerFleetMemberBuff;
+import data.scripts.campaign.specialist.challenges.UNGP_ChallengeManager;
 import data.scripts.campaign.specialist.items.UNGP_RuleItem;
 import data.scripts.campaign.specialist.rules.UNGP_RulesManager;
 import data.scripts.utils.UNGPFont;
@@ -26,6 +27,7 @@ public class UNGP_modPlugin extends BaseModPlugin {
         UNGPFont.init();
         UNGP_RulesManager.initOrReloadRules();
         UNGP_RuleItem.loadSprite();
+        UNGP_ChallengeManager.initOrReloadChallengeInfos();
     }
 
     @Override

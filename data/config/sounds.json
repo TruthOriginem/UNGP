@@ -1,6 +1,14 @@
 {
+  "music": {
+    "UNGP_rulepicker_bgm": [
+      {"file": "UNGP_rulepicker_bgm.ogg", "source": "sounds/music/", "volume": 1, "randomStart": true},
+    ]
+  },
   "UNGP_fungus_activate": [
     {"file": "sounds/fx/trigger/UNGP_fungus_activate.ogg", "pitch": 1, "volume": 1},
+  ],
+  "UNGP_collector_activate": [
+    {"file": "sounds/fx/trigger/UNGP_collector_activate.ogg", "pitch": 1, "volume": 1},
   ],
   "UNGP_birthdaypresent_activate": [
     {"file": "sounds/fx/trigger/UNGP_birthdaypresent_activate.ogg", "pitch": 1, "volume": 1},

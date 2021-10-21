@@ -18,13 +18,6 @@ public class UNGP_NoWayBack extends UNGP_BaseRuleEffect {
     }
 
     @Override
-    public String getDescriptionParams(int index) {
-        if (index == 0) return getFactorString(timeMultiplier);
-        if (index == 1) return getFactorString((int) (1f / timeMultiplier));
-        return null;
-    }
-
-    @Override
     public String getDescriptionParams(int index, int difficulty) {
         if (index == 0) return getFactorString(getValueByDifficulty(0, difficulty));
         if (index == 1) return getFactorString((float) Math.ceil(1f / getValueByDifficulty(0, difficulty)));

@@ -85,7 +85,7 @@ public class UNGP_RepickRulesDialog implements InteractionDialogPlugin {
                 }
             }, null);
             dialog.showCargoPickerDialog(d_i18n.get("rulepick_title"), d_i18n.get("confirm"), d_i18n.get("cancel"), false,
-                    280, UNGP_RulesManager.createAllRulesCargo(), pickListener);
+                    280, UNGP_RulesManager.createRulesCargoBasedOnChallenges(inGameData.getCompletedChallenges()), pickListener);
         }
 
         if (optionData == OptionConfirm) {
