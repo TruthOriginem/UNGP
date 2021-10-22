@@ -13,17 +13,20 @@ import data.scripts.campaign.specialist.rules.UNGP_RulesManager;
 import data.scripts.utils.UNGPFont;
 import data.scripts.utils.UNGP_LoadingChecker;
 
-import static com.fs.starfarer.api.Global.getSettings;
-
 public class UNGP_modPlugin extends BaseModPlugin {
 
     @Override
     public void onApplicationLoad() {
         UNGP_LoadingChecker.checkLoad();
+
+        /*
         boolean hasLazyLib = getSettings().getModManager().isModEnabled("lw_lazylib");
         if (!hasLazyLib) {
             throw new RuntimeException("Unofficial New Game Plus requires LazyLib!");
         }
+        not required now
+         */
+
         UNGPFont.init();
         UNGP_RulesManager.initOrReloadRules();
         UNGP_RuleItem.loadSprite();

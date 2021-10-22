@@ -116,6 +116,7 @@ public final class UNGP_RuleInfoLoader {
                 JSONObject row = ruleInfos.getJSONObject(i);
                 String id = row.optString("id", EMPTY);
                 if (isEmpty(id)) continue;
+
                 String name = row.optString("name", EMPTY);
                 String shortDesc = row.optString("short", EMPTY);
                 String desc = row.optString("desc", EMPTY);
@@ -148,6 +149,7 @@ public final class UNGP_RuleInfoLoader {
                 if (sprite == null || sprite.getHeight() < 1) {
                     Global.getSettings().loadTexture(spritePath);
                 }
+
                 UNGP_RuleInfo info = new UNGP_RuleInfo(id, name, shortDesc, desc, cost, isBonus, isGolden, spritePath, extra1, extra2, source, ruleEffect, tagList);
                 infos.add(info);
             }

@@ -29,7 +29,9 @@ public class UNGP_RuleItem extends BaseSpecialItemPlugin {
      * @return
      */
     public static String getSpecialItemID(URule rule) {
-        if (rule.isGolden()) {
+    	if (rule.isMileStone()) {
+			return "ungp_ruleitem_milestone";
+		} else if (rule.isGolden()) {
             return "ungp_ruleitem_golden";
         } else {
             return rule.isBonus() ? "ungp_ruleitem_positive" : "ungp_ruleitem_negative";
@@ -76,19 +78,14 @@ public class UNGP_RuleItem extends BaseSpecialItemPlugin {
         float cy = y + h / 2f;
         float frameFactor = UNGP_UITimeScript.getFactor("2secs");
 
-        boolean isGoldenRule = rule.isGolden();
+        boolean isGoldenOrMilestone = rule.isGolden() || rule.isMileStone();
         float speedUpBy2FrameFactor = (frameFactor % 0.5f) / 0.5f;
 
 
 //        sprite = Global.getSettings().getSprite(getBackgroundSpriteNameByFrame((int) Math.floor(frameFactor * 23.99f)));
         if (sprite != null) {
-            Color baseColor;
-            if (rule.isMileStone()) {
-                baseColor = UNGP_RulesManager.getMilestoneColor();
-                isGoldenRule = true;
-            } else {
-                baseColor = rule.getCorrectColor();
-            }
+            Color baseColor = rule.getCorrectColor();
+
             sprite.setColor(baseColor);
             sprite.setNormalBlend();
             sprite.setAlphaMult(alphaMult * 0.8f);
@@ -115,7 +112,7 @@ public class UNGP_RuleItem extends BaseSpecialItemPlugin {
             // 边框渐隐
             sprite.setColor(Color.white);
             sprite.setAdditiveBlend();
-            if (isGoldenRule) {
+            if (isGoldenOrMilestone) {
                 sprite.setAlphaMult(0.6f * (float) Math.sin(Math.PI * frameFactor));
             } else {
                 sprite.setAlphaMult(0.1f * (float) Math.sin(Math.PI * frameFactor));
@@ -151,7 +148,7 @@ public class UNGP_RuleItem extends BaseSpecialItemPlugin {
             icon.setAlphaMult(alphaMult * (0.3f + 0.7f * (frameFactor)));
             icon.renderAtCenter(cx, cy);
             // 扫描效果
-            if (isGoldenRule) {
+            if (isGoldenOrMilestone) {
                 icon.setColor(UNGP_RulesManager.getGoldenColor());
                 icon.setAdditiveBlend();
 
@@ -207,7 +204,6 @@ public class UNGP_RuleItem extends BaseSpecialItemPlugin {
         final DrawableString drawableRuleType = UNGPFont.getDynamicDrawable(rule.getRuleTypeCharacter(), rule.getCorrectColor());
         drawableRuleType.draw(cx - 42, cy + 42);
     }
-
 
     @Override
     public String getDesignType() {

@@ -26,7 +26,8 @@ public class UNGP_PlayerFleetMemberBuff implements BuffManagerAPI.Buff {
             tag.applyPlayerFleetMemberInCampaign(member);
     }
 
-    public String getId() {
+    @Override
+	public String getId() {
         return id;
     }
 

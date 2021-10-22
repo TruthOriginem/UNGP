@@ -52,7 +52,6 @@ public final class UNGP_UITimeScript implements EveryFrameScript {
         systemTime = curSystemTime;
     }
 
-
     public void setPaused(boolean paused) {
         isPaused = paused;
         reset();

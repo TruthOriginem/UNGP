@@ -47,6 +47,7 @@ public class UNGP_BlackInBlack extends UNGP_BaseRuleEffect implements UNGP_Econo
                 tradeData.setTotalPlayerTradeValue(0f);
             }
         }
+
         market.getMemoryWithoutUpdate().set(MemFlags.MARKET_EXTRA_SUSPICION, 0f);
     }
 
