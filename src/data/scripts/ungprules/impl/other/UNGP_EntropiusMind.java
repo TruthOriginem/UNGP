@@ -1,10 +1,11 @@
 package data.scripts.ungprules.impl.other;
 
 import com.fs.starfarer.api.Global;
+import com.fs.starfarer.api.impl.campaign.intel.MessageIntel;
+import com.fs.starfarer.api.util.Misc;
 import com.fs.starfarer.api.util.WeightedRandomPicker;
 import data.scripts.campaign.UNGP_InGameData;
 import data.scripts.campaign.everyframe.UNGP_CampaignPlugin.TempCampaignParams;
-import data.scripts.campaign.specialist.intel.UNGP_SpecialistIntel.RuleMessage;
 import data.scripts.campaign.specialist.rules.UNGP_RulesManager;
 import data.scripts.campaign.specialist.rules.UNGP_RulesManager.URule;
 import data.scripts.ungprules.impl.UNGP_BaseRuleEffect;
@@ -55,8 +56,10 @@ public class UNGP_EntropiusMind extends UNGP_BaseRuleEffect implements UNGP_Camp
                     activatedRules.add(toAdd);
                 }
 
-                RuleMessage message = new RuleMessage(rule, rule.getExtra1(), "" + (rulesToAdd - 1));
-                message.send();
+                MessageIntel message = new MessageIntel(rule.getName(), rule.getCorrectColor());
+                message.setIcon(rule.getSpritePath());
+                message.addLine(rule.getExtra1(), Misc.getHighlightColor());
+                showMessage(message);
 
                 inGameData.saveActivatedRules(activatedRules);
                 UNGP_RulesManager.updateCacheNextFrame();

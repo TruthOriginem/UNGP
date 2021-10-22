@@ -134,16 +134,12 @@ public class UNGP_ChallengeIntel extends BaseIntelPlugin {
             dayChecker = curDay;
             UNGP_InGameData inGameData = UNGP_InGameData.getDataInSave();
             updateChallengeProgress(inGameData);
-            for (int i = 0; i < 10; i++) {
-                inGameData.addTimesToChangeSpecialistMode();
-            }
         }
     }
 
     @Override
     public void createLargeDescription(CustomPanelAPI panel, float width, float height) {
         TooltipMakerAPI tooltip = panel.createUIElement(width, height, true);
-        Color milestoneColor = UNGP_RulesManager.getMilestoneColor();
         List<UNGP_ChallengeProgress> runningProgress = new ArrayList<>();
         List<UNGP_ChallengeProgress> cancelledProgress = new ArrayList<>();
         List<UNGP_ChallengeProgress> completedProgress = new ArrayList<>();

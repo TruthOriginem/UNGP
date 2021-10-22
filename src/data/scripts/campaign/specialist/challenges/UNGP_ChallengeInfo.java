@@ -103,6 +103,9 @@ public final class UNGP_ChallengeInfo {
             } else {
                 imageTooltip.addPara(rules_i18n.get("challenge_tip_desc0_1"), grayColor, 5f);
             }
+            if (!canReselectRules){
+                imageTooltip.addPara(rules_i18n.get("challenge_tip_desc3"), grayColor, 5f);
+            }
             tooltip.addImageWithText(pad);
         }
     }

@@ -14,6 +14,7 @@ import data.scripts.utils.UNGPFont;
 import org.lazywizard.lazylib.FastTrig;
 import org.lazywizard.lazylib.MathUtils;
 import org.lazywizard.lazylib.ui.LazyFont.DrawableString;
+import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
@@ -29,9 +30,9 @@ public class UNGP_RuleItem extends BaseSpecialItemPlugin {
      * @return
      */
     public static String getSpecialItemID(URule rule) {
-    	if (rule.isMileStone()) {
-			return "ungp_ruleitem_milestone";
-		} else if (rule.isGolden()) {
+        if (rule.isMileStone()) {
+            return "ungp_ruleitem_milestone";
+        } else if (rule.isGolden()) {
             return "ungp_ruleitem_golden";
         } else {
             return rule.isBonus() ? "ungp_ruleitem_positive" : "ungp_ruleitem_negative";
@@ -64,7 +65,8 @@ public class UNGP_RuleItem extends BaseSpecialItemPlugin {
 
         rule.addRollDesc(tooltip, opad * 22f, prefix);
 
-        rule.addChallengeRelatedDesc(tooltip, opad * 2f, prefix);
+        boolean showMore = Keyboard.isKeyDown(Keyboard.KEY_F1);
+        rule.addChallengeRelatedDesc(tooltip, opad * 2f, prefix, showMore);
 
         rule.addCost(tooltip, opad * 2f);
     }

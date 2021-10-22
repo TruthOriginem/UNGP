@@ -1,12 +1,14 @@
-1.5.0 2021/10/19
+1.5.0 2021/10/22
 本次更新不能中途加入存档，建议先保存重生点。
 
 增加正面规则：收集者，电子烟幕，黑手鬼才，伏击艺术家
 增加负面规则：世纪战争，Order 66，穷编剧的剧本
+增加成就规则：熵变之心(同时生日礼物，优质海鲜变为成就规则)
 
 科技革命:Cost点数需求降低1.
 高压视距:敌方增加射程10%~20%->10%~15%
 低效维修技术：数值调整 15%~30%->15%~25%
+优质海鲜：每日获得1只龙虾->2只
 
 选择专家模式时播放特殊BGM。
 现在专家模式默认可选1~20级。
@@ -16,10 +18,12 @@
 
 Add new positive rules: Collector, EW Smog, Black in Black, Seer
 Add new negative rules: Century War, Order 66, Monotonous Teller
+Add new milestone rules: Entropius Mind.(Birthday Present and Premium Seafood are changed to milestones.)
 
 Tech Revolution: Decrease the cost by 1.
 Overwhelming Vision: Enemy weapon and sensor range + 10%~20% -> 10%~15%
 Low Efficiency Repair: Fleetwide repair and combat readiness recover rate -15%~30%->15%~25%
+Premium Seafood: Lobster 1->2
 
 Play custom bgm while picking the rules of Specialist mode.
 Now you could pick the level of Specialist Mode from 1 to 20 by default.

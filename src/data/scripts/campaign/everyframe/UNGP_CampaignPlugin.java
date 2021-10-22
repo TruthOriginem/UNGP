@@ -170,6 +170,12 @@ public class UNGP_CampaignPlugin implements EveryFrameScript, CampaignEventListe
         if (currentDay != oneDayChecker) {
             oneDayChecker = currentDay;
             params.oneDayPassed = true;
+            // 如果是开发模式
+            if (Global.getSettings().isDevMode()) {
+                for (int i = 0; i < 10; i++) {
+                    inGameData.addTimesToChangeSpecialistMode();
+                }
+            }
         }
         // 每月一触发
         if (currentMonth != oneMonthChecker) {
