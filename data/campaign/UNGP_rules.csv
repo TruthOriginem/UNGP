@@ -60,6 +60,7 @@ black_in_black,黑市鬼才,畅游黑市,所有势力在黑市方面对你保持
 ,,,,,,,,,,,,,
 lobster_perday,优质海鲜,龙虾之主,"货舱未满时,每天获得一个蓝龙虾",0,TRUE,,graphics/icons/cargo/lobster.png,data.scripts.ungprules.impl.other.UNGP_LobsterPerDay,,,潜伏的混沌,milestone,[-<虾王>-]
 birthday_present,生日礼物,一年后获得随机正面规则,在选择本规则后，{%s}年后随机获得一个正面规则并失去本规则。(中途更换规则时，只要不舍弃本规则，获得礼物的时间就不会改变),0,TRUE,,graphics/icons/ungp/milestones/birthday_present.png,data.scripts.ungprules.impl.other.UNGP_BirthdayPresent,生日快乐！您随机获得了{%s},,你忠实的部下/家人/爱人,milestone,议长√
+entropius_mind,熵变之心,每周随机切换规则,"每周随机洗回所有规则, 并完全随机地抽取数个正面或负面规则.",0,TRUE,,graphics/icons/ungp/milestones/entropius_mind.png,data.scripts.ungprules.impl.other.UNGP_EntropiusMind,你突然心生一阵恍惚...,,掷骰子的上帝,milestone,default
 ,,,,,,,,,,,,,
 ying,阴,随机选择负面规则,"专家模式规则选择完毕并确认后,删除该规则,随机添加一个未被选中的{%s}.当选择了""阳""时,也会随机到未被选中的{%s}.",2,FALSE,,graphics/icons/ungp/ying.png,data.scripts.ungprules.impl.other.UNGP_Ying,您随机获得了{%s},,,no_roll,议长√
 yang,阳,随机选择正面规则,"专家模式规则选择完毕并确认后,删除该规则,随机添加一个未被选中的{%s}.当选择了""阴""时,也会随机到未被选中的{%s}.",-2,TRUE,,graphics/icons/ungp/yang.png,data.scripts.ungprules.impl.other.UNGP_Yang,您随机获得了{%s},,,no_roll,议长√
