@@ -72,6 +72,7 @@ public class UNGP_CampaignPlugin implements EveryFrameScript, CampaignEventListe
     public UNGP_CampaignPlugin() {
         inGameData = new UNGP_InGameData();
         init();
+
         final CampaignClockAPI clock = Global.getSector().getClock();
         oneDayChecker = clock.getDay();
         oneMonthChecker = clock.getMonth();
