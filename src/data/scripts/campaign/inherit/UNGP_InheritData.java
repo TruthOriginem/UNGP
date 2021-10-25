@@ -115,7 +115,7 @@ public class UNGP_InheritData {
         root.addImageWithText(5f);
         root.setBulletedListMode(bulletedPrefix);
         if (completedChallenges.isEmpty()) {
-            root.addPara(descKey + "_4_empty", Misc.getGrayColor(), 5f);
+            root.addPara(d_i18n.get("challenge_empty"), Misc.getGrayColor(), 5f);
         } else {
             for (String challengeId : completedChallenges) {
                 UNGP_ChallengeInfo challengeInfo = UNGP_ChallengeManager.getChallengeInfo(challengeId);

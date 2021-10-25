@@ -3,9 +3,9 @@ package data.scripts.ungprules.impl.combat;
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.CampaignFleetAPI;
 import com.fs.starfarer.api.combat.*;
-import com.fs.starfarer.api.combat.listeners.AdvanceableListener;
 import com.fs.starfarer.api.combat.listeners.ApplyDamageResultAPI;
 import com.fs.starfarer.api.combat.listeners.DamageListener;
+import com.fs.starfarer.api.input.InputEventAPI;
 import com.fs.starfarer.api.util.Misc;
 import data.scripts.ungprules.impl.UNGP_BaseRuleEffect;
 import data.scripts.ungprules.tags.UNGP_CombatInitTag;
@@ -13,6 +13,7 @@ import org.lazywizard.lazylib.MathUtils;
 import org.lwjgl.util.vector.Vector2f;
 
 import java.awt.*;
+import java.util.List;
 
 public class UNGP_Collector extends UNGP_BaseRuleEffect implements UNGP_CombatInitTag {
 
@@ -32,12 +33,21 @@ public class UNGP_Collector extends UNGP_BaseRuleEffect implements UNGP_CombatIn
 
     @Override
     public void init(CombatEngineAPI engine) {
-        engine.getListenerManager().addListener(new CollectorListener());
+        engine.getListenerManager().addListener(new CollectorListener(engine));
     }
 
-    public static class CollectorListener implements DamageListener, AdvanceableListener {
+    public static class CollectorListener implements DamageListener {
         public static final String DEBUFF_ID = "UNGP_collector_debuff";
         private float hiddenCoolDown = 0f; // 隐藏CD，每0.1秒才能触发一次
+
+        public CollectorListener(CombatEngineAPI engine) {
+            engine.addPlugin(new BaseEveryFrameCombatPlugin() {
+                @Override
+                public void advance(float amount, List<InputEventAPI> events) {
+                    CollectorListener.this.advance(amount);
+                }
+            });
+        }
 
         @Override
         public void reportDamageApplied(Object source, CombatEntityAPI target, ApplyDamageResultAPI result) {
@@ -76,7 +86,7 @@ public class UNGP_Collector extends UNGP_BaseRuleEffect implements UNGP_CombatIn
                                 stats.getMinArmorFraction().modifyMult(DEBUFF_ID, 0f);
                                 // 设置中心装甲为0
                                 armorGrid.setArmorValue(cellAtLocation[0], cellAtLocation[1], 0f);
-                                final float damage = target.getHitpoints() * COLLECT_HP_THRESHOLD + 999f;
+                                final float damage = target.getMaxHitpoints() * COLLECT_HP_THRESHOLD + 999f;
                                 targetShip.setHitpoints(1f);
                                 engine.applyDamage(target,
                                                    targetLocation,
@@ -85,19 +95,20 @@ public class UNGP_Collector extends UNGP_BaseRuleEffect implements UNGP_CombatIn
                                 stats.getMaxArmorDamageReduction().unmodify(DEBUFF_ID);
                                 stats.getMinArmorFraction().unmodify(DEBUFF_ID);
 
-                                engine.addFloatingText(targetLocation,
-                                                       "+" + Misc.getDGSCredits(25f),
-                                                       50f, Color.yellow,
-                                                       null, 0f, 0f);
-                                Global.getSoundPlayer().playSound("UNGP_collector_activate", 1f, 1f, targetLocation, Misc.ZERO);
-                                hiddenCoolDown = 0.1f;
+                                hiddenCoolDown = 0.15f;
                                 // 增加星币
+                                Global.getSoundPlayer().playSound("UNGP_collector_activate", 1f, 1f, targetLocation, Misc.ZERO);
                                 if (!engine.isInCampaignSim()) {
                                     final CampaignFleetAPI playerFleet = Global.getSector().getPlayerFleet();
                                     if (playerFleet != null) {
                                         playerFleet.getCargo().getCredits().add(25f);
+                                        engine.addFloatingText(targetLocation,
+                                                               "+" + Misc.getDGSCredits(25f),
+                                                               50f, Color.yellow,
+                                                               null, 0f, 0f);
                                     }
                                 }
+                                check = 0;
                                 break;
                             }
                         }
@@ -106,7 +117,6 @@ public class UNGP_Collector extends UNGP_BaseRuleEffect implements UNGP_CombatIn
             }
         }
 
-        @Override
         public void advance(float amount) {
             if (hiddenCoolDown > 0f) {
                 hiddenCoolDown -= amount;

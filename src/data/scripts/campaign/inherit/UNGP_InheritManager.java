@@ -17,7 +17,6 @@ public class UNGP_InheritManager {
     public static UNGP_InheritData InheritData_slot0 = null;
     public static UNGP_InheritData InheritData_slot1 = null;
     public static UNGP_InheritData InheritData_slot2 = null;
-    private static boolean savePointsExists = false;
     private static final String FILE_NAME_PREFIX = "UNGP_inherit";
 
 
@@ -28,13 +27,9 @@ public class UNGP_InheritManager {
         InheritData_slot0 = load(0);
         InheritData_slot1 = load(1);
         InheritData_slot2 = load(2);
-        savePointsExists = Global.getSettings().fileExistsInCommon(getSaveFileName(0)) ||
-                Global.getSettings().fileExistsInCommon(getSaveFileName(1)) ||
-                Global.getSettings().fileExistsInCommon(getSaveFileName(2));
         // Special Empty Data
-        if (!savePointsExist() && Global.getSettings().getBoolean("createEmptySavepoint")) {
+        if (InheritData_slot0 == null && InheritData_slot1 == null && InheritData_slot2 == null) {
             InheritData_slot0 = createEmptyData();
-            savePointsExists = true;
         }
     }
 
@@ -153,7 +148,10 @@ public class UNGP_InheritManager {
     }
 
     public static boolean savePointsExist() {
-        return savePointsExists;
+        return Global.getSettings().fileExistsInCommon(getSaveFileName(0)) ||
+                Global.getSettings().fileExistsInCommon(getSaveFileName(1)) ||
+                Global.getSettings().fileExistsInCommon(getSaveFileName(2)) ||
+                Global.getSettings().getBoolean("createEmptySavepoint");
     }
 
     private static String getSaveFileName(int slotID) {

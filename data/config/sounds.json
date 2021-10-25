@@ -37,6 +37,12 @@
   "ui_positive_drop": [
     {"file": "sounds/fx/rule_item/ui_positive_drop.ogg", "pitch": 1, "volume": 0.6},
   ],
+  "ui_milestone_pickup": [
+    {"file": "sounds/fx/rule_item/ui_milestone_pickup.ogg", "pitch": 1, "volume": 0.6},
+  ],
+  "ui_milestone_drop": [
+    {"file": "sounds/fx/rule_item/ui_milestone_drop.ogg", "pitch": 1, "volume": 0.6},
+  ],
   "ui_specialist_on": [
     {"file": "sounds/fx/rule_item/ui_specialist_on.ogg", "pitch": 1, "volume": 0.6},
   ],
