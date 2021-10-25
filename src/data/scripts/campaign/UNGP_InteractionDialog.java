@@ -99,7 +99,7 @@ public class UNGP_InteractionDialog implements InteractionDialogPlugin {
         //lastInheritData = UNGP_InheritData.Load();
 
         toRecordInheritData = UNGP_InheritData.createInheritData(inGameData);
-        UNGP_InheritManager.LoadAllSlots();
+        UNGP_InheritManager.loadAllSlots();
         initMenu();
         dialog.setOptionOnEscape(null, OptionID.LEAVE);
         visual.showCustomPanel(400f, 300f, new CustomUIPanelPlugin() {
@@ -397,7 +397,7 @@ public class UNGP_InteractionDialog implements InteractionDialogPlugin {
                 initMenu();
                 break;
             case LEAVE:
-                UNGP_InheritManager.ClearSlots();
+                UNGP_InheritManager.clearSlots();
                 dialog.dismiss();
                 break;
             default:

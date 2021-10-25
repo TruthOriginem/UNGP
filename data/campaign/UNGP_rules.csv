@@ -1,5 +1,6 @@
 id,name,short,desc,cost,isBonus,isGolden,spritePath,effectPlugin,extra1,extra2,source,tags,spriteAuthor
 techlock,科技封锁,降低装配点数,舰船装配点数 - %s,3,FALSE,,graphics/icons/ungp/techlock.png,data.scripts.ungprules.impl.character.UNGP_TechLock,,,,,影之光√
+galatia_underachiever,学院差生,降低指挥能力,"战斗开始时命令点数-{%s},且整场战斗中命令点数恢复速度-{%s}",2,FALSE,,graphics/icons/ungp/galatia_underachiever.png,data.scripts.ungprules.impl.character.UNGP_GalatiaUnderachiever,,,,,议长√
 ,,,,,,,,,,,,,
 naval_treaty,海军条约,"舰船混搭时,降低最大战备","舰队舰船设计类型超过{%s}种时,每超出一种将使最大战备降低{%s}",4,FALSE,,graphics/icons/ungp/naval_treaty.png,data.scripts.ungprules.impl.fleet.UNGP_NavalTreaty,,,,,和莱√
 deep_space_fear,深空恐惧,超空间中感应器性能下降,"在超空间中,舰队感应器强度x{%s},感应器截面/被探测范围x{%s}",1,FALSE,,graphics/icons/ungp/deep_space_fear.png,data.scripts.ungprules.impl.fleet.UNGP_DeepSpaceFear,,,,,议长√

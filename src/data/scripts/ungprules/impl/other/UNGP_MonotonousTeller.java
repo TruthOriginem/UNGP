@@ -26,10 +26,9 @@ public class UNGP_MonotonousTeller extends UNGP_BaseRuleEffect implements UNGP_C
         if (params.isOneDayPassed()) {
             int sinceLastLost;
             final String buffID = rule.getBuffID();
-            if (Global.getSector().getPersistentData().get(buffID) != null) {
-                sinceLastLost = (int) Global.getSector().getPersistentData().get(buffID);
+            if (getDataInCampaign(buffID) != null) {
+                sinceLastLost = getDataInCampaign(buffID);
             } else {
-                Global.getSector().getPersistentData().put(buffID, 0);
                 sinceLastLost = 0;
             }
 
@@ -45,8 +44,7 @@ public class UNGP_MonotonousTeller extends UNGP_BaseRuleEffect implements UNGP_C
                     message.send();
                 }
             }
-
-            Global.getSector().getPersistentData().put(buffID, sinceLastLost);
+            saveDataInCampaign(buffID, sinceLastLost);
         }
     }
 

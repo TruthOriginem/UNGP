@@ -1,12 +1,14 @@
 package data.scripts.campaign.inherit;
 
 import com.fs.starfarer.api.Global;
+import data.scripts.UNGP_modPlugin;
 import org.json.JSONArray;
 import org.lazywizard.lazylib.JSONUtils;
 
 import java.util.ArrayList;
 
 import static data.scripts.campaign.inherit.UNGP_InheritData.DEFAULT_NAME;
+import static data.scripts.campaign.inherit.UNGP_InheritData.createEmptyData;
 
 /**
  * 管理三个重生点槽位
@@ -15,16 +17,28 @@ public class UNGP_InheritManager {
     public static UNGP_InheritData InheritData_slot0 = null;
     public static UNGP_InheritData InheritData_slot1 = null;
     public static UNGP_InheritData InheritData_slot2 = null;
+    private static boolean savePointsExists = false;
     private static final String FILE_NAME_PREFIX = "UNGP_inherit";
 
 
-    public static void LoadAllSlots() {
+    /**
+     * Called when {@link UNGP_modPlugin#onApplicationLoad()}
+     */
+    public static void loadAllSlots() {
         InheritData_slot0 = load(0);
         InheritData_slot1 = load(1);
         InheritData_slot2 = load(2);
+        savePointsExists = Global.getSettings().fileExistsInCommon(getSaveFileName(0)) ||
+                Global.getSettings().fileExistsInCommon(getSaveFileName(1)) ||
+                Global.getSettings().fileExistsInCommon(getSaveFileName(2));
+        // Special Empty Data
+        if (!savePointsExist() && Global.getSettings().getBoolean("createEmptySavepoint")) {
+            InheritData_slot0 = createEmptyData();
+            savePointsExists = true;
+        }
     }
 
-    public static void ClearSlots() {
+    public static void clearSlots() {
         InheritData_slot0 = null;
         InheritData_slot1 = null;
         InheritData_slot2 = null;
@@ -139,9 +153,7 @@ public class UNGP_InheritManager {
     }
 
     public static boolean savePointsExist() {
-        return Global.getSettings().fileExistsInCommon(getSaveFileName(0)) ||
-                Global.getSettings().fileExistsInCommon(getSaveFileName(1)) ||
-                Global.getSettings().fileExistsInCommon(getSaveFileName(2));
+        return savePointsExists;
     }
 
     private static String getSaveFileName(int slotID) {

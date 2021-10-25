@@ -1,5 +1,6 @@
 id,name,short,desc,cost,isBonus,isGolden,spritePath,effectPlugin,extra1,extra2,source,tags,spriteAuthor
 techlock,Technology Blockade,Reduce OP,OP - %s,3.0,False,,graphics/icons/ungp/techlock.png,data.scripts.ungprules.impl.character.UNGP_TechLock,,,,,
+galatia_underachiever,学院差生,降低指挥能力,"战斗开始时命令点数-{%s},且整场战斗中命令点数恢复速度-{%s}",2,FALSE,,graphics/icons/ungp/galatia_underachiever.png,data.scripts.ungprules.impl.character.UNGP_GalatiaUnderachiever,,,,,议长√
 ,,,,,,,,,,,,,
 naval_treaty,Arms Limitation Treaty,Limit mixing different Design-Type ships,"When the fleet contains ships of more than %s different design types, every type decreases max CR by %s",4.0,False,,graphics/icons/ungp/naval_treaty.png,data.scripts.ungprules.impl.fleet.UNGP_NavalTreaty,,,,,
 deep_space_fear,Deep Space Phobia,Decrease the performance of sensors in hyperspace,"While in hyperspace,the sensor strength x %s , sensor profile and detected range x %s",1.0,False,,graphics/icons/ungp/deep_space_fear.png,data.scripts.ungprules.impl.fleet.UNGP_DeepSpaceFear,,,,,

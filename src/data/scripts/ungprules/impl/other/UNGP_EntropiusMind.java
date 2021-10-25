@@ -1,6 +1,5 @@
 package data.scripts.ungprules.impl.other;
 
-import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.impl.campaign.intel.MessageIntel;
 import com.fs.starfarer.api.util.Misc;
 import com.fs.starfarer.api.util.WeightedRandomPicker;
@@ -17,7 +16,7 @@ import java.util.Random;
 
 public class UNGP_EntropiusMind extends UNGP_BaseRuleEffect implements UNGP_CampaignTag {
 
-    public static final String KEY_DAYS_PASSED = "$UNGP_EntropiusMind_DaysPassed";
+    public static final String KEY_DAYS_PASSED = "UNGP_EntropiusMind_DaysPassed";
 
     @Override
     public void updateDifficultyCache(int difficulty) {
@@ -30,9 +29,8 @@ public class UNGP_EntropiusMind extends UNGP_BaseRuleEffect implements UNGP_Camp
 
     @Override
     public void advanceInCampaign(float amount, TempCampaignParams params) {
-
         if (params.isOneDayPassed()) {
-            int daysPassed = (int) Global.getSector().getMemoryWithoutUpdate().get(KEY_DAYS_PASSED);
+            int daysPassed = getDataInCampaign(KEY_DAYS_PASSED);
             daysPassed++;
 
             if (daysPassed == 7) {
@@ -67,14 +65,14 @@ public class UNGP_EntropiusMind extends UNGP_BaseRuleEffect implements UNGP_Camp
                 daysPassed = 0;
             }
 
-            Global.getSector().getMemoryWithoutUpdate().set(KEY_DAYS_PASSED, daysPassed);
+            saveDataInCampaign(KEY_DAYS_PASSED, daysPassed);
         }
     }
 
     @Override
     public void applyGlobalStats() {
-        if (!Global.getSector().getMemoryWithoutUpdate().contains(KEY_DAYS_PASSED)) {
-            Global.getSector().getMemoryWithoutUpdate().set(KEY_DAYS_PASSED, 0);
+        if (getDataInCampaign(KEY_DAYS_PASSED) == null) {
+            saveDataInCampaign(KEY_DAYS_PASSED, 0);
         }
     }
 

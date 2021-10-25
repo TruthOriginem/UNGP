@@ -229,8 +229,9 @@ public class UNGP_CampaignPlugin implements EveryFrameScript, CampaignEventListe
                     }
                 }
             }
-            if (needsSync) {
+            if (needsSync || UNGP_PlayerFleetMemberBuff.isShouldForceSyncNextStep()) {
                 playerFleet.forceSync();
+                UNGP_PlayerFleetMemberBuff.completeForceSync();
             }
         }
     }

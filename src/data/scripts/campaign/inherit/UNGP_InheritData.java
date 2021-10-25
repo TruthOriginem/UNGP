@@ -6,6 +6,9 @@ import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
 import data.scripts.campaign.UNGP_InGameData;
 import data.scripts.campaign.specialist.UNGP_SpecialistSettings;
+import data.scripts.campaign.specialist.challenges.UNGP_ChallengeInfo;
+import data.scripts.campaign.specialist.challenges.UNGP_ChallengeManager;
+import data.scripts.campaign.specialist.rules.UNGP_RulesManager;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -52,6 +55,21 @@ public class UNGP_InheritData {
         return inheritData;
     }
 
+    public static UNGP_InheritData createEmptyData() {
+        UNGP_InheritData inheritData = new UNGP_InheritData();
+        inheritData.ungp_id = UUID.randomUUID().toString();
+        inheritData.lastPlayerName = "UNGP-NewFound";
+        inheritData.cycle = 0;
+        inheritData.isHardMode = false;
+        inheritData.inheritCredits = 0;
+        inheritData.ships = new ArrayList<>();
+        inheritData.fighters = new ArrayList<>();
+        inheritData.weapons = new ArrayList<>();
+        inheritData.hullmods = new ArrayList<>();
+        inheritData.completedChallenges = new ArrayList<>();
+        return inheritData;
+    }
+
     public void addInheritTooltip(TooltipMakerAPI root) {
         addDescriptionTooltip(root, "inheritData");
     }
@@ -62,7 +80,7 @@ public class UNGP_InheritData {
             TooltipMakerAPI section = root.beginImageWithText(UNGP_SpecialistSettings.getSpecialistModeIconPath(), 24f);
             section.addPara(d_i18n.get("specialistMode"), Misc.getNegativeHighlightColor(), 0f);
             section.addPara(d_i18n.get("hardmodeLevel") + ": %s", 0f, Misc.getGrayColor(), Misc.getHighlightColor(), difficulty + "");
-            root.addImageWithText(5f);
+            root.addImageWithText(10f);
         }
     }
 
@@ -91,5 +109,21 @@ public class UNGP_InheritData {
                      bulletedPrefix + fighters.size(),
                      bulletedPrefix + weapons.size(),
                      bulletedPrefix + hullmods.size());
+        // Completed challenges
+        section = root.beginImageWithText("graphics/icons/reports/hazard_pay2.png", 24f);
+        section.addPara(d_i18n.get(descKey + "_4"), 3f);
+        root.addImageWithText(5f);
+        root.setBulletedListMode(bulletedPrefix);
+        if (completedChallenges.isEmpty()) {
+            root.addPara(descKey + "_4_empty", Misc.getGrayColor(), 5f);
+        } else {
+            for (String challengeId : completedChallenges) {
+                UNGP_ChallengeInfo challengeInfo = UNGP_ChallengeManager.getChallengeInfo(challengeId);
+                if (challengeInfo != null) {
+                    root.addPara(challengeInfo.getName(), UNGP_RulesManager.getMilestoneColor(), 5f);
+                }
+            }
+        }
+        root.setBulletedListMode(null);
     }
 }

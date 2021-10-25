@@ -1,7 +1,8 @@
 {
   "noLevelLimit": false, # set true to cancel the record level limit
-  "noTimesLimit": false, # set true to make record could be done for unlimited times,
+  "noTimesLimit": false, # set true to make record could be done for unlimited times
   "noDifficultyLimit": true, # set true to make max difficulty always equals 20
+  "createEmptySavepoint": false,# set true to automatically generate a empty savepoint
   "plugins": {
     "UNGP_SpecialistCombatPlugin": "data.scripts.plugins.UNGP_SpecialistCombatPlugin",
   },
