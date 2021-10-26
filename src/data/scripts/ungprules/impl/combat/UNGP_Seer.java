@@ -2,9 +2,11 @@ package data.scripts.ungprules.impl.combat;
 
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.combat.CombatEngineAPI;
+import com.fs.starfarer.api.combat.FogOfWarAPI;
 import com.fs.starfarer.api.combat.ShipAPI;
 import data.scripts.ungprules.impl.UNGP_BaseRuleEffect;
 import data.scripts.ungprules.tags.UNGP_CombatTag;
+import data.scripts.utils.UNGPUtils;
 import org.lwjgl.util.vector.Vector2f;
 
 public class UNGP_Seer extends UNGP_BaseRuleEffect implements UNGP_CombatTag {
@@ -57,7 +59,10 @@ public class UNGP_Seer extends UNGP_BaseRuleEffect implements UNGP_CombatTag {
 
         if (data.isEffecting) {
             float radiusEx = engine.getMapHeight() * 2f + engine.getMapWidth() * 2f;
-            engine.getFogOfWar(engine.getPlayerShip().getOwner()).revealAroundPoint(this, 0f, 0f, radiusEx);
+            FogOfWarAPI fogOfWar = engine.getFogOfWar(UNGPUtils.PLAYER);
+            if (fogOfWar != null) {
+                fogOfWar.revealAroundPoint(this, 0f, 0f, radiusEx);
+            }
         }
     }
 

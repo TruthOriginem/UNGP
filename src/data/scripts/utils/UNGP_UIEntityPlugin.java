@@ -24,6 +24,7 @@ import static data.scripts.campaign.specialist.rules.UNGP_RulesManager.*;
 import static org.lwjgl.opengl.GL11.*;
 
 public class UNGP_UIEntityPlugin extends BaseCustomEntityPlugin {
+    private static final float BASIC_ICON_ALPHA = 0.4f;
     private static final float SMALL_ICON_SIZE = 32f;
     private static final Color LEVEL_COLOR = new Color(255, 148, 89, 255);
     private static final Rectangle SpecialistIconRect;
@@ -31,6 +32,8 @@ public class UNGP_UIEntityPlugin extends BaseCustomEntityPlugin {
     transient private UNGP_Progress moveOverAndWaitProgress;
     transient private DrawableString drawableLevel;
     transient private int levelToRender = -1;
+    transient private float targetIconAlphaMult = BASIC_ICON_ALPHA;
+    transient private float currentIconAlphaMult = BASIC_ICON_ALPHA;
 
     static {
         int width = (int) (Global.getSettings().getScreenWidth() * Display.getPixelScaleFactor());
@@ -49,6 +52,8 @@ public class UNGP_UIEntityPlugin extends BaseCustomEntityPlugin {
         levelToRender = -1;
         moveOverAndWaitProgress = new UNGP_Progress(0.2f);
         icon = Global.getSettings().getSprite("icons", "UNGP_sdimlogo");
+        targetIconAlphaMult = 0f;
+        currentIconAlphaMult = 0f;
         return this;
     }
 
@@ -97,16 +102,12 @@ public class UNGP_UIEntityPlugin extends BaseCustomEntityPlugin {
         GL11.glMatrixMode(GL11.GL_MODELVIEW);
         GL11.glPushMatrix();
 
-//        glEnable(GL_BLEND);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-//        if (!isTextureEnabled) {
-//            GL11.glEnable(GL11.GL_TEXTURE_2D);
-//        }
 
-        float alphaMult = 0.7f;
+        targetIconAlphaMult = BASIC_ICON_ALPHA;
         if (SpecialistIconRect.contains(Mouse.getX(), Mouse.getY())) {
             moveOverAndWaitProgress.advance(amount);
-            alphaMult = 0.7f + moveOverAndWaitProgress.getProgress() * 0.3f;
+            targetIconAlphaMult = BASIC_ICON_ALPHA + moveOverAndWaitProgress.getProgress() * (1f - BASIC_ICON_ALPHA);
             if (moveOverAndWaitProgress.getProgress() > 0.7f) {
                 List<URule> bonusRules = new ArrayList<>();
                 List<URule> notBonusRules = new ArrayList<>();
@@ -128,8 +129,9 @@ public class UNGP_UIEntityPlugin extends BaseCustomEntityPlugin {
         } else {
             moveOverAndWaitProgress.reset();
         }
-
-        icon.setAlphaMult(alphaMult);
+        targetIconAlphaMult *= viewport.getAlphaMult();
+        currentIconAlphaMult = Misc.interpolate(currentIconAlphaMult, targetIconAlphaMult, 5f * amount);
+        icon.setAlphaMult(currentIconAlphaMult);
         icon.render(SpecialistIconRect.getX(), SpecialistIconRect.getY());
 
         float textHeight = drawableLevel.getHeight();

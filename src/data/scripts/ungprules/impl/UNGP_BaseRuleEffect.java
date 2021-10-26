@@ -7,6 +7,7 @@ import com.fs.starfarer.api.campaign.InteractionDialogAPI;
 import com.fs.starfarer.api.combat.CombatEngineAPI;
 import com.fs.starfarer.api.combat.MutableShipStatsAPI;
 import com.fs.starfarer.api.impl.campaign.intel.MessageIntel;
+import data.scripts.campaign.specialist.UNGP_PlayerFleetMemberBuff;
 import data.scripts.campaign.specialist.UNGP_SpecialistSettings;
 import data.scripts.ungprules.UNGP_RuleEffectAPI;
 import data.scripts.utils.SimpleI18n.I18nSection;
@@ -157,17 +158,40 @@ public abstract class UNGP_BaseRuleEffect implements UNGP_RuleEffectAPI {
         memberStats.getMaxCombatReadiness().modifyFlat(id, -toDecrease, desc);
     }
 
+
+    protected static <T> void saveDataInCampaign(String key, T t) {
+        Global.getSector().getPersistentData().put(key, t);
+    }
+
+    protected static <T> T getDataInCampaign(String key) {
+        return (T) Global.getSector().getPersistentData().get(key);
+    }
+
+    /**
+     * 基于游戏种子，规则id，当前年，月，获取随机对象
+     * Get random object based on game seed, rule id, current cycle and month
+     *
+     * @return
+     */
     protected Random getRandom() {
         final CampaignClockAPI clock = Global.getSector().getClock();
-        String sb = Global.getSector().getSeedString() + rule.getId() +
-                String.format("%d%d", clock.getCycle(), clock.getMonth());
+        String sb = Global.getSector().getSeedString() + rule.getId() + clock.getCycle() + clock.getMonth();
         return new Random(sb.hashCode());
     }
 
+    /**
+     * @return
+     */
     protected Random getRandomByDay() {
         final CampaignClockAPI clock = Global.getSector().getClock();
-        String sb = Global.getSector().getSeedString() + rule.getId() +
-                String.format("%d%d%d", clock.getCycle(), clock.getMonth(), clock.getDay());
+        String sb = Global.getSector().getSeedString() + rule.getId() + clock.getCycle() + clock.getMonth() + clock.getDay();
         return new Random(sb.hashCode());
+    }
+
+    /**
+     * Should be called to reapply the buff by syncing the player fleet.
+     */
+    protected void forceSyncPlayerMemberBuff() {
+        UNGP_PlayerFleetMemberBuff.forceSyncNextStep();
     }
 }

@@ -28,6 +28,8 @@ public final class UNGP_InGameData {
     private List<String> activatedRuleIDs = new ArrayList<>();
     private List<String> completedChallenges = new ArrayList<>();
 
+    public UNGP_InGameData() {
+    }
 
     /**
      * @return 获取当前存档中的数据
@@ -58,8 +60,6 @@ public final class UNGP_InGameData {
         timesToChangeSpecialistMode += timeToAdd;
     }
 
-    public UNGP_InGameData() {
-    }
 
     public void completeChallenge(String id) {
         completedChallenges.add(id);
@@ -165,5 +165,9 @@ public final class UNGP_InGameData {
 
     public List<String> getCompletedChallenges() {
         return completedChallenges;
+    }
+
+    public void setCompletedChallenges(List<String> completedChallenges) {
+        this.completedChallenges = new ArrayList<>(completedChallenges);
     }
 }

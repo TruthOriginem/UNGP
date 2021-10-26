@@ -99,7 +99,7 @@ public class UNGP_InteractionDialog implements InteractionDialogPlugin {
         //lastInheritData = UNGP_InheritData.Load();
 
         toRecordInheritData = UNGP_InheritData.createInheritData(inGameData);
-        UNGP_InheritManager.LoadAllSlots();
+        UNGP_InheritManager.loadAllSlots();
         initMenu();
         dialog.setOptionOnEscape(null, OptionID.LEAVE);
         visual.showCustomPanel(400f, 300f, new CustomUIPanelPlugin() {
@@ -397,7 +397,7 @@ public class UNGP_InteractionDialog implements InteractionDialogPlugin {
                 initMenu();
                 break;
             case LEAVE:
-                UNGP_InheritManager.ClearSlots();
+                UNGP_InheritManager.clearSlots();
                 dialog.dismiss();
                 break;
             default:
@@ -520,6 +520,7 @@ public class UNGP_InteractionDialog implements InteractionDialogPlugin {
         inGameData.setCurCycle(lastInheritData.cycle);
         inGameData.setInherited(true);
         inGameData.setHardMode(isHardMode);
+        inGameData.setCompletedChallenges(lastInheritData.completedChallenges);
         if (isHardMode) {
             inGameData.setDifficultyLevel(difficultyValue);
             inGameData.saveActivatedRules(selectedRules);
@@ -560,19 +561,17 @@ public class UNGP_InteractionDialog implements InteractionDialogPlugin {
 
     @Override
     public void advance(float amount) {
-//        Global.getSoundPlayer().playCustomMusic(1, 1, "ApproLight_unos_music", true);
-
         if (options.hasSelector(inheritCreditsSelector)) {
             float newValue = options.getSelectorValue(inheritCreditsSelector);
             if (newValue != creditsSelecterValue) {
-                creditsSelecterValue = options.getSelectorValue(inheritCreditsSelector);
+                creditsSelecterValue = newValue;
                 changeInheritConfirmationTooltip();
             }
         }
         if (options.hasSelector(inheritBPSelector)) {
             float newValue = options.getSelectorValue(inheritBPSelector);
             if (newValue != bpSelecterValue) {
-                bpSelecterValue = options.getSelectorValue(inheritBPSelector);
+                bpSelecterValue = newValue;
                 changeInheritConfirmationTooltip();
             }
         }
@@ -580,8 +579,12 @@ public class UNGP_InteractionDialog implements InteractionDialogPlugin {
             if (!lockedDifficultyValue) {
                 int newDifficultyValue = Math.round(options.getSelectorValue(inheritDifficultySelector));
                 if (newDifficultyValue != difficultyValue) {
-                    difficultyValue = Math.round(options.getSelectorValue(inheritDifficultySelector));
-//                setHardModeToolTip(difficultyValue);
+                    difficultyValue = newDifficultyValue;
+                    if (difficultyValue == UNGP_SpecialistSettings.MAX_DIFFICULTY) {
+                        options.setOptionText(d_i18n.get("rulepick_button") + d_i18n.get("rulepick_couldChallenge"), OptionID.PICK_RULES);
+                    } else {
+                        options.setOptionText(d_i18n.get("rulepick_button"), OptionID.PICK_RULES);
+                    }
                     changeInheritConfirmationTooltip();
                 }
             } else {

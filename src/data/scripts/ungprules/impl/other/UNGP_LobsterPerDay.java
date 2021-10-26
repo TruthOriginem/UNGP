@@ -26,8 +26,8 @@ public class UNGP_LobsterPerDay extends UNGP_BaseRuleEffect implements UNGP_Camp
             CampaignFleetAPI fleet = Global.getSector().getPlayerFleet();
             if (fleet != null) {
                 CargoAPI cargo = fleet.getCargo();
-                if (cargo.getSpaceLeft() > 0.9) {
-                    cargo.addCommodity(Commodities.LOBSTER, 1f);
+                if (cargo.getSpaceLeft() - 1 > 0) {
+                    cargo.addCommodity(Commodities.LOBSTER, 2f);
                 }
             }
         }
@@ -35,12 +35,8 @@ public class UNGP_LobsterPerDay extends UNGP_BaseRuleEffect implements UNGP_Camp
 
 
     @Override
-    public String getDescriptionParams(int index) {
-        return null;
-    }
-
-    @Override
     public String getDescriptionParams(int index, int difficulty) {
+        if (index == 0) return "2";
         return null;
     }
 }

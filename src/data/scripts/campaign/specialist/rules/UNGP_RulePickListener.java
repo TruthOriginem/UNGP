@@ -74,7 +74,9 @@ public class UNGP_RulePickListener implements CargoPickerListener {
     }
 
     private void clearUIData() {
-        Global.getSoundPlayer().pauseCustomMusic();
+        Global.getSoundPlayer().playCustomMusic(1, 1, null);
+//        Global.getSoundPlayer().pauseCustomMusic();
+//        Global.getSoundPlayer().restartCurrentMusic();
         UNGP_UITimeScript.removeInterval("2secs");
         UNGP_UITimeScript.removeInterval("6secs");
         UNGPFont.clearDynamicDrawable();
@@ -90,7 +92,11 @@ public class UNGP_RulePickListener implements CargoPickerListener {
         // 专家等级:X
         TooltipMakerAPI imageTooltip = panel.beginImageWithText(UNGP_SpecialistSettings.getSpecialistModeIconPath(), 64f);
         imageTooltip.setParaOrbitronLarge();
-        imageTooltip.addPara(d_i18n.get("rulepick_level"), opad, highlight, difficultyValue + "");
+        if (difficultyValue == UNGP_SpecialistSettings.MAX_DIFFICULTY) {
+            imageTooltip.addPara(d_i18n.get("rulepick_level"), opad, negative, highlight, difficultyValue + "");
+        } else {
+            imageTooltip.addPara(d_i18n.get("rulepick_level"), opad, highlight, difficultyValue + "");
+        }
         imageTooltip.setParaFontDefault();
         panel.addImageWithText(0);
 

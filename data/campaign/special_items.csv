@@ -2,4 +2,4 @@ name,id,tags,rarity,base price,stack size,cargo space,icon,sound id,sound id dro
 RuleItem,ungp_ruleitem_golden,,,0,1,1,,ui_golden_pickup,ui_golden_drop,data.scripts.campaign.specialist.items.UNGP_RuleItem,,,1500.2
 RuleItem,ungp_ruleitem_negative,,,0,1,1,,ui_negative_pickup,ui_negative_drop,data.scripts.campaign.specialist.items.UNGP_RuleItem,,,1500.1
 RuleItem,ungp_ruleitem_positive,,,0,1,1,,ui_positive_pickup,ui_positive_drop,data.scripts.campaign.specialist.items.UNGP_RuleItem,,,1500.3
-RuleItem,ungp_ruleitem_milestone,,,0,1,1,,ui_golden_pickup,ui_golden_drop,data.scripts.campaign.specialist.items.UNGP_RuleItem,,,1500.4
+RuleItem,ungp_ruleitem_milestone,,,0,1,1,,ui_milestone_pickup,ui_milestone_drop,data.scripts.campaign.specialist.items.UNGP_RuleItem,,,1500.4

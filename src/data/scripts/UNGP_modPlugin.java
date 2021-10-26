@@ -48,9 +48,9 @@ public class UNGP_modPlugin extends BaseModPlugin {
         if (!Global.getSector().hasScript(UNGP_CampaignPlugin.class)) {
             new UNGP_CampaignPlugin();
         }
-        UNGP_UITimeScript script = new UNGP_UITimeScript();
-        UNGP_UITimeScript.setInstance(script);
-        Global.getSector().addTransientScript(script);
+//        UNGP_UITimeScript script = new UNGP_UITimeScript();
+//        UNGP_UITimeScript.setInstance(script);
+        Global.getSector().addTransientScript(new UNGP_UITimeScript());
     }
 
     @Override

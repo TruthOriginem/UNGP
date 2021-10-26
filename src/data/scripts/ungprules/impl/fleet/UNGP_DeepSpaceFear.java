@@ -22,15 +22,10 @@ public class UNGP_DeepSpaceFear extends UNGP_BaseRuleEffect implements UNGP_Play
         return 0;
     }
 
-    @Override
-    public String getDescriptionParams(int index) {
-        if (index == 0) return getFactorString(SENSOR_STRENGTH_MULTIPLIER);
-        if (index == 1) return getFactorString(profileMultiplier);
-        return null;
-    }
 
     @Override
     public String getDescriptionParams(int index, int difficulty) {
+        if (index == 0) return getFactorString(SENSOR_STRENGTH_MULTIPLIER);
         if (index == 1) return getFactorString(getValueByDifficulty(index, difficulty));
         return super.getDescriptionParams(index, difficulty);
     }
@@ -38,12 +33,16 @@ public class UNGP_DeepSpaceFear extends UNGP_BaseRuleEffect implements UNGP_Play
     @Override
     public void applyPlayerFleetStats(CampaignFleetAPI fleet) {
         if (fleet.isInHyperspace()) {
-            String id = rule.getBuffID();
-            fleet.getStats().getDetectedRangeMod().modifyMult(id, profileMultiplier, rule.getName());
-            isInHyperspace = true;
+            if (!isInHyperspace) {
+                isInHyperspace = true;
+                forceSyncPlayerMemberBuff();
+            }
         } else {
-            unapplyPlayerFleetStats(fleet);
-            isInHyperspace = false;
+            if (isInHyperspace) {
+                unapplyPlayerFleetStats(fleet);
+                forceSyncPlayerMemberBuff();
+                isInHyperspace = false;
+            }
         }
     }
 

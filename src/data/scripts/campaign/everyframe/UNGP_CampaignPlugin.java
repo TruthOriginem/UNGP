@@ -156,10 +156,10 @@ public class UNGP_CampaignPlugin implements EveryFrameScript, CampaignEventListe
 
         // 调整专家模式UI的位置
         if (!ui_entity.isInCurrentLocation()) {
-            LocationAPI loc = sector.getCurrentLocation();
+            LocationAPI currentLocation = sector.getCurrentLocation();
             ui_entity.getContainingLocation().removeEntity(ui_entity);
-            loc.addEntity(ui_entity);
-            ui_entity.setContainingLocation(loc);
+            currentLocation.addEntity(ui_entity);
+            ui_entity.setContainingLocation(currentLocation);
         }
 
         int currentDay = clock.getDay();
@@ -170,6 +170,12 @@ public class UNGP_CampaignPlugin implements EveryFrameScript, CampaignEventListe
         if (currentDay != oneDayChecker) {
             oneDayChecker = currentDay;
             params.oneDayPassed = true;
+            // 如果是开发模式
+            if (Global.getSettings().isDevMode()) {
+                for (int i = 0; i < 10; i++) {
+                    inGameData.addTimesToChangeSpecialistMode();
+                }
+            }
         }
         // 每月一触发
         if (currentMonth != oneMonthChecker) {
@@ -223,8 +229,9 @@ public class UNGP_CampaignPlugin implements EveryFrameScript, CampaignEventListe
                     }
                 }
             }
-            if (needsSync) {
+            if (needsSync || UNGP_PlayerFleetMemberBuff.isShouldForceSyncNextStep()) {
                 playerFleet.forceSync();
+                UNGP_PlayerFleetMemberBuff.completeForceSync();
             }
         }
     }
