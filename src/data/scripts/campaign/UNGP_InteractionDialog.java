@@ -520,6 +520,7 @@ public class UNGP_InteractionDialog implements InteractionDialogPlugin {
         inGameData.setCurCycle(lastInheritData.cycle);
         inGameData.setInherited(true);
         inGameData.setHardMode(isHardMode);
+        inGameData.setCompletedChallenges(lastInheritData.completedChallenges);
         if (isHardMode) {
             inGameData.setDifficultyLevel(difficultyValue);
             inGameData.saveActivatedRules(selectedRules);

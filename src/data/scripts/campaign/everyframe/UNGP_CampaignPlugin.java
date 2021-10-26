@@ -156,10 +156,10 @@ public class UNGP_CampaignPlugin implements EveryFrameScript, CampaignEventListe
 
         // 调整专家模式UI的位置
         if (!ui_entity.isInCurrentLocation()) {
-            LocationAPI loc = sector.getCurrentLocation();
+            LocationAPI currentLocation = sector.getCurrentLocation();
             ui_entity.getContainingLocation().removeEntity(ui_entity);
-            loc.addEntity(ui_entity);
-            ui_entity.setContainingLocation(loc);
+            currentLocation.addEntity(ui_entity);
+            ui_entity.setContainingLocation(currentLocation);
         }
 
         int currentDay = clock.getDay();

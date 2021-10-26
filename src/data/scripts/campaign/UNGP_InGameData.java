@@ -166,4 +166,8 @@ public final class UNGP_InGameData {
     public List<String> getCompletedChallenges() {
         return completedChallenges;
     }
+
+    public void setCompletedChallenges(List<String> completedChallenges) {
+        this.completedChallenges = new ArrayList<>(completedChallenges);
+    }
 }

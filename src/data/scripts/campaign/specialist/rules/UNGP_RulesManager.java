@@ -73,7 +73,7 @@ public class UNGP_RulesManager {
     public static void updateRulesCache() {
         UNGP_InGameData inGameData = UNGP_InGameData.getDataInSave();
         if (inGameData != null) {
-            LOGGER.info("Start updating Rule caches...");
+            LOGGER.info("Start updating rule caches...");
             //清理已生效的Rules
             ACTIVATED_RULES_IN_THIS_GAME.clear();
             COMBAT_RULES_IN_THIS_GAME.clear();
@@ -120,11 +120,12 @@ public class UNGP_RulesManager {
             }
 
             //apply stats
+            int difficultyLevel = inGameData.getDifficultyLevel();
             for (URule rule : activatedRules) {
                 ACTIVATED_RULES_IN_THIS_GAME.add(rule);
 
                 UNGP_RuleEffectAPI effect = rule.getRuleEffect();
-                effect.updateDifficultyCache(inGameData.getDifficultyLevel());
+                effect.updateDifficultyCache(difficultyLevel);
                 effect.applyGlobalStats();
 
                 //如果不是战斗效果，那就是生涯效果
@@ -159,7 +160,7 @@ public class UNGP_RulesManager {
                 UNGP_EconomyListener.addListener();
                 UNGP_EconomyListener.applyMarkets();
             }
-            setDifficultyLevel(inGameData.getDifficultyLevel());
+            setDifficultyLevel(difficultyLevel);
             setSpecialistMode(inGameData.isHardMode());
             inGameData.saveActivatedRules(activatedRules);
             UNGP_ChallengeManager.updateChallengeProgress(inGameData);
@@ -389,6 +390,27 @@ public class UNGP_RulesManager {
             return String.format(ruleInfo.getDesc(), values);
         }
 
+        public Object[] getCombatMessages(int difficulty) {
+            List<Object> messageList = new ArrayList<>();
+            String originDesc = ruleInfo.getDesc();
+            String[] unformulatedDesc = originDesc.split("%s");
+            Color baseColor = getBonusColor(isBonus());
+            Color hlColor = isBonus() ? Misc.getHighlightColor() : Misc.getNegativeHighlightColor();
+            for (int i = 0; i < unformulatedDesc.length; i++) {
+                String baseString = unformulatedDesc[i];
+                if (baseString != null && !baseString.isEmpty()) {
+                    messageList.add(baseColor);
+                    messageList.add(baseString);
+                }
+                String hlString = getRuleEffect().getDescriptionParams(i, difficulty);
+                if (hlString != null && !hlString.isEmpty()) {
+                    messageList.add(hlColor);
+                    messageList.add(getRuleEffect().getDescriptionParams(i, difficulty));
+                }
+            }
+            return messageList.toArray();
+        }
+
         public void addCost(TooltipMakerAPI tooltip, float pad) {
             int cost = getCost();
             tooltip.setParaOrbitronLarge();
@@ -567,10 +589,12 @@ public class UNGP_RulesManager {
         List<String> unlockedRuleIds = new ArrayList<>();
         // 检测完成的专家挑战
         for (String completedChallenge : completedChallenges) {
-            final UNGP_ChallengeInfo challengeInfo = UNGP_ChallengeManager.getChallengeInfo(completedChallenge);
-            final String mileStoneRuleId = challengeInfo.getMilestoneToUnlock();
-            if (!mileStoneRuleId.isEmpty()) {
-                unlockedRuleIds.add(mileStoneRuleId);
+            UNGP_ChallengeInfo challengeInfo = UNGP_ChallengeManager.getChallengeInfo(completedChallenge);
+            if (challengeInfo != null) {
+                String mileStoneRuleId = challengeInfo.getMilestoneToUnlock();
+                if (!mileStoneRuleId.isEmpty()) {
+                    unlockedRuleIds.add(mileStoneRuleId);
+                }
             }
         }
         List<URule> sortedRules = new ArrayList<>();

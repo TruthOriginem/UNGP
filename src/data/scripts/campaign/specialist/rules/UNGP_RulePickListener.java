@@ -74,7 +74,9 @@ public class UNGP_RulePickListener implements CargoPickerListener {
     }
 
     private void clearUIData() {
-        Global.getSoundPlayer().pauseCustomMusic();
+        Global.getSoundPlayer().playCustomMusic(1, 1, null);
+//        Global.getSoundPlayer().pauseCustomMusic();
+//        Global.getSoundPlayer().restartCurrentMusic();
         UNGP_UITimeScript.removeInterval("2secs");
         UNGP_UITimeScript.removeInterval("6secs");
         UNGPFont.clearDynamicDrawable();

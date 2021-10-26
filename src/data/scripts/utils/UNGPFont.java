@@ -6,6 +6,7 @@ import org.lazywizard.lazylib.ui.LazyFont;
 import org.lazywizard.lazylib.ui.LazyFont.DrawableString;
 
 import java.awt.*;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
@@ -50,7 +51,8 @@ public class UNGPFont {
     }
 
     public static void clearDynamicDrawable() {
-        for (DrawableString drawableString : DYNAMIC_DRAWABLE_MAP.values()) {
+        Collection<DrawableString> drawableStrings = DYNAMIC_DRAWABLE_MAP.values();
+        for (DrawableString drawableString : drawableStrings) {
             drawableString.dispose();
         }
         DYNAMIC_DRAWABLE_MAP.clear();

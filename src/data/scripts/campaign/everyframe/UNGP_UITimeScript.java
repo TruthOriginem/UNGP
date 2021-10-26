@@ -1,6 +1,7 @@
 package data.scripts.campaign.everyframe;
 
 import com.fs.starfarer.api.EveryFrameScript;
+import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.util.IntervalUtil;
 
 import java.util.HashMap;
@@ -10,7 +11,6 @@ import java.util.HashMap;
  * Transient script
  */
 public final class UNGP_UITimeScript implements EveryFrameScript {
-    private transient static UNGP_UITimeScript instance;
     private boolean isPaused = false;
     private long systemTime;
     private HashMap<String, IntervalUtil> intervalMap = new HashMap<>();
@@ -20,12 +20,20 @@ public final class UNGP_UITimeScript implements EveryFrameScript {
     }
 
     public static UNGP_UITimeScript getInstance() {
-        return instance;
+        for (EveryFrameScript transientScript : Global.getSector().getTransientScripts()) {
+            if (transientScript instanceof UNGP_UITimeScript) {
+                return (UNGP_UITimeScript) transientScript;
+            }
+        }
+        UNGP_UITimeScript script = new UNGP_UITimeScript();
+        Global.getSector().addTransientScript(script);
+        return script;
     }
 
-    public static void setInstance(UNGP_UITimeScript instance) {
-        UNGP_UITimeScript.instance = instance;
-    }
+//    public static void setInstance(UNGP_UITimeScript instance) {
+//        Global.getSector().getTransientScripts()
+//        UNGP_UITimeScript.instance = instance;
+//    }
 
     @Override
     public boolean isDone() {
