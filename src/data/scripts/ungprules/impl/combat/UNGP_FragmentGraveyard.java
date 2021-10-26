@@ -33,6 +33,7 @@ public class UNGP_FragmentGraveyard extends UNGP_BaseRuleEffect implements UNGP_
     @Override
     public void advanceInCombat(CombatEngineAPI engine, float amount) {
         for (ShipAPI ship : engine.getShips()) {
+            if (ship.isAlive()) continue;
             if (!ship.isHulk()) continue;
             if (ship.getCustomData().containsKey(rule.getBuffID())) continue;
 
