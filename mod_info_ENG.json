@@ -2,9 +2,9 @@
   "id": "ungp",
   "name": "Unofficial New Game Plus",
   "author": "Originem\nCode Assistant: AnyIDElse\nTranslated By RUA,Fax,ILLEXIUS\nSprites by Originem, Light of Shadow, Helai\nIdeas from Haixian Group\nSpecial Thanks: Game-icons.net",
-  "version": {"major": 1, "minor": 5, "patch": 2},
+  "version": {"major": 1, "minor": 5, "patch": 3},
   "dependencies": [
-    {"id": "lw_lazylib", "name": "LazyLib", "version": "2.6"},
+    {"id": "lw_lazylib", "name": "LazyLib"},
   ],
   "description": "A mod with a similar 'new game plus' function.\n Left ctrl+P to call the menu",
   "gameVersion": "0.95a-RC15",

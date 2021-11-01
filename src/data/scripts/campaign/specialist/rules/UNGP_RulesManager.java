@@ -88,6 +88,8 @@ public class UNGP_RulesManager {
             MutableCharacterStatsAPI playerStats = Global.getSector().getPlayerStats();
             //unapply All stats
             for (URule rule : ALL_RULES) {
+                // 首先锁住成就规则的随机pick
+                rule.isMilestoneRollLocked = true;
                 UNGP_RuleEffectAPI effect = rule.getRuleEffect();
                 effect.unapplyGlobalStats();
                 // 清理舰队rule
@@ -118,7 +120,8 @@ public class UNGP_RulesManager {
             for (UNGP_TweakBeforeApplyTag tag : beforeApplyTags) {
                 tag.tweakBeforeApply(activatedRules, originalActivatedRules);
             }
-
+            // 根据当前完成挑战，让那些成就规则可被roll
+            updateRollableMilestoneRules(inGameData);
             //apply stats
             int difficultyLevel = inGameData.getDifficultyLevel();
             for (URule rule : activatedRules) {
@@ -185,7 +188,24 @@ public class UNGP_RulesManager {
     }
 
     /**
-     * 规则的封装类
+     * 根据当前inGameData完成的挑战来使成就规则可被roll到
+     *
+     * @return
+     */
+    public static void updateRollableMilestoneRules(UNGP_InGameData dataInSave) {
+        for (String completedChallenge : dataInSave.getCompletedChallenges()) {
+            UNGP_ChallengeInfo info = UNGP_ChallengeManager.getChallengeInfo(completedChallenge);
+            if (info != null) {
+                URule rule = URule.getByID(info.getMilestoneToUnlock());
+                if (rule != null)
+                    rule.isMilestoneRollLocked = false;
+            }
+        }
+    }
+
+    /**
+     * 规则的封装类，每个规则应该有且仅有一个对象
+     * The sealed class of single rule, each rule should only have one object of this class
      */
     public static final class URule {
         public enum Tags {
@@ -200,6 +220,7 @@ public class UNGP_RulesManager {
 
         private String buffID;
         private UNGP_RuleInfo ruleInfo;
+        private boolean isMilestoneRollLocked = true;
 
         URule(UNGP_RuleInfo info) {
             this.buffID = "ungp_" + info.getId();
@@ -240,6 +261,12 @@ public class UNGP_RulesManager {
             return UNGP_RulesManager.getBonusColor(isBonus());
         }
 
+        /**
+         * 一般来说是规则名颜色
+         * The color of rules' name in default.
+         *
+         * @return
+         */
         public Color getCorrectColor() {
             if (isMileStone()) return getMilestoneColor();
             if (isGolden()) {
@@ -390,7 +417,13 @@ public class UNGP_RulesManager {
             return String.format(ruleInfo.getDesc(), values);
         }
 
-        public Object[] getCombatMessages(int difficulty) {
+        /**
+         * Would be shown at the beginning of the battle
+         *
+         * @param difficulty
+         * @return
+         */
+        public Object[] generateCombatTips(int difficulty) {
             List<Object> messageList = new ArrayList<>();
             String originDesc = ruleInfo.getDesc();
             String[] unformulatedDesc = originDesc.split("%s");
@@ -474,8 +507,19 @@ public class UNGP_RulesManager {
             return null;
         }
 
+        /**
+         * 默认情况下成就规则是不能被roll到的
+         *
+         * @return
+         */
         public boolean isRollable() {
-            return !hasTag(Tags.NO_ROLL) && !isMileStone();
+            if (hasTag(Tags.NO_ROLL)) {
+                return false;
+            }
+            if (isMileStone()) {
+                return !isMilestoneRollLocked;
+            }
+            return true;
         }
 
         public boolean isMileStone() {

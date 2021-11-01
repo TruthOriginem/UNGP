@@ -10,6 +10,9 @@
   "UNGP_collector_activate": [
     {"file": "sounds/fx/trigger/UNGP_collector_activate.ogg", "pitch": 1, "volume": 1},
   ],
+  "UNGP_still_growing_up_activate": [
+    {"file": "sounds/fx/trigger/UNGP_still_growing_up_activate.ogg", "pitch": 1, "volume": 1},
+  ],
   "UNGP_birthdaypresent_activate": [
     {"file": "sounds/fx/trigger/UNGP_birthdaypresent_activate.ogg", "pitch": 1, "volume": 1},
   ],

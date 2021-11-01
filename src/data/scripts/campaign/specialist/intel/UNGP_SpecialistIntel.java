@@ -60,11 +60,11 @@ public class UNGP_SpecialistIntel extends BaseIntelPlugin {
 
     @Override
     public void createLargeDescription(CustomPanelAPI panel, float width, float height) {
-        float marginTopBottom = height * 0.05f;
+        float marginTopBottom = height * 0.03f;
         float marginLeft = width * 0.05f;
         float contentWidth = width - marginLeft * 2f;
         //0.325 + 0.025 + 0.325 +0.025 + 0.3
-        float ruleListWidth = contentWidth * 0.325f;
+        float ruleListWidth = contentWidth * 0.35f;
         float ruleWidthMargin = contentWidth * 0.025f;
         float titleHeight = 80f;
         float titleWidth = width * 0.3f;
@@ -95,7 +95,7 @@ public class UNGP_SpecialistIntel extends BaseIntelPlugin {
         title.addImageWithText(0f);
         panel.addUIElement(title).inTMid(marginTopBottom);
 
-        float ruleTitleHeight = 20f;
+        float ruleTitleHeight = 30f;
         float ruleListHeight = contentHeight - ruleTitleHeight;
         float ruleTitleTopMargin = marginTopBottom + titleHeight + contentHeightMargin;
 
@@ -103,6 +103,7 @@ public class UNGP_SpecialistIntel extends BaseIntelPlugin {
         bonusTitle.setParaOrbitronLarge();
         bonusTitle.addPara(UNGP_RulesManager.getBonusString(true), UNGP_RulesManager.getBonusColor(true), 0f);
         bonusTitle.setParaFontDefault();
+        addLine(bonusTitle, ruleListWidth - 5f, 1f, 3f);
         panel.addUIElement(bonusTitle).inTL(marginLeft, ruleTitleTopMargin);
 
 
@@ -122,6 +123,7 @@ public class UNGP_SpecialistIntel extends BaseIntelPlugin {
         notBonusTitle.setParaOrbitronLarge();
         notBonusTitle.addPara(UNGP_RulesManager.getBonusString(false), UNGP_RulesManager.getBonusColor(false), 0f);
         notBonusTitle.setParaFontDefault();
+        addLine(notBonusTitle, ruleListWidth - 5f, 1f, 3f);
         panel.addUIElement(notBonusTitle).inTL(notBonusLeftMargin, ruleTitleTopMargin);
 
 
@@ -135,13 +137,14 @@ public class UNGP_SpecialistIntel extends BaseIntelPlugin {
         panel.addUIElement(notbonusContent).inTL(notBonusLeftMargin, ruleListTopMargin);
 
 
-        float detailedHeight = contentHeight * 0.8f - ruleTitleHeight;
+        float detailedHeight = contentHeight * 0.85f - ruleTitleHeight;
         float detailedRightMargin = marginLeft;
 
         TooltipMakerAPI detailedTitle = panel.createUIElement(detailedWidth, ruleTitleHeight, false);
         detailedTitle.setParaOrbitronLarge();
         detailedTitle.addPara(rules_i18n.get("suited_state"), Misc.getButtonTextColor(), 0f);
         detailedTitle.setParaFontDefault();
+        addLine(detailedTitle, detailedWidth - 5f, 1f, 3f);
         panel.addUIElement(detailedTitle).inTR(detailedRightMargin, ruleTitleTopMargin);
 
 
@@ -164,8 +167,8 @@ public class UNGP_SpecialistIntel extends BaseIntelPlugin {
             }
         }
 
-        float detailedTopMargin = ruleListTopMargin + ruleTitleHeight;
         TooltipMakerAPI gameStateTooltip = panel.createUIElement(detailedWidth, detailedHeight, true);
+        gameStateTooltip.addSpacer(5f);
         if (!campaignRules.isEmpty()) {
             gameStateTooltip.setParaOrbitronLarge();
             gameStateTooltip.addPara(rules_i18n.get("campaign_state"), 0f);
@@ -183,9 +186,9 @@ public class UNGP_SpecialistIntel extends BaseIntelPlugin {
             }
         }
 
-        panel.addUIElement(gameStateTooltip).inTR(detailedRightMargin, detailedTopMargin);
+        panel.addUIElement(gameStateTooltip).inTR(detailedRightMargin, ruleListTopMargin);
 
-        float buttonHeight = contentHeight * 0.2f;
+        float buttonHeight = contentHeight * 0.15f;
         TooltipMakerAPI buttonTooltip = panel.createUIElement(detailedWidth, buttonHeight, false);
         buttonTooltip.addPara(rules_i18n.get("current_cycle") + "%s", 0f, positiveColor, Global.getSector().getClock().getCycle() + "");
         boolean lockedBecauseOfChallenges = UNGP_ChallengeManager.isRepickLockedByChallenges();
@@ -194,10 +197,21 @@ public class UNGP_SpecialistIntel extends BaseIntelPlugin {
         } else {
             buttonTooltip.addPara(rules_i18n.get("current_times_to_refresh") + "%s", 0f, positiveColor, rules_i18n.get("repick_rules"), inGameData.getTimesToChangeSpecialistMode() + "");
         }
-        ButtonAPI button = buttonTooltip.addButton(rules_i18n.get("repick_rules"), KEY, detailedWidth * 0.5f, buttonHeight * 0.3f, 10f);
+        Color buttonBase = Misc.getBasePlayerColor();
+        Color buttonDark = Misc.getDarkPlayerColor();
+        ButtonAPI button = buttonTooltip.addButton(rules_i18n.get("repick_rules"), KEY, buttonBase, buttonDark, Alignment.MID, CutStyle.C2_MENU, detailedWidth * 0.5f, buttonHeight * 0.3f, 10f);
         // 设置重选
         button.setEnabled(!lockedBecauseOfChallenges && inGameData.getTimesToChangeSpecialistMode() > 0);
-        panel.addUIElement(buttonTooltip).inBR(detailedRightMargin, marginTopBottom);
+        panel.addUIElement(buttonTooltip).inBR(detailedRightMargin, marginTopBottom * 0.3f);
+    }
+
+    private void addLine(TooltipMakerAPI tooltip, float width, float height, float pad) {
+        ButtonAPI button = tooltip.addButton("", new Object(), width, height, pad);
+        button.setEnabled(false);
+        button.setButtonDisabledPressedSound(null);
+        button.setButtonPressedSound(null);
+        button.setMouseOverSound(null);
+        button.setChecked(true);
     }
 
     @Override

@@ -25,8 +25,6 @@ public interface UNGP_RuleEffectAPI {
      */
     float getValueByDifficulty(int index, int difficulty);
 
-//    String getDescriptionParams(int index);
-
     /**
      * Shown in the rule's picker interface.
      * 会在规则选择界面展示
@@ -44,6 +42,13 @@ public interface UNGP_RuleEffectAPI {
     void applyGlobalStats();
 
     void unapplyGlobalStats();
+
+    /**
+     * Would be called if the rule was removed after reselection or other reasons like rules which may remove others.
+     * Should only put some global cleansing code here.
+     * 该规则被移除时会被调用，一般往里放清理全局数据的代码
+     */
+    void cleanUp();
 
     URule getRule();
 }

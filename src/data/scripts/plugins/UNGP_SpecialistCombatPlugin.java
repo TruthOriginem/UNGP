@@ -42,17 +42,17 @@ public class UNGP_SpecialistCombatPlugin extends BaseEveryFrameCombatPlugin {
                     if (ruleEffect instanceof UNGP_CombatTag) {
                         tags.add((UNGP_CombatTag) ruleEffect);
                         if (rule.isBonus()) {
-                            bonusMessages.add(rule.getCombatMessages(difficultyLevel));
+                            bonusMessages.add(rule.generateCombatTips(difficultyLevel));
                         } else {
-                            notBonusMessages.add(rule.getCombatMessages(difficultyLevel));
+                            notBonusMessages.add(rule.generateCombatTips(difficultyLevel));
                         }
                     }
                     if (ruleEffect instanceof UNGP_CombatInitTag) {
                         ((UNGP_CombatInitTag) ruleEffect).init(engine);
                         if (rule.isBonus()) {
-                            bonusMessages.add(rule.getCombatMessages(difficultyLevel));
+                            bonusMessages.add(rule.generateCombatTips(difficultyLevel));
                         } else {
-                            notBonusMessages.add(rule.getCombatMessages(difficultyLevel));
+                            notBonusMessages.add(rule.generateCombatTips(difficultyLevel));
                         }
                     }
                 }

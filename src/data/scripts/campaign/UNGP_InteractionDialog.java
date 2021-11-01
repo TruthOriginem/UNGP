@@ -596,6 +596,9 @@ public class UNGP_InteractionDialog implements InteractionDialogPlugin {
         }
     }
 
+    /**
+     * 继承
+     */
     private void changeInheritConfirmationTooltip() {
         if (options.hasOption(OptionID.INHERIT)) {
             final int creditsInherited = (int) (lastInheritData.inheritCredits * creditsSelecterValue * 0.01f);

@@ -52,7 +52,7 @@ experimental_shunt,Experimental Shunt,Enable the dissipation of hard flux,Gain %
 critical_hit,Critical Hit,Twice the damage of flagship by chance,Any damage dealt by the flagship has a %s chance of being doubled (only shown when the original damage is above 100),-2.0,True,,graphics/icons/ungp/critical_hit.png,data.scripts.ungprules.impl.combat.UNGP_CriticalHit,,,,,
 seer,伏击艺术家,揭开他们的面纱,"每冷却{%s}秒, 就清除战场中的战争迷雾{%s}秒",-1,TRUE,,graphics/icons/ungp/seer.png,data.scripts.ungprules.impl.combat.UNGP_Seer,,,,,议长√
 ,,,,,,,,,,,,,
-collector,收集者,旗舰斩杀低结构舰船,旗舰对当前结构小于等于{%s}的敌方舰船结构造成伤害时，处决该舰船，并获得{%s}，对战机无效。,-1,TRUE,,graphics/icons/ungp/collector.png,data.scripts.ungprules.impl.combat.UNGP_Collector,,,英仙座联盟,,议长√
+collector,收集者,旗舰斩杀低结构舰船,旗舰对当前结构小于等于{%s}的敌方舰船结构造成伤害时，处决该舰船，并获得{%s}，对战机无效。,-1,TRUE,,graphics/icons/ungp/collector.png,data.scripts.ungprules.impl.combat.UNGP_Collector,,,英仙座联盟,,和莱√
 ,,,,,,,,,,,,,
 mercantilism,Mercantilism,Increase the accessibility of colonies,"Increase the accessibility of colonies for up to %s, if the accessibility is above %s then bonus will be %s",-2.0,True,,graphics/icons/ungp/mercantilism.png,data.scripts.ungprules.impl.economy.UNGP_Mercantilism,,,,,
 glados,GLaDos,Increase the supply bonus from Alpha core,Add %s supply in the industry with alpha core,-2.0,True,,graphics/icons/ungp/glados.png,data.scripts.ungprules.impl.economy.UNGP_GLaDos,,,,,

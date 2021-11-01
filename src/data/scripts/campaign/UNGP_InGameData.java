@@ -73,11 +73,22 @@ public final class UNGP_InGameData {
      * @param newRules
      */
     public void saveActivatedRules(List<URule> newRules) {
+        List<String> oldRules = new ArrayList<>(activatedRuleIDs);
         activatedRuleIDs.clear();
         Set<String> ruleSet = new HashSet<>();
         // Avoid duplicated
         for (URule rule : newRules) {
-            ruleSet.add(rule.getId());
+            String ruleId = rule.getId();
+            ruleSet.add(ruleId);
+            // remove the current activated rules
+            oldRules.remove(ruleId);
+        }
+        // Clean up the old rules
+        for (String ruleId : oldRules) {
+            URule rule = URule.getByID(ruleId);
+            if (rule != null) {
+                rule.getRuleEffect().cleanUp();
+            }
         }
         activatedRuleIDs.addAll(ruleSet);
     }

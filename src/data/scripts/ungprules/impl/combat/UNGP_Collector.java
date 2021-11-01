@@ -91,7 +91,7 @@ public class UNGP_Collector extends UNGP_BaseRuleEffect implements UNGP_CombatIn
                                 targetShip.setHitpoints(1f);
                                 engine.applyDamage(target,
                                                    targetLocation,
-                                                   damage, DamageType.OTHER,
+                                                   damage, result.getType(),
                                                    0f, true, false, sourceShip, true);
                                 stats.getMinArmorFraction().unmodify(DEBUFF_ID);
 

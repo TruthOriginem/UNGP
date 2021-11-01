@@ -20,9 +20,9 @@ public class UNGP_RuleSorter implements Comparator<URule> {
         if (compare == 0) {
             compare = Boolean.compare(o1.isGolden(), o2.isGolden());
             if (compare == 0) {
-                compare = Integer.compare(Math.abs(o1.getCost()), Math.abs(o2.getCost()));
+                compare = Boolean.compare(!o1.isMileStone(), !o2.isMileStone());
                 if (compare == 0) {
-                    compare = Boolean.compare(o1.isMileStone(), o2.isMileStone());
+                    compare = Integer.compare(Math.abs(o1.getCost()), Math.abs(o2.getCost()));
                     if (compare == 0)
                         compare = o1.getId().compareTo(o2.getId());
                 }

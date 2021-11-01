@@ -71,6 +71,11 @@ public abstract class UNGP_BaseRuleEffect implements UNGP_RuleEffectAPI {
 
     }
 
+    @Override
+    public void cleanUp() {
+
+    }
+
     /**
      * Get linear value
      *
