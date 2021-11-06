@@ -32,38 +32,23 @@ public class UNGP_DeepSpaceFear extends UNGP_BaseRuleEffect implements UNGP_Play
 
     @Override
     public void applyPlayerFleetStats(CampaignFleetAPI fleet) {
-        if (fleet.isInHyperspace()) {
-            if (!isInHyperspace) {
-                isInHyperspace = true;
-                forceSyncPlayerMemberBuff();
-            }
-        } else {
-            if (isInHyperspace) {
-                unapplyPlayerFleetStats(fleet);
-                forceSyncPlayerMemberBuff();
-                isInHyperspace = false;
-            }
-        }
+        isInHyperspace = fleet.isInHyperspace();
     }
 
     @Override
     public void unapplyPlayerFleetStats(CampaignFleetAPI fleet) {
-        String id = rule.getBuffID();
-        fleet.getStats().getDetectedRangeMod().unmodify(id);
     }
 
     @Override
     public void applyPlayerFleetMemberInCampaign(FleetMemberAPI member) {
-        if (isInHyperspace) {
-            String id = rule.getBuffID();
-            member.getStats().getSensorProfile().modifyMult(id, profileMultiplier);
-            member.getStats().getSensorStrength().modifyMult(id, SENSOR_STRENGTH_MULTIPLIER);
-        }
+        String id = rule.getBuffID();
+        member.getStats().getSensorProfile().modifyMult(id, profileMultiplier);
+        member.getStats().getSensorStrength().modifyMult(id, SENSOR_STRENGTH_MULTIPLIER);
     }
 
     @Override
     public boolean canApply(FleetMemberAPI member) {
-        return true;
+        return isInHyperspace;
     }
 
     @Override

@@ -1,8 +1,12 @@
 1.5.3 2021/10/31
 增加成就规则：仍在成长
+
+幅能导流阻塞现在基于护盾展开角度降低幅能。
 现在挑战已完成的成就规则可被随机规则选中。
 
 Add milestone rule: Still Growing Up
+
+Now Blocked Flux Conduits reduces the flux based on the active arc of the shield.
 Now you could roll milestone rules that whose challenge has been completed.
 
 1.5.2 2021/10/26

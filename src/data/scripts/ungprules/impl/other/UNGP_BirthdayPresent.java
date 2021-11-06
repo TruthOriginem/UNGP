@@ -23,17 +23,17 @@ public class UNGP_BirthdayPresent extends UNGP_BaseRuleEffect implements UNGP_Ca
     }
 
     @Override
-    public String getDescriptionParams(int index) {
+    public String getDescriptionParams(int index, int difficulty) {
         if (index == 0) return "1";
-        return null;
+        return super.getDescriptionParams(index, difficulty);
     }
 
     @Override
     public void advanceInCampaign(float amount, UNGP_CampaignPlugin.TempCampaignParams params) {
         if (params.isOneDayPassed()) {
-            int[] giftTime = (int[]) Global.getSector().getMemoryWithoutUpdate().get("$" + rule.getBuffID());
+            int[] giftTime = getDataInCampaign(0);
+            CampaignClockAPI clock = Global.getSector().getClock();
             if (giftTime != null) {
-                CampaignClockAPI clock = Global.getSector().getClock();
                 if (clock.getCycle() == giftTime[0] && clock.getMonth() == giftTime[1] && clock.getDay() == giftTime[2]) {
                     UNGP_InGameData inGameData = UNGP_InGameData.getDataInSave();
                     List<URule> activatedRules = inGameData.getActivatedRules();
@@ -57,25 +57,15 @@ public class UNGP_BirthdayPresent extends UNGP_BaseRuleEffect implements UNGP_Ca
                     inGameData.saveActivatedRules(activatedRules);
                     UNGP_RulesManager.updateCacheNextFrame();
                 }
+            } else {
+                giftTime = new int[]{clock.getCycle() + 1, clock.getMonth(), clock.getDay() - 1};
+                saveDataInCampaign(0, giftTime);
             }
         }
     }
 
     @Override
-    public void applyGlobalStats() {
-        if (!Global.getSector().getMemoryWithoutUpdate().contains("$" + rule.getBuffID())) {
-            CampaignClockAPI clock = Global.getSector().getClock();
-            int[] giftTime = new int[]{clock.getCycle() + 1, clock.getMonth(), clock.getDay()};
-            Global.getSector().getMemoryWithoutUpdate().set("$" + rule.getBuffID(), giftTime);
-        }
-    }
-
-    @Override
-    public void unapplyGlobalStats() {
-        UNGP_InGameData inGameData = UNGP_InGameData.getDataInSave();
-        List<URule> activatedRules = inGameData.getActivatedRules();
-        if (!activatedRules.contains(rule)) {
-            Global.getSector().getMemoryWithoutUpdate().unset("$" + rule.getBuffID());
-        }
+    public void cleanUp() {
+        clearDataInCampaign(0);
     }
 }

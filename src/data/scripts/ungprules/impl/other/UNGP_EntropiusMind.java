@@ -16,8 +16,6 @@ import java.util.Random;
 
 public class UNGP_EntropiusMind extends UNGP_BaseRuleEffect implements UNGP_CampaignTag {
 
-    public static final String KEY_DAYS_PASSED = "UNGP_EntropiusMind_DaysPassed";
-
     @Override
     public void updateDifficultyCache(int difficulty) {
     }
@@ -30,7 +28,7 @@ public class UNGP_EntropiusMind extends UNGP_BaseRuleEffect implements UNGP_Camp
     @Override
     public void advanceInCampaign(float amount, TempCampaignParams params) {
         if (params.isOneDayPassed()) {
-            int daysPassed = getDataInCampaign(KEY_DAYS_PASSED);
+            int daysPassed = getDataInCampaign(0);
             daysPassed++;
 
             if (daysPassed == 7) {
@@ -65,14 +63,14 @@ public class UNGP_EntropiusMind extends UNGP_BaseRuleEffect implements UNGP_Camp
                 daysPassed = 0;
             }
 
-            saveDataInCampaign(KEY_DAYS_PASSED, daysPassed);
+            saveDataInCampaign(0, daysPassed);
         }
     }
 
     @Override
     public void applyGlobalStats() {
-        if (getDataInCampaign(KEY_DAYS_PASSED) == null) {
-            saveDataInCampaign(KEY_DAYS_PASSED, 0);
+        if (getDataInCampaign(0) == null) {
+            saveDataInCampaign(0, 0);
         }
     }
 

@@ -4,6 +4,7 @@ import com.fs.starfarer.api.BaseModPlugin;
 import com.fs.starfarer.api.Global;
 import com.thoughtworks.xstream.XStream;
 import data.scripts.campaign.UNGP_InGameData;
+import data.scripts.campaign.UNGP_SharedData;
 import data.scripts.campaign.everyframe.UNGP_CampaignPlugin;
 import data.scripts.campaign.everyframe.UNGP_UITimeScript;
 import data.scripts.campaign.specialist.UNGP_PlayerFleetMemberBuff;
@@ -39,6 +40,7 @@ public class UNGP_modPlugin extends BaseModPlugin {
 
     @Override
     public void onGameLoad(boolean newGame) {
+        UNGP_SharedData.initialize();
         addScriptsIfNeeded();
         UNGP_RulesManager.updateRulesCache();
         UNGP_CampaignPlugin.loadUIEntity();

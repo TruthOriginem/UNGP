@@ -25,9 +25,8 @@ public class UNGP_MonotonousTeller extends UNGP_BaseRuleEffect implements UNGP_C
     public void advanceInCampaign(float amount, TempCampaignParams params) {
         if (params.isOneDayPassed()) {
             int sinceLastLost;
-            final String buffID = rule.getBuffID();
-            if (getDataInCampaign(buffID) != null) {
-                sinceLastLost = getDataInCampaign(buffID);
+            if (getDataInCampaign(0) != null) {
+                sinceLastLost = getDataInCampaign(0);
             } else {
                 sinceLastLost = 0;
             }
@@ -44,7 +43,7 @@ public class UNGP_MonotonousTeller extends UNGP_BaseRuleEffect implements UNGP_C
                     message.send();
                 }
             }
-            saveDataInCampaign(buffID, sinceLastLost);
+            saveDataInCampaign(0, sinceLastLost);
         }
     }
 

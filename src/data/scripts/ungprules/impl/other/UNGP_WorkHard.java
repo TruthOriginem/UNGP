@@ -14,7 +14,7 @@ import java.awt.*;
 import static data.scripts.campaign.specialist.intel.UNGP_SpecialistIntel.RuleMessage;
 
 public class UNGP_WorkHard extends UNGP_BaseRuleEffect implements UNGP_CampaignTag {
-    private static final String MEM_CHECK_WORK = "$UNGP_WorkHard";
+    private static final String MEM_CHECK_WORK = "$UNGP_WorkHard_Warning";
     private static final float STRIKE_CHANCE_PER_DAY = 0.08f;
     private static final float CR_LOSS = 0.75f;
     private static final float CREW_LOSS = 0.50f;

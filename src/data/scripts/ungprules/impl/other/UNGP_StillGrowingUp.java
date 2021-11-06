@@ -29,11 +29,9 @@ public class UNGP_StillGrowingUp extends UNGP_BaseRuleEffect implements UNGP_Cam
     @Override
     public void advanceInCampaign(float amount, UNGP_CampaignPlugin.TempCampaignParams params) {
         if (params.isOneMonthPassed()) {
-            int[] monthData = getDataInCampaign(rule.getBuffID());
+            int[] monthData = getDataInCampaign(0);
             if (monthData == null) {
-                monthData = new int[2];
-                monthData[0] = 0;
-                monthData[1] = 3;
+                monthData = new int[]{0, 3};
             }
             int elapsedMonth = monthData[0] + 1;
             int maxMonth = monthData[1];
@@ -71,7 +69,7 @@ public class UNGP_StillGrowingUp extends UNGP_BaseRuleEffect implements UNGP_Cam
             intel.setIcon(rule.getSpritePath());
             intel.addLine(rule.getExtra2(), Misc.getTextColor(), new String[]{"" + (monthData[1] - monthData[0])}, Misc.getHighlightColor());
             showMessage(intel);
-            saveDataInCampaign(rule.getBuffID(), monthData);
+            saveDataInCampaign(0, monthData);
         }
     }
 }

@@ -7,6 +7,7 @@ import com.fs.starfarer.api.campaign.InteractionDialogAPI;
 import com.fs.starfarer.api.combat.CombatEngineAPI;
 import com.fs.starfarer.api.combat.MutableShipStatsAPI;
 import com.fs.starfarer.api.impl.campaign.intel.MessageIntel;
+import data.scripts.campaign.UNGP_SharedData;
 import data.scripts.campaign.specialist.UNGP_PlayerFleetMemberBuff;
 import data.scripts.campaign.specialist.UNGP_SpecialistSettings;
 import data.scripts.ungprules.UNGP_RuleEffectAPI;
@@ -165,11 +166,37 @@ public abstract class UNGP_BaseRuleEffect implements UNGP_RuleEffectAPI {
 
 
     protected static <T> void saveDataInCampaign(String key, T t) {
-        Global.getSector().getPersistentData().put(key, t);
+        UNGP_SharedData.saveRuleData(key, t);
+    }
+
+    /**
+     * Called to save data.
+     *
+     * @param slot To distinguish the different data
+     * @param t
+     * @param <T>
+     */
+    protected <T> void saveDataInCampaign(int slot, T t) {
+        saveDataInCampaign(rule.getId() + slot, t);
     }
 
     protected static <T> T getDataInCampaign(String key) {
-        return (T) Global.getSector().getPersistentData().get(key);
+        return UNGP_SharedData.loadRuleData(key);
+    }
+
+    /**
+     * Called to get the data, might be null
+     *
+     * @param slot
+     * @param <T>
+     * @return
+     */
+    protected <T> T getDataInCampaign(int slot) {
+        return getDataInCampaign(rule.getId() + slot);
+    }
+
+    protected void clearDataInCampaign(int slot) {
+        UNGP_SharedData.clearRuleData(rule.getId() + slot);
     }
 
     /**
