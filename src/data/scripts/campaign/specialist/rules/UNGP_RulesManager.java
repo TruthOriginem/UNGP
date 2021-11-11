@@ -46,6 +46,7 @@ public class UNGP_RulesManager {
     public static List<UNGP_PlayerFleetTag> PLAYER_FLEET_TAGS_ITG = new ArrayList<>();
     public static List<UNGP_PlayerFleetMemberTag> PLAYER_FLEET_MEMBER_TAGS_ITG = new ArrayList<>();
     public static boolean needUpdateCache = false;
+    // 2 static values that avoids calling inGameData occasionally
     private static boolean isSpecialistMode = false;
     private static int globalDifficultyLevel = 1;
 
@@ -54,6 +55,18 @@ public class UNGP_RulesManager {
      */
     public static void initOrReloadRules() {
         loadAllRules(UNGP_RuleInfoLoader.LoadAllInfos());
+    }
+
+    /**
+     * Should be called after {@link UNGP_ChallengeManager#initOrReloadChallengeInfos()} to tag all the rules which provides the challenge
+     */
+    public static void tagAllChallengeProviders() {
+        final List<UNGP_ChallengeInfo> challengesCopy = UNGP_ChallengeManager.getChallengeInfosCopy();
+        for (UNGP_ChallengeInfo challengeInfo : challengesCopy) {
+            for (URule rule : challengeInfo.getRulesRequired()) {
+                rule.isMilestoneProvider = true;
+            }
+        }
     }
 
     /**
@@ -163,8 +176,8 @@ public class UNGP_RulesManager {
                 UNGP_EconomyListener.addListener();
                 UNGP_EconomyListener.applyMarkets();
             }
-            setDifficultyLevel(difficultyLevel);
-            setSpecialistMode(inGameData.isHardMode());
+            setStaticDifficultyLevel(difficultyLevel);
+            setStaticSpecialistMode(inGameData.isHardMode());
             inGameData.saveActivatedRules(activatedRules);
             UNGP_ChallengeManager.updateChallengeProgress(inGameData);
             LOGGER.info("Rule caches update completed.");
@@ -179,7 +192,7 @@ public class UNGP_RulesManager {
         return isSpecialistMode;
     }
 
-    public static void setSpecialistMode(boolean isSpecialistMode) {
+    public static void setStaticSpecialistMode(boolean isSpecialistMode) {
         UNGP_RulesManager.isSpecialistMode = isSpecialistMode;
     }
 
@@ -196,7 +209,7 @@ public class UNGP_RulesManager {
         for (String completedChallenge : dataInSave.getCompletedChallenges()) {
             UNGP_ChallengeInfo info = UNGP_ChallengeManager.getChallengeInfo(completedChallenge);
             if (info != null) {
-                URule rule = URule.getByID(info.getMilestoneToUnlock());
+                URule rule = info.getMilestoneToUnlock();
                 if (rule != null)
                     rule.isMilestoneRollLocked = false;
             }
@@ -221,6 +234,7 @@ public class UNGP_RulesManager {
         private String buffID;
         private UNGP_RuleInfo ruleInfo;
         private boolean isMilestoneRollLocked = true;
+        private boolean isMilestoneProvider = false;
 
         URule(UNGP_RuleInfo info) {
             this.buffID = "ungp_" + info.getId();
@@ -322,7 +336,7 @@ public class UNGP_RulesManager {
         }
 
         public void addRollDesc(TooltipMakerAPI tooltip, float pad, String prefix) {
-            if (!isRollable()) {
+            if (!isBasicallyRollable()) {
                 tooltip.addPara(prefix + rules_i18n.get("not_rollable"), Misc.getGrayColor(), 10f);
             }
         }
@@ -352,7 +366,7 @@ public class UNGP_RulesManager {
                 final List<UNGP_ChallengeInfo> challengesCopy = UNGP_ChallengeManager.getChallengeInfosCopy();
                 List<UNGP_ChallengeInfo> provider = new ArrayList<>();
                 for (UNGP_ChallengeInfo challengeInfo : challengesCopy) {
-                    if (challengeInfo.getRulesRequired().contains(getId())) {
+                    if (challengeInfo.getRulesRequired().contains(this)) {
                         provider.add(challengeInfo);
                     }
                 }
@@ -393,12 +407,13 @@ public class UNGP_RulesManager {
                             tooltip.setParaFontDefault();
                         }
                     }
-                    if (!showMore) {
-                        tooltip.addPara(rules_i18n.get("more_details_tip"), grayColor, 10f);
-                    }
                 }
             }
             tooltip.setBulletedListMode(null);
+        }
+
+        public boolean isTooltipExpandable() {
+            return isMilestoneProvider;
         }
 
         public void addDesc(TooltipMakerAPI tooltip, float pad) {
@@ -513,13 +528,17 @@ public class UNGP_RulesManager {
          * @return
          */
         public boolean isRollable() {
-            if (hasTag(Tags.NO_ROLL)) {
+            if (!isBasicallyRollable()) {
                 return false;
             }
             if (isMileStone()) {
                 return !isMilestoneRollLocked;
             }
             return true;
+        }
+
+        private boolean isBasicallyRollable() {
+            return !hasTag(Tags.NO_ROLL);
         }
 
         public boolean isMileStone() {
@@ -601,7 +620,7 @@ public class UNGP_RulesManager {
         return MILESTONE_COLOR;
     }
 
-    public static void setDifficultyLevel(int level) {
+    public static void setStaticDifficultyLevel(int level) {
         globalDifficultyLevel = level;
     }
 
@@ -635,7 +654,7 @@ public class UNGP_RulesManager {
         for (String completedChallenge : completedChallenges) {
             UNGP_ChallengeInfo challengeInfo = UNGP_ChallengeManager.getChallengeInfo(completedChallenge);
             if (challengeInfo != null) {
-                String mileStoneRuleId = challengeInfo.getMilestoneToUnlock();
+                String mileStoneRuleId = challengeInfo.getMilestoneToUnlock().getId();
                 if (!mileStoneRuleId.isEmpty()) {
                     unlockedRuleIds.add(mileStoneRuleId);
                 }

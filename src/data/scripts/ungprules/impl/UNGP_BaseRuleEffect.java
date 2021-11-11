@@ -7,6 +7,7 @@ import com.fs.starfarer.api.campaign.InteractionDialogAPI;
 import com.fs.starfarer.api.combat.CombatEngineAPI;
 import com.fs.starfarer.api.combat.MutableShipStatsAPI;
 import com.fs.starfarer.api.impl.campaign.intel.MessageIntel;
+import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import data.scripts.campaign.UNGP_SharedData;
 import data.scripts.campaign.specialist.UNGP_PlayerFleetMemberBuff;
 import data.scripts.campaign.specialist.UNGP_SpecialistSettings;
@@ -75,6 +76,11 @@ public abstract class UNGP_BaseRuleEffect implements UNGP_RuleEffectAPI {
     @Override
     public void cleanUp() {
 
+    }
+
+    @Override
+    public boolean addIntelTips(TooltipMakerAPI imageTooltip) {
+        return false;
     }
 
     /**

@@ -2,32 +2,48 @@ package data.scripts.campaign.specialist.challenges;
 
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
-import data.scripts.campaign.specialist.rules.UNGP_RulesManager;
 
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.List;
 
-import static data.scripts.campaign.specialist.rules.UNGP_RulesManager.rules_i18n;
+import static data.scripts.campaign.specialist.rules.UNGP_RulesManager.*;
 
 public final class UNGP_ChallengeInfo {
     private String id;
     private String name;
-    private List<String> rulesRequired;
+    private List<URule> rulesRequired;
     private int positiveLimitation;
     private int durationByMonth; //Month
     private boolean needMaxLevel;
     private boolean canReselectRules;
-    private String milestoneToUnlock;
+    private URule milestoneToUnlock;
+    private boolean isValid = true;
 
     public UNGP_ChallengeInfo(String id, String name, List<String> rulesRequired, int positiveLimitation, int durationByMonth, boolean needMaxLevel, boolean canReselectRules, String milestoneToUnlock) {
         this.id = id;
         this.name = name;
-        this.rulesRequired = rulesRequired;
         this.positiveLimitation = positiveLimitation;
         this.durationByMonth = durationByMonth;
         this.needMaxLevel = needMaxLevel;
         this.canReselectRules = canReselectRules;
-        this.milestoneToUnlock = milestoneToUnlock;
+        this.rulesRequired = new ArrayList<>();
+        for (String ruleID : rulesRequired) {
+            URule rule = URule.getByID(ruleID);
+            if (rule != null) {
+                this.rulesRequired.add(rule);
+            } else {
+                isValid = false;
+                return;
+            }
+        }
+        URule mileStoneUnlock = URule.getByID(milestoneToUnlock);
+        if (mileStoneUnlock != null) {
+            this.milestoneToUnlock = mileStoneUnlock;
+        } else {
+            isValid = false;
+            return;
+        }
     }
 
     public String getId() {
@@ -38,12 +54,16 @@ public final class UNGP_ChallengeInfo {
         return name;
     }
 
-    public List<String> getRulesRequired() {
+    public List<URule> getRulesRequired() {
         return rulesRequired;
     }
 
     public boolean isRulesContainRequired(List<String> rules) {
-        return rules.containsAll(rulesRequired);
+        List<String> rulesRequiredIDs = new ArrayList<>();
+        for (URule rule : rulesRequired) {
+            rulesRequiredIDs.add(rule.getId());
+        }
+        return rules.containsAll(rulesRequiredIDs);
     }
 
     public int getPositiveLimitation() {
@@ -67,7 +87,7 @@ public final class UNGP_ChallengeInfo {
         return needMaxLevel;
     }
 
-    public String getMilestoneToUnlock() {
+    public URule getMilestoneToUnlock() {
         return milestoneToUnlock;
     }
 
@@ -79,21 +99,18 @@ public final class UNGP_ChallengeInfo {
      */
     public String getConnectedRuleNames() {
         StringBuilder sb = new StringBuilder();
-        for (String ruleId : rulesRequired) {
-            UNGP_RulesManager.URule rule = UNGP_RulesManager.URule.getByID(ruleId);
-            if (rule != null) {
-                sb.append(rule.getName()).append("+");
-            }
+        for (URule rule : rulesRequired) {
+            sb.append(rule.getName()).append("+");
         }
         sb.deleteCharAt(sb.length() - 1);
         return sb.toString();
     }
 
     public void createTooltip(TooltipMakerAPI tooltip, float pad, int elapsedMonth) {
-        UNGP_RulesManager.URule unlockRule = UNGP_RulesManager.URule.getByID(milestoneToUnlock);
+        URule unlockRule = milestoneToUnlock;
         if (unlockRule != null) {
             TooltipMakerAPI imageTooltip = tooltip.beginImageWithText(unlockRule.getSpritePath(), 64f);
-            imageTooltip.addPara(name, UNGP_RulesManager.getMilestoneColor(), 0);
+            imageTooltip.addPara(name, getMilestoneColor(), 0);
 
             Color grayColor = Misc.getGrayColor();
             imageTooltip.addPara(getConnectedRuleNames(), grayColor, 5f);
@@ -103,7 +120,7 @@ public final class UNGP_ChallengeInfo {
             } else {
                 imageTooltip.addPara(rules_i18n.get("challenge_tip_desc0_1"), grayColor, 5f);
             }
-            if (!canReselectRules){
+            if (!canReselectRules) {
                 imageTooltip.addPara(rules_i18n.get("challenge_tip_desc3"), grayColor, 5f);
             }
             tooltip.addImageWithText(pad);
@@ -112,5 +129,9 @@ public final class UNGP_ChallengeInfo {
 
     public boolean canReselectRules() {
         return canReselectRules;
+    }
+
+    public boolean isValid() {
+        return isValid;
     }
 }

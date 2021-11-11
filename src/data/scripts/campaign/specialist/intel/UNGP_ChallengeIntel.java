@@ -14,6 +14,7 @@ import data.scripts.campaign.specialist.challenges.UNGP_ChallengeManager;
 import data.scripts.campaign.specialist.intel.UNGP_ChallengeIntel.UNGP_ChallengeProgress.ProgressState;
 import data.scripts.campaign.specialist.rules.UNGP_RulesManager;
 import data.scripts.campaign.specialist.rules.UNGP_RulesManager.URule;
+import data.scripts.utils.UNGP_UIRect;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -139,7 +140,13 @@ public class UNGP_ChallengeIntel extends BaseIntelPlugin {
 
     @Override
     public void createLargeDescription(CustomPanelAPI panel, float width, float height) {
-        TooltipMakerAPI tooltip = panel.createUIElement(width, height, true);
+        UNGP_SpecialistBackgroundUI.resumeTicking();
+        CustomPanelAPI customPanel = panel.createCustomPanel(width, height, UNGP_SpecialistBackgroundUI.getInstance());
+        panel.addComponent(customPanel);
+        UNGP_UIRect fullScreenRect = new UNGP_UIRect(0, 0, width, height).shrink(40f);
+        TooltipMakerAPI tooltip =
+                fullScreenRect.beginTooltip(panel, true);
+
         List<UNGP_ChallengeProgress> runningProgress = new ArrayList<>();
         List<UNGP_ChallengeProgress> cancelledProgress = new ArrayList<>();
         List<UNGP_ChallengeProgress> completedProgress = new ArrayList<>();
@@ -158,7 +165,9 @@ public class UNGP_ChallengeIntel extends BaseIntelPlugin {
         }
         Color grayColor = Misc.getGrayColor();
         if (!runningProgress.isEmpty()) {
+            tooltip.setParaOrbitronLarge();
             tooltip.addPara(rules_i18n.get("challenge_intel_running"), Misc.getPositiveHighlightColor(), 0f);
+            tooltip.setParaFontDefault();
             for (UNGP_ChallengeProgress progress : runningProgress) {
                 UNGP_ChallengeInfo challengeInfo = UNGP_ChallengeManager.getChallengeInfo(progress.challenge_id);
                 challengeInfo.createTooltip(tooltip, 10f, progress.elapsedMonth);
@@ -166,10 +175,12 @@ public class UNGP_ChallengeIntel extends BaseIntelPlugin {
         }
         if (!cancelledProgress.isEmpty()) {
             tooltip.addSpacer(20f);
+            tooltip.setParaOrbitronLarge();
             tooltip.addPara(rules_i18n.get("challenge_intel_cancelled"), Misc.getNegativeHighlightColor(), 0f);
+            tooltip.setParaFontDefault();
             for (UNGP_ChallengeProgress progress : cancelledProgress) {
                 UNGP_ChallengeInfo challengeInfo = UNGP_ChallengeManager.getChallengeInfo(progress.challenge_id);
-                URule unlockRule = URule.getByID(challengeInfo.getMilestoneToUnlock());
+                URule unlockRule = challengeInfo.getMilestoneToUnlock();
                 if (unlockRule != null) {
                     TooltipMakerAPI imageTooltip = tooltip.beginImageWithText(unlockRule.getSpritePath(), 64f);
                     imageTooltip.addPara(challengeInfo.getName(), grayColor, 0);
@@ -179,10 +190,12 @@ public class UNGP_ChallengeIntel extends BaseIntelPlugin {
         }
         if (!completedProgress.isEmpty()) {
             tooltip.addSpacer(20f);
+            tooltip.setParaOrbitronLarge();
             tooltip.addPara(rules_i18n.get("challenge_intel_completed"), Misc.getHighlightColor(), 0f);
+            tooltip.setParaFontDefault();
             for (UNGP_ChallengeProgress progress : completedProgress) {
                 UNGP_ChallengeInfo challengeInfo = UNGP_ChallengeManager.getChallengeInfo(progress.challenge_id);
-                URule unlockRule = URule.getByID(challengeInfo.getMilestoneToUnlock());
+                URule unlockRule = challengeInfo.getMilestoneToUnlock();
                 if (unlockRule != null) {
                     TooltipMakerAPI imageTooltip = tooltip.beginImageWithText(unlockRule.getSpritePath(), 64f);
                     imageTooltip.addPara(challengeInfo.getName(), Misc.getHighlightColor(), 0);
@@ -190,7 +203,7 @@ public class UNGP_ChallengeIntel extends BaseIntelPlugin {
                 }
             }
         }
-        panel.addUIElement(tooltip).inTL(0f, 0f);
+        fullScreenRect.addTooltip();
     }
 
     @Override
@@ -257,7 +270,7 @@ public class UNGP_ChallengeIntel extends BaseIntelPlugin {
         if (listInfoParam instanceof UNGP_ChallengeProgress) {
             UNGP_ChallengeProgress progress = (UNGP_ChallengeProgress) listInfoParam;
             UNGP_ChallengeInfo challengeInfo = UNGP_ChallengeManager.getChallengeInfo(progress.challenge_id);
-            URule rule = URule.getByID(challengeInfo.getMilestoneToUnlock());
+            URule rule = challengeInfo.getMilestoneToUnlock();
             if (rule != null) {
                 return rule.getSpritePath();
             }

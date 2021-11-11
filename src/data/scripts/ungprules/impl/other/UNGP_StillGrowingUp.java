@@ -1,6 +1,7 @@
 package data.scripts.ungprules.impl.other;
 
 import com.fs.starfarer.api.impl.campaign.intel.MessageIntel;
+import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
 import com.fs.starfarer.api.util.WeightedRandomPicker;
 import data.scripts.campaign.UNGP_InGameData;
@@ -15,6 +16,15 @@ import java.util.List;
 import static data.scripts.campaign.specialist.rules.UNGP_RulesManager.getAllRulesCopy;
 
 public class UNGP_StillGrowingUp extends UNGP_BaseRuleEffect implements UNGP_CampaignTag {
+    @Override
+    public void updateDifficultyCache(int difficulty) {
+        int[] monthData = getDataInCampaign(0);
+        if (monthData == null) {
+            monthData = new int[]{0, 3};
+            saveDataInCampaign(0, monthData);
+        }
+    }
+
     @Override
     public float getValueByDifficulty(int index, int difficulty) {
         return 0;
@@ -71,5 +81,15 @@ public class UNGP_StillGrowingUp extends UNGP_BaseRuleEffect implements UNGP_Cam
             showMessage(intel);
             saveDataInCampaign(0, monthData);
         }
+    }
+
+    @Override
+    public boolean addIntelTips(TooltipMakerAPI imageTooltip) {
+        int[] monthData = getDataInCampaign(0);
+        if (monthData != null) {
+            imageTooltip.addPara(rule.getExtra2(), 0f, Misc.getHighlightColor(), "" + (monthData[1] - monthData[0]));
+            return true;
+        }
+        return false;
     }
 }

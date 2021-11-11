@@ -2,7 +2,7 @@
   "id": "ungp",
   "name": "Unofficial New Game Plus",
   "author": "Originem\nCode Assistant: AnyIDElse\nTranslated By RUA,Fax,ILLEXIUS\nSprites by Originem, Light of Shadow, Helai\nIdeas from Haixian Group\nSpecial Thanks: Game-icons.net",
-  "version": {"major": 1, "minor": 5, "patch": 3},
+  "version": {"major": 1, "minor": 5, "patch": 4},
   "dependencies": [
     {"id": "lw_lazylib", "name": "LazyLib"},
   ],

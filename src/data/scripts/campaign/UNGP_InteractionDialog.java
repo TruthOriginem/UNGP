@@ -342,7 +342,7 @@ public class UNGP_InteractionDialog implements InteractionDialogPlugin {
             case PICK_RULES:
                 final List<URule> oldList = new ArrayList<>(selectedRules);
                 selectedRules.clear();
-                UNGP_RulesManager.setDifficultyLevel(difficultyValue);
+                UNGP_RulesManager.setStaticDifficultyLevel(difficultyValue);
                 UNGP_RulePickListener pickListener = new UNGP_RulePickListener(selectedRules, difficultyValue, new Script() {
                     @Override
                     public void run() {

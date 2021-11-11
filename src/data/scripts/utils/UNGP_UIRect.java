@@ -68,6 +68,17 @@ public class UNGP_UIRect {
         }
     }
 
+    public UNGP_UIRect[] splitVertically(float splitHeight) {
+        if (splitHeight >= height) {
+            return new UNGP_UIRect[]{this};
+        } else {
+            UNGP_UIRect[] newRects = new UNGP_UIRect[2];
+            newRects[0] = new UNGP_UIRect(x, y, width, splitHeight);
+            newRects[1] = new UNGP_UIRect(x, y + splitHeight, width, height - splitHeight);
+            return newRects;
+        }
+    }
+
     public float getX() {
         return x;
     }

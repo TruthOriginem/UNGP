@@ -33,7 +33,7 @@
     "d_inheritBPs": "继承蓝图数量百分比",
     "d_hardmodeDes": "你选中的专家模式规则如下:(选择完毕后无法再调整难度等级)",
     "d_rulepick_button": "选择专家模式规则",
-    "d_rulepick_couldChallenge":"(可进行专家挑战)",
+    "d_rulepick_couldChallenge": "(可进行专家挑战)",
     "d_rulepick_title": "专家模式规则选择",
     "d_rulepick_desc": "请遵循以下指示:\n -%s 消耗Cost点\n -%s 增加Cost点\n -%s 同一时间只能存在一种\n -剩余Cost大于等于0才能开启专家模式\n -按SHIFT切换信息显示模式/A,D键以翻页\n -专家等级为20时可以进行专家挑战",
     "d_rulepick_warning": "您之前已经选过规则了，您要重选吗?",
@@ -89,14 +89,17 @@
     "challenge_tip_desc2": "正面规则数不得大于{%s}",
     "challenge_tip_desc3": "该挑战禁止重选规则",
     "milestone_tip": "该成就规则来自于专家挑战：",
-    "more_details_tip": "按住F1查看更多内容",
     "challenge_intel_name": "专家挑战",
     "challenge_intel_desc": "通过网络信息[E]了解详情",
     "challenge_intel_running": "正在进行的挑战",
     "challenge_intel_cancelled": "已经取消的挑战",
     "challenge_intel_completed": "已经完成的挑战",
     "repick_desc": "每年你都会获得一次机会，重新选取你的专家规则。注意，如果你开启了专家挑战，重选规则会导致专家挑战失败。",
-    "rule_source": "这条规则来源于:"
+    "rule_source": "这条规则来源于:",
+    "button_details": "规则详尽信息",
+    "button_details_tooltip": "查看当前专家等级内所有生效规则的效果。",
+    "button_tips": "规则生涯提示",
+    "button_tips_tooltip": "查看部分规则在生涯储存的额外信息。"
   },
   "UNGP_rule_impl": {
     "halved": "减半",

@@ -49,4 +49,7 @@
   "ui_specialist_on": [
     {"file": "sounds/fx/rule_item/ui_specialist_on.ogg", "pitch": 1, "volume": 0.6},
   ],
+  "ui_specialist_intel_loop": [
+    {"file": "sounds/fx/rule_item/ui_specialist_intel_loop.ogg", "pitch": 1, "volume": 0.6},
+  ],
 }

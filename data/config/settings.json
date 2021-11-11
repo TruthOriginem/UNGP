@@ -2,7 +2,7 @@
   "noLevelLimit": false, # set true to cancel the record level limit
   "noTimesLimit": false, # set true to make record could be done for unlimited times
   "noDifficultyLimit": true, # set true to make max difficulty always equals 20
-  "createEmptySavepoint": false,# set true to automatically generate a empty savepoint
+  "createEmptySavepoint": false, # set true to automatically generate a empty savepoint
   "plugins": {
     "UNGP_SpecialistCombatPlugin": "data.scripts.plugins.UNGP_SpecialistCombatPlugin",
   },
@@ -22,7 +22,12 @@
       "UNGP_logo": "graphics/illustrations/UNGP_logo.png"
     },
     "fx": {
-      "UNGP_frame": "graphics/fx/UNGP_frame.png"
+      "UNGP_frame": "graphics/fx/UNGP_frame.png",
+      "UNGP_specialist_bg_corner": "graphics/fx/UNGP_specialist_bg_corner.png",
+      "UNGP_specialist_bg_seamless": "graphics/fx/UNGP_specialist_bg_seamless.png",
+      "UNGP_specialist_bg_seamless_ring0": "graphics/fx/UNGP_specialist_bg_seamless_ring0.png",
+      "UNGP_specialist_bg_seamless_ring1": "graphics/fx/UNGP_specialist_bg_seamless_ring1.png",
+      "UNGP_specialist_bg_seamless_ring2": "graphics/fx/UNGP_specialist_bg_seamless_ring2.png"
     }
   }
 }

@@ -20,18 +20,13 @@ public class UNGP_modPlugin extends BaseModPlugin {
     public void onApplicationLoad() {
         UNGP_LoadingChecker.checkLoad();
 
-        /*
-        boolean hasLazyLib = getSettings().getModManager().isModEnabled("lw_lazylib");
-        if (!hasLazyLib) {
-            throw new RuntimeException("Unofficial New Game Plus requires LazyLib!");
-        }
-        not required now
-         */
 
         UNGPFont.init();
-        UNGP_RulesManager.initOrReloadRules();
         UNGP_RuleItem.loadSprite();
+        // 规则与挑战
+        UNGP_RulesManager.initOrReloadRules();
         UNGP_ChallengeManager.initOrReloadChallengeInfos();
+        UNGP_RulesManager.tagAllChallengeProviders();
     }
 
     @Override

@@ -60,8 +60,8 @@ industrial_zone,工业开发区,提高工业设施上限,"工业设施上限+{%s
 black_in_black,黑市鬼才,畅游黑市,所有势力在黑市方面对你保持最低怀疑度,-2,TRUE,,graphics/icons/ungp/black_in_black.png,data.scripts.ungprules.impl.economy.UNGP_BlackInBlack,,,,,议长√
 ,,,,,,,,,,,,,
 lobster_perday,优质海鲜,龙虾之主,"货舱未满时,每天获得{%s}个蓝龙虾",0,TRUE,,graphics/icons/cargo/lobster.png,data.scripts.ungprules.impl.other.UNGP_LobsterPerDay,,,潜伏的混沌,milestone,[-<虾王>-]
-birthday_present,生日礼物,一年后获得随机正面规则,在选择本规则后，{%s}年后随机获得一个正面规则并失去本规则(中途更换规则时，只要不舍弃本规则，获得礼物的时间就不会改变),0,TRUE,,graphics/icons/ungp/milestones/birthday_present.png,data.scripts.ungprules.impl.other.UNGP_BirthdayPresent,生日快乐！您随机获得了{%s},,你忠实的部下/家人/爱人,milestone,议长√
-entropius_mind,熵变之心,每周随机切换规则,"每周随机洗回所有规则, 并完全随机地抽取数个正面或负面规则.",0,TRUE,,graphics/icons/ungp/milestones/entropius_mind.png,data.scripts.ungprules.impl.other.UNGP_EntropiusMind,你突然心生一阵恍惚...,,掷骰子的上帝,milestone,议长√
+birthday_present,生日礼物,一年后获得随机正面规则,在选择本规则后，{%s}年后随机获得一个正面规则并失去本规则(中途更换规则时，只要不舍弃本规则，获得礼物的时间就不会改变),0,TRUE,,graphics/icons/ungp/milestones/birthday_present.png,data.scripts.ungprules.impl.other.UNGP_BirthdayPresent,生日快乐！您随机获得了{%s},您将在{%s}年{%s}月{%s}日获得您的生日礼物,你忠实的部下/家人/爱人,milestone,议长√
+entropius_mind,熵变之心,每周随机切换规则,"每周随机洗回所有规则, 并完全随机地抽取数个正面或负面规则.",0,TRUE,,graphics/icons/ungp/milestones/entropius_mind.png,data.scripts.ungprules.impl.other.UNGP_EntropiusMind,你突然心生一阵恍惚...,距离下次随机还有{%s}天,掷骰子的上帝,"milestone,no_roll",议长√
 still_growing_up,仍在成长,每隔数月获得随机正面规则,在选择本规则后，每隔数月都能随机获取一个正面规则(不能随机到黄金规则，Cost花费低的优先)。一开始的时间间隔是{%s}月，每获得一次，下次间隔增加{%s}月。,-4,TRUE,,graphics/icons/ungp/milestones/still_growing_up.png,data.scripts.ungprules.impl.other.UNGP_StillGrowingUp,您随机获得了{%s},距离你下次成长还有{%s}个月,"""三十年河东，三十年河西，莫欺少年穷!""",milestone,
 ,,,,,,,,,,,,,
 ying,阴,随机选择负面规则,"专家模式规则选择完毕并确认后,删除该规则,随机添加一个未被选中的{%s}.当选择了""阳""时,也会随机到未被选中的{%s}",2,FALSE,,graphics/icons/ungp/ying.png,data.scripts.ungprules.impl.other.UNGP_Ying,您随机获得了{%s},,,no_roll,议长√

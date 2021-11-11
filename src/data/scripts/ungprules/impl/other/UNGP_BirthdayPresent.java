@@ -3,6 +3,7 @@ package data.scripts.ungprules.impl.other;
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.CampaignClockAPI;
 import com.fs.starfarer.api.impl.campaign.intel.MessageIntel;
+import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
 import com.fs.starfarer.api.util.WeightedRandomPicker;
 import data.scripts.campaign.UNGP_InGameData;
@@ -17,6 +18,16 @@ import static data.scripts.campaign.specialist.rules.UNGP_RulesManager.URule;
 import static data.scripts.campaign.specialist.rules.UNGP_RulesManager.getAllRulesCopy;
 
 public class UNGP_BirthdayPresent extends UNGP_BaseRuleEffect implements UNGP_CampaignTag {
+    @Override
+    public void updateDifficultyCache(int difficulty) {
+        int[] giftTime = getDataInCampaign(0);
+        if (giftTime == null) {
+            CampaignClockAPI clock = Global.getSector().getClock();
+            giftTime = new int[]{clock.getCycle() + 1, clock.getMonth(), clock.getDay()};
+            saveDataInCampaign(0, giftTime);
+        }
+    }
+
     @Override
     public float getValueByDifficulty(int index, int difficulty) {
         return 0;
@@ -58,7 +69,7 @@ public class UNGP_BirthdayPresent extends UNGP_BaseRuleEffect implements UNGP_Ca
                     UNGP_RulesManager.updateCacheNextFrame();
                 }
             } else {
-                giftTime = new int[]{clock.getCycle() + 1, clock.getMonth(), clock.getDay() - 1};
+                giftTime = new int[]{clock.getCycle() + 1, clock.getMonth(), clock.getDay()};
                 saveDataInCampaign(0, giftTime);
             }
         }
@@ -67,5 +78,15 @@ public class UNGP_BirthdayPresent extends UNGP_BaseRuleEffect implements UNGP_Ca
     @Override
     public void cleanUp() {
         clearDataInCampaign(0);
+    }
+
+    @Override
+    public boolean addIntelTips(TooltipMakerAPI imageTooltip) {
+        int[] giftTime = getDataInCampaign(0);
+        if (giftTime != null) {
+            imageTooltip.addPara(rule.getExtra2(), 0f, Misc.getHighlightColor(), giftTime[0] + "", giftTime[1] + "", giftTime[2] + "");
+            return true;
+        }
+        return false;
     }
 }
