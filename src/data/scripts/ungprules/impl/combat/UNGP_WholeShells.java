@@ -60,7 +60,7 @@ public class UNGP_WholeShells extends UNGP_BaseRuleEffect implements UNGP_Combat
             Iterator<DamagingProjectileAPI> recordIter = recordedProjectile.iterator();
             while (recordIter.hasNext()) {
                 DamagingProjectileAPI proj = recordIter.next();
-                if (!engine.isEntityInPlay(proj)) {
+                if (!engine.isEntityInPlay(proj) || proj.isExpired()) {
                     recordIter.remove();
                 }
             }

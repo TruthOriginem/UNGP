@@ -37,7 +37,9 @@ public class UNGP_ChallengeLoader {
                 boolean canReselectRules = row.optBoolean("canReselectRules", true);
                 String milestoneToUnlock = row.optString("milestoneToUnlock", "");
                 UNGP_ChallengeInfo challengeInfo = new UNGP_ChallengeInfo(id, name, rulesRequiredList, positiveLimitation, durationByMonth, needMaxLevel, canReselectRules, milestoneToUnlock);
-                challengeInfoMap.put(id, challengeInfo);
+                if (challengeInfo.isValid()) {
+                    challengeInfoMap.put(id, challengeInfo);
+                }
             }
         } catch (Exception e) {
             Global.getLogger(UNGP_ChallengeLoader.class).error(e);

@@ -35,7 +35,7 @@
     "d_hardModeYes": "Specialist mode enabled, enjoy you FANTASTIC experience HIAHIAHIA!",
     "d_hardmodeDes": "Chosen rules for Specialist Mode:(You can't adjust the difficulty level now)",
     "d_rulepick_button": "Choose Rules for Specialist Mode",
-    "d_rulepick_couldChallenge":"(可进行专家挑战)",
+    "d_rulepick_couldChallenge": "(可进行专家挑战)",
     "d_rulepick_title": "Choose Rules",
     "d_rulepick_desc": "Please follow these rules:\n -%s consume cost points\n -%s give cost points\n -%s could only be used once\n -Specialist mode could be activated only if cost points are larger than 0\n -Press SHIFT to switch the information mode/A,D to swap the page\n -Specialist challenges could be activated when the level equals 20.",
     "d_rulepick_warning": "You have picked rules, would you like to repick?",
@@ -94,10 +94,13 @@
     "challenge_intel_running": "正在进行的挑战",
     "challenge_intel_canceled": "已经取消的挑战",
     "challenge_intel_completed": "已经完成的挑战",
-    "more_details_tip": "按住F1查看更多内容",
     "cost_point": "Cost: %s",
     "repick_desc": "You have the option to repick your rules every cycle. Warning: You may fail the Specialist challenge if you picked other rules.",
-    "rule_source": "This rule is from:"
+    "rule_source": "This rule is from:",
+    "button_details": "规则详尽信息",
+    "button_details_tooltip": "查看当前专家等级内所有生效规则的效果。",
+    "button_tips": "规则生涯提示",
+    "button_tips_tooltip": "查看部分规则在生涯储存的额外信息。"
   },
   "UNGP_rule_impl": {
     "halved": "halved",

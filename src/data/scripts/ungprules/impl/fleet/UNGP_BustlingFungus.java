@@ -13,7 +13,6 @@ import data.scripts.utils.UNGP_BaseBuff;
 import java.awt.*;
 
 public class UNGP_BustlingFungus extends UNGP_BaseRuleEffect implements UNGP_CampaignTag {
-    private static final String STAY_MEM = "$ungp_fungus_elapsed";
     private static final Color NOTICE_COLOR = new Color(0, 213, 140, 255);
     private static final float WAIT_DAY = 1;
     private static final float REPAIR_RATE = 50f;
@@ -49,9 +48,9 @@ public class UNGP_BustlingFungus extends UNGP_BaseRuleEffect implements UNGP_Cam
         if (playerFleet != null) {
             float vel = playerFleet.getCurrBurnLevel();
             if (vel < 1e-2) {
-                Object mem = playerFleet.getMemoryWithoutUpdate().get(STAY_MEM);
+                Object mem = getDataInCampaign(0);
                 if (mem == null) {
-                    playerFleet.getMemoryWithoutUpdate().set(STAY_MEM, 0f);
+                    saveDataInCampaign(0, 0f);
                 } else {
                     float elapsed = (float) mem;
                     if (elapsed >= WAIT_DAY) {
@@ -74,7 +73,7 @@ public class UNGP_BustlingFungus extends UNGP_BaseRuleEffect implements UNGP_Cam
                     } else {
                         float days = Global.getSector().getClock().convertToDays(amount);
                         elapsed += days;
-                        playerFleet.getMemoryWithoutUpdate().set(STAY_MEM, elapsed);
+                        saveDataInCampaign(0, elapsed);
                         //只会运行一次
                         if (elapsed >= WAIT_DAY) {
                             playerFleet.addFloatingText(rule.getExtra1(), NOTICE_COLOR, 1f);
@@ -93,7 +92,7 @@ public class UNGP_BustlingFungus extends UNGP_BaseRuleEffect implements UNGP_Cam
                     }
                 }
             } else {
-                playerFleet.getMemoryWithoutUpdate().unset(STAY_MEM);
+                clearDataInCampaign(0);
             }
         }
     }

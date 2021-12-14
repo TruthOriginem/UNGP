@@ -6,6 +6,7 @@ import com.fs.starfarer.api.campaign.CargoTransferHandlerAPI;
 import com.fs.starfarer.api.campaign.impl.items.BaseSpecialItemPlugin;
 import com.fs.starfarer.api.graphics.SpriteAPI;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
+import com.fs.starfarer.api.ui.TooltipMakerAPI.TooltipCreator;
 import com.fs.starfarer.api.util.Misc;
 import data.scripts.campaign.everyframe.UNGP_UITimeScript;
 import data.scripts.campaign.specialist.rules.UNGP_RulesManager;
@@ -14,7 +15,6 @@ import data.scripts.utils.UNGPFont;
 import org.lazywizard.lazylib.FastTrig;
 import org.lazywizard.lazylib.MathUtils;
 import org.lazywizard.lazylib.ui.LazyFont.DrawableString;
-import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
@@ -50,8 +50,12 @@ public class UNGP_RuleItem extends BaseSpecialItemPlugin {
 
     @Override
     public void createTooltip(TooltipMakerAPI tooltip, boolean expanded, CargoTransferHandlerAPI transferHandler, Object stackSource, boolean useGray) {
-        float opad = 10f;
         if (rule == null) return;
+        addRuleItemTooltip(tooltip, rule, expanded);
+    }
+
+    public static void addRuleItemTooltip(TooltipMakerAPI tooltip, URule rule, boolean isExpanded) {
+        float opad = 10f;
         tooltip.setTitleOrbitronLarge();
         Color c = Misc.getTextColor();
 
@@ -65,10 +69,33 @@ public class UNGP_RuleItem extends BaseSpecialItemPlugin {
 
         rule.addRollDesc(tooltip, opad * 22f, prefix);
 
-        boolean showMore = Keyboard.isKeyDown(Keyboard.KEY_F1);
-        rule.addChallengeRelatedDesc(tooltip, opad * 2f, prefix, showMore);
+        rule.addChallengeRelatedDesc(tooltip, opad * 2f, prefix, isExpanded);
 
         rule.addCost(tooltip, opad * 2f);
+    }
+
+    public static TooltipCreator createRuleItemTooltip(final URule rule) {
+        return new TooltipCreator() {
+            @Override
+            public boolean isTooltipExpandable(Object tooltipParam) {
+                return rule.isTooltipExpandable();
+            }
+
+            @Override
+            public float getTooltipWidth(Object tooltipParam) {
+                return getCommonWidth();
+            }
+
+            @Override
+            public void createTooltip(TooltipMakerAPI tooltip, boolean expanded, Object tooltipParam) {
+                addRuleItemTooltip(tooltip, rule, expanded);
+            }
+        };
+    }
+
+    @Override
+    public boolean isTooltipExpandable() {
+        return rule.isTooltipExpandable();
     }
 
     @Override

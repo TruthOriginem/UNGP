@@ -1,6 +1,7 @@
 package data.scripts.ungprules.impl.other;
 
 import com.fs.starfarer.api.impl.campaign.intel.MessageIntel;
+import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
 import com.fs.starfarer.api.util.WeightedRandomPicker;
 import data.scripts.campaign.UNGP_InGameData;
@@ -16,10 +17,12 @@ import java.util.Random;
 
 public class UNGP_EntropiusMind extends UNGP_BaseRuleEffect implements UNGP_CampaignTag {
 
-    public static final String KEY_DAYS_PASSED = "UNGP_EntropiusMind_DaysPassed";
-
     @Override
     public void updateDifficultyCache(int difficulty) {
+        Integer daysPassed = getDataInCampaign(0);
+        if (daysPassed == null) {
+            saveDataInCampaign(0, 0);
+        }
     }
 
     @Override
@@ -30,7 +33,7 @@ public class UNGP_EntropiusMind extends UNGP_BaseRuleEffect implements UNGP_Camp
     @Override
     public void advanceInCampaign(float amount, TempCampaignParams params) {
         if (params.isOneDayPassed()) {
-            int daysPassed = getDataInCampaign(KEY_DAYS_PASSED);
+            Integer daysPassed = getDataInCampaign(0);
             daysPassed++;
 
             if (daysPassed == 7) {
@@ -65,14 +68,14 @@ public class UNGP_EntropiusMind extends UNGP_BaseRuleEffect implements UNGP_Camp
                 daysPassed = 0;
             }
 
-            saveDataInCampaign(KEY_DAYS_PASSED, daysPassed);
+            saveDataInCampaign(0, daysPassed);
         }
     }
 
     @Override
     public void applyGlobalStats() {
-        if (getDataInCampaign(KEY_DAYS_PASSED) == null) {
-            saveDataInCampaign(KEY_DAYS_PASSED, 0);
+        if (getDataInCampaign(0) == null) {
+            saveDataInCampaign(0, 0);
         }
     }
 
@@ -83,5 +86,15 @@ public class UNGP_EntropiusMind extends UNGP_BaseRuleEffect implements UNGP_Camp
     @Override
     public String getDescriptionParams(int index, int difficulty) {
         return null;
+    }
+
+    @Override
+    public boolean addIntelTips(TooltipMakerAPI imageTooltip) {
+        Integer daysPassed = getDataInCampaign(0);
+        if (daysPassed != null) {
+            imageTooltip.addPara(rule.getExtra2(), 0f, Misc.getHighlightColor(), 7 - daysPassed + "");
+            return true;
+        }
+        return false;
     }
 }
