@@ -2,6 +2,7 @@ package data.scripts.ungprules.impl.member;
 
 import com.fs.starfarer.api.campaign.CampaignFleetAPI;
 import com.fs.starfarer.api.fleet.FleetMemberAPI;
+import data.scripts.campaign.specialist.UNGP_SpecialistSettings;
 import data.scripts.ungprules.impl.UNGP_MemberBuffRuleEffect;
 import data.scripts.ungprules.tags.UNGP_PlayerFleetTag;
 
@@ -10,14 +11,14 @@ public class UNGP_EliteReserves extends UNGP_MemberBuffRuleEffect implements UNG
     private float curBonus;
 
     @Override
-    public void updateDifficultyCache(int difficulty) {
+    public void updateDifficultyCache(UNGP_SpecialistSettings.Difficulty difficulty) {
         maxBonus = getValueByDifficulty(0, difficulty);
         curBonus = 0f;
     }
 
     //15~30
     @Override
-    public float getValueByDifficulty(int index, int difficulty) {
+    public float getValueByDifficulty(int index, UNGP_SpecialistSettings.Difficulty difficulty) {
         if (index == 0) return 0.15f;
         return 0;
     }
@@ -38,17 +39,12 @@ public class UNGP_EliteReserves extends UNGP_MemberBuffRuleEffect implements UNG
 
     @Override
     public void applyPlayerFleetMemberInCampaign(FleetMemberAPI member) {
-        member.getStats().getMaxCombatReadiness().modifyFlat(rule.getBuffID(), curBonus, rule.getName());
+        member.getStats().getMaxCombatReadiness().modifyFlat(buffID, curBonus, rule.getName());
     }
 
-    @Override
-    public String getDescriptionParams(int index) {
-        if (index == 0) return getPercentString(maxBonus * 100f);
-        return null;
-    }
 
     @Override
-    public String getDescriptionParams(int index, int difficulty) {
+    public String getDescriptionParams(int index, UNGP_SpecialistSettings.Difficulty difficulty) {
         if (index == 0) return getPercentString(getValueByDifficulty(index, difficulty) * 100f);
         return null;
     }

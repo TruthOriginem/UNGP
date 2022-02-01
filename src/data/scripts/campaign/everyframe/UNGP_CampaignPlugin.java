@@ -4,20 +4,21 @@ import com.fs.starfarer.api.EveryFrameScript;
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.Script;
 import com.fs.starfarer.api.campaign.*;
-import com.fs.starfarer.api.campaign.econ.MarketAPI;
-import com.fs.starfarer.api.characters.AbilityPlugin;
-import com.fs.starfarer.api.characters.PersonAPI;
-import com.fs.starfarer.api.combat.EngagementResultAPI;
+import com.fs.starfarer.api.campaign.listeners.CampaignInputListener;
 import com.fs.starfarer.api.fleet.FleetMemberAPI;
+import com.fs.starfarer.api.input.InputEventAPI;
 import com.fs.starfarer.api.util.IntervalUtil;
 import data.scripts.campaign.UNGP_InGameData;
-import data.scripts.campaign.UNGP_InteractionDialog;
 import data.scripts.campaign.inherit.UNGP_InheritManager;
 import data.scripts.campaign.specialist.UNGP_PlayerFleetMemberBuff;
+import data.scripts.campaign.specialist.dialog.UNGP_InteractionDialog;
+import data.scripts.campaign.specialist.intel.UNGP_SpecialistIntel;
+import data.scripts.campaign.specialist.rules.UNGP_RulesManager;
 import data.scripts.ungprules.tags.UNGP_CampaignTag;
 import data.scripts.ungprules.tags.UNGP_PlayerFleetMemberTag;
 import data.scripts.ungprules.tags.UNGP_PlayerFleetTag;
 import data.scripts.utils.SimpleI18n;
+import data.scripts.utils.UNGP_UIEntityPlugin;
 import org.lwjgl.input.Keyboard;
 
 import java.util.List;
@@ -28,7 +29,7 @@ import static data.scripts.campaign.specialist.rules.UNGP_RulesManager.*;
 /**
  * 主要战役逻辑所在地
  */
-public class UNGP_CampaignPlugin implements EveryFrameScript, CampaignEventListener {
+public class UNGP_CampaignPlugin implements EveryFrameScript, CampaignInputListener {
     private static final String KEY = "UNGP_cam";
     private static final String ENTITY_ID = "ungp_ui_entity";
     private static final SimpleI18n.I18nSection i18n = new SimpleI18n.I18nSection("UNGP", "c", true);
@@ -46,15 +47,14 @@ public class UNGP_CampaignPlugin implements EveryFrameScript, CampaignEventListe
     private float newGameCheckDays = 0.1f;
     private boolean newGameChecked = false;
     private boolean shouldShowDialog = false;
-    private SectorEntityToken ui_entity;
-
+    private SectorEntityToken uiEntity;
 
     public static UNGP_CampaignPlugin getInstance() {
         UNGP_CampaignPlugin plugin = (UNGP_CampaignPlugin) Global.getSector().getPersistentData().get(KEY);
         if (plugin != null) {
             return plugin;
         } else {
-            return new UNGP_CampaignPlugin();
+            throw new RuntimeException("Something wrong with UNGP, you may best reboot your game...");
         }
     }
 
@@ -63,32 +63,20 @@ public class UNGP_CampaignPlugin implements EveryFrameScript, CampaignEventListe
      */
     public static void loadUIEntity() {
         UNGP_CampaignPlugin plugin = UNGP_CampaignPlugin.getInstance();
-        plugin.ui_entity = Global.getSector().getEntityById(ENTITY_ID);
-        if (plugin.ui_entity == null) {
-            plugin.ui_entity = Global.getSector().getCurrentLocation().addCustomEntity(ENTITY_ID, null, "ungp_ui", null);
+        plugin.uiEntity = Global.getSector().getEntityById(ENTITY_ID);
+        if (plugin.uiEntity == null) {
+            plugin.uiEntity = Global.getSector().getCurrentLocation().addCustomEntity(ENTITY_ID, null, "ungp_ui", null);
         }
     }
 
     public UNGP_CampaignPlugin() {
         inGameData = new UNGP_InGameData();
-        init();
-
-        final CampaignClockAPI clock = Global.getSector().getClock();
+        Global.getSector().getListenerManager().addListener((CampaignInputListener) this);
+        Global.getSector().getPersistentData().put(KEY, this);
+        CampaignClockAPI clock = Global.getSector().getClock();
         oneDayChecker = clock.getDay();
         oneMonthChecker = clock.getMonth();
         oneYearChecker = clock.getCycle();
-    }
-
-    public UNGP_CampaignPlugin init() {
-        //clear the listener
-        Global.getSector().getListenerManager().removeListenerOfClass(UNGP_CampaignPlugin.class);
-        Global.getSector().removeScriptsOfClass(UNGP_CampaignPlugin.class);
-
-        //add listener
-        Global.getSector().addScript(this);
-        Global.getSector().addListener(this);
-        Global.getSector().getPersistentData().put(KEY, this);
-        return this;
     }
 
     @Override
@@ -155,11 +143,11 @@ public class UNGP_CampaignPlugin implements EveryFrameScript, CampaignEventListe
         if (!inGameData.isHardMode()) return;
 
         // 调整专家模式UI的位置
-        if (!ui_entity.isInCurrentLocation()) {
+        if (!uiEntity.isInCurrentLocation()) {
             LocationAPI currentLocation = sector.getCurrentLocation();
-            ui_entity.getContainingLocation().removeEntity(ui_entity);
-            currentLocation.addEntity(ui_entity);
-            ui_entity.setContainingLocation(currentLocation);
+            uiEntity.getContainingLocation().removeEntity(uiEntity);
+            currentLocation.addEntity(uiEntity);
+            uiEntity.setContainingLocation(currentLocation);
         }
 
         int currentDay = clock.getDay();
@@ -245,6 +233,38 @@ public class UNGP_CampaignPlugin implements EveryFrameScript, CampaignEventListe
         return inGameData;
     }
 
+    @Override
+    public int getListenerInputPriority() {
+        return 1000;
+    }
+
+    @Override
+    public void processCampaignInputPreCore(List<InputEventAPI> events) {
+
+    }
+
+    @Override
+    public void processCampaignInputPreFleetControl(List<InputEventAPI> events) {
+        if (uiEntity != null) {
+            if (!UNGP_RulesManager.isSpecialistMode()) {
+                return;
+            }
+            for (InputEventAPI event : events) {
+                if (event.isLMBDownEvent() && UNGP_UIEntityPlugin.specialistIconRect.contains(event.getX(), event.getY())) {
+                    Global.getSector().getCampaignUI().showCoreUITab(CoreUITabId.INTEL, UNGP_SpecialistIntel.getInstance());
+                    Global.getSoundPlayer().playUISound("ui_button_pressed", 1f, 1f);
+                    event.consume();
+                    break;
+                }
+            }
+        }
+    }
+
+    @Override
+    public void processCampaignInputPostCore(List<InputEventAPI> events) {
+
+    }
+
 
     /**
      * Just some parameters that rules may used many times
@@ -265,110 +285,5 @@ public class UNGP_CampaignPlugin implements EveryFrameScript, CampaignEventListe
         public boolean isOneDayPassed() {
             return oneDayPassed;
         }
-    }
-
-    @Override
-    public void reportPlayerOpenedMarket(MarketAPI market) {
-
-    }
-
-    @Override
-    public void reportPlayerClosedMarket(MarketAPI market) {
-
-    }
-
-    @Override
-    public void reportPlayerOpenedMarketAndCargoUpdated(MarketAPI market) {
-
-    }
-
-    @Override
-    public void reportEncounterLootGenerated(FleetEncounterContextPlugin plugin, CargoAPI loot) {
-
-    }
-
-    @Override
-    public void reportPlayerMarketTransaction(PlayerMarketTransaction transaction) {
-
-    }
-
-    @Override
-    public void reportBattleOccurred(CampaignFleetAPI primaryWinner, BattleAPI battle) {
-
-    }
-
-    @Override
-    public void reportBattleFinished(CampaignFleetAPI primaryWinner, BattleAPI battle) {
-
-    }
-
-    @Override
-    public void reportPlayerEngagement(EngagementResultAPI result) {
-
-    }
-
-    @Override
-    public void reportFleetDespawned(CampaignFleetAPI fleet, FleetDespawnReason reason, Object param) {
-
-    }
-
-    @Override
-    public void reportFleetSpawned(CampaignFleetAPI fleet) {
-
-    }
-
-    @Override
-    public void reportFleetReachedEntity(CampaignFleetAPI fleet, SectorEntityToken entity) {
-
-    }
-
-    @Override
-    public void reportFleetJumped(CampaignFleetAPI fleet, SectorEntityToken from, JumpPointAPI.JumpDestination to) {
-
-    }
-
-    @Override
-    public void reportShownInteractionDialog(InteractionDialogAPI dialog) {
-
-    }
-
-    @Override
-    public void reportPlayerReputationChange(String faction, float delta) {
-
-    }
-
-    @Override
-    public void reportPlayerReputationChange(PersonAPI person, float delta) {
-
-    }
-
-    @Override
-    public void reportPlayerActivatedAbility(AbilityPlugin ability, Object param) {
-
-    }
-
-    @Override
-    public void reportPlayerDeactivatedAbility(AbilityPlugin ability, Object param) {
-
-    }
-
-    @Override
-    public void reportPlayerDumpedCargo(CargoAPI cargo) {
-
-    }
-
-    @Override
-    public void reportPlayerDidNotTakeCargo(CargoAPI cargo) {
-
-    }
-
-    @Override
-    public void reportEconomyTick(int iterIndex) {
-
-    }
-
-    @Override
-    public void reportEconomyMonthEnd() {
-
     }
 }

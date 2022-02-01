@@ -3,6 +3,7 @@ package data.scripts.ungprules.impl.fleet;
 import com.fs.starfarer.api.campaign.BuffManagerAPI;
 import com.fs.starfarer.api.campaign.CampaignFleetAPI;
 import com.fs.starfarer.api.fleet.FleetMemberAPI;
+import data.scripts.campaign.specialist.UNGP_SpecialistSettings;
 import data.scripts.ungprules.impl.UNGP_BaseRuleEffect;
 import data.scripts.ungprules.tags.UNGP_PlayerFleetTag;
 import data.scripts.utils.UNGP_BaseBuff;
@@ -18,8 +19,8 @@ public class UNGP_NavalTreaty extends UNGP_BaseRuleEffect implements UNGP_Player
 
         private int extraType;
 
-        public CRDeBuff(String id, float dur, int extraType) {
-            super(id, dur);
+        public CRDeBuff(String id, int extraType) {
+            super(id);
             this.extraType = extraType;
         }
 
@@ -35,12 +36,12 @@ public class UNGP_NavalTreaty extends UNGP_BaseRuleEffect implements UNGP_Player
     }
 
     @Override
-    public void updateDifficultyCache(int difficulty) {
+    public void updateDifficultyCache(UNGP_SpecialistSettings.Difficulty difficulty) {
 
     }
 
     @Override
-    public float getValueByDifficulty(int index, int difficulty) {
+    public float getValueByDifficulty(int index, UNGP_SpecialistSettings.Difficulty difficulty) {
         return 0;
     }
 
@@ -59,17 +60,16 @@ public class UNGP_NavalTreaty extends UNGP_BaseRuleEffect implements UNGP_Player
         int typeAmount = designTypes.size();
         if (typeAmount > THRESHOLD_DESIGN_TYPE_AMOUNT) {
             typeAmount -= THRESHOLD_DESIGN_TYPE_AMOUNT;
-            String buffId = rule.getBuffID();
-            float buffDur = 0.1f;
+            String buffId = buffID;
             boolean needsSync = false;
             for (FleetMemberAPI member : members) {
                 BuffManagerAPI.Buff test = member.getBuffManager().getBuff(buffId);
                 if (test instanceof CRDeBuff) {
                     CRDeBuff buff = (CRDeBuff) test;
-                    buff.setDur(buffDur);
+                    buff.refresh();
                     buff.setExtraType(typeAmount);
                 } else {
-                    member.getBuffManager().addBuff(new CRDeBuff(buffId, buffDur, typeAmount));
+                    member.getBuffManager().addBuff(new CRDeBuff(buffId, typeAmount));
                     needsSync = true;
                 }
             }
@@ -83,10 +83,11 @@ public class UNGP_NavalTreaty extends UNGP_BaseRuleEffect implements UNGP_Player
     public void unapplyPlayerFleetStats(CampaignFleetAPI fleet) {
     }
 
+
     @Override
-    public String getDescriptionParams(int index) {
+    public String getDescriptionParams(int index, UNGP_SpecialistSettings.Difficulty difficulty) {
         if (index == 0) return THRESHOLD_DESIGN_TYPE_AMOUNT + "";
         if (index == 1) return (int) (MAX_CR_REDUCTION_PER_TYPE * 100f) + "%";
-        return null;
+        return super.getDescriptionParams(index, difficulty);
     }
 }

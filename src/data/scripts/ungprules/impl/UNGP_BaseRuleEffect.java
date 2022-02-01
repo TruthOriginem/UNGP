@@ -4,15 +4,18 @@ import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.CampaignClockAPI;
 import com.fs.starfarer.api.campaign.CampaignUIAPI;
 import com.fs.starfarer.api.campaign.InteractionDialogAPI;
+import com.fs.starfarer.api.campaign.comm.CommMessageAPI;
 import com.fs.starfarer.api.combat.CombatEngineAPI;
 import com.fs.starfarer.api.combat.MutableShipStatsAPI;
 import com.fs.starfarer.api.impl.campaign.intel.MessageIntel;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import data.scripts.campaign.UNGP_SharedData;
 import data.scripts.campaign.specialist.UNGP_PlayerFleetMemberBuff;
-import data.scripts.campaign.specialist.UNGP_SpecialistSettings;
+import data.scripts.campaign.specialist.UNGP_SpecialistSettings.Difficulty;
+import data.scripts.campaign.specialist.intel.UNGP_SpecialistIntel;
 import data.scripts.ungprules.UNGP_RuleEffectAPI;
 import data.scripts.utils.SimpleI18n.I18nSection;
+import org.jetbrains.annotations.Nullable;
 
 import java.math.BigDecimal;
 import java.util.Random;
@@ -23,13 +26,17 @@ public abstract class UNGP_BaseRuleEffect implements UNGP_RuleEffectAPI {
     protected static final Random RANDOM = new Random();
     protected static final I18nSection i18n = new I18nSection("UNGP_rule_impl", "", false);
     protected URule rule;
+    protected String buffID;
 
     public UNGP_BaseRuleEffect() {
-
     }
 
     public boolean roll(float chance) {
-        return RANDOM.nextFloat() < chance;
+        return roll(RANDOM, chance);
+    }
+
+    public boolean roll(Random random, float chance) {
+        return random.nextFloat() < chance;
     }
 
     public boolean roll2() {
@@ -38,6 +45,7 @@ public abstract class UNGP_BaseRuleEffect implements UNGP_RuleEffectAPI {
 
     public void setRule(URule rule) {
         this.rule = rule;
+        this.buffID = "UNGP_" + rule.getId();
     }
 
     @Override
@@ -45,22 +53,39 @@ public abstract class UNGP_BaseRuleEffect implements UNGP_RuleEffectAPI {
         return rule;
     }
 
-    @Override
-    public void updateDifficultyCache(int difficulty) {
+    @Deprecated
+    public void updateDifficultyCache(int legacyLevel) {
 
     }
 
     @Override
-    public abstract float getValueByDifficulty(int index, int difficulty);
+    public void updateDifficultyCache(Difficulty difficulty) {
+        updateDifficultyCache(difficulty.legacyLevel);
+    }
+
+    @Deprecated
+    public float getValueByDifficulty(int index, int legacyLevel) {
+        return 0f;
+    }
+
+    @Override
+    public float getValueByDifficulty(int index, Difficulty difficulty) {
+        return getValueByDifficulty(index, difficulty.legacyLevel);
+    }
 
     @Deprecated
     public String getDescriptionParams(int index) {
         return null;
     }
 
+    @Deprecated
+    public String getDescriptionParams(int index, int legacyLevel) {
+        return null;
+    }
+
     @Override
-    public String getDescriptionParams(int index, int difficulty) {
-        return getDescriptionParams(index);
+    public String getDescriptionParams(int index, Difficulty difficulty) {
+        return getDescriptionParams(index, difficulty.legacyLevel);
     }
 
     @Override
@@ -83,28 +108,16 @@ public abstract class UNGP_BaseRuleEffect implements UNGP_RuleEffectAPI {
         return false;
     }
 
-    /**
-     * Get linear value
-     *
-     * @param min
-     * @param max
-     * @param difficulty
-     * @param maxDifficulty
-     * @return
-     */
-    protected float getLinearValue(float min, float max, int difficulty, int maxDifficulty) {
-        return min + (max - min) / (maxDifficulty - 1) * (difficulty - 1);
+
+    @Deprecated
+    protected float getLinearValue(float min, float max, int legacyLevel) {
+        Difficulty difficulty = Difficulty.convertLegacyLevelToDifficulty(legacyLevel);
+        if (difficulty != null) {
+            return difficulty.getLinearValue(min, max - min);
+        } else {
+            return 0f;
+        }
     }
-
-    protected float getLinearValue(float min, float max, int difficulty) {
-        return getLinearValue(min, max, difficulty, UNGP_SpecialistSettings.MAX_DIFFICULTY);
-    }
-
-
-/*
-    public static float smooth(float x) {
-        return 0.5f - ((float) (FastTrig.cos(Math.min(1, Math.max(0, x)) * MathUtils.FPI) / 2));
-    }*/
 
     /**
      * value should be 0~100
@@ -129,6 +142,17 @@ public abstract class UNGP_BaseRuleEffect implements UNGP_RuleEffectAPI {
     }
 
     /**
+     * Used for create MessageIntel
+     *
+     * @return
+     */
+    protected MessageIntel createMessage() {
+        MessageIntel message = new MessageIntel(rule.getName(), rule.getCorrectColor());
+        message.setIcon(rule.getSpritePath());
+        return message;
+    }
+
+    /**
      * 在文本框和生涯界面都显示信息
      *
      * @param intel
@@ -142,7 +166,7 @@ public abstract class UNGP_BaseRuleEffect implements UNGP_RuleEffectAPI {
                 Global.getSector().getIntelManager().addIntelToTextPanel(intel,
                                                                          dialog.getTextPanel());
         }
-        campaignUI.addMessage(intel);
+        campaignUI.addMessage(intel, CommMessageAPI.MessageClickAction.INTEL_TAB, UNGP_SpecialistIntel.getInstance());
     }
 
     /**
@@ -197,6 +221,7 @@ public abstract class UNGP_BaseRuleEffect implements UNGP_RuleEffectAPI {
      * @param <T>
      * @return
      */
+    @Nullable
     protected <T> T getDataInCampaign(int slot) {
         return getDataInCampaign(rule.getId() + slot);
     }
@@ -225,6 +250,7 @@ public abstract class UNGP_BaseRuleEffect implements UNGP_RuleEffectAPI {
         String sb = Global.getSector().getSeedString() + rule.getId() + clock.getCycle() + clock.getMonth() + clock.getDay();
         return new Random(sb.hashCode());
     }
+
 
     /**
      * Should be called to reapply the buff by syncing the player fleet.

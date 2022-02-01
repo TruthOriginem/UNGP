@@ -3,6 +3,7 @@ package data.scripts.ungprules.impl.combat;
 import com.fs.starfarer.api.combat.CombatEngineAPI;
 import com.fs.starfarer.api.combat.MutableShipStatsAPI;
 import com.fs.starfarer.api.combat.ShipAPI;
+import data.scripts.campaign.specialist.UNGP_SpecialistSettings;
 import data.scripts.ungprules.impl.UNGP_BaseRuleEffect;
 import data.scripts.ungprules.tags.UNGP_CombatTag;
 
@@ -11,24 +12,18 @@ public class UNGP_ExperimentalShunt extends UNGP_BaseRuleEffect implements UNGP_
 
 
     @Override
-    public void updateDifficultyCache(int difficulty) {
+    public void updateDifficultyCache(UNGP_SpecialistSettings.Difficulty difficulty) {
         hardFluxFlat = getValueByDifficulty(0, difficulty);
     }
 
     @Override
-    public float getValueByDifficulty(int index, int difficulty) {
-        if (index == 0) return getLinearValue(0.04f, 0.08f, difficulty);
+    public float getValueByDifficulty(int index, UNGP_SpecialistSettings.Difficulty difficulty) {
+        if (index == 0) return difficulty.getLinearValue(0.04f, 0.04f);
         return 0;
     }
 
     @Override
-    public String getDescriptionParams(int index) {
-        if (index == 0) return getPercentString(hardFluxFlat * 100f);
-        return null;
-    }
-
-    @Override
-    public String getDescriptionParams(int index, int difficulty) {
+    public String getDescriptionParams(int index, UNGP_SpecialistSettings.Difficulty difficulty) {
         if (index == 0) return getPercentString(getValueByDifficulty(index, difficulty) * 100f);
         return super.getDescriptionParams(index, difficulty);
     }
@@ -46,6 +41,6 @@ public class UNGP_ExperimentalShunt extends UNGP_BaseRuleEffect implements UNGP_
     @Override
     public void applyPlayerShipInCombat(float amount, CombatEngineAPI engine, ShipAPI ship) {
         MutableShipStatsAPI stats = ship.getMutableStats();
-        stats.getHardFluxDissipationFraction().modifyFlat(rule.getBuffID(), hardFluxFlat);
+        stats.getHardFluxDissipationFraction().modifyFlat(buffID, hardFluxFlat);
     }
 }

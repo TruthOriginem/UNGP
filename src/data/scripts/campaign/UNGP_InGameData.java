@@ -11,6 +11,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import static data.scripts.campaign.specialist.UNGP_SpecialistSettings.Difficulty;
 import static data.scripts.campaign.specialist.rules.UNGP_RulesManager.URule;
 
 /**
@@ -18,7 +19,7 @@ import static data.scripts.campaign.specialist.rules.UNGP_RulesManager.URule;
  */
 public final class UNGP_InGameData {
     private int curCycle = 1;
-    private int difficultyLevel = 0;
+    private Difficulty difficulty = null;
     private boolean isRecorded = false;//是否用这个记录了重生点
     private boolean inherited = false;//是否已经继承了上个重生点
     private boolean passedInheritTime = false;
@@ -122,12 +123,12 @@ public final class UNGP_InGameData {
         return Global.getSettings().getBoolean("noTimesLimit");
     }
 
-    public int getDifficultyLevel() {
-        return difficultyLevel;
+    public Difficulty getDifficulty() {
+        return difficulty;
     }
 
-    public void setDifficultyLevel(int difficultyLevel) {
-        this.difficultyLevel = difficultyLevel;
+    public void setDifficulty(Difficulty difficulty) {
+        this.difficulty = difficulty;
     }
 
     public int getCurCycle() {

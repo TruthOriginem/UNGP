@@ -51,10 +51,10 @@ public final class UNGP_UITimeScript implements EveryFrameScript {
         if (intervalMap.isEmpty()) return;
         long curSystemTime = System.nanoTime();
         long diff = curSystemTime - systemTime;
-        float elapsed = diff / 1000000000f;
+        float deltaTime = diff / 1000000000f;
         for (IntervalUtil intervalUtil : intervalMap.values()) {
-            if (elapsed < intervalUtil.getIntervalDuration()) {
-                intervalUtil.advance(elapsed);
+            if (deltaTime < intervalUtil.getIntervalDuration()) {
+                intervalUtil.advance(deltaTime);
             }
         }
         systemTime = curSystemTime;
@@ -64,6 +64,7 @@ public final class UNGP_UITimeScript implements EveryFrameScript {
         isPaused = paused;
         reset();
     }
+
 
     public static float getFactor(String intervalID) {
         IntervalUtil intervalUtil = getInstance().intervalMap.get(intervalID);

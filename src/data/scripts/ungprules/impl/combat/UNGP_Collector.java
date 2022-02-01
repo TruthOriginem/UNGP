@@ -7,6 +7,7 @@ import com.fs.starfarer.api.combat.listeners.ApplyDamageResultAPI;
 import com.fs.starfarer.api.combat.listeners.DamageListener;
 import com.fs.starfarer.api.input.InputEventAPI;
 import com.fs.starfarer.api.util.Misc;
+import data.scripts.campaign.specialist.UNGP_SpecialistSettings;
 import data.scripts.ungprules.impl.UNGP_BaseRuleEffect;
 import data.scripts.ungprules.tags.UNGP_CombatInitTag;
 import data.scripts.utils.UNGPUtils;
@@ -21,12 +22,12 @@ public class UNGP_Collector extends UNGP_BaseRuleEffect implements UNGP_CombatIn
     public static final float COLLECT_HP_THRESHOLD = 0.05f;
 
     @Override
-    public float getValueByDifficulty(int index, int difficulty) {
+    public float getValueByDifficulty(int index, UNGP_SpecialistSettings.Difficulty difficulty) {
         return 0;
     }
 
     @Override
-    public String getDescriptionParams(int index, int difficulty) {
+    public String getDescriptionParams(int index, UNGP_SpecialistSettings.Difficulty difficulty) {
         if (index == 0) return "5%";
         if (index == 1) return Misc.getDGSCredits(25f);
         return super.getDescriptionParams(index, difficulty);

@@ -11,15 +11,14 @@ import data.scripts.campaign.specialist.UNGP_PlayerFleetMemberBuff;
 import data.scripts.campaign.specialist.challenges.UNGP_ChallengeManager;
 import data.scripts.campaign.specialist.items.UNGP_RuleItem;
 import data.scripts.campaign.specialist.rules.UNGP_RulesManager;
-import data.scripts.utils.UNGPFont;
 import data.scripts.utils.UNGP_LoadingChecker;
+import ungp.ui.UNGPFont;
 
 public class UNGP_modPlugin extends BaseModPlugin {
 
     @Override
     public void onApplicationLoad() {
         UNGP_LoadingChecker.checkLoad();
-
 
         UNGPFont.init();
         UNGP_RuleItem.loadSprite();
@@ -43,10 +42,8 @@ public class UNGP_modPlugin extends BaseModPlugin {
 
     private void addScriptsIfNeeded() {
         if (!Global.getSector().hasScript(UNGP_CampaignPlugin.class)) {
-            new UNGP_CampaignPlugin();
+            Global.getSector().addScript(new UNGP_CampaignPlugin());
         }
-//        UNGP_UITimeScript script = new UNGP_UITimeScript();
-//        UNGP_UITimeScript.setInstance(script);
         Global.getSector().addTransientScript(new UNGP_UITimeScript());
     }
 
@@ -65,7 +62,7 @@ public class UNGP_modPlugin extends BaseModPlugin {
 
         x.alias("ungp_igd", UNGP_InGameData.class);
         x.aliasAttribute(UNGP_InGameData.class, "curCycle", "cC");
-        x.aliasAttribute(UNGP_InGameData.class, "difficultyLevel", "dL");
+        x.aliasAttribute(UNGP_InGameData.class, "difficulty", "d");
         x.aliasAttribute(UNGP_InGameData.class, "passedInheritTime", "pIT");
         x.aliasAttribute(UNGP_InGameData.class, "isRecorded", "iR");
         x.aliasAttribute(UNGP_InGameData.class, "inherited", "ied");

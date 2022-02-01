@@ -6,6 +6,7 @@ import com.fs.starfarer.api.util.Misc;
 import com.fs.starfarer.api.util.WeightedRandomPicker;
 import data.scripts.campaign.UNGP_InGameData;
 import data.scripts.campaign.everyframe.UNGP_CampaignPlugin.TempCampaignParams;
+import data.scripts.campaign.specialist.UNGP_SpecialistSettings;
 import data.scripts.campaign.specialist.rules.UNGP_RulesManager;
 import data.scripts.campaign.specialist.rules.UNGP_RulesManager.URule;
 import data.scripts.ungprules.impl.UNGP_BaseRuleEffect;
@@ -18,7 +19,7 @@ import java.util.Random;
 public class UNGP_EntropiusMind extends UNGP_BaseRuleEffect implements UNGP_CampaignTag {
 
     @Override
-    public void updateDifficultyCache(int difficulty) {
+    public void updateDifficultyCache(UNGP_SpecialistSettings.Difficulty difficulty) {
         Integer daysPassed = getDataInCampaign(0);
         if (daysPassed == null) {
             saveDataInCampaign(0, 0);
@@ -26,7 +27,7 @@ public class UNGP_EntropiusMind extends UNGP_BaseRuleEffect implements UNGP_Camp
     }
 
     @Override
-    public float getValueByDifficulty(int index, int difficulty) {
+    public float getValueByDifficulty(int index, UNGP_SpecialistSettings.Difficulty difficulty) {
         return 0f;
     }
 
@@ -34,6 +35,9 @@ public class UNGP_EntropiusMind extends UNGP_BaseRuleEffect implements UNGP_Camp
     public void advanceInCampaign(float amount, TempCampaignParams params) {
         if (params.isOneDayPassed()) {
             Integer daysPassed = getDataInCampaign(0);
+            if (daysPassed == null) {
+                daysPassed = 0;
+            }
             daysPassed++;
 
             if (daysPassed == 7) {
@@ -57,8 +61,7 @@ public class UNGP_EntropiusMind extends UNGP_BaseRuleEffect implements UNGP_Camp
                     activatedRules.add(toAdd);
                 }
 
-                MessageIntel message = new MessageIntel(rule.getName(), rule.getCorrectColor());
-                message.setIcon(rule.getSpritePath());
+                MessageIntel message = createMessage();
                 message.addLine(rule.getExtra1(), Misc.getHighlightColor());
                 showMessage(message);
 
@@ -73,18 +76,7 @@ public class UNGP_EntropiusMind extends UNGP_BaseRuleEffect implements UNGP_Camp
     }
 
     @Override
-    public void applyGlobalStats() {
-        if (getDataInCampaign(0) == null) {
-            saveDataInCampaign(0, 0);
-        }
-    }
-
-    @Override
-    public void unapplyGlobalStats() {
-    }
-
-    @Override
-    public String getDescriptionParams(int index, int difficulty) {
+    public String getDescriptionParams(int index, UNGP_SpecialistSettings.Difficulty difficulty) {
         return null;
     }
 

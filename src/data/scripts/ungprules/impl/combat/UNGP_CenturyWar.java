@@ -3,6 +3,7 @@ package data.scripts.ungprules.impl.combat;
 import com.fs.starfarer.api.combat.CombatEngineAPI;
 import com.fs.starfarer.api.combat.MutableShipStatsAPI;
 import com.fs.starfarer.api.combat.ShipAPI;
+import data.scripts.campaign.specialist.UNGP_SpecialistSettings;
 import data.scripts.ungprules.impl.UNGP_BaseRuleEffect;
 import data.scripts.ungprules.tags.UNGP_CombatTag;
 
@@ -12,20 +13,20 @@ public class UNGP_CenturyWar extends UNGP_BaseRuleEffect implements UNGP_CombatT
 
 
     @Override
-    public void updateDifficultyCache(int difficulty) {
+    public void updateDifficultyCache(UNGP_SpecialistSettings.Difficulty difficulty) {
         damageMultiplier = 1f - getValueByDifficulty(0, difficulty) * 0.01f;
         rangeBonus = getValueByDifficulty(1, difficulty);
     }
 
     @Override
-    public float getValueByDifficulty(int index, int difficulty) {
-        if (index == 0) return getLinearValue(15f, 30f, difficulty);
-        if (index == 1) return getLinearValue(25f, 50f, difficulty);
+    public float getValueByDifficulty(int index, UNGP_SpecialistSettings.Difficulty difficulty) {
+        if (index == 0) return difficulty.getLinearValue(20f, 10f);
+        if (index == 1) return difficulty.getLinearValue(30f, 20f);
         return 0;
     }
 
     @Override
-    public String getDescriptionParams(int index, int difficulty) {
+    public String getDescriptionParams(int index, UNGP_SpecialistSettings.Difficulty difficulty) {
         if (index == 0) return getPercentString(getValueByDifficulty(index, difficulty));
         if (index == 1) return getPercentString(getValueByDifficulty(index, difficulty));
         return super.getDescriptionParams(index, difficulty);
@@ -46,7 +47,6 @@ public class UNGP_CenturyWar extends UNGP_BaseRuleEffect implements UNGP_CombatT
         }
         if (shouldApply) {
             final MutableShipStatsAPI stats = enemy.getMutableStats();
-            final String buffID = rule.getBuffID();
             stats.getHullDamageTakenMult().modifyMult(buffID, damageMultiplier);
             stats.getArmorDamageTakenMult().modifyMult(buffID, damageMultiplier);
             stats.getShieldDamageTakenMult().modifyMult(buffID, damageMultiplier);

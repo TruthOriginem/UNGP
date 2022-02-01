@@ -1,4 +1,4 @@
-package data.scripts.utils;
+package ungp.ui;
 
 import data.scripts.UNGP_modPlugin;
 import org.lazywizard.lazylib.ui.FontException;

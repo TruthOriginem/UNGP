@@ -44,7 +44,7 @@ public class UNGP_InheritManager {
      * @param slotID
      * @return
      */
-    public static UNGP_InheritData Get(int slotID) {
+    public static UNGP_InheritData getDataFromSlot(int slotID) {
         if (slotID == 0) {
             return InheritData_slot0;
         } else if (slotID == 1) {
@@ -61,7 +61,7 @@ public class UNGP_InheritManager {
      * @param inheritData
      * @param slotID
      */
-    public static void save(UNGP_InheritData inheritData, int slotID) {
+    public static void saveDataToSlot(UNGP_InheritData inheritData, int slotID) {
         try {
             JSONUtils.CommonDataJSONObject jsonObject = new JSONUtils.CommonDataJSONObject(getSaveFileName(slotID));
             jsonObject.put("ungp_id", inheritData.ungp_id);

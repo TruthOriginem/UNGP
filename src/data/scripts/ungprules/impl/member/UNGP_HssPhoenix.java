@@ -2,6 +2,7 @@ package data.scripts.ungprules.impl.member;
 
 import com.fs.starfarer.api.combat.MutableShipStatsAPI;
 import com.fs.starfarer.api.fleet.FleetMemberAPI;
+import data.scripts.campaign.specialist.UNGP_SpecialistSettings;
 import data.scripts.ungprules.impl.UNGP_MemberBuffRuleEffect;
 
 public class UNGP_HssPhoenix extends UNGP_MemberBuffRuleEffect {
@@ -11,22 +12,22 @@ public class UNGP_HssPhoenix extends UNGP_MemberBuffRuleEffect {
 
 
     @Override
-    public float getValueByDifficulty(int index, int difficulty) {
+    public float getValueByDifficulty(int index, UNGP_SpecialistSettings.Difficulty difficulty) {
         return 0;
     }
 
     @Override
-    public String getDescriptionParams(int index) {
+    public String getDescriptionParams(int index, UNGP_SpecialistSettings.Difficulty difficulty) {
         if (index == 0) return getPercentString(NORMAL_BONUS);
         if (index == 1) return getPercentString(MANEUVER_BONUS);
         if (index == 2) return getPercentString(CR_BONUS);
-        return null;
+        return super.getDescriptionParams(index, difficulty);
     }
 
     @Override
     public void applyPlayerFleetMemberInCampaign(FleetMemberAPI member) {
         MutableShipStatsAPI stats = member.getStats();
-        String id = rule.getBuffID();
+        String id = buffID;
         stats.getHullBonus().modifyPercent(id, NORMAL_BONUS);
         stats.getArmorBonus().modifyPercent(id, NORMAL_BONUS);
         stats.getFluxCapacity().modifyPercent(id, NORMAL_BONUS);
@@ -44,10 +45,5 @@ public class UNGP_HssPhoenix extends UNGP_MemberBuffRuleEffect {
     @Override
     public boolean canApply(FleetMemberAPI member) {
         return member.isFlagship() && member.getHullId().contains("onslaught");
-    }
-
-    @Override
-    public String getBuffID() {
-        return rule.getBuffID();
     }
 }

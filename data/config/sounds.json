@@ -4,6 +4,9 @@
       {"file": "UNGP_rulepicker_bgm.ogg", "source": "sounds/music/", "volume": 1, "randomStart": true},
     ]
   },
+  "UNGP_glados_chosen": [
+    {"file": "sounds/fx/trigger/UNGP_glados_chosen.ogg", "pitch": 1, "volume": 1},
+  ],
   "UNGP_fungus_activate": [
     {"file": "sounds/fx/trigger/UNGP_fungus_activate.ogg", "pitch": 1, "volume": 1},
   ],

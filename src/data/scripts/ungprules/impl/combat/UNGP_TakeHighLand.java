@@ -5,6 +5,7 @@ import com.fs.starfarer.api.combat.BattleObjectiveAPI;
 import com.fs.starfarer.api.combat.CombatEngineAPI;
 import com.fs.starfarer.api.combat.MutableShipStatsAPI;
 import com.fs.starfarer.api.combat.ShipAPI;
+import data.scripts.campaign.specialist.UNGP_SpecialistSettings;
 import data.scripts.ungprules.impl.UNGP_BaseRuleEffect;
 import data.scripts.ungprules.tags.UNGP_CombatTag;
 import org.lazywizard.lazylib.MathUtils;
@@ -15,13 +16,13 @@ public class UNGP_TakeHighLand extends UNGP_BaseRuleEffect implements UNGP_Comba
     private float range;
 
     @Override
-    public void updateDifficultyCache(int difficulty) {
+    public void updateDifficultyCache(UNGP_SpecialistSettings.Difficulty difficulty) {
         range = getValueByDifficulty(0, difficulty);
     }
 
     @Override
-    public float getValueByDifficulty(int index, int difficulty) {
-        if (index == 0) return (int) (1500f + 500f * (float) Math.pow(difficulty, 0.3669));
+    public float getValueByDifficulty(int index, UNGP_SpecialistSettings.Difficulty difficulty) {
+        if (index == 0) return (int) difficulty.getLinearValue(2000f, 1000f);
         return 1f;
     }
 
@@ -47,8 +48,8 @@ public class UNGP_TakeHighLand extends UNGP_BaseRuleEffect implements UNGP_Comba
         }
         MutableShipStatsAPI stats = ship.getMutableStats();
         if (takeEffect) {
-            stats.getBallisticWeaponRangeBonus().modifyPercent(rule.getBuffID(), RANGE_BONUS);
-            stats.getEnergyWeaponRangeBonus().modifyPercent(rule.getBuffID(), RANGE_BONUS);
+            stats.getBallisticWeaponRangeBonus().modifyPercent(buffID, RANGE_BONUS);
+            stats.getEnergyWeaponRangeBonus().modifyPercent(buffID, RANGE_BONUS);
             if (ship == engine.getPlayerShip()) {
                 engine.maintainStatusForPlayerShip(rule,
                                                    "graphics/icons/sensor_array.png",
@@ -57,22 +58,16 @@ public class UNGP_TakeHighLand extends UNGP_BaseRuleEffect implements UNGP_Comba
                                                    false);
             }
         } else {
-            stats.getBallisticWeaponRangeBonus().unmodify(rule.getBuffID());
-            stats.getEnergyWeaponRangeBonus().unmodify(rule.getBuffID());
+            stats.getBallisticWeaponRangeBonus().unmodify(buffID);
+            stats.getEnergyWeaponRangeBonus().unmodify(buffID);
         }
     }
 
     @Override
-    public String getDescriptionParams(int index) {
-        if (index == 0) return getFactorString(range);
+    public String getDescriptionParams(int index, UNGP_SpecialistSettings.Difficulty difficulty) {
+        if (index == 0) return getFactorString(getValueByDifficulty(index, difficulty));
         if (index == 1) return "20%";
         return null;
-    }
-
-    @Override
-    public String getDescriptionParams(int index, int difficulty) {
-        if (index == 0) return getFactorString(getValueByDifficulty(index, difficulty));
-        return getDescriptionParams(index);
     }
 
 }

@@ -5,7 +5,7 @@ import com.fs.starfarer.api.campaign.FactionAPI;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
 import data.scripts.campaign.UNGP_InGameData;
-import data.scripts.campaign.specialist.UNGP_SpecialistSettings;
+import data.scripts.campaign.specialist.UNGP_SpecialistSettings.Difficulty;
 import data.scripts.campaign.specialist.challenges.UNGP_ChallengeInfo;
 import data.scripts.campaign.specialist.challenges.UNGP_ChallengeManager;
 import data.scripts.campaign.specialist.rules.UNGP_RulesManager;
@@ -74,12 +74,13 @@ public class UNGP_InheritData {
         addDescriptionTooltip(root, "inheritData");
     }
 
-    public void addRecordTooltip(TooltipMakerAPI root, int difficulty) {
+    public void addRecordTooltip(TooltipMakerAPI root, Difficulty difficulty) {
         addDescriptionTooltip(root, "inGameData");
         if (isHardMode) {
-            TooltipMakerAPI section = root.beginImageWithText(UNGP_SpecialistSettings.getSpecialistModeIconPath(), 24f);
+            TooltipMakerAPI section = root.beginImageWithText(difficulty.spritePath, 24f);
             section.addPara(d_i18n.get("specialistMode"), Misc.getNegativeHighlightColor(), 0f);
-            section.addPara(d_i18n.get("hardmodeLevel") + ": %s", 0f, Misc.getGrayColor(), Misc.getHighlightColor(), difficulty + "");
+            section.addPara(d_i18n.get("hardmodeLevel") + ": %s", 0f, Misc.getGrayColor(),
+                            Misc.getHighlightColor(), difficulty.name);
             root.addImageWithText(10f);
         }
     }

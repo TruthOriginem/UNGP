@@ -1,7 +1,6 @@
 {
   "noLevelLimit": false, # set true to cancel the record level limit
   "noTimesLimit": false, # set true to make record could be done for unlimited times
-  "noDifficultyLimit": true, # set true to make max difficulty always equals 20
   "createEmptySavepoint": false, # set true to automatically generate a empty savepoint
   "plugins": {
     "UNGP_SpecialistCombatPlugin": "data.scripts.plugins.UNGP_SpecialistCombatPlugin",
@@ -9,14 +8,17 @@
   "graphics": {
     "icons": {
       "UNGP_hmlogo": "graphics/icons/UNGP_hmode_logo.png",
-      "UNGP_sdimlogo": "graphics/icons/UNGP_hmode_dim.png",
       "UNGP_itemBG": "graphics/icons/cargo/UNGP_ruleItemBG.png",
       "UNGP_itemBG_mask": "graphics/icons/cargo/UNGP_ruleItemBG_mask.png",
       "rule_negative": "graphics/icons/negative_icon.png",
       "rule_positive": "graphics/icons/positive_icon.png",
       "rule_golden": "graphics/icons/golden_icon.png",
       "rule_milestone": "graphics/icons/milestone_icon.png",
-      "rule_default": "graphics/icons/ungp/default.png"
+      "rule_default": "graphics/icons/ungp/default.png",
+      "UNGP_difficulty_gamma": "graphics/icons/UNGP_difficulty_gamma.png",
+      "UNGP_difficulty_beta": "graphics/icons/UNGP_difficulty_beta.png",
+      "UNGP_difficulty_alpha": "graphics/icons/UNGP_difficulty_alpha.png",
+      "UNGP_difficulty_omega": "graphics/icons/UNGP_difficulty_omega.png"
     },
     "illustrations": {
       "UNGP_logo": "graphics/illustrations/UNGP_logo.png"
@@ -27,7 +29,9 @@
       "UNGP_specialist_bg_seamless": "graphics/fx/UNGP_specialist_bg_seamless.png",
       "UNGP_specialist_bg_seamless_ring0": "graphics/fx/UNGP_specialist_bg_seamless_ring0.png",
       "UNGP_specialist_bg_seamless_ring1": "graphics/fx/UNGP_specialist_bg_seamless_ring1.png",
-      "UNGP_specialist_bg_seamless_ring2": "graphics/fx/UNGP_specialist_bg_seamless_ring2.png"
+      "UNGP_specialist_bg_seamless_ring2": "graphics/fx/UNGP_specialist_bg_seamless_ring2.png",
+      "UNGP_specialist_icon_layer0": "graphics/fx/UNGP_specialist_icon_layer0.png",
+      "UNGP_specialist_icon_layer1": "graphics/fx/UNGP_specialist_icon_layer1.png"
     }
   }
 }

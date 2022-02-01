@@ -8,6 +8,7 @@ import com.fs.starfarer.api.util.Misc;
 import com.fs.starfarer.api.util.WeightedRandomPicker;
 import data.scripts.campaign.UNGP_InGameData;
 import data.scripts.campaign.everyframe.UNGP_CampaignPlugin;
+import data.scripts.campaign.specialist.UNGP_SpecialistSettings;
 import data.scripts.campaign.specialist.rules.UNGP_RulesManager;
 import data.scripts.ungprules.impl.UNGP_BaseRuleEffect;
 import data.scripts.ungprules.tags.UNGP_CampaignTag;
@@ -19,7 +20,7 @@ import static data.scripts.campaign.specialist.rules.UNGP_RulesManager.getAllRul
 
 public class UNGP_BirthdayPresent extends UNGP_BaseRuleEffect implements UNGP_CampaignTag {
     @Override
-    public void updateDifficultyCache(int difficulty) {
+    public void updateDifficultyCache(UNGP_SpecialistSettings.Difficulty difficulty) {
         int[] giftTime = getDataInCampaign(0);
         if (giftTime == null) {
             CampaignClockAPI clock = Global.getSector().getClock();
@@ -29,12 +30,12 @@ public class UNGP_BirthdayPresent extends UNGP_BaseRuleEffect implements UNGP_Ca
     }
 
     @Override
-    public float getValueByDifficulty(int index, int difficulty) {
+    public float getValueByDifficulty(int index, UNGP_SpecialistSettings.Difficulty difficulty) {
         return 0;
     }
 
     @Override
-    public String getDescriptionParams(int index, int difficulty) {
+    public String getDescriptionParams(int index, UNGP_SpecialistSettings.Difficulty difficulty) {
         if (index == 0) return "1";
         return super.getDescriptionParams(index, difficulty);
     }
@@ -59,7 +60,7 @@ public class UNGP_BirthdayPresent extends UNGP_BaseRuleEffect implements UNGP_Ca
                     activatedRules.remove(rule);
                     if (toAdd != null) {
                         activatedRules.add(toAdd);
-                        MessageIntel intel = new MessageIntel(rule.getName(), toAdd.getCorrectColor());
+                        MessageIntel intel = createMessage();
                         intel.setIcon(toAdd.getSpritePath());
                         intel.addLine(rule.getExtra1(), Misc.getTextColor(), new String[]{toAdd.getName()}, toAdd.getCorrectColor());
                         showMessage(intel);

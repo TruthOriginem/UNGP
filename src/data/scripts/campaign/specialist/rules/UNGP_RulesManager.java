@@ -9,6 +9,7 @@ import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
 import data.scripts.UNGP_modPlugin;
 import data.scripts.campaign.UNGP_InGameData;
+import data.scripts.campaign.specialist.UNGP_SpecialistSettings.Difficulty;
 import data.scripts.campaign.specialist.challenges.UNGP_ChallengeInfo;
 import data.scripts.campaign.specialist.challenges.UNGP_ChallengeManager;
 import data.scripts.campaign.specialist.economy.UNGP_EconomyListener;
@@ -22,6 +23,7 @@ import org.apache.log4j.Logger;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class UNGP_RulesManager {
@@ -48,7 +50,7 @@ public class UNGP_RulesManager {
     public static boolean needUpdateCache = false;
     // 2 static values that avoids calling inGameData occasionally
     private static boolean isSpecialistMode = false;
-    private static int globalDifficultyLevel = 1;
+    private static Difficulty globalDifficulty = null;
 
     /**
      * Called on {@link UNGP_modPlugin}
@@ -105,6 +107,13 @@ public class UNGP_RulesManager {
                 rule.isMilestoneRollLocked = true;
                 UNGP_RuleEffectAPI effect = rule.getRuleEffect();
                 effect.unapplyGlobalStats();
+
+                // 清理listener
+                if (effect instanceof UNGP_CampaignListenerTag) {
+                    Class<?> listenerClass = ((UNGP_CampaignListenerTag<?>) effect).getClassOfListener();
+                    Global.getSector().getListenerManager().removeListenerOfClass(listenerClass);
+                }
+
                 // 清理舰队rule
                 if (effect instanceof UNGP_PlayerFleetTag) {
                     if (playerFleet != null)
@@ -136,13 +145,18 @@ public class UNGP_RulesManager {
             // 根据当前完成挑战，让那些成就规则可被roll
             updateRollableMilestoneRules(inGameData);
             //apply stats
-            int difficultyLevel = inGameData.getDifficultyLevel();
+            Difficulty difficulty = inGameData.getDifficulty();
             for (URule rule : activatedRules) {
                 ACTIVATED_RULES_IN_THIS_GAME.add(rule);
 
                 UNGP_RuleEffectAPI effect = rule.getRuleEffect();
-                effect.updateDifficultyCache(difficultyLevel);
+                effect.updateDifficultyCache(difficulty);
                 effect.applyGlobalStats();
+
+                if (effect instanceof UNGP_CampaignListenerTag) {
+                    Global.getSector().getListenerManager().addListener(((UNGP_CampaignListenerTag<?>) effect).getListener(),
+                                                                        true);
+                }
 
                 //如果不是战斗效果，那就是生涯效果
                 if (effect instanceof UNGP_CombatTag || effect instanceof UNGP_CombatInitTag) {
@@ -176,7 +190,7 @@ public class UNGP_RulesManager {
                 UNGP_EconomyListener.addListener();
                 UNGP_EconomyListener.applyMarkets();
             }
-            setStaticDifficultyLevel(difficultyLevel);
+            setStaticDifficulty(difficulty);
             setStaticSpecialistMode(inGameData.isHardMode());
             inGameData.saveActivatedRules(activatedRules);
             UNGP_ChallengeManager.updateChallengeProgress(inGameData);
@@ -184,8 +198,8 @@ public class UNGP_RulesManager {
         }
     }
 
-    public static int getGlobalDifficultyLevel() {
-        return globalDifficultyLevel;
+    public static Difficulty getGlobalDifficulty() {
+        return globalDifficulty;
     }
 
     public static boolean isSpecialistMode() {
@@ -246,6 +260,12 @@ public class UNGP_RulesManager {
             return ruleInfo.getId();
         }
 
+        /**
+         * Should just use buffID in Rule plugin.
+         *
+         * @return
+         */
+        @Deprecated
         public String getBuffID() {
             return buffID;
         }
@@ -318,10 +338,12 @@ public class UNGP_RulesManager {
                 tooltip.addPara(rules_i18n.get("rule_source") + ruleInfo.getSource(), Misc.getGrayColor(), pad * 0.5f);
                 tooltip.setParaFontDefault();
             }
-            tooltip.addPara(rules_i18n.get("front_desc"), pad * 0.5f, Misc.getBasePlayerColor(), Misc.getHighlightColor(), getGlobalDifficultyLevel() + "");
+            Difficulty difficulty = getGlobalDifficulty();
+            tooltip.addPara(rules_i18n.get("front_desc"), pad * 0.5f, Misc.getBasePlayerColor(), difficulty.color,
+                            difficulty.name);
         }
 
-        public void addDesc(TooltipMakerAPI tooltip, float pad, String prefix, int difficulty) {
+        public void addDesc(TooltipMakerAPI tooltip, float pad, String prefix, Difficulty difficulty) {
             String[] values = new String[10];
             for (int i = 0; i < 10; i++) {
                 values[i] = getRuleEffect().getDescriptionParams(i, difficulty);
@@ -332,7 +354,7 @@ public class UNGP_RulesManager {
         }
 
         public void addDesc(TooltipMakerAPI tooltip, float pad, String prefix) {
-            addDesc(tooltip, pad, prefix, getGlobalDifficultyLevel());
+            addDesc(tooltip, pad, prefix, getGlobalDifficulty());
         }
 
         public void addRollDesc(TooltipMakerAPI tooltip, float pad, String prefix) {
@@ -424,13 +446,13 @@ public class UNGP_RulesManager {
             tooltip.addPara(ruleInfo.getShortDesc(), pad);
         }
 
-        public String getDesc(int difficulty) {
-            String[] values = new String[10];
-            for (int i = 0; i < 10; i++) {
-                values[i] = getRuleEffect().getDescriptionParams(i, difficulty);
-            }
-            return String.format(ruleInfo.getDesc(), values);
-        }
+//        public String getDesc(int difficulty) {
+//            String[] values = new String[10];
+//            for (int i = 0; i < 10; i++) {
+//                values[i] = getRuleEffect().getDescriptionParams(i, difficulty);
+//            }
+//            return String.format(ruleInfo.getDesc(), values);
+//        }
 
         /**
          * Would be shown at the beginning of the battle
@@ -438,7 +460,7 @@ public class UNGP_RulesManager {
          * @param difficulty
          * @return
          */
-        public Object[] generateCombatTips(int difficulty) {
+        public Object[] generateCombatTips(Difficulty difficulty) {
             List<Object> messageList = new ArrayList<>();
             String originDesc = ruleInfo.getDesc();
             String[] unformulatedDesc = originDesc.split("%s");
@@ -620,8 +642,8 @@ public class UNGP_RulesManager {
         return MILESTONE_COLOR;
     }
 
-    public static void setStaticDifficultyLevel(int level) {
-        globalDifficultyLevel = level;
+    public static void setStaticDifficulty(Difficulty difficulty) {
+        globalDifficulty = difficulty;
     }
 
     /**
@@ -678,5 +700,34 @@ public class UNGP_RulesManager {
             cargo.addSpecial(new SpecialItemData(UNGP_RuleItem.getSpecialItemID(rule), rule.getId()), 1f);
         }
         return cargo;
+    }
+
+    public static class UNGP_RuleSorter implements Comparator<URule> {
+        /**
+         * 负面规则在前，正面在后
+         * cost高的在前，低的在后
+         * 根据id在排
+         *
+         * @param o1
+         * @param o2
+         * @return
+         */
+        @Override
+        public int compare(URule o1, URule o2) {
+            int compare = Boolean.compare(!o1.isBonus(), !o2.isBonus());
+            if (compare == 0) {
+                compare = Boolean.compare(o1.isGolden(), o2.isGolden());
+                if (compare == 0) {
+                    compare = Boolean.compare(!o1.isMileStone(), !o2.isMileStone());
+                    if (compare == 0) {
+                        compare = Integer.compare(Math.abs(o1.getCost()), Math.abs(o2.getCost()));
+                        if (compare == 0)
+                            compare = o1.getId().compareTo(o2.getId());
+                    }
+                }
+            }
+            compare = -compare;
+            return compare;
+        }
     }
 }

@@ -5,6 +5,7 @@ import com.fs.starfarer.api.combat.DamagingProjectileAPI;
 import com.fs.starfarer.api.combat.ShipAPI;
 import com.fs.starfarer.api.loading.ProjectileSpawnType;
 import com.fs.starfarer.api.util.IntervalUtil;
+import data.scripts.campaign.specialist.UNGP_SpecialistSettings;
 import data.scripts.ungprules.impl.UNGP_BaseRuleEffect;
 import data.scripts.ungprules.tags.UNGP_CombatTag;
 import data.scripts.utils.UNGPUtils;
@@ -22,13 +23,13 @@ public class UNGP_WholeShells extends UNGP_BaseRuleEffect implements UNGP_Combat
     private float total_damageReduction = 0f;
 
     @Override
-    public void updateDifficultyCache(int difficulty) {
+    public void updateDifficultyCache(UNGP_SpecialistSettings.Difficulty difficulty) {
         chance = getValueByDifficulty(0, difficulty);
     }
 
     @Override
-    public float getValueByDifficulty(int index, int difficulty) {
-        if (index == 0) return 0.04f + 0.01f * (float) Math.pow(difficulty, 0.598);
+    public float getValueByDifficulty(int index, UNGP_SpecialistSettings.Difficulty difficulty) {
+        if (index == 0) return difficulty.getLinearValue(0.05f, 0.05f);
         return 1f;
     }
 
@@ -67,17 +68,17 @@ public class UNGP_WholeShells extends UNGP_BaseRuleEffect implements UNGP_Combat
         }
         ShipAPI player = engine.getPlayerShip();
         if (player != null) {
-            engine.maintainStatusForPlayerShip(rule.getBuffID(),
-                    "graphics/icons/hullsys/ammo_feeder.png",
-                    rule.getName() + "(" + decrease_amount + ")",
-                    rule.getExtra1() + (int) (total_damageReduction),
-                    true);
+            engine.maintainStatusForPlayerShip(buffID,
+                                               "graphics/icons/hullsys/ammo_feeder.png",
+                                               rule.getName() + "(" + decrease_amount + ")",
+                                               rule.getExtra1() + (int) (total_damageReduction),
+                                               true);
         }
     }
 
     @Override
     public void applyEnemyShipInCombat(float amount, ShipAPI enemy) {
-        
+
     }
 
     @Override
@@ -87,15 +88,9 @@ public class UNGP_WholeShells extends UNGP_BaseRuleEffect implements UNGP_Combat
 
 
     @Override
-    public String getDescriptionParams(int index) {
-        if (index == 0) return getPercentString(chance * 100f);
+    public String getDescriptionParams(int index, UNGP_SpecialistSettings.Difficulty difficulty) {
+        if (index == 0) return getPercentString(getValueByDifficulty(index, difficulty) * 100f);
         if (index == 1) return getFactorString(DAMAGE_MULTIPLIER);
         return null;
-    }
-
-    @Override
-    public String getDescriptionParams(int index, int difficulty) {
-        if (index == 0) return getPercentString(getValueByDifficulty(index, difficulty) * 100f);
-        return getDescriptionParams(index);
     }
 }

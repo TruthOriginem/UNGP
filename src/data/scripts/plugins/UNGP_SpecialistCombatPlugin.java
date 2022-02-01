@@ -9,12 +9,14 @@ import data.scripts.campaign.UNGP_InGameData;
 import data.scripts.ungprules.UNGP_RuleEffectAPI;
 import data.scripts.ungprules.tags.UNGP_CombatInitTag;
 import data.scripts.ungprules.tags.UNGP_CombatTag;
+import data.scripts.ungprules.tags.UNGP_TweakBeforeApplyCombatTag;
 import data.scripts.utils.SimpleI18n.I18nSection;
 import data.scripts.utils.UNGPUtils;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static data.scripts.campaign.specialist.UNGP_SpecialistSettings.Difficulty;
 import static data.scripts.campaign.specialist.rules.UNGP_RulesManager.COMBAT_RULES_IN_THIS_GAME;
 import static data.scripts.campaign.specialist.rules.UNGP_RulesManager.URule;
 
@@ -36,23 +38,30 @@ public class UNGP_SpecialistCombatPlugin extends BaseEveryFrameCombatPlugin {
             UNGP_InGameData inGameData = UNGP_InGameData.getDataInSave();
             if (inGameData != null && inGameData.isHardMode()) {
                 isHardMode = true;
-                int difficultyLevel = inGameData.getDifficultyLevel();
-                for (URule rule : COMBAT_RULES_IN_THIS_GAME) {
+                Difficulty difficulty = inGameData.getDifficulty();
+                List<URule> originalRules = new ArrayList<>(COMBAT_RULES_IN_THIS_GAME);
+                List<URule> activatedRules = new ArrayList<>(originalRules);
+                for (URule rule : originalRules) {
+                    if (rule.getRuleEffect() instanceof UNGP_TweakBeforeApplyCombatTag) {
+                        ((UNGP_TweakBeforeApplyCombatTag) rule.getRuleEffect()).tweakBeforeApply(activatedRules, originalRules);
+                    }
+                }
+                for (URule rule : activatedRules) {
                     UNGP_RuleEffectAPI ruleEffect = rule.getRuleEffect();
                     if (ruleEffect instanceof UNGP_CombatTag) {
                         tags.add((UNGP_CombatTag) ruleEffect);
                         if (rule.isBonus()) {
-                            bonusMessages.add(rule.generateCombatTips(difficultyLevel));
+                            bonusMessages.add(rule.generateCombatTips(difficulty));
                         } else {
-                            notBonusMessages.add(rule.generateCombatTips(difficultyLevel));
+                            notBonusMessages.add(rule.generateCombatTips(difficulty));
                         }
                     }
                     if (ruleEffect instanceof UNGP_CombatInitTag) {
                         ((UNGP_CombatInitTag) ruleEffect).init(engine);
                         if (rule.isBonus()) {
-                            bonusMessages.add(rule.generateCombatTips(difficultyLevel));
+                            bonusMessages.add(rule.generateCombatTips(difficulty));
                         } else {
-                            notBonusMessages.add(rule.generateCombatTips(difficultyLevel));
+                            notBonusMessages.add(rule.generateCombatTips(difficulty));
                         }
                     }
                 }

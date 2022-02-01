@@ -4,12 +4,18 @@ import com.fs.starfarer.api.campaign.BuffManagerAPI;
 import com.fs.starfarer.api.fleet.FleetMemberAPI;
 
 public class UNGP_BaseBuff implements BuffManagerAPI.Buff {
+    public static final float BASE_DURATION = 0.1f;
     protected String id;
     protected float dur;
 
     public UNGP_BaseBuff(String id, float dur) {
         this.id = id;
         this.dur = dur;
+    }
+
+    public UNGP_BaseBuff(String id) {
+        this.id = id;
+        this.dur = BASE_DURATION;
     }
 
     @Override
@@ -38,6 +44,10 @@ public class UNGP_BaseBuff implements BuffManagerAPI.Buff {
 
     public void setDur(float dur) {
         this.dur = dur;
+    }
+
+    public void refresh() {
+        this.dur = BASE_DURATION;
     }
 
     public UNGP_BaseBuff init(String id, float dur) {

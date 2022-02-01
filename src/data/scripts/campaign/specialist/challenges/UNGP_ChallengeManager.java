@@ -2,7 +2,7 @@ package data.scripts.campaign.specialist.challenges;
 
 import com.fs.starfarer.api.Global;
 import data.scripts.campaign.UNGP_InGameData;
-import data.scripts.campaign.specialist.UNGP_SpecialistSettings;
+import data.scripts.campaign.specialist.UNGP_SpecialistSettings.Difficulty;
 import data.scripts.campaign.specialist.intel.UNGP_ChallengeIntel;
 import data.scripts.campaign.specialist.intel.UNGP_ChallengeIntel.UNGP_ChallengeProgress;
 import data.scripts.campaign.specialist.rules.UNGP_RulesManager;
@@ -44,7 +44,7 @@ public class UNGP_ChallengeManager {
      */
     public static UNGP_ChallengeIntel confirmChallenges(UNGP_InGameData inGameData) {
         // 低于专20无法开启挑战
-        if (inGameData.getDifficultyLevel() < UNGP_SpecialistSettings.getMinDifficultyLevelOfChallenge()) return null;
+        if (!isDifficultyEnough(inGameData.getDifficulty())) return null;
         Global.getSector().getPersistentData().put("UNGP_challenge_start", true);
         if (!Global.getSector().getIntelManager().hasIntelOfClass(UNGP_ChallengeIntel.class)) {
             List<UNGP_ChallengeProgress> challengeProgresses = new ArrayList<>();
@@ -71,7 +71,7 @@ public class UNGP_ChallengeManager {
      * @return
      */
     public static List<UNGP_ChallengeInfo> getRunnableChallenges(UNGP_InGameData inGameData) {
-        return getRunnableChallenges(inGameData.getDifficultyLevel(), inGameData.getActivatedRules(), inGameData.getCompletedChallenges());
+        return getRunnableChallenges(inGameData.getDifficulty(), inGameData.getActivatedRules(), inGameData.getCompletedChallenges());
     }
 
     /**
@@ -79,10 +79,10 @@ public class UNGP_ChallengeManager {
      *
      * @return
      */
-    public static List<UNGP_ChallengeInfo> getRunnableChallenges(int difficultyLevel, List<URule> rules, List<String> completedChallenges) {
+    public static List<UNGP_ChallengeInfo> getRunnableChallenges(Difficulty difficulty, List<URule> rules, List<String> completedChallenges) {
         rules = new ArrayList<>(rules);
         // 低于专20无法开启挑战
-        if (difficultyLevel < UNGP_SpecialistSettings.getMinDifficultyLevelOfChallenge())
+        if (!isDifficultyEnough(difficulty))
             return new ArrayList<>();
         List<String> activeRuleIds = new ArrayList<>();
         int positiveRuleAmount = 0;
@@ -107,6 +107,16 @@ public class UNGP_ChallengeManager {
             runnableChallenges.add(challengeInfo);
         }
         return runnableChallenges;
+    }
+
+    /**
+     * 专家挑战需要最顶级
+     *
+     * @param difficulty
+     * @return
+     */
+    public static boolean isDifficultyEnough(Difficulty difficulty) {
+        return difficulty == Difficulty.ALPHA || difficulty == Difficulty.OMEGA;
     }
 
     /**

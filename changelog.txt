@@ -1,3 +1,23 @@
+1.6.0 2022/1/27
+兼容0.95.1a。
+本次更新不能中途加入存档，建议先保存重生点。
+专家模式左上角的图标可以点击直接前往专家模式网络界面了。
+取消专家等级需要多周目解锁的设定。
+专家等级现在划分为：Gamma, Beta, Alpha, Omega，分别对应之前的1，10，20，(30)级。
+对底层代码进行较大调整，希望各位接入UNGP的modder注意。
+
+增加负面规则：嗜血，盗刷，相位幽灵。
+增加正面规则：通融一下，核之子嗣，远洋围猎。
+
+0.95.1a coming!
+While in specialist mode, you could click the up-left icon to go directly to the specialist mode intel.
+Canceled the limitation of specialist level.
+Now specialist levels are ： Gamma, Beta, Alpha, Omega, which corresponds 1, 10, 20, 30.
+Tweaked many base codes, please each modder who implements this mod take a look at it.
+
+Add new negative rule: Blood Lust, Fraudulent, Phasing Ghost.
+Add new positive rule: Make an Exception, Son of Core, Cruising Hunting.
+
 1.5.4 2021/11/11
 专家模式网络界面大更新！
 

@@ -6,6 +6,7 @@ import com.fs.starfarer.api.util.Misc;
 import com.fs.starfarer.api.util.WeightedRandomPicker;
 import data.scripts.campaign.UNGP_InGameData;
 import data.scripts.campaign.everyframe.UNGP_CampaignPlugin;
+import data.scripts.campaign.specialist.UNGP_SpecialistSettings;
 import data.scripts.campaign.specialist.rules.UNGP_RulesManager;
 import data.scripts.campaign.specialist.rules.UNGP_RulesManager.URule;
 import data.scripts.ungprules.impl.UNGP_BaseRuleEffect;
@@ -17,7 +18,7 @@ import static data.scripts.campaign.specialist.rules.UNGP_RulesManager.getAllRul
 
 public class UNGP_StillGrowingUp extends UNGP_BaseRuleEffect implements UNGP_CampaignTag {
     @Override
-    public void updateDifficultyCache(int difficulty) {
+    public void updateDifficultyCache(UNGP_SpecialistSettings.Difficulty difficulty) {
         int[] monthData = getDataInCampaign(0);
         if (monthData == null) {
             monthData = new int[]{0, 3};
@@ -26,12 +27,12 @@ public class UNGP_StillGrowingUp extends UNGP_BaseRuleEffect implements UNGP_Cam
     }
 
     @Override
-    public float getValueByDifficulty(int index, int difficulty) {
+    public float getValueByDifficulty(int index, UNGP_SpecialistSettings.Difficulty difficulty) {
         return 0;
     }
 
     @Override
-    public String getDescriptionParams(int index, int difficulty) {
+    public String getDescriptionParams(int index, UNGP_SpecialistSettings.Difficulty difficulty) {
         if (index == 0 || index == 1) return "3";
         return super.getDescriptionParams(index, difficulty);
     }
@@ -75,7 +76,7 @@ public class UNGP_StillGrowingUp extends UNGP_BaseRuleEffect implements UNGP_Cam
             } else {
                 monthData[0] = elapsedMonth;
             }
-            MessageIntel intel = new MessageIntel(rule.getName(), rule.getCorrectColor());
+            MessageIntel intel = createMessage();
             intel.setIcon(rule.getSpritePath());
             intel.addLine(rule.getExtra2(), Misc.getTextColor(), new String[]{"" + (monthData[1] - monthData[0])}, Misc.getHighlightColor());
             showMessage(intel);

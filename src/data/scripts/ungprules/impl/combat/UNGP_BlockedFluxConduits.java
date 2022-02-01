@@ -7,22 +7,24 @@ import com.fs.starfarer.api.combat.ShipAPI;
 import data.scripts.ungprules.impl.UNGP_BaseRuleEffect;
 import data.scripts.ungprules.tags.UNGP_CombatTag;
 
+import static data.scripts.campaign.specialist.UNGP_SpecialistSettings.Difficulty;
+
 public class UNGP_BlockedFluxConduits extends UNGP_BaseRuleEffect implements UNGP_CombatTag {
     private float fluxReduction = 20f;
 
     @Override
-    public void updateDifficultyCache(int difficulty) {
+    public void updateDifficultyCache(Difficulty difficulty) {
         fluxReduction = getValueByDifficulty(0, difficulty);
     }
 
     @Override
-    public float getValueByDifficulty(int index, int difficulty) {
-        if (index == 0) return getLinearValue(20f, 30f, difficulty);
+    public float getValueByDifficulty(int index, Difficulty difficulty) {
+        if (index == 0) return difficulty.getLinearValue(20f, 10f);
         return 0;
     }
 
     @Override
-    public String getDescriptionParams(int index, int difficulty) {
+    public String getDescriptionParams(int index, Difficulty difficulty) {
         if (index == 0) return getPercentString(getValueByDifficulty(index, difficulty));
         return super.getDescriptionParams(index, difficulty);
     }

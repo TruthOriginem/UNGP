@@ -1,80 +1,80 @@
-package data.scripts.utils;
+package ungp.ui;
 
 import com.fs.starfarer.api.campaign.CustomUIPanelPlugin;
 import com.fs.starfarer.api.ui.CustomPanelAPI;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 
-public class UNGP_UIRect {
+public class UIRect {
     // top left = (0,0)
     float x;
     float y;
     float width;
     float height;
 
-    public UNGP_UIRect(float x, float y, float width, float height) {
+    public UIRect(float x, float y, float width, float height) {
         this.x = (int) x;
         this.y = (int) y;
         this.width = (int) width;
         this.height = (int) height;
     }
 
-    public UNGP_UIRect shrink(float marginTop, float marginBottom, float marginLeft, float marginRight) {
+    public UIRect shrink(float marginTop, float marginBottom, float marginLeft, float marginRight) {
         float newWidth = width - marginLeft - marginRight;
         float newHeight = height - marginTop - marginBottom;
         float newX = x + marginLeft;
         float newY = y + marginTop;
-        return new UNGP_UIRect(newX, newY, newWidth, newHeight);
+        return new UIRect(newX, newY, newWidth, newHeight);
     }
 
-    public UNGP_UIRect shrink(float margin) {
+    public UIRect shrink(float margin) {
         return shrink(margin, margin, margin, margin);
     }
 
-    public UNGP_UIRect[] splitHorizontally(float... weights) {
+    public UIRect[] splitHorizontally(float... weights) {
         if (weights == null || weights.length == 0) {
-            return new UNGP_UIRect[]{this};
+            return new UIRect[]{this};
         } else {
             float total = 0;
             for (float weight : weights) {
                 total += weight;
             }
             float addOnX = 0;
-            UNGP_UIRect[] newRects = new UNGP_UIRect[weights.length];
+            UIRect[] newRects = new UIRect[weights.length];
             for (int i = 0; i < weights.length; i++) {
                 float curWidth = width * (weights[i] / total);
-                newRects[i] = new UNGP_UIRect(x + addOnX, y, curWidth, height);
+                newRects[i] = new UIRect(x + addOnX, y, curWidth, height);
                 addOnX += curWidth;
             }
             return newRects;
         }
     }
 
-    public UNGP_UIRect[] splitVertically(float... weights) {
+    public UIRect[] splitVertically(float... weights) {
         if (weights == null || weights.length == 0) {
-            return new UNGP_UIRect[]{this};
+            return new UIRect[]{this};
         } else {
             float total = 0;
             for (float weight : weights) {
                 total += weight;
             }
             float addOnY = 0;
-            UNGP_UIRect[] newRects = new UNGP_UIRect[weights.length];
+            UIRect[] newRects = new UIRect[weights.length];
             for (int i = 0; i < weights.length; i++) {
                 float curHeight = height * (weights[i] / total);
-                newRects[i] = new UNGP_UIRect(x, y + addOnY, width, curHeight);
+                newRects[i] = new UIRect(x, y + addOnY, width, curHeight);
                 addOnY += curHeight;
             }
             return newRects;
         }
     }
 
-    public UNGP_UIRect[] splitVertically(float splitHeight) {
+    public UIRect[] splitVertically(float splitHeight) {
         if (splitHeight >= height) {
-            return new UNGP_UIRect[]{this};
+            return new UIRect[]{this};
         } else {
-            UNGP_UIRect[] newRects = new UNGP_UIRect[2];
-            newRects[0] = new UNGP_UIRect(x, y, width, splitHeight);
-            newRects[1] = new UNGP_UIRect(x, y + splitHeight, width, height - splitHeight);
+            UIRect[] newRects = new UIRect[2];
+            newRects[0] = new UIRect(x, y, width, splitHeight);
+            newRects[1] = new UIRect(x, y + splitHeight, width, height - splitHeight);
             return newRects;
         }
     }
