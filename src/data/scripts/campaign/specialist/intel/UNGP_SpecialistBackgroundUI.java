@@ -12,11 +12,10 @@ import org.lwjgl.opengl.GL11;
 import java.awt.*;
 
 public class UNGP_SpecialistBackgroundUI implements CustomUIPanelPlugin {
-    public static final Color BOTTOM_BG_COLOR = new Color(255, 26, 106);
     public static final Color ABOVE_BG_COLOR = new Color(25, 255, 140);
+    public static final Color BOTTOM_BG_COLOR = new Color(255, 26, 106);
     private static float uiElapsed = 0f;
     private static float uiLoopVolume = 0f;
-    private static UNGP_SpecialistBackgroundUI instance;
 
     private PositionAPI p;
     private SpriteAPI seamless_bg = Global.getSettings().getSprite("fx", "UNGP_specialist_bg_seamless");
@@ -40,13 +39,6 @@ public class UNGP_SpecialistBackgroundUI implements CustomUIPanelPlugin {
             uiElapsed = Misc.random.nextFloat() * 1000f;
         uiLoopVolume = 0f;
         ticking = true;
-    }
-
-    public static UNGP_SpecialistBackgroundUI getInstance() {
-        if (instance == null) {
-            instance = new UNGP_SpecialistBackgroundUI();
-        }
-        return instance;
     }
 
     @Override

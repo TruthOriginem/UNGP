@@ -6,6 +6,7 @@ import com.fs.starfarer.api.fleet.FleetMemberAPI;
 import com.fs.starfarer.api.util.Misc;
 import com.fs.starfarer.api.util.WeightedRandomPicker;
 import data.scripts.campaign.everyframe.UNGP_CampaignPlugin.TempCampaignParams;
+import data.scripts.campaign.specialist.UNGP_SpecialistSettings;
 import data.scripts.ungprules.impl.UNGP_BaseRuleEffect;
 import data.scripts.ungprules.tags.UNGP_CampaignTag;
 
@@ -21,13 +22,13 @@ public class UNGP_WorkHard extends UNGP_BaseRuleEffect implements UNGP_CampaignT
     private float ratio;
 
     @Override
-    public void updateDifficultyCache(int difficulty) {
+    public void updateDifficultyCache(UNGP_SpecialistSettings.Difficulty difficulty) {
         ratio = getValueByDifficulty(0, difficulty);
     }
 
     @Override
-    public float getValueByDifficulty(int index, int difficulty) {
-        if (index == 0) return 0.11f + 0.04f * (float) Math.pow(difficulty, 0.5201);
+    public float getValueByDifficulty(int index, UNGP_SpecialistSettings.Difficulty difficulty) {
+        if (index == 0) return difficulty.getLinearValue(0.15f, 0.15f);
         return 0;
     }
 
@@ -46,7 +47,7 @@ public class UNGP_WorkHard extends UNGP_BaseRuleEffect implements UNGP_CampaignT
                     Color negative = Misc.getNegativeHighlightColor();
                     Color highlight = Misc.getHighlightColor();
                     Global.getSector().getCampaignUI().addMessage(String.format(rule.getExtra2(), neededMarineString),
-                            negative, neededMarineString, "", highlight, highlight);
+                                                                  negative, neededMarineString, "", highlight, highlight);
                 }
 
                 if (Math.random() < STRIKE_CHANCE_PER_DAY) {
@@ -77,17 +78,11 @@ public class UNGP_WorkHard extends UNGP_BaseRuleEffect implements UNGP_CampaignT
 
 
     @Override
-    public String getDescriptionParams(int index) {
-        if (index == 0) return getPercentString(ratio * 100f);
+    public String getDescriptionParams(int index, UNGP_SpecialistSettings.Difficulty difficulty) {
+        if (index == 0) return getPercentString(getValueByDifficulty(index, difficulty) * 100f);
         if (index == 1) return (int) (STRIKE_CHANCE_PER_DAY * 100f) + "%";
         if (index == 2) return (int) (CR_LOSS * 100f) + "%";
         if (index == 3) return (int) (CREW_LOSS * 100f) + "%";
         return null;
-    }
-
-    @Override
-    public String getDescriptionParams(int index, int difficulty) {
-        if (index == 0) return getPercentString(getValueByDifficulty(index, difficulty) * 100f);
-        return getDescriptionParams(index);
     }
 }

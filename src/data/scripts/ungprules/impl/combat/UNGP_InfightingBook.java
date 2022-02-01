@@ -3,6 +3,7 @@ package data.scripts.ungprules.impl.combat;
 import com.fs.starfarer.api.combat.CombatEngineAPI;
 import com.fs.starfarer.api.combat.ShipAPI;
 import com.fs.starfarer.api.combat.WeaponAPI;
+import data.scripts.campaign.specialist.UNGP_SpecialistSettings;
 import data.scripts.ungprules.impl.UNGP_BaseRuleEffect;
 import data.scripts.ungprules.tags.UNGP_CombatTag;
 
@@ -10,14 +11,14 @@ public class UNGP_InfightingBook extends UNGP_BaseRuleEffect implements UNGP_Com
     private float multiplier;
 
     @Override
-    public void updateDifficultyCache(int difficulty) {
-        multiplier = getValueByDifficulty(1, difficulty);
+    public void updateDifficultyCache(UNGP_SpecialistSettings.Difficulty difficulty) {
+        multiplier = getValueByDifficulty(0, difficulty);
     }
 
     //15%~25%
     @Override
-    public float getValueByDifficulty(int index, int difficulty) {
-        if (index == 1) return 0.13f + 0.02f * (float) Math.pow(difficulty, 0.598);
+    public float getValueByDifficulty(int index, UNGP_SpecialistSettings.Difficulty difficulty) {
+        if (index == 0) return difficulty.getLinearValue(0.15f, 0.1f);
         return 1f;
     }
 
@@ -36,22 +37,15 @@ public class UNGP_InfightingBook extends UNGP_BaseRuleEffect implements UNGP_Com
         for (WeaponAPI weapon : ship.getAllWeapons()) {
             if (weapon.isDecorative() || weapon.isBeam() || weapon.isBurstBeam()) continue;
             if (weapon.getSpec().getMaxRange() < 500) {
-                weapon.getDamage().getModifier().modifyMult(rule.getBuffID(), 1f + multiplier);
+                weapon.getDamage().getModifier().modifyMult(buffID, 1f + multiplier);
             }
         }
     }
 
     @Override
-    public String getDescriptionParams(int index) {
+    public String getDescriptionParams(int index, UNGP_SpecialistSettings.Difficulty difficulty) {
         if (index == 0) return "500";
-        if (index == 1) return getPercentString(multiplier * 100f);
-        return null;
-    }
-
-    @Override
-    public String getDescriptionParams(int index, int difficulty) {
-        if (index == 0) return "500";
-        if (index == 1) return getPercentString(getValueByDifficulty(index, difficulty) * 100f);
+        if (index == 1) return getPercentString(getValueByDifficulty(0, difficulty) * 100f);
         return null;
     }
 

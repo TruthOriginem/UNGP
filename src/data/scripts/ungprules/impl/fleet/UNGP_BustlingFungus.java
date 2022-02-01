@@ -6,6 +6,7 @@ import com.fs.starfarer.api.campaign.CampaignFleetAPI;
 import com.fs.starfarer.api.fleet.FleetMemberAPI;
 import com.fs.starfarer.api.loading.CampaignPingSpec;
 import data.scripts.campaign.everyframe.UNGP_CampaignPlugin;
+import data.scripts.campaign.specialist.UNGP_SpecialistSettings;
 import data.scripts.ungprules.impl.UNGP_BaseRuleEffect;
 import data.scripts.ungprules.tags.UNGP_CampaignTag;
 import data.scripts.utils.UNGP_BaseBuff;
@@ -19,26 +20,26 @@ public class UNGP_BustlingFungus extends UNGP_BaseRuleEffect implements UNGP_Cam
     private static final float SUPPLY_FACTOR = 0.5f;
 
     private class FungusBuff extends UNGP_BaseBuff {
-        public FungusBuff(String id, float dur) {
-            super(id, dur);
+        public FungusBuff(String id) {
+            super(id);
         }
 
         @Override
         public void apply(FleetMemberAPI member) {
-            member.getStats().getRepairRatePercentPerDay().modifyPercent(rule.getBuffID(), REPAIR_RATE);
-            member.getStats().getSuppliesPerMonth().modifyMult(rule.getBuffID(), SUPPLY_FACTOR);
+            member.getStats().getRepairRatePercentPerDay().modifyPercent(buffID, REPAIR_RATE);
+            member.getStats().getSuppliesPerMonth().modifyMult(buffID, SUPPLY_FACTOR);
         }
 
     }
 
 
     @Override
-    public void updateDifficultyCache(int difficulty) {
+    public void updateDifficultyCache(UNGP_SpecialistSettings.Difficulty difficulty) {
 
     }
 
     @Override
-    public float getValueByDifficulty(int index, int difficulty) {
+    public float getValueByDifficulty(int index, UNGP_SpecialistSettings.Difficulty difficulty) {
         return 0;
     }
 
@@ -54,16 +55,15 @@ public class UNGP_BustlingFungus extends UNGP_BaseRuleEffect implements UNGP_Cam
                 } else {
                     float elapsed = (float) mem;
                     if (elapsed >= WAIT_DAY) {
-                        String buffId = rule.getBuffID();
-                        float buffDur = 0.1f;
+                        String buffId = buffID;
                         boolean needsSync = false;
                         for (FleetMemberAPI member : playerFleet.getFleetData().getMembersListCopy()) {
                             BuffManagerAPI.Buff test = member.getBuffManager().getBuff(buffId);
                             if (test instanceof FungusBuff) {
                                 FungusBuff buff = (FungusBuff) test;
-                                buff.setDur(buffDur);
+                                buff.refresh();
                             } else {
-                                member.getBuffManager().addBuff(new FungusBuff(buffId, buffDur));
+                                member.getBuffManager().addBuff(new FungusBuff(buffId));
                                 needsSync = true;
                             }
                         }
@@ -98,10 +98,10 @@ public class UNGP_BustlingFungus extends UNGP_BaseRuleEffect implements UNGP_Cam
     }
 
     @Override
-    public String getDescriptionParams(int index) {
+    public String getDescriptionParams(int index, UNGP_SpecialistSettings.Difficulty difficulty) {
         if (index == 0) return (int) WAIT_DAY + "";
         if (index == 1) return (int) (REPAIR_RATE) + "%";
         if (index == 2) return (int) ((1 - SUPPLY_FACTOR) * 100f) + "%";
-        return null;
+        return super.getDescriptionParams(index, difficulty);
     }
 }

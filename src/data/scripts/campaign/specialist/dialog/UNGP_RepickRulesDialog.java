@@ -1,4 +1,4 @@
-package data.scripts.campaign.specialist.rules;
+package data.scripts.campaign.specialist.dialog;
 
 import com.fs.starfarer.api.Script;
 import com.fs.starfarer.api.campaign.InteractionDialogAPI;
@@ -12,13 +12,16 @@ import com.fs.starfarer.api.ui.IntelUIAPI;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
 import data.scripts.campaign.UNGP_InGameData;
-import data.scripts.campaign.specialist.UNGP_SpecialistSettings;
+import data.scripts.campaign.specialist.rules.UNGP_RulePickListener;
+import data.scripts.campaign.specialist.rules.UNGP_RulesManager;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 import static data.scripts.campaign.UNGP_Settings.d_i18n;
+import static data.scripts.campaign.specialist.UNGP_SpecialistSettings.Difficulty;
+import static data.scripts.campaign.specialist.UNGP_SpecialistSettings.rulesMeetCondition;
 import static data.scripts.campaign.specialist.rules.UNGP_RulesManager.URule;
 import static data.scripts.campaign.specialist.rules.UNGP_RulesManager.rules_i18n;
 
@@ -63,9 +66,10 @@ public class UNGP_RepickRulesDialog implements InteractionDialogPlugin {
         if (optionData == OptionRepick) {
             pickedList.clear();
             couldRepick = false;
-            final int difficultyValue = inGameData.getDifficultyLevel();
-            UNGP_RulesManager.setStaticDifficultyLevel(difficultyValue);
-            UNGP_RulePickListener pickListener = new UNGP_RulePickListener(pickedList, difficultyValue, new Script() {
+            final Difficulty difficulty = inGameData.getDifficulty();
+            UNGP_RulesManager.setStaticDifficulty(difficulty);
+            UNGP_RulePickListener pickListener = new UNGP_RulePickListener(pickedList, inGameData.getCompletedChallenges(),
+                                                                           difficulty, new Script() {
                 @Override
                 public void run() {
                     textPanel.addPara(d_i18n.get("hardmodeDes"));
@@ -77,15 +81,14 @@ public class UNGP_RepickRulesDialog implements InteractionDialogPlugin {
                         tooltip.addImageWithText(3f);
                     }
                     couldRepick = true;
-                    if (!UNGP_SpecialistSettings.rulesMeetCondition(pickedList, difficultyValue)) {
+                    if (!rulesMeetCondition(pickedList, difficulty)) {
                         tooltip.addPara(d_i18n.get("rulepick_notMeet"), Misc.getNegativeHighlightColor(), 5f);
                         couldRepick = false;
                     }
                     textPanel.addTooltip();
                 }
             }, null);
-            dialog.showCargoPickerDialog(d_i18n.get("rulepick_title"), d_i18n.get("confirm"), d_i18n.get("cancel"), false,
-                    280, UNGP_RulesManager.createRulesCargoBasedOnChallenges(inGameData.getCompletedChallenges()), pickListener);
+            pickListener.showCargoPickerDialog(dialog);
         }
 
         if (optionData == OptionConfirm) {

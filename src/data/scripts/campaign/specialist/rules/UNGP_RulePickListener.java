@@ -5,6 +5,7 @@ import com.fs.starfarer.api.Script;
 import com.fs.starfarer.api.campaign.CargoAPI;
 import com.fs.starfarer.api.campaign.CargoPickerListener;
 import com.fs.starfarer.api.campaign.CargoStackAPI;
+import com.fs.starfarer.api.campaign.InteractionDialogAPI;
 import com.fs.starfarer.api.ui.Alignment;
 import com.fs.starfarer.api.ui.LabelAPI;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
@@ -12,8 +13,11 @@ import com.fs.starfarer.api.util.IntervalUtil;
 import com.fs.starfarer.api.util.Misc;
 import data.scripts.campaign.everyframe.UNGP_UITimeScript;
 import data.scripts.campaign.specialist.UNGP_SpecialistSettings;
-import data.scripts.utils.UNGPFont;
+import data.scripts.campaign.specialist.UNGP_SpecialistSettings.Difficulty;
+import data.scripts.campaign.specialist.challenges.UNGP_ChallengeManager;
+import data.scripts.campaign.specialist.items.UNGP_RuleItemConnectBGManager;
 import org.lwjgl.input.Keyboard;
+import ungp.ui.UNGPFont;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -25,20 +29,22 @@ import static data.scripts.campaign.specialist.rules.UNGP_RulesManager.*;
 
 public class UNGP_RulePickListener implements CargoPickerListener {
     private List<URule> pickedRules;
+    private List<String> completedChallenges;
     private Script onPicked = null;
     private Script onCancelled = null;
-    private int difficultyValue;
+    private Difficulty difficulty;
     private boolean isPressedShift = false;
     private boolean detailedMode = false;
     private boolean isAPressed = false;
     private boolean isDPressed = false;
     private int rulePage = 0;
 
-    public UNGP_RulePickListener(List<URule> pickedRules, int difficulty, Script onPicked, Script onCancelled) {
+    public UNGP_RulePickListener(List<URule> pickedRules, List<String> completedChallenges, Difficulty difficulty, Script onPicked, Script onCancelled) {
         this.pickedRules = pickedRules;
+        this.completedChallenges = completedChallenges;
         this.onPicked = onPicked;
         this.onCancelled = onCancelled;
-        this.difficultyValue = difficulty;
+        this.difficulty = difficulty;
         initUIData();
     }
 
@@ -54,7 +60,7 @@ public class UNGP_RulePickListener implements CargoPickerListener {
             }
         }
         pickedRules.addAll(ruleToAdd);
-        Collections.sort(pickedRules, new UNGP_RuleSorter());
+        Collections.sort(pickedRules, new UNGP_RulesManager.UNGP_RuleSorter());
         if (onPicked != null)
             onPicked.run();
         clearUIData();
@@ -68,15 +74,15 @@ public class UNGP_RulePickListener implements CargoPickerListener {
     }
 
     private void initUIData() {
+        UNGP_RuleItemConnectBGManager.clear();
         Global.getSoundPlayer().playCustomMusic(1, 1, "UNGP_rulepicker_bgm", true);
         UNGP_UITimeScript.addInterval("2secs", new IntervalUtil(2f, 2f));
         UNGP_UITimeScript.addInterval("6secs", new IntervalUtil(6f, 6f));
     }
 
     private void clearUIData() {
+        UNGP_RuleItemConnectBGManager.clear();
         Global.getSoundPlayer().playCustomMusic(1, 1, null);
-//        Global.getSoundPlayer().pauseCustomMusic();
-//        Global.getSoundPlayer().restartCurrentMusic();
         UNGP_UITimeScript.removeInterval("2secs");
         UNGP_UITimeScript.removeInterval("6secs");
         UNGPFont.clearDynamicDrawable();
@@ -89,13 +95,21 @@ public class UNGP_RulePickListener implements CargoPickerListener {
         float opad = 10f;
         Color highlight = Misc.getHighlightColor();
         Color negative = Misc.getNegativeHighlightColor();
+        // 满足挑战开启条件(专20)
+        if (UNGP_ChallengeManager.isDifficultyEnough(difficulty)) {
+            CargoAPI copy = combined.createCopy();
+            if (pickedUp != null) {
+                copy.addFromStack(pickedUp);
+            }
+            UNGP_RuleItemConnectBGManager.refresh(copy, completedChallenges);
+        }
         // 专家等级:X
-        TooltipMakerAPI imageTooltip = panel.beginImageWithText(UNGP_SpecialistSettings.getSpecialistModeIconPath(), 64f);
+        TooltipMakerAPI imageTooltip = panel.beginImageWithText(difficulty.spritePath, 64f);
         imageTooltip.setParaOrbitronLarge();
-        if (difficultyValue == UNGP_SpecialistSettings.MAX_DIFFICULTY) {
-            imageTooltip.addPara(d_i18n.get("rulepick_level"), opad, negative, highlight, difficultyValue + "");
+        if (difficulty == Difficulty.OMEGA) {
+            imageTooltip.addPara(d_i18n.get("rulepick_level"), opad, negative, difficulty.color, difficulty.name);
         } else {
-            imageTooltip.addPara(d_i18n.get("rulepick_level"), opad, highlight, difficultyValue + "");
+            imageTooltip.addPara(d_i18n.get("rulepick_level"), opad, difficulty.color, difficulty.name);
         }
         imageTooltip.setParaFontDefault();
         panel.addImageWithText(0);
@@ -130,18 +144,17 @@ public class UNGP_RulePickListener implements CargoPickerListener {
         panel.setParaOrbitronLarge();
         Color color = cost >= 0 ? highlight : negative;
         Color textColor = Misc.getBasePlayerColor();
-        Color grey = Misc.getGrayColor();
         panel.addPara(d_i18n.get("rulepick_cost"), pad, textColor, color, cost + "");
-        int maxAmount = UNGP_SpecialistSettings.getMaxRulesAmount(difficultyValue);
-        int minAmount = UNGP_SpecialistSettings.getMinRulesAmount(difficultyValue);
+        int maxAmount = difficulty.maxRules;
+        int minAmount = difficulty.minRules;
         // 规则数目
         color = (amount >= minAmount && amount <= maxAmount) ? highlight : negative;
         LabelAPI para = panel.addPara(d_i18n.get("rulepick_ruleAmount"), pad, textColor, color, amount + "", maxAmount + "", minAmount + "");
         para.setHighlightColors(color, highlight, highlight);
         panel.setParaFontDefault();
 
-        Collections.sort(bonusRules, new UNGP_RuleSorter());
-        Collections.sort(notBonusRules, new UNGP_RuleSorter());
+        Collections.sort(bonusRules, new UNGP_RulesManager.UNGP_RuleSorter());
+        Collections.sort(notBonusRules, new UNGP_RulesManager.UNGP_RuleSorter());
         List<URule> rules = new ArrayList<>();
         rules.addAll(bonusRules);
         rules.addAll(notBonusRules);
@@ -222,7 +235,7 @@ public class UNGP_RulePickListener implements CargoPickerListener {
             panel.addSectionHeading(getBonusString(false) + String.format("(%d/%d)", rulePage + 1, maxPage + 1), getBonusColor(false), sectionColor, Alignment.MID, pad);
             addRuleSmallIconGroup(panel, notBonusRules);
         }
-        if (!UNGP_SpecialistSettings.rulesMeetCondition(rules, difficultyValue)) {
+        if (!UNGP_SpecialistSettings.rulesMeetCondition(rules, this.difficulty)) {
             panel.setParaOrbitronLarge();
             panel.addPara(d_i18n.get("rulepick_notMeet"), negative, small).setAlignment(Alignment.MID);
             panel.setParaFontDefault();
@@ -242,5 +255,21 @@ public class UNGP_RulePickListener implements CargoPickerListener {
             }
             panel.addImageWithText(2f);
         }
+    }
+
+    /**
+     * Add cargo picker to dialog.
+     *
+     * @param baseDialog
+     */
+    public void showCargoPickerDialog(InteractionDialogAPI baseDialog) {
+        float width = Global.getSettings().getScreenWidthPixels() * 0.8f;
+        float height = Global.getSettings().getScreenHeightPixels() * 0.8f;
+        baseDialog.showCargoPickerDialog(d_i18n.get("rulepick_title"), d_i18n.get("confirm"), d_i18n.get("cancel"), false,
+                                         Math.max(280f, width * 0.2f),
+                                         width,
+                                         height,
+                                         UNGP_RulesManager.createRulesCargoBasedOnChallenges(completedChallenges),
+                                         this);
     }
 }

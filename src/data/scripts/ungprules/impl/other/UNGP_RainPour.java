@@ -3,6 +3,7 @@ package data.scripts.ungprules.impl.other;
 import com.fs.starfarer.api.impl.campaign.intel.MessageIntel;
 import com.fs.starfarer.api.util.Misc;
 import com.fs.starfarer.api.util.WeightedRandomPicker;
+import data.scripts.campaign.specialist.UNGP_SpecialistSettings;
 import data.scripts.campaign.specialist.rules.UNGP_RulesManager;
 import data.scripts.ungprules.impl.UNGP_BaseRuleEffect;
 import data.scripts.ungprules.tags.UNGP_TweakBeforeApplyTag;
@@ -14,12 +15,12 @@ import static data.scripts.campaign.specialist.rules.UNGP_RulesManager.getAllRul
 
 public class UNGP_RainPour extends UNGP_BaseRuleEffect implements UNGP_TweakBeforeApplyTag {
     @Override
-    public float getValueByDifficulty(int index, int difficulty) {
+    public float getValueByDifficulty(int index, UNGP_SpecialistSettings.Difficulty difficulty) {
         return 0;
     }
 
     @Override
-    public String getDescriptionParams(int index, int difficulty) {
+    public String getDescriptionParams(int index, UNGP_SpecialistSettings.Difficulty difficulty) {
         if (index == 0) return "2";
         if (index == 1) return UNGP_RulesManager.getBonusString(false);
         return null;
@@ -41,7 +42,7 @@ public class UNGP_RainPour extends UNGP_BaseRuleEffect implements UNGP_TweakBefo
             for (int i = 0; i < 2; i++) {
                 URule rolled = picker.pickAndRemove();
                 activeRules.add(rolled);
-                MessageIntel intel = new MessageIntel(rule.getName(), rolled.getCorrectColor());
+                MessageIntel intel = createMessage();
                 intel.setIcon(rolled.getSpritePath());
                 intel.addLine(rule.getExtra1(), Misc.getTextColor(), new String[]{rolled.getName()}, rolled.getCorrectColor());
                 showMessage(intel);

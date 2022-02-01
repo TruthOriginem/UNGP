@@ -1,4 +1,4 @@
-package data.scripts.campaign;
+package data.scripts.campaign.specialist.dialog;
 
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.Script;
@@ -13,15 +13,13 @@ import com.fs.starfarer.api.input.InputEventAPI;
 import com.fs.starfarer.api.loading.FighterWingSpecAPI;
 import com.fs.starfarer.api.loading.HullModSpecAPI;
 import com.fs.starfarer.api.loading.WeaponSpecAPI;
-import com.fs.starfarer.api.ui.Alignment;
-import com.fs.starfarer.api.ui.PositionAPI;
-import com.fs.starfarer.api.ui.TooltipMakerAPI;
-import com.fs.starfarer.api.ui.ValueDisplayMode;
+import com.fs.starfarer.api.ui.*;
 import com.fs.starfarer.api.util.Misc;
 import com.fs.starfarer.api.util.WeightedRandomPicker;
+import data.scripts.campaign.UNGP_InGameData;
+import data.scripts.campaign.UNGP_Settings;
 import data.scripts.campaign.inherit.UNGP_InheritData;
 import data.scripts.campaign.inherit.UNGP_InheritManager;
-import data.scripts.campaign.specialist.UNGP_SpecialistSettings;
 import data.scripts.campaign.specialist.challenges.UNGP_ChallengeInfo;
 import data.scripts.campaign.specialist.challenges.UNGP_ChallengeManager;
 import data.scripts.campaign.specialist.intel.UNGP_ChallengeIntel;
@@ -29,7 +27,11 @@ import data.scripts.campaign.specialist.intel.UNGP_SpecialistIntel;
 import data.scripts.campaign.specialist.rules.UNGP_RulePickListener;
 import data.scripts.campaign.specialist.rules.UNGP_RulesManager;
 import data.scripts.campaign.specialist.rules.UNGP_RulesManager.URule;
+import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.Display;
+import ungp.ui.CheckBoxGroup;
+import ungp.ui.HorizontalButtonGroup;
+import ungp.ui.SettingEntry;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -37,6 +39,8 @@ import java.util.List;
 import java.util.Map;
 
 import static data.scripts.campaign.UNGP_Settings.d_i18n;
+import static data.scripts.campaign.specialist.UNGP_SpecialistSettings.Difficulty;
+import static data.scripts.campaign.specialist.UNGP_SpecialistSettings.rulesMeetCondition;
 
 public class UNGP_InteractionDialog implements InteractionDialogPlugin {
     private enum OptionID {
@@ -47,9 +51,9 @@ public class UNGP_InteractionDialog implements InteractionDialogPlugin {
         CHOOSE_INHERIT_SLOT_0,
         CHOOSE_INHERIT_SLOT_1,
         CHOOSE_INHERIT_SLOT_2,
-        SWITCH_MODE,
         PICK_RULES,
         INHERIT,
+        INHERIT_SETTINGS,
 
         //        START_RECORD,
         CHOOSE_RECORD_SLOT_0,
@@ -72,16 +76,14 @@ public class UNGP_InteractionDialog implements InteractionDialogPlugin {
     private OptionID choseInheritSlotOptionID = null;
 
     private UNGP_InheritData toRecordInheritData;
-    private boolean isHardMode = false;
+    private boolean isSpecialistMode = false;
 
-    private String inheritCreditsSelector = Misc.genUID();
-    private String inheritBPSelector = Misc.genUID();
-    private String inheritDifficultySelector = Misc.genUID();
-    private boolean lockedDifficultyValue = false;
-    private float creditsSelecterValue;
-    private float bpSelecterValue;
-    private int difficultyValue;
-    private List<URule> selectedRules = new ArrayList<>();
+    private SettingEntry<Float> setting_inheritCreditsRatio = new SettingEntry<>(0f);
+    private SettingEntry<Float> setting_inheritBPsRatio = new SettingEntry<>(0f);
+    private SettingEntry<Difficulty> setting_difficulty = new SettingEntry<>(null);
+
+    private List<URule> pickedRules = new ArrayList<>();
+
 
     public UNGP_InteractionDialog(UNGP_InGameData inGameData) {
         this.inGameData = inGameData;
@@ -160,9 +162,9 @@ public class UNGP_InteractionDialog implements InteractionDialogPlugin {
             }
         }
         TooltipMakerAPI toRecordInfo = textPanel.beginTooltip();
-        int difficulty = 0;
+        Difficulty difficulty = null;
         if (inGameData.isHardMode()) {
-            difficulty = inGameData.getDifficultyLevel();
+            difficulty = inGameData.getDifficulty();
         }
         toRecordInheritData.addRecordTooltip(toRecordInfo, difficulty);
         textPanel.addTooltip();
@@ -185,9 +187,8 @@ public class UNGP_InteractionDialog implements InteractionDialogPlugin {
                 slotID = 2;
                 break;
         }
-        Color hl = Misc.getHighlightColor();
-
-        lastInheritData = UNGP_InheritManager.Get(slotID);
+        lastInheritData = UNGP_InheritManager.getDataFromSlot(slotID);
+        Color negativeHighlightColor = Misc.getNegativeHighlightColor();
         if (lastInheritData != null) {
             choseInheritSlotOptionID = option;
             TooltipMakerAPI inheritDataInfo = textPanel.beginTooltip();
@@ -196,41 +197,31 @@ public class UNGP_InteractionDialog implements InteractionDialogPlugin {
 
             //如果没有继承过或者没有超过时限
             if (!inGameData.isPassedInheritTime() && !inGameData.isInherited()) {
-                options.addSelector(d_i18n.get("inheritCredits"), inheritCreditsSelector,
-                                    hl, 270f, 30f,
-                                    0f, 100f, ValueDisplayMode.PERCENT, null);
-                options.setSelectorValue(inheritCreditsSelector, creditsSelecterValue);
 
-                options.addSelector(d_i18n.get("inheritBPs"), inheritBPSelector,
-                                    hl, 270f, 30f,
-                                    0f, 100f, ValueDisplayMode.PERCENT, null);
-                options.setSelectorValue(inheritBPSelector, bpSelecterValue);
+                // 继承选项
+                String settingOptionStr = d_i18n.get("startSetting");
+                options.addOption(settingOptionStr, OptionID.INHERIT_SETTINGS);
+                options.setShortcut(OptionID.INHERIT_SETTINGS, Keyboard.KEY_S, false, false, false, true);
 
-                //专家模式
-                if (isHardMode) {
-                    options.addSelector(d_i18n.get("hardmodeLevel"), inheritDifficultySelector,
-                                        Misc.getNegativeHighlightColor(), 270f, 30f,
-                                        1, UNGP_SpecialistSettings.getMaxDifficultyLevel(lastInheritData.cycle + 1), ValueDisplayMode.VALUE, null);
-                    options.setSelectorValue(inheritDifficultySelector, difficultyValue);
-                }
-                options.addOption(d_i18n.get("specialistMode") + " : " + (isHardMode ? d_i18n.get("on") : d_i18n.get("off")), OptionID.SWITCH_MODE);
-                if (isHardMode) {
-                    options.addOption(d_i18n.get("rulepick_button"), OptionID.PICK_RULES);
-                    selectedRules.clear();
-//                    setHardModeToolTip(difficultyValue);
+                if (isSpecialistMode) {
+                    options.addOption(d_i18n.get("rulepick_button") + (UNGP_ChallengeManager.isDifficultyEnough(setting_difficulty.get()) ?
+                                                                       d_i18n.get("rulepick_couldChallenge") : ""), OptionID.PICK_RULES);
+                    options.setShortcut(OptionID.PICK_RULES, Keyboard.KEY_R, false, false, false, true);
+                    pickedRules.clear();
                 }
 
                 options.addOption(d_i18n.get("startInherit"), OptionID.INHERIT);
-                changeInheritConfirmationTooltip();
+                options.setShortcut(OptionID.INHERIT, Keyboard.KEY_SPACE, false, false, false, true);
+                updateOptionsFromSettings();
             } else {
                 if (inGameData.isInherited()) {
-                    textPanel.addPara(d_i18n.get("hasInherited"), Misc.getNegativeHighlightColor());
+                    textPanel.addPara(d_i18n.get("hasInherited"), negativeHighlightColor);
                 } else {
-                    textPanel.addPara(d_i18n.get("hasPassedTime"), Misc.getNegativeHighlightColor());
+                    textPanel.addPara(d_i18n.get("hasPassedTime"), negativeHighlightColor);
                 }
             }
         } else {
-            textPanel.addPara(d_i18n.get("noInherit"), Misc.getNegativeHighlightColor());
+            textPanel.addPara(d_i18n.get("noInherit"), negativeHighlightColor);
         }
     }
 
@@ -246,7 +237,7 @@ public class UNGP_InteractionDialog implements InteractionDialogPlugin {
                 slotID = 2;
                 break;
         }
-        UNGP_InheritManager.save(dataToRecord, slotID);
+        UNGP_InheritManager.saveDataToSlot(dataToRecord, slotID);
     }
 
     @Override
@@ -284,6 +275,7 @@ public class UNGP_InteractionDialog implements InteractionDialogPlugin {
                     options.addOption(d_i18n.format("slotDes", curSlot.cycle - 1 + "", curSlot.lastPlayerName)
                             , OptionID.CHOOSE_INHERIT_SLOT_2);
                 }
+                resetSettings();
                 addBackButton(OptionID.BACK_TO_MENU);
             }
             break;
@@ -296,7 +288,7 @@ public class UNGP_InteractionDialog implements InteractionDialogPlugin {
             case CHECK_RECORD: {
                 TooltipMakerAPI recordInfo = textPanel.beginTooltip();
                 textPanel.addPara(d_i18n.get("recordInfo"));
-                toRecordInheritData.addRecordTooltip(recordInfo, inGameData.getDifficultyLevel());
+                toRecordInheritData.addRecordTooltip(recordInfo, inGameData.getDifficulty());
                 textPanel.addTooltip();
                 textPanel.addPara(d_i18n.get("checkRecordSlot"));
                 // 三个重生槽位
@@ -331,35 +323,30 @@ public class UNGP_InteractionDialog implements InteractionDialogPlugin {
                 textPanel.addPara(d_i18n.get("helpInfo"));
                 addBackButton(OptionID.BACK_TO_MENU);
                 break;
-            case SWITCH_MODE:
-                isHardMode = !isHardMode;
-                if (!isHardMode) {
-                    selectedRules.clear();
-                    lockedDifficultyValue = false;
-                }
-                optionSelected(null, choseInheritSlotOptionID);
-                break;
             case PICK_RULES:
-                final List<URule> oldList = new ArrayList<>(selectedRules);
-                selectedRules.clear();
-                UNGP_RulesManager.setStaticDifficultyLevel(difficultyValue);
-                UNGP_RulePickListener pickListener = new UNGP_RulePickListener(selectedRules, difficultyValue, new Script() {
+                final List<URule> oldList = new ArrayList<>(pickedRules);
+                pickedRules.clear();
+                final Difficulty difficulty = setting_difficulty.get();
+                UNGP_RulesManager.setStaticDifficulty(difficulty);
+                UNGP_RulePickListener pickListener = new UNGP_RulePickListener(pickedRules,
+                                                                               lastInheritData.completedChallenges,
+                                                                               difficulty, new Script() {
                     @Override
                     public void run() {
-                        setHardModeToolTip();
+                        setSpecialistModeToolTip();
                         textPanel.addPara(d_i18n.get("hardmodeDes"));
                         TooltipMakerAPI tooltip = textPanel.beginTooltip();
-                        for (URule rule : selectedRules) {
+                        for (URule rule : pickedRules) {
                             TooltipMakerAPI imageMaker = tooltip.beginImageWithText(rule.getSpritePath(), 32f);
                             imageMaker.addPara(rule.getName(), rule.getCorrectColor(), 0f);
                             rule.addDesc(imageMaker, 0f);
                             tooltip.addImageWithText(3f);
                         }
                         // 如果满足规则
-                        if (!UNGP_SpecialistSettings.rulesMeetCondition(selectedRules, difficultyValue)) {
+                        if (!rulesMeetCondition(pickedRules, difficulty)) {
                             tooltip.addPara(d_i18n.get("rulepick_notMeet"), Misc.getNegativeHighlightColor(), 5f);
                         } else {
-                            List<UNGP_ChallengeInfo> runnableChallenges = UNGP_ChallengeManager.getRunnableChallenges(difficultyValue, selectedRules, lastInheritData.completedChallenges);
+                            List<UNGP_ChallengeInfo> runnableChallenges = UNGP_ChallengeManager.getRunnableChallenges(difficulty, pickedRules, lastInheritData.completedChallenges);
                             if (!runnableChallenges.isEmpty()) {
                                 tooltip.addPara(d_i18n.get("rulepick_runnableChallenges"), 10f);
                                 for (UNGP_ChallengeInfo challenge : runnableChallenges) {
@@ -368,17 +355,14 @@ public class UNGP_InteractionDialog implements InteractionDialogPlugin {
                             }
                         }
                         textPanel.addTooltip();
-                        lockedDifficultyValue = true;
                     }
                 }, new Script() {
                     @Override
                     public void run() {
-                        selectedRules.addAll(oldList);
+                        pickedRules.addAll(oldList);
                     }
                 });
-                dialog.showCargoPickerDialog(d_i18n.get("rulepick_title"), d_i18n.get("confirm"), d_i18n.get("cancel"), false,
-                                             280, UNGP_RulesManager.createRulesCargoBasedOnChallenges(lastInheritData.completedChallenges), pickListener);
-                options.setEnabled(inheritDifficultySelector, false);
+                pickListener.showCargoPickerDialog(dialog);
                 break;
             case INHERIT:
                 inherit();
@@ -400,6 +384,9 @@ public class UNGP_InteractionDialog implements InteractionDialogPlugin {
                 UNGP_InheritManager.clearSlots();
                 dialog.dismiss();
                 break;
+            case INHERIT_SETTINGS:
+                dialog.showCustomDialog(720f, 300f, new CustomConfirmDialog());
+                break;
             default:
                 break;
         }
@@ -410,11 +397,11 @@ public class UNGP_InteractionDialog implements InteractionDialogPlugin {
      * 继承重生点
      */
     private void inherit() {
-        int creditsInherited = (int) (lastInheritData.inheritCredits * creditsSelecterValue * 0.01f);
+        int creditsInherited = (int) (lastInheritData.inheritCredits * setting_inheritCreditsRatio.get());
         sector.getPlayerFleet().getCargo().getCredits().add(creditsInherited);
         AddRemoveCommodity.addCreditsGainText(creditsInherited, textPanel);
         FactionAPI player = sector.getPlayerFaction();
-        float inheritBPPercent = bpSelecterValue * 0.01f;
+        float inheritBPPercent = setting_inheritBPsRatio.get();
         int shipAmount = (int) (inheritBPPercent * lastInheritData.ships.size());
         int fighterAmount = (int) (inheritBPPercent * lastInheritData.fighters.size());
         int weaponAmount = (int) (inheritBPPercent * lastInheritData.weapons.size());
@@ -511,7 +498,7 @@ public class UNGP_InteractionDialog implements InteractionDialogPlugin {
 
         textPanel.setFontInsignia();
 
-        if (isHardMode)
+        if (isSpecialistMode)
             textPanel.addPara(d_i18n.get("hardModeYes"), Misc.getNegativeHighlightColor());
 
 
@@ -519,13 +506,13 @@ public class UNGP_InteractionDialog implements InteractionDialogPlugin {
 
         inGameData.setCurCycle(lastInheritData.cycle);
         inGameData.setInherited(true);
-        inGameData.setHardMode(isHardMode);
+        inGameData.setHardMode(isSpecialistMode);
         inGameData.setCompletedChallenges(lastInheritData.completedChallenges);
-        if (isHardMode) {
-            inGameData.setDifficultyLevel(difficultyValue);
-            inGameData.saveActivatedRules(selectedRules);
-            UNGP_SpecialistIntel intel = UNGP_SpecialistIntel.getInstance();
-            Global.getSector().getIntelManager().addIntelToTextPanel(intel, textPanel);
+        if (isSpecialistMode) {
+            inGameData.setDifficulty(setting_difficulty.get());
+            inGameData.saveActivatedRules(pickedRules);
+            UNGP_SpecialistIntel intel = new UNGP_SpecialistIntel();
+            Global.getSector().getIntelManager().addIntel(intel, false, textPanel);
             UNGP_ChallengeIntel challengeIntel = UNGP_ChallengeManager.confirmChallenges(inGameData);
             if (challengeIntel != null) {
                 Global.getSector().getIntelManager().addIntelToTextPanel(challengeIntel, textPanel);
@@ -539,14 +526,14 @@ public class UNGP_InteractionDialog implements InteractionDialogPlugin {
 
     }
 
-    private void setHardModeToolTip() {
+    private void setSpecialistModeToolTip() {
         if (options.hasOption(OptionID.INHERIT)) {
-            if (!selectedRules.isEmpty()) {
-                String[] ruleNames = new String[selectedRules.size()];
-                Color[] ruleColors = new Color[selectedRules.size()];
+            if (!pickedRules.isEmpty()) {
+                String[] ruleNames = new String[pickedRules.size()];
+                Color[] ruleColors = new Color[pickedRules.size()];
                 StringBuilder result = new StringBuilder(d_i18n.get("hardmodeDes"));
-                for (int i = 0; i < selectedRules.size(); i++) {
-                    URule rule = selectedRules.get(i);
+                for (int i = 0; i < pickedRules.size(); i++) {
+                    URule rule = pickedRules.get(i);
                     result.append("\n  ");
                     result.append(rule.getName());
                     ruleNames[i] = rule.getName();
@@ -561,51 +548,32 @@ public class UNGP_InteractionDialog implements InteractionDialogPlugin {
 
     @Override
     public void advance(float amount) {
-        if (options.hasSelector(inheritCreditsSelector)) {
-            float newValue = options.getSelectorValue(inheritCreditsSelector);
-            if (newValue != creditsSelecterValue) {
-                creditsSelecterValue = newValue;
-                changeInheritConfirmationTooltip();
-            }
-        }
-        if (options.hasSelector(inheritBPSelector)) {
-            float newValue = options.getSelectorValue(inheritBPSelector);
-            if (newValue != bpSelecterValue) {
-                bpSelecterValue = newValue;
-                changeInheritConfirmationTooltip();
-            }
-        }
-        if (options.hasSelector(inheritDifficultySelector)) {
-            if (!lockedDifficultyValue) {
-                int newDifficultyValue = Math.round(options.getSelectorValue(inheritDifficultySelector));
-                if (newDifficultyValue != difficultyValue) {
-                    difficultyValue = newDifficultyValue;
-                    if (difficultyValue == UNGP_SpecialistSettings.MAX_DIFFICULTY) {
-                        options.setOptionText(d_i18n.get("rulepick_button") + d_i18n.get("rulepick_couldChallenge"), OptionID.PICK_RULES);
-                    } else {
-                        options.setOptionText(d_i18n.get("rulepick_button"), OptionID.PICK_RULES);
-                    }
-                    changeInheritConfirmationTooltip();
-                }
-            } else {
-                options.setSelectorValue(inheritDifficultySelector, difficultyValue);
-            }
-        }
-        if (isHardMode && options.hasOption(OptionID.INHERIT)) {
-            options.setEnabled(OptionID.INHERIT, UNGP_SpecialistSettings.rulesMeetCondition(selectedRules, difficultyValue));
+        if (isSpecialistMode && options.hasOption(OptionID.INHERIT)) {
+            options.setEnabled(OptionID.INHERIT, rulesMeetCondition(pickedRules, setting_difficulty.get()));
         }
     }
 
     /**
      * 继承
      */
-    private void changeInheritConfirmationTooltip() {
+    private void updateOptionsFromSettings() {
         if (options.hasOption(OptionID.INHERIT)) {
-            final int creditsInherited = (int) (lastInheritData.inheritCredits * creditsSelecterValue * 0.01f);
-            final int bpInherited = (int) ((lastInheritData.ships.size() + lastInheritData.fighters.size() + lastInheritData.weapons.size() + lastInheritData.hullmods.size()) * bpSelecterValue * 0.01f);
+            final int creditsInherited = (int) (lastInheritData.inheritCredits * setting_inheritCreditsRatio.get());
+            final int bpInherited = (int) ((lastInheritData.ships.size() +
+                    lastInheritData.fighters.size() +
+                    lastInheritData.weapons.size() +
+                    lastInheritData.hullmods.size())
+                    * setting_inheritBPsRatio.get());
             final int addSkillPoints = UNGP_Settings.getBonusSkillPoints(lastInheritData.cycle);
             final int addStoryPoints = UNGP_Settings.getBonusStoryPoints(lastInheritData.cycle);
-            final boolean isHd = isHardMode;
+            final boolean isHd = isSpecialistMode;
+            final Difficulty difficulty = setting_difficulty.get();
+
+            textPanel.addPara(d_i18n.get("inheritCredits") + ": %s", Misc.getHighlightColor(), (int) (setting_inheritCreditsRatio.get() * 100f) + "%");
+            textPanel.addPara(d_i18n.get("inheritBPs") + ": %s", Misc.getPositiveHighlightColor(), (int) (setting_inheritBPsRatio.get() * 100f) + "%");
+            if (difficulty != null) {
+                textPanel.addPara(d_i18n.get("hardmodeLevel") + ": %s", difficulty.color, difficulty.name);
+            }
             // 确认
             options.addOptionConfirmation(OptionID.INHERIT, new BaseStoryPointActionDelegate() {
                 @Override
@@ -633,13 +601,11 @@ public class UNGP_InteractionDialog implements InteractionDialogPlugin {
                     info.addSpacer(pad);
                     info.addPara(d_i18n.get("inheritConfirmTip_p1"), 0f, Misc.getBasePlayerColor(), hl, addSkillPoints + "");
                     info.addPara(d_i18n.get("inheritConfirmTip_p2"), 0f, Misc.getStoryOptionColor(), hl, addStoryPoints + "");
-                    if (isHd) {
+                    if (difficulty != null && isHd) {
                         info.addPara(d_i18n.get("inheritConfirmInfo1"), negative, 0f);
-                    }
-                    if (isHd) {
-                        info.addSectionHeading(d_i18n.format("rulepick_level", difficultyValue), hl, Misc.scaleAlpha(negative, 0.2f), Alignment.MID, pad * 0.5f);
+                        info.addSectionHeading(d_i18n.format("rulepick_level", difficulty.name), hl, Misc.scaleAlpha(negative, 0.2f), Alignment.MID, pad * 0.5f);
                         float width = info.getPrev().getPosition().getWidth();
-                        int ruleSize = selectedRules.size();
+                        int ruleSize = pickedRules.size();
                         int itemsPerRow = (int) (width / 64f);
                         int page = Math.max(0, ruleSize - 1) / itemsPerRow;
 
@@ -647,7 +613,7 @@ public class UNGP_InteractionDialog implements InteractionDialogPlugin {
                             List<String> ruleSprites = new ArrayList<>();
                             for (int j = i * itemsPerRow; j < (i + 1) * itemsPerRow; j++) {
                                 if (j < ruleSize) {
-                                    ruleSprites.add(selectedRules.get(j).getSpritePath());
+                                    ruleSprites.add(pickedRules.get(j).getSpritePath());
                                 }
                             }
                             if (!ruleSprites.isEmpty()) {
@@ -708,5 +674,192 @@ public class UNGP_InteractionDialog implements InteractionDialogPlugin {
     @Override
     public Map<String, MemoryAPI> getMemoryMap() {
         return null;
+    }
+
+    public void resetSettings() {
+        setting_difficulty.reset();
+        setting_inheritBPsRatio.reset();
+        setting_inheritCreditsRatio.reset();
+    }
+
+    private class CustomConfirmDialog implements CustomDialogDelegate {
+
+        CheckBoxGroup creditsGroup = new CheckBoxGroup();
+        CheckBoxGroup bpsGroup = new CheckBoxGroup();
+        CheckBoxGroup difficultyGroup = new CheckBoxGroup();
+
+        @Override
+        public void createCustomDialog(CustomPanelAPI panel) {
+            creditsGroup.clear();
+            bpsGroup.clear();
+            difficultyGroup.clear();
+            float width = panel.getPosition().getWidth();
+            float height = panel.getPosition().getHeight();
+            float pad = 5f;
+
+            TooltipMakerAPI tooltip = panel.createUIElement(width, height, true);
+            panel.addUIElement(tooltip);
+
+//            tooltip.setForceProcessInput(true);
+            tooltip.setParaOrbitronLarge();
+            tooltip.setAreaCheckboxFont(Fonts.ORBITRON_24AA);
+            tooltip.addPara(d_i18n.get("inheritCredits"), Misc.getHighlightColor(), 0f);
+            tooltip.addSpacer(pad);
+            float buttonHeight = 30f;
+            final float buttonWidth = width / pad - 10f;
+            {
+                HorizontalButtonGroup buttonGroup = new HorizontalButtonGroup();
+                for (int i = 0; i < 5; i++) {
+                    float percentage = Math.min(1, i * 0.25f);
+                    ButtonAPI checkBox = tooltip.addAreaCheckbox((int) (percentage * 100f) + "%", null, Misc.getBasePlayerColor(),
+                                                                 Misc.getDarkPlayerColor(), Misc.getBrightPlayerColor(),
+                                                                 buttonWidth, buttonHeight, 0f);
+                    buttonGroup.addButton(checkBox);
+                    creditsGroup.addCheckBox(checkBox, percentage);
+                }
+                buttonGroup.addToTooltip(tooltip, pad);
+            }
+            tooltip.addSpacer(pad);
+            tooltip.addPara(d_i18n.get("inheritBPs"), Misc.getPositiveHighlightColor(), 0f);
+            tooltip.addSpacer(pad);
+            {
+                HorizontalButtonGroup buttonGroup = new HorizontalButtonGroup();
+                for (int i = 0; i < 5; i++) {
+                    float percentage = Math.min(1, i * 0.25f);
+                    ButtonAPI checkBox = tooltip.addAreaCheckbox((int) (percentage * 100f) + "%", null, Misc.getBasePlayerColor(),
+                                                                 Misc.getDarkPlayerColor(), Misc.getBrightPlayerColor(),
+                                                                 buttonWidth, buttonHeight, 0f);
+                    buttonGroup.addButton(checkBox);
+                    bpsGroup.addCheckBox(checkBox, percentage);
+                }
+                buttonGroup.addToTooltip(tooltip, pad);
+            }
+            tooltip.addSpacer(40f);
+            tooltip.addPara(d_i18n.get("hardmodeLevel"), Misc.getNegativeHighlightColor(), 0f);
+            tooltip.addSpacer(pad);
+            {
+                HorizontalButtonGroup buttonGroup = new HorizontalButtonGroup();
+                Difficulty[] difficulties = Difficulty.values();
+                for (int i = 0; i < difficulties.length + 1; i++) {
+                    ButtonAPI checkBox;
+                    Difficulty difficulty;
+                    if (i == 0) {
+                        difficulty = null;
+                        checkBox = tooltip.addAreaCheckbox("/", null, Misc.getBasePlayerColor(),
+                                                           Misc.getDarkPlayerColor(), Misc.getBrightPlayerColor(),
+                                                           buttonWidth, buttonHeight, 0f);
+                    } else {
+                        difficulty = difficulties[i - 1];
+                        checkBox = tooltip.addAreaCheckbox(difficulty.name, null, difficulty.color,
+                                                           difficulty.color.darker(), difficulty.color.brighter(),
+                                                           buttonWidth, buttonHeight, 0f);
+                    }
+                    tooltip.addTooltipToPrevious(new DifficultyTooltipCreator(difficulty), TooltipMakerAPI.TooltipLocation.BELOW);
+                    buttonGroup.addButton(checkBox);
+                    difficultyGroup.addCheckBox(checkBox, difficulty);
+                }
+                buttonGroup.addToTooltip(tooltip, pad);
+            }
+            creditsGroup.tryCheckValue(setting_inheritCreditsRatio.get());
+            bpsGroup.tryCheckValue(setting_inheritBPsRatio.get());
+            difficultyGroup.tryCheckValue(setting_difficulty.get());
+        }
+
+        private class DifficultyTooltipCreator implements TooltipMakerAPI.TooltipCreator {
+            private Difficulty difficulty;
+
+            public DifficultyTooltipCreator(Difficulty difficulty) {
+                this.difficulty = difficulty;
+            }
+
+            @Override
+            public boolean isTooltipExpandable(Object tooltipParam) {
+                return false;
+            }
+
+            @Override
+            public float getTooltipWidth(Object tooltipParam) {
+                return 180f;
+            }
+
+            @Override
+            public void createTooltip(TooltipMakerAPI tooltip, boolean expanded, Object tooltipParam) {
+                if (difficulty == null) {
+                    tooltip.addPara(d_i18n.get("difficulty_desc_null"), 0);
+                } else {
+                    Color hl = Misc.getHighlightColor();
+                    tooltip.addPara(d_i18n.get("difficulty_desc_base") + "%s / %s", 0f, hl,
+                                    difficulty.minRules + "",
+                                    difficulty.maxRules + "");
+                    tooltip.addPara(d_i18n.get("difficulty_desc_value") + "%s", 0f, hl,
+                                    (int) (difficulty.extraValueMultiplier * 100f) + "%");
+                    if (UNGP_ChallengeManager.isDifficultyEnough(difficulty)) {
+                        tooltip.addPara(d_i18n.get("difficulty_desc_max"), hl, 5f);
+                    }
+                }
+            }
+        }
+
+        @Override
+        public boolean hasCancelButton() {
+            return true;
+        }
+
+        @Override
+        public String getConfirmText() {
+            return null;
+        }
+
+        @Override
+        public String getCancelText() {
+            return null;
+        }
+
+        @Override
+        public void customDialogConfirm() {
+            setting_inheritCreditsRatio.set((Float) creditsGroup.getCheckedValue());
+            setting_inheritBPsRatio.set((Float) bpsGroup.getCheckedValue());
+            Difficulty difficulty = (Difficulty) difficultyGroup.getCheckedValue();
+            setting_difficulty.set(difficulty);
+            isSpecialistMode = difficulty != null;
+            optionSelected(null, choseInheritSlotOptionID);
+        }
+
+        @Override
+        public void customDialogCancel() {
+            optionSelected(null, choseInheritSlotOptionID);
+        }
+
+        @Override
+        public CustomUIPanelPlugin getCustomPanelPlugin() {
+            return new CustomUIPanelPlugin() {
+                @Override
+                public void positionChanged(PositionAPI position) {
+
+                }
+
+                @Override
+                public void renderBelow(float alphaMult) {
+
+                }
+
+                @Override
+                public void render(float alphaMult) {
+
+                }
+
+                @Override
+                public void advance(float amount) {
+                    creditsGroup.updateCheck();
+                    bpsGroup.updateCheck();
+                    difficultyGroup.updateCheck();
+                }
+
+                @Override
+                public void processInput(List<InputEventAPI> events) {
+
+                }
+            };
+        }
     }
 }

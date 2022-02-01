@@ -8,11 +8,10 @@ import com.fs.starfarer.api.util.Misc;
 import data.scripts.campaign.UNGP_InGameData;
 import data.scripts.campaign.specialist.UNGP_SpecialistSettings;
 import data.scripts.campaign.specialist.challenges.UNGP_ChallengeManager;
+import data.scripts.campaign.specialist.dialog.UNGP_RepickRulesDialog;
 import data.scripts.campaign.specialist.items.UNGP_RuleItem;
-import data.scripts.campaign.specialist.rules.UNGP_RepickRulesDialog;
-import data.scripts.campaign.specialist.rules.UNGP_RuleSorter;
 import data.scripts.campaign.specialist.rules.UNGP_RulesManager;
-import data.scripts.utils.UNGP_UIRect;
+import ungp.ui.UIRect;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -51,10 +50,6 @@ public class UNGP_SpecialistIntel extends BaseIntelPlugin {
 
     public static UNGP_SpecialistIntel getInstance() {
         IntelInfoPlugin intel = Global.getSector().getIntelManager().getFirstIntel(UNGP_SpecialistIntel.class);
-        if (intel == null) {
-            intel = new UNGP_SpecialistIntel();
-            Global.getSector().getIntelManager().addIntel(intel);
-        }
         return (UNGP_SpecialistIntel) intel;
     }
 
@@ -71,7 +66,7 @@ public class UNGP_SpecialistIntel extends BaseIntelPlugin {
     @Override
     public void createLargeDescription(CustomPanelAPI panel, float width, float height) {
         UNGP_SpecialistBackgroundUI.resumeTicking();
-        CustomPanelAPI customPanel = panel.createCustomPanel(width, height, UNGP_SpecialistBackgroundUI.getInstance());
+        CustomPanelAPI customPanel = panel.createCustomPanel(width, height, new UNGP_SpecialistBackgroundUI());
         panel.addComponent(customPanel);
         // 数据处理
         TooltipMakerAPI tooltip;
@@ -88,8 +83,8 @@ public class UNGP_SpecialistIntel extends BaseIntelPlugin {
                 notBonusRules.add(rule);
             }
         }
-        Collections.sort(bonusRules, new UNGP_RuleSorter());
-        Collections.sort(notBonusRules, new UNGP_RuleSorter());
+        Collections.sort(bonusRules, new UNGP_RulesManager.UNGP_RuleSorter());
+        Collections.sort(notBonusRules, new UNGP_RulesManager.UNGP_RuleSorter());
 
         // 状态
         List<URule> combatRules = new ArrayList<>();
@@ -113,23 +108,24 @@ public class UNGP_SpecialistIntel extends BaseIntelPlugin {
 
         // UI生成
         float contentShrink = 20f;
-        UNGP_UIRect fullScreen = new UNGP_UIRect(0, 0, width, height);
-        UNGP_UIRect[] fullScreenSplits = fullScreen.splitVertically(120f);
-        UNGP_UIRect titleRect = fullScreenSplits[0];
+        UIRect fullScreen = new UIRect(0, 0, width, height);
+        UIRect[] fullScreenSplits = fullScreen.splitVertically(120f);
+        UIRect titleRect = fullScreenSplits[0];
         // title
         {
-            UNGP_UIRect[] titleRectSplits = titleRect.splitHorizontally(0.35f, 0.35f, 0.3f);
-            UNGP_UIRect levelTitle = titleRectSplits[0].shrink(contentShrink);
+            UIRect[] titleRectSplits = titleRect.splitHorizontally(0.35f, 0.35f, 0.3f);
+            UIRect levelTitle = titleRectSplits[0].shrink(contentShrink);
             {
                 tooltip = levelTitle.beginTooltip(panel, false);
-                TooltipMakerAPI imageMaker = tooltip.beginImageWithText(UNGP_SpecialistSettings.getSpecialistModeIconPath(), 80f);
+                UNGP_SpecialistSettings.Difficulty difficulty = inGameData.getDifficulty();
+                TooltipMakerAPI imageMaker = tooltip.beginImageWithText(difficulty.spritePath, 80f);
                 imageMaker.setParaOrbitronLarge();
-                imageMaker.addPara(d_i18n.get("rulepick_level"), 0, positiveColor, inGameData.getDifficultyLevel() + "");
+                imageMaker.addPara(d_i18n.get("rulepick_level"), 0, difficulty.color, difficulty.name);
                 imageMaker.setParaFontDefault();
                 tooltip.addImageWithText(0f);
                 levelTitle.addTooltip();
             }
-            UNGP_UIRect checkBoxRect = titleRectSplits[1].shrink(contentShrink);
+            UIRect checkBoxRect = titleRectSplits[1].shrink(contentShrink);
             {
                 tooltip = checkBoxRect.beginTooltip(panel, false);
                 final float checkBoxRectWidth = checkBoxRect.getWidth();
@@ -176,7 +172,7 @@ public class UNGP_SpecialistIntel extends BaseIntelPlugin {
                 button_tips.setChecked(checkedButton == OPTION_ID_TIPS);
                 checkBoxRect.addTooltip();
             }
-            UNGP_UIRect repickRect = titleRectSplits[2].shrink(contentShrink);
+            UIRect repickRect = titleRectSplits[2].shrink(contentShrink);
             {
                 tooltip = repickRect.beginTooltip(panel, false);
                 tooltip.addPara(rules_i18n.get("current_cycle") + "%s", 0f, positiveColor, Global.getSector().getClock().getCycle() + "").setAlignment(Alignment.RMID);
@@ -197,13 +193,13 @@ public class UNGP_SpecialistIntel extends BaseIntelPlugin {
 
 
         // content
-        UNGP_UIRect contentRect = fullScreenSplits[1];
+        UIRect contentRect = fullScreenSplits[1];
         {
-            UNGP_UIRect[] contentRectSplits = contentRect.splitHorizontally(0.35f, 0.35f, 0.3f);
-            UNGP_UIRect positiveRect = contentRectSplits[0];
+            UIRect[] contentRectSplits = contentRect.splitHorizontally(0.35f, 0.35f, 0.3f);
+            UIRect positiveRect = contentRectSplits[0];
             {
-                UNGP_UIRect[] positiveRectSplits = positiveRect.splitVertically(30f);
-                UNGP_UIRect positiveRectTitle = positiveRectSplits[0].shrink(contentShrink);
+                UIRect[] positiveRectSplits = positiveRect.splitVertically(30f);
+                UIRect positiveRectTitle = positiveRectSplits[0].shrink(contentShrink);
                 {
                     // 正面规则标题
                     tooltip = positiveRectTitle.beginTooltip(panel, false);
@@ -213,7 +209,7 @@ public class UNGP_SpecialistIntel extends BaseIntelPlugin {
                     addLine(tooltip, positiveRectTitle.getWidth() - 5f, 1f, 3f);
                     positiveRectTitle.addTooltip();
                 }
-                UNGP_UIRect positiveRectContent = positiveRectSplits[1].shrink(contentShrink);
+                UIRect positiveRectContent = positiveRectSplits[1].shrink(contentShrink);
                 {
                     //正面规则内容
                     tooltip = positiveRectContent.beginTooltip(panel, true);
@@ -231,10 +227,10 @@ public class UNGP_SpecialistIntel extends BaseIntelPlugin {
                     positiveRectContent.addTooltip();
                 }
             }
-            UNGP_UIRect negativeRect = contentRectSplits[1];
+            UIRect negativeRect = contentRectSplits[1];
             {
-                UNGP_UIRect[] negativeRectSplits = negativeRect.splitVertically(30f);
-                UNGP_UIRect negativeRectTitle = negativeRectSplits[0].shrink(contentShrink);
+                UIRect[] negativeRectSplits = negativeRect.splitVertically(30f);
+                UIRect negativeRectTitle = negativeRectSplits[0].shrink(contentShrink);
                 {
                     // 负面规则标题
                     tooltip = negativeRectTitle.beginTooltip(panel, false);
@@ -244,7 +240,7 @@ public class UNGP_SpecialistIntel extends BaseIntelPlugin {
                     addLine(tooltip, negativeRectTitle.getWidth() - 5f, 1f, 3f);
                     negativeRectTitle.addTooltip();
                 }
-                UNGP_UIRect negativeRectContent = negativeRectSplits[1].shrink(contentShrink);
+                UIRect negativeRectContent = negativeRectSplits[1].shrink(contentShrink);
                 {
                     //负面规则内容
                     tooltip = negativeRectContent.beginTooltip(panel, true);
@@ -262,10 +258,10 @@ public class UNGP_SpecialistIntel extends BaseIntelPlugin {
                     negativeRectContent.addTooltip();
                 }
             }
-            UNGP_UIRect gameStateRect = contentRectSplits[2];
+            UIRect gameStateRect = contentRectSplits[2];
             {
-                UNGP_UIRect[] gameStateRectSplits = gameStateRect.splitVertically(30f);
-                UNGP_UIRect gameStateRectTitle = gameStateRectSplits[0].shrink(contentShrink);
+                UIRect[] gameStateRectSplits = gameStateRect.splitVertically(30f);
+                UIRect gameStateRectTitle = gameStateRectSplits[0].shrink(contentShrink);
                 {
                     // 状态标题
                     tooltip = gameStateRectTitle.beginTooltip(panel, false);
@@ -275,7 +271,7 @@ public class UNGP_SpecialistIntel extends BaseIntelPlugin {
                     addLine(tooltip, gameStateRectTitle.getWidth() - 5f, 1f, 3f);
                     gameStateRectTitle.addTooltip();
                 }
-                UNGP_UIRect gameStateRectContent = gameStateRectSplits[1].shrink(contentShrink);
+                UIRect gameStateRectContent = gameStateRectSplits[1].shrink(contentShrink);
                 {
                     tooltip = gameStateRectContent.beginTooltip(panel, true);
                     tooltip.addSpacer(5f);
@@ -284,9 +280,10 @@ public class UNGP_SpecialistIntel extends BaseIntelPlugin {
                         tooltip.addPara(rules_i18n.get("campaign_state"), 0f);
                         tooltip.setParaFontDefault();
                         tooltip.addSpacer(5f);
-                        tooltip.setBulletedListMode("    ");
                         for (URule rule : campaignRules) {
-                            tooltip.addPara(rule.getName(), rule.getCorrectColor(), 3f);
+                            TooltipMakerAPI image = tooltip.beginImageWithText(rule.getSpritePath(), 16f);
+                            image.addPara(rule.getName(), rule.getCorrectColor(), 0);
+                            tooltip.addImageWithText(2f);
                         }
                         tooltip.setBulletedListMode(null);
                     }
@@ -295,9 +292,10 @@ public class UNGP_SpecialistIntel extends BaseIntelPlugin {
                         tooltip.addPara(rules_i18n.get("combat_state"), 10f);
                         tooltip.setParaFontDefault();
                         tooltip.addSpacer(5f);
-                        tooltip.setBulletedListMode("    ");
                         for (URule rule : combatRules) {
-                            tooltip.addPara(rule.getName(), rule.getCorrectColor(), 3f);
+                            TooltipMakerAPI image = tooltip.beginImageWithText(rule.getSpritePath(), 16f);
+                            image.addPara(rule.getName(), rule.getCorrectColor(), 0);
+                            tooltip.addImageWithText(2f);
                         }
                         tooltip.setBulletedListMode(null);
                     }
@@ -361,7 +359,7 @@ public class UNGP_SpecialistIntel extends BaseIntelPlugin {
     @Override
     public String getIcon() {
         if (listInfoParam == null) {
-            return Global.getSettings().getSpriteName("icons", "UNGP_hmlogo");
+            return UNGP_SpecialistSettings.getSpecialistModeIconPath();
         } else {
             RuleMessage message = (RuleMessage) listInfoParam;
             return message.rule.getSpritePath();

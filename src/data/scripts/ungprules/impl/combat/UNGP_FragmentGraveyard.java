@@ -2,6 +2,7 @@ package data.scripts.ungprules.impl.combat;
 
 import com.fs.starfarer.api.combat.CombatEngineAPI;
 import com.fs.starfarer.api.combat.ShipAPI;
+import data.scripts.campaign.specialist.UNGP_SpecialistSettings;
 import data.scripts.ungprules.impl.UNGP_BaseRuleEffect;
 import data.scripts.ungprules.tags.UNGP_CombatTag;
 
@@ -11,20 +12,20 @@ public class UNGP_FragmentGraveyard extends UNGP_BaseRuleEffect implements UNGP_
     private float massBonus;
 
     @Override
-    public void updateDifficultyCache(int difficulty) {
+    public void updateDifficultyCache(UNGP_SpecialistSettings.Difficulty difficulty) {
         this.velBonus = getValueByDifficulty(0, difficulty);
         this.massBonus = getValueByDifficulty(1, difficulty);
     }
 
     @Override
-    public float getValueByDifficulty(int index, int difficulty) {
-        if (index == 0) return getLinearValue(3f, 5f, difficulty);
-        if (index == 1) return getLinearValue(1.5f, 2f, difficulty);
+    public float getValueByDifficulty(int index, UNGP_SpecialistSettings.Difficulty difficulty) {
+        if (index == 0) return difficulty.getLinearValue(3f, 2f);
+        if (index == 1) return difficulty.getLinearValue(1.5f, 0.5f);
         return 1f;
     }
 
     @Override
-    public String getDescriptionParams(int index, int difficulty) {
+    public String getDescriptionParams(int index, UNGP_SpecialistSettings.Difficulty difficulty) {
         if (index == 0) return getPercentString(getValueByDifficulty(index, difficulty) * 100f);
         if (index == 1) return getPercentString(getValueByDifficulty(index, difficulty) * 100f);
         return null;
@@ -35,9 +36,9 @@ public class UNGP_FragmentGraveyard extends UNGP_BaseRuleEffect implements UNGP_
         for (ShipAPI ship : engine.getShips()) {
             if (ship.isAlive()) continue;
             if (!ship.isHulk()) continue;
-            if (ship.getCustomData().containsKey(rule.getBuffID())) continue;
+            if (ship.getCustomData().containsKey(buffID)) continue;
 
-            ship.setCustomData(rule.getBuffID(), true);
+            ship.setCustomData(buffID, true);
             ship.getVelocity().scale(velBonus);
             ship.setMass(ship.getMass() * massBonus);
         }

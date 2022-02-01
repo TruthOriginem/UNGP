@@ -3,6 +3,7 @@ package data.scripts.ungprules.impl.combat;
 import com.fs.starfarer.api.combat.CombatEngineAPI;
 import com.fs.starfarer.api.combat.MutableShipStatsAPI;
 import com.fs.starfarer.api.combat.ShipAPI;
+import data.scripts.campaign.specialist.UNGP_SpecialistSettings;
 import data.scripts.ungprules.impl.UNGP_BaseRuleEffect;
 import data.scripts.ungprules.tags.UNGP_CombatTag;
 
@@ -10,14 +11,14 @@ public class UNGP_OppressiveDistance extends UNGP_BaseRuleEffect implements UNGP
     private float factor;
 
     @Override
-    public void updateDifficultyCache(int difficulty) {
+    public void updateDifficultyCache(UNGP_SpecialistSettings.Difficulty difficulty) {
         factor = getValueByDifficulty(0, difficulty);
     }
 
     //10~20
     @Override
-    public float getValueByDifficulty(int index, int difficulty) {
-        if (index == 0) return getLinearValue(0.1f, 0.15f, difficulty);
+    public float getValueByDifficulty(int index, UNGP_SpecialistSettings.Difficulty difficulty) {
+        if (index == 0) return difficulty.getLinearValue(0.1f, 0.05f);
         return 1f;
     }
 
@@ -30,9 +31,9 @@ public class UNGP_OppressiveDistance extends UNGP_BaseRuleEffect implements UNGP
     public void applyEnemyShipInCombat(float amount, ShipAPI enemy) {
         MutableShipStatsAPI stats = enemy.getMutableStats();
         float bonus = factor * 100f;
-        stats.getBallisticWeaponRangeBonus().modifyPercent(rule.getBuffID(), bonus);
-        stats.getEnergyWeaponRangeBonus().modifyPercent(rule.getBuffID(), bonus);
-        stats.getSensorStrength().modifyMult(rule.getBuffID(), bonus);
+        stats.getBallisticWeaponRangeBonus().modifyPercent(buffID, bonus);
+        stats.getEnergyWeaponRangeBonus().modifyPercent(buffID, bonus);
+        stats.getSensorStrength().modifyMult(buffID, bonus);
     }
 
     @Override
@@ -41,7 +42,7 @@ public class UNGP_OppressiveDistance extends UNGP_BaseRuleEffect implements UNGP
     }
 
     @Override
-    public String getDescriptionParams(int index, int difficulty) {
+    public String getDescriptionParams(int index, UNGP_SpecialistSettings.Difficulty difficulty) {
         if (index == 0) return getPercentString(getValueByDifficulty(index, difficulty) * 100f);
         return null;
     }

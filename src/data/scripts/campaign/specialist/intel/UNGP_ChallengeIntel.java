@@ -14,7 +14,7 @@ import data.scripts.campaign.specialist.challenges.UNGP_ChallengeManager;
 import data.scripts.campaign.specialist.intel.UNGP_ChallengeIntel.UNGP_ChallengeProgress.ProgressState;
 import data.scripts.campaign.specialist.rules.UNGP_RulesManager;
 import data.scripts.campaign.specialist.rules.UNGP_RulesManager.URule;
-import data.scripts.utils.UNGP_UIRect;
+import ungp.ui.UIRect;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -141,9 +141,9 @@ public class UNGP_ChallengeIntel extends BaseIntelPlugin {
     @Override
     public void createLargeDescription(CustomPanelAPI panel, float width, float height) {
         UNGP_SpecialistBackgroundUI.resumeTicking();
-        CustomPanelAPI customPanel = panel.createCustomPanel(width, height, UNGP_SpecialistBackgroundUI.getInstance());
+        CustomPanelAPI customPanel = panel.createCustomPanel(width, height, new UNGP_SpecialistBackgroundUI());
         panel.addComponent(customPanel);
-        UNGP_UIRect fullScreenRect = new UNGP_UIRect(0, 0, width, height).shrink(40f);
+        UIRect fullScreenRect = new UIRect(0, 0, width, height).shrink(40f);
         TooltipMakerAPI tooltip =
                 fullScreenRect.beginTooltip(panel, true);
 

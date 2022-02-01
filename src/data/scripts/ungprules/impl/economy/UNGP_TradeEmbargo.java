@@ -2,6 +2,7 @@ package data.scripts.ungprules.impl.economy;
 
 import com.fs.starfarer.api.campaign.econ.MarketAPI;
 import com.fs.starfarer.api.util.Misc;
+import data.scripts.campaign.specialist.UNGP_SpecialistSettings;
 import data.scripts.ungprules.impl.UNGP_BaseRuleEffect;
 import data.scripts.ungprules.tags.UNGP_EconomyTag;
 
@@ -9,15 +10,16 @@ import java.util.List;
 
 public class UNGP_TradeEmbargo extends UNGP_BaseRuleEffect implements UNGP_EconomyTag {
     @Override
-    public float getValueByDifficulty(int index, int difficulty) {
+    public float getValueByDifficulty(int index, UNGP_SpecialistSettings.Difficulty difficulty) {
         return 0;
     }
 
+
     @Override
-    public String getDescriptionParams(int index) {
+    public String getDescriptionParams(int index, UNGP_SpecialistSettings.Difficulty difficulty) {
         if (index == 0) return "15";
         if (index == 1) return "10%";
-        return null;
+        return super.getDescriptionParams(index, difficulty);
     }
 
     @Override
@@ -29,12 +31,12 @@ public class UNGP_TradeEmbargo extends UNGP_BaseRuleEffect implements UNGP_Econo
                 hostileCount++;
             }
         }
-        market.getAccessibilityMod().modifyFlat(rule.getBuffID(), -hostileCount * 0.1f, rule.getName());
+        market.getAccessibilityMod().modifyFlat(buffID, -hostileCount * 0.1f, rule.getName());
     }
 
     @Override
     public void unapplyPlayerMarket(MarketAPI market) {
-        market.getAccessibilityMod().unmodify(rule.getBuffID());
+        market.getAccessibilityMod().unmodify(buffID);
     }
 
     @Override

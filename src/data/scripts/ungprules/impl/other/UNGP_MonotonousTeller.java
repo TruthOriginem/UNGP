@@ -3,6 +3,7 @@ package data.scripts.ungprules.impl.other;
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.characters.PersonAPI;
 import data.scripts.campaign.everyframe.UNGP_CampaignPlugin.TempCampaignParams;
+import data.scripts.campaign.specialist.UNGP_SpecialistSettings;
 import data.scripts.campaign.specialist.intel.UNGP_SpecialistIntel;
 import data.scripts.ungprules.impl.UNGP_BaseRuleEffect;
 import data.scripts.ungprules.tags.UNGP_CampaignTag;
@@ -12,22 +13,20 @@ public class UNGP_MonotonousTeller extends UNGP_BaseRuleEffect implements UNGP_C
     private int daysToLostStoryPoint;
 
     @Override
-    public void updateDifficultyCache(int difficulty) {
+    public void updateDifficultyCache(UNGP_SpecialistSettings.Difficulty difficulty) {
         daysToLostStoryPoint = (int) getValueByDifficulty(0, difficulty);
     }
 
     @Override
-    public float getValueByDifficulty(int index, int difficulty) {
-        return Math.round(getLinearValue(120f, 60f, difficulty));
+    public float getValueByDifficulty(int index, UNGP_SpecialistSettings.Difficulty difficulty) {
+        return Math.round(difficulty.getLinearValue(120f, -60f));
     }
 
     @Override
     public void advanceInCampaign(float amount, TempCampaignParams params) {
         if (params.isOneDayPassed()) {
-            int sinceLastLost;
-            if (getDataInCampaign(0) != null) {
-                sinceLastLost = getDataInCampaign(0);
-            } else {
+            Integer sinceLastLost = getDataInCampaign(0);
+            if (sinceLastLost == null) {
                 sinceLastLost = 0;
             }
 
@@ -48,7 +47,7 @@ public class UNGP_MonotonousTeller extends UNGP_BaseRuleEffect implements UNGP_C
     }
 
     @Override
-    public String getDescriptionParams(int index, int difficulty) {
+    public String getDescriptionParams(int index, UNGP_SpecialistSettings.Difficulty difficulty) {
         if (index == 0) return getFactorString(getValueByDifficulty(index, difficulty));
         if (index == 1) return "1";
         return null;

@@ -1,6 +1,7 @@
 package data.scripts.ungprules;
 
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
+import data.scripts.campaign.specialist.UNGP_SpecialistSettings.Difficulty;
 import data.scripts.campaign.specialist.rules.UNGP_RulesManager.URule;
 
 /**
@@ -14,7 +15,8 @@ public interface UNGP_RuleEffectAPI {
      *
      * @param difficulty
      */
-    void updateDifficultyCache(int difficulty);
+    void updateDifficultyCache(Difficulty difficulty);
+//    void updateDifficultyCache(int difficulty);
 
     /**
      * Get the values depending on the difficulty level, these values should be saved in the object of the rule class.
@@ -24,7 +26,8 @@ public interface UNGP_RuleEffectAPI {
      * @param difficulty
      * @return
      */
-    float getValueByDifficulty(int index, int difficulty);
+    float getValueByDifficulty(int index, Difficulty difficulty);
+//    float getValueByDifficulty(int index, int difficulty);
 
     /**
      * Shown in the rule's picker interface.
@@ -34,7 +37,8 @@ public interface UNGP_RuleEffectAPI {
      * @param difficulty
      * @return
      */
-    String getDescriptionParams(int index, int difficulty);
+    String getDescriptionParams(int index, Difficulty difficulty);
+//    String getDescriptionParams(int index, int difficulty);
 
 
     /**

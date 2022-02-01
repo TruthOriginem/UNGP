@@ -2,6 +2,7 @@ package data.scripts.ungprules.impl.fleet;
 
 import com.fs.starfarer.api.campaign.CampaignFleetAPI;
 import com.fs.starfarer.api.fleet.FleetMemberAPI;
+import data.scripts.campaign.specialist.UNGP_SpecialistSettings;
 import data.scripts.ungprules.impl.UNGP_MemberBuffRuleEffect;
 import data.scripts.ungprules.tags.UNGP_PlayerFleetTag;
 
@@ -12,27 +13,21 @@ public class UNGP_DisarmamentAgreement extends UNGP_MemberBuffRuleEffect impleme
     private float curSuppliesPenalty;
 
     @Override
-    public void updateDifficultyCache(int difficulty) {
+    public void updateDifficultyCache(UNGP_SpecialistSettings.Difficulty difficulty) {
         memberLimit = (int) getValueByDifficulty(0, difficulty);
     }
 
     @Override
-    public float getValueByDifficulty(int index, int difficulty) {
-        if (index == 0) return Math.round(getLinearValue(20, 15, difficulty));
+    public float getValueByDifficulty(int index, UNGP_SpecialistSettings.Difficulty difficulty) {
+        if (index == 0) return Math.round(difficulty.getLinearValue(20, -5));
         if (index == 1) return EXTRA_SUPPLIES_PENALTY;
         return 0;
     }
 
     @Override
-    public String getDescriptionParams(int index) {
-        if (index == 0) return getFactorString(memberLimit);
-        if (index == 1) return getPercentString(EXTRA_SUPPLIES_PENALTY);
-        return null;
-    }
-
-    @Override
-    public String getDescriptionParams(int index, int difficulty) {
+    public String getDescriptionParams(int index, UNGP_SpecialistSettings.Difficulty difficulty) {
         if (index == 0) return getFactorString(getValueByDifficulty(index, difficulty));
+        if (index == 1) return getPercentString(EXTRA_SUPPLIES_PENALTY);
         return super.getDescriptionParams(index, difficulty);
     }
 

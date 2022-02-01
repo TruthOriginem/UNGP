@@ -4,6 +4,7 @@ import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.combat.CombatEngineAPI;
 import com.fs.starfarer.api.combat.FogOfWarAPI;
 import com.fs.starfarer.api.combat.ShipAPI;
+import data.scripts.campaign.specialist.UNGP_SpecialistSettings;
 import data.scripts.ungprules.impl.UNGP_BaseRuleEffect;
 import data.scripts.ungprules.tags.UNGP_CombatTag;
 import data.scripts.utils.UNGPUtils;
@@ -16,18 +17,18 @@ public class UNGP_Seer extends UNGP_BaseRuleEffect implements UNGP_CombatTag {
     private float revealDuration;
 
     @Override
-    public void updateDifficultyCache(int difficulty) {
+    public void updateDifficultyCache(UNGP_SpecialistSettings.Difficulty difficulty) {
         this.revealDuration = getValueByDifficulty(0, difficulty);
     }
 
     @Override
-    public float getValueByDifficulty(int index, int difficulty) {
-        return getLinearValue(2f, 3f, difficulty);
+    public float getValueByDifficulty(int index, UNGP_SpecialistSettings.Difficulty difficulty) {
+        return difficulty.getLinearValue(2f, 1f);
     }
 
 
     @Override
-    public String getDescriptionParams(int index, int difficulty) {
+    public String getDescriptionParams(int index, UNGP_SpecialistSettings.Difficulty difficulty) {
         if (index == 0) return "20";
         if (index == 1) return getFactorString(getValueByDifficulty(index, difficulty));
         return null;
@@ -35,8 +36,6 @@ public class UNGP_Seer extends UNGP_BaseRuleEffect implements UNGP_CombatTag {
 
     @Override
     public void advanceInCombat(CombatEngineAPI engine, float amount) {
-
-        final String buffID = rule.getBuffID();
         RevealData data = getDataInEngine(engine, buffID);
         if (data == null) {
             data = new RevealData();

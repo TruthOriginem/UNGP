@@ -11,17 +11,19 @@ import com.fs.starfarer.api.util.Misc;
 import data.scripts.campaign.everyframe.UNGP_UITimeScript;
 import data.scripts.campaign.specialist.rules.UNGP_RulesManager;
 import data.scripts.campaign.specialist.rules.UNGP_RulesManager.URule;
-import data.scripts.utils.UNGPFont;
 import org.lazywizard.lazylib.FastTrig;
 import org.lazywizard.lazylib.MathUtils;
 import org.lazywizard.lazylib.ui.LazyFont.DrawableString;
 import org.lwjgl.opengl.GL11;
+import ungp.ui.RuleDescBackgroundPlugin;
+import ungp.ui.UNGPFont;
 
 import java.awt.*;
 
-import static data.scripts.utils.UNGPFont.*;
+import static ungp.ui.UNGPFont.*;
 
 public class UNGP_RuleItem extends BaseSpecialItemPlugin {
+    public static final String BULLET_PREFIX = "        ";
     private static SpriteAPI BG_NORMAL_SPRITE;
     private static SpriteAPI BG_MASK_SPRITE;
 
@@ -56,6 +58,7 @@ public class UNGP_RuleItem extends BaseSpecialItemPlugin {
 
     public static void addRuleItemTooltip(TooltipMakerAPI tooltip, URule rule, boolean isExpanded) {
         float opad = 10f;
+        RuleDescBackgroundPlugin.addToTooltip(tooltip, rule);
         tooltip.setTitleOrbitronLarge();
         Color c = Misc.getTextColor();
 
@@ -63,13 +66,11 @@ public class UNGP_RuleItem extends BaseSpecialItemPlugin {
 
         rule.addPreDesc(tooltip, opad * 2f);
 
-        String prefix = "        ";
+        rule.addDesc(tooltip, opad * 2f, BULLET_PREFIX);
 
-        rule.addDesc(tooltip, opad * 2f, prefix);
+        rule.addRollDesc(tooltip, opad * 22f, BULLET_PREFIX);
 
-        rule.addRollDesc(tooltip, opad * 22f, prefix);
-
-        rule.addChallengeRelatedDesc(tooltip, opad * 2f, prefix, isExpanded);
+        rule.addChallengeRelatedDesc(tooltip, opad * 2f, BULLET_PREFIX, isExpanded);
 
         rule.addCost(tooltip, opad * 2f);
     }
@@ -114,7 +115,9 @@ public class UNGP_RuleItem extends BaseSpecialItemPlugin {
 //        sprite = Global.getSettings().getSprite(getBackgroundSpriteNameByFrame((int) Math.floor(frameFactor * 23.99f)));
         if (sprite != null) {
             Color baseColor = rule.getCorrectColor();
-
+            if (UNGP_RuleItemConnectBGManager.canRuleHighlighted(rule)) {
+                baseColor = UNGP_RulesManager.getMilestoneColor();
+            }
             sprite.setColor(baseColor);
             sprite.setNormalBlend();
             sprite.setAlphaMult(alphaMult * 0.8f);
@@ -221,10 +224,10 @@ public class UNGP_RuleItem extends BaseSpecialItemPlugin {
             drawableName.setMaxWidth(maxWidth);
             drawableName.setMaxHeight(maxHeight);
             Color color = Misc.scaleColor(Color.BLACK, 1f - frameFactor);
-            drawableName.setColor(color);
+            drawableName.setBaseColor(color);
             UNGPFont.drawShadow(drawableName, cx - drawableName.getWidth() * 0.5f, cy + drawableName.getHeight() * 0.5f, 2);
             color = Misc.scaleColor(rule.getCorrectColor(), 1f - frameFactor);
-            drawableName.setColor(color);
+            drawableName.setBaseColor(color);
             drawableName.draw((int) (cx - drawableName.getWidth() * 0.5f), cy + drawableName.getHeight() * 0.5f);
         }
         final DrawableString drawableCost = UNGPFont.getDynamicDrawable(rule.getCostString(), rule.getCostColor());

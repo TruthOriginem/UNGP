@@ -4,6 +4,8 @@ import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.combat.*;
 import com.fs.starfarer.api.graphics.SpriteAPI;
 import com.fs.starfarer.api.util.Misc;
+import data.scripts.campaign.specialist.UNGP_SpecialistSettings;
+import data.scripts.campaign.specialist.UNGP_SpecialistSettings.Difficulty;
 import data.scripts.ungprules.impl.UNGP_BaseRuleEffect;
 import data.scripts.ungprules.tags.UNGP_CombatTag;
 import org.lazywizard.lazylib.MathUtils;
@@ -92,18 +94,18 @@ public class UNGP_StayCalm extends UNGP_BaseRuleEffect implements UNGP_CombatTag
     }
 
     @Override
-    public float getValueByDifficulty(int index, int difficulty) {
+    public float getValueByDifficulty(int index, UNGP_SpecialistSettings.Difficulty difficulty) {
         return 0;
     }
 
     @Override
-    public String getDescriptionParams(int index) {
+    public String getDescriptionParams(int index, Difficulty difficulty) {
         if (index == 0) return getFactorString(PREDICT_TIME);
         if (index == 1) return getPercentString(HIT_POINTS_THRESHOLD * 100f);
         if (index == 2) return getPercentString((1f - TIME_MULTIPLIER) * 100f);
         if (index == 3) return getFactorString(PREDICT_TIME);
         if (index == 4) return getFactorString(COOL_DOWN);
-        return null;
+        return super.getDescriptionParams(index, difficulty);
     }
 
     @Override
@@ -197,7 +199,7 @@ public class UNGP_StayCalm extends UNGP_BaseRuleEffect implements UNGP_CombatTag
             }
             String content = String.format(format, String.format("%.1f", data.getRemainTime()));
             engine.maintainStatusForPlayerShip(DATA_KEY, rule.getSpritePath(), rule.getName(),
-                    content, isNegative);
+                                               content, isNegative);
         }
     }
 

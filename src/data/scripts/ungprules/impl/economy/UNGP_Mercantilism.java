@@ -1,6 +1,7 @@
 package data.scripts.ungprules.impl.economy;
 
 import com.fs.starfarer.api.campaign.econ.MarketAPI;
+import data.scripts.campaign.specialist.UNGP_SpecialistSettings;
 import data.scripts.ungprules.impl.UNGP_BaseRuleEffect;
 import data.scripts.ungprules.tags.UNGP_EconomyTag;
 
@@ -9,14 +10,14 @@ public class UNGP_Mercantilism extends UNGP_BaseRuleEffect implements UNGP_Econo
     private float bonus;
 
     @Override
-    public void updateDifficultyCache(int difficulty) {
+    public void updateDifficultyCache(UNGP_SpecialistSettings.Difficulty difficulty) {
         bonus = getValueByDifficulty(0, difficulty);
     }
 
     //20~30%
     @Override
-    public float getValueByDifficulty(int index, int difficulty) {
-        if (index == 0) return getLinearValue(0.2f, 0.3f, difficulty);
+    public float getValueByDifficulty(int index, UNGP_SpecialistSettings.Difficulty difficulty) {
+        if (index == 0) return difficulty.getLinearValue(0.2f, 0.1f);
         return 0;
     }
 
@@ -27,12 +28,12 @@ public class UNGP_Mercantilism extends UNGP_BaseRuleEffect implements UNGP_Econo
         if (market.getAccessibilityMod().computeEffective(0f) > ACCESS_THRESHOLD) {
             couldBonus *= 0.5f;
         }
-        market.getAccessibilityMod().modifyFlat(rule.getBuffID(), couldBonus, rule.getName());
+        market.getAccessibilityMod().modifyFlat(buffID, couldBonus, rule.getName());
     }
 
     @Override
     public void unapplyPlayerMarket(MarketAPI market) {
-        market.getAccessibilityMod().unmodify(rule.getBuffID());
+        market.getAccessibilityMod().unmodify(buffID);
     }
 
     @Override
@@ -46,16 +47,10 @@ public class UNGP_Mercantilism extends UNGP_BaseRuleEffect implements UNGP_Econo
     }
 
     @Override
-    public String getDescriptionParams(int index) {
-        if (index == 0) return getPercentString(bonus * 100f);
+    public String getDescriptionParams(int index, UNGP_SpecialistSettings.Difficulty difficulty) {
+        if (index == 0) return getPercentString(getValueByDifficulty(index, difficulty) * 100f);
         if (index == 1) return getPercentString(ACCESS_THRESHOLD * 100f);
         if (index == 2) return i18n.get("halved");
         return null;
-    }
-
-    @Override
-    public String getDescriptionParams(int index, int difficulty) {
-        if (index == 0) return getPercentString(getValueByDifficulty(index, difficulty) * 100f);
-        return getDescriptionParams(index);
     }
 }

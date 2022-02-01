@@ -4,15 +4,15 @@ import com.fs.starfarer.api.campaign.BuffManagerAPI;
 import com.fs.starfarer.api.campaign.CampaignFleetAPI;
 import com.fs.starfarer.api.fleet.FleetMemberAPI;
 import com.fs.starfarer.api.impl.campaign.ids.Tags;
+import data.scripts.campaign.specialist.UNGP_SpecialistSettings;
 import data.scripts.ungprules.impl.UNGP_BaseRuleEffect;
 import data.scripts.ungprules.tags.UNGP_PlayerFleetTag;
 import data.scripts.utils.UNGP_BaseBuff;
 
 public class UNGP_AncientThreat extends UNGP_BaseRuleEffect implements UNGP_PlayerFleetTag {
     private class ThreatBuff extends UNGP_BaseBuff {
-
-        public ThreatBuff(String id, float dur) {
-            super(id, dur);
+        public ThreatBuff(String id) {
+            super(id);
         }
 
         @Override
@@ -24,13 +24,13 @@ public class UNGP_AncientThreat extends UNGP_BaseRuleEffect implements UNGP_Play
     private float reduction;
 
     @Override
-    public void updateDifficultyCache(int difficulty) {
+    public void updateDifficultyCache(UNGP_SpecialistSettings.Difficulty difficulty) {
         reduction = getValueByDifficulty(0, difficulty);
     }
 
     @Override
-    public float getValueByDifficulty(int index, int difficulty) {
-        if (index == 0) return 0.08f + 0.02f * (float) Math.pow(difficulty, 0.598);
+    public float getValueByDifficulty(int index, UNGP_SpecialistSettings.Difficulty difficulty) {
+        if (index == 0) return difficulty.getLinearValue(0.1f, 0.05f);
         return 0;
     }
 
@@ -38,16 +38,14 @@ public class UNGP_AncientThreat extends UNGP_BaseRuleEffect implements UNGP_Play
     @Override
     public void applyPlayerFleetStats(CampaignFleetAPI fleet) {
         if (fleet.getContainingLocation().hasTag(Tags.THEME_REMNANT)) {
-            String buffId = rule.getBuffID();
-            float buffDur = 0.1f;
             boolean needsSync = false;
             for (FleetMemberAPI member : fleet.getFleetData().getMembersListCopy()) {
-                BuffManagerAPI.Buff test = member.getBuffManager().getBuff(buffId);
+                BuffManagerAPI.Buff test = member.getBuffManager().getBuff(buffID);
                 if (test instanceof ThreatBuff) {
                     ThreatBuff buff = (ThreatBuff) test;
-                    buff.setDur(buffDur);
+                    buff.refresh();
                 } else {
-                    member.getBuffManager().addBuff(new ThreatBuff(buffId, buffDur));
+                    member.getBuffManager().addBuff(new ThreatBuff(buffID));
                     needsSync = true;
                 }
             }
@@ -62,13 +60,7 @@ public class UNGP_AncientThreat extends UNGP_BaseRuleEffect implements UNGP_Play
     }
 
     @Override
-    public String getDescriptionParams(int index) {
-        if (index == 0) return getPercentString(reduction * 100f);
-        return null;
-    }
-
-    @Override
-    public String getDescriptionParams(int index, int difficulty) {
+    public String getDescriptionParams(int index, UNGP_SpecialistSettings.Difficulty difficulty) {
         if (index == 0) return getPercentString(getValueByDifficulty(index, difficulty) * 100f);
         return null;
     }

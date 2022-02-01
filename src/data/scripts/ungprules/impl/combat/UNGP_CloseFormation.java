@@ -3,6 +3,7 @@ package data.scripts.ungprules.impl.combat;
 import com.fs.starfarer.api.combat.CombatEngineAPI;
 import com.fs.starfarer.api.combat.MutableShipStatsAPI;
 import com.fs.starfarer.api.combat.ShipAPI;
+import data.scripts.campaign.specialist.UNGP_SpecialistSettings;
 import data.scripts.ungprules.impl.UNGP_BaseRuleEffect;
 import data.scripts.ungprules.tags.UNGP_CombatTag;
 import org.lazywizard.lazylib.combat.CombatUtils;
@@ -14,7 +15,7 @@ public class UNGP_CloseFormation extends UNGP_BaseRuleEffect implements UNGP_Com
     private static final float MULTIPLIER = 1.1f;
 
     @Override
-    public float getValueByDifficulty(int index, int difficulty) {
+    public float getValueByDifficulty(int index, UNGP_SpecialistSettings.Difficulty difficulty) {
         return 0f;
     }
 
@@ -43,31 +44,27 @@ public class UNGP_CloseFormation extends UNGP_BaseRuleEffect implements UNGP_Com
         }
         final MutableShipStatsAPI stats = ship.getMutableStats();
         if (isEffective) {
-            stats.getFluxDissipation().modifyMult(rule.getBuffID(), MULTIPLIER);
-            stats.getShieldDamageTakenMult().modifyMult(rule.getBuffID(), 1f / MULTIPLIER);
+            stats.getFluxDissipation().modifyMult(buffID, MULTIPLIER);
+            stats.getShieldDamageTakenMult().modifyMult(buffID, 1f / MULTIPLIER);
             if (ship == engine.getPlayerShip()) {
-                engine.maintainStatusForPlayerShip(rule.getBuffID(),
-                        rule.getSpritePath(),
-                        rule.getName(),
-                        rule.getExtra1() + getFactorString(MULTIPLIER),
-                        false);
+                engine.maintainStatusForPlayerShip(buffID,
+                                                   rule.getSpritePath(),
+                                                   rule.getName(),
+                                                   rule.getExtra1() + getFactorString(MULTIPLIER),
+                                                   false);
             }
         } else {
-            stats.getFluxDissipation().unmodify(rule.getBuffID());
-            stats.getShieldDamageTakenMult().unmodify(rule.getBuffID());
+            stats.getFluxDissipation().unmodify(buffID);
+            stats.getShieldDamageTakenMult().unmodify(buffID);
         }
     }
 
+
     @Override
-    public String getDescriptionParams(int index) {
+    public String getDescriptionParams(int index, UNGP_SpecialistSettings.Difficulty difficulty) {
         if (index == 0) return getFactorString(RANGE);
         if (index == 1) return getFactorString(MULTIPLIER);
         return null;
-    }
-
-    @Override
-    public String getDescriptionParams(int index, int difficulty) {
-        return getDescriptionParams(index);
     }
 
 }

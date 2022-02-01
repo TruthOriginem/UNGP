@@ -3,6 +3,7 @@ package data.scripts.ungprules.impl.combat;
 import com.fs.starfarer.api.combat.CombatEngineAPI;
 import com.fs.starfarer.api.combat.MutableShipStatsAPI;
 import com.fs.starfarer.api.combat.ShipAPI;
+import data.scripts.campaign.specialist.UNGP_SpecialistSettings;
 import data.scripts.ungprules.impl.UNGP_BaseRuleEffect;
 import data.scripts.ungprules.tags.UNGP_CombatTag;
 
@@ -10,14 +11,14 @@ public class UNGP_EnemyDamageTakenReduction extends UNGP_BaseRuleEffect implemen
     private float multiplier;
 
     @Override
-    public void updateDifficultyCache(int difficulty) {
+    public void updateDifficultyCache(UNGP_SpecialistSettings.Difficulty difficulty) {
         multiplier = getValueByDifficulty(0, difficulty);
     }
 
     //10~20
     @Override
-    public float getValueByDifficulty(int index, int difficulty) {
-        if (index == 0) return 1f - (0.05f + 0.05f * (float) Math.pow(difficulty, 0.3668));
+    public float getValueByDifficulty(int index, UNGP_SpecialistSettings.Difficulty difficulty) {
+        if (index == 0) return 1f - difficulty.getLinearValue(0.1f, 0.1f);
         return 1f;
     }
 
@@ -29,9 +30,9 @@ public class UNGP_EnemyDamageTakenReduction extends UNGP_BaseRuleEffect implemen
     @Override
     public void applyEnemyShipInCombat(float amount, ShipAPI enemy) {
         MutableShipStatsAPI stats = enemy.getMutableStats();
-        stats.getHullDamageTakenMult().modifyMult(rule.getBuffID(), multiplier);
-        stats.getShieldDamageTakenMult().modifyMult(rule.getBuffID(), multiplier);
-        stats.getArmorDamageTakenMult().modifyMult(rule.getBuffID(), multiplier);
+        stats.getHullDamageTakenMult().modifyMult(buffID, multiplier);
+        stats.getShieldDamageTakenMult().modifyMult(buffID, multiplier);
+        stats.getArmorDamageTakenMult().modifyMult(buffID, multiplier);
     }
 
     @Override
@@ -40,13 +41,7 @@ public class UNGP_EnemyDamageTakenReduction extends UNGP_BaseRuleEffect implemen
     }
 
     @Override
-    public String getDescriptionParams(int index) {
-        if (index == 0) getFactorString(multiplier);
-        return null;
-    }
-
-    @Override
-    public String getDescriptionParams(int index, int difficulty) {
+    public String getDescriptionParams(int index, UNGP_SpecialistSettings.Difficulty difficulty) {
         if (index == 0) return getFactorString(getValueByDifficulty(index, difficulty));
         return null;
     }
