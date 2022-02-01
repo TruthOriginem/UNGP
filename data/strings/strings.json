@@ -87,7 +87,7 @@
     "milestone_rule": "成就规则",
     "cost_point": "Cost点数: %s",
     "not_rollable": "如果其他规则拥有随机获得规则的效果，本规则将不被计入。",
-    "challenge_tip": "专家挑战(仅可在专家等级为Omega时挑战):",
+    "challenge_tip": "专家挑战(仅可在专家等级为Alpha/Omega时挑战):",
     "challenge_tip_desc0_0": "完成该挑战需要保持这些规则{%s}月",
     "challenge_tip_desc0_1": "完成该挑战需要保持这些规则直至玩家满级",
     "challenge_tip_desc1": "玩家满级",

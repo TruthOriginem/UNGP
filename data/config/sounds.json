@@ -7,6 +7,15 @@
   "UNGP_glados_chosen": [
     {"file": "sounds/fx/trigger/UNGP_glados_chosen.ogg", "pitch": 1, "volume": 1},
   ],
+  "UNGP_fraudulent_activate": [
+    {"file": "sounds/fx/trigger/UNGP_fraudulent_activate.ogg", "pitch": 1, "volume": 1},
+  ],
+  "UNGP_phasingghost_activate": [
+    {"file": "sounds/fx/trigger/UNGP_phasingghost_activate.ogg", "pitch": 1, "volume": 1},
+  ],
+  "UNGP_phasingghost_warning": [
+    {"file": "sounds/fx/trigger/UNGP_phasingghost_warning.ogg", "pitch": 1, "volume": 1},
+  ],
   "UNGP_fungus_activate": [
     {"file": "sounds/fx/trigger/UNGP_fungus_activate.ogg", "pitch": 1, "volume": 1},
   ],

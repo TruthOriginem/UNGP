@@ -48,6 +48,7 @@ public class UNGP_Fraudulent extends UNGP_BaseRuleEffect implements UNGP_Campaig
                     message.addLine(rule.getExtra1(), Misc.getTextColor(), new String[]{
                             Misc.getDGSCredits(dropCredit)
                     }, Misc.getHighlightColor());
+                    message.setSound("UNGP_fraudulent_activate");
                     showMessage(message);
                     Global.getSector().getPlayerFleet().getCargo().getCredits().subtract(dropCredit);
                 }

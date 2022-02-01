@@ -87,7 +87,7 @@
     "golden_rule": "Golden Rule",
     "milestone_rule": "成就规则",
     "not_rollable": "If another rule has the effect of acquiring other rules, this rule will not be counted.",
-    "challenge_tip": "Specialist Challenge(Only take effect when difficulty level is 20):",
+    "challenge_tip": "Specialist Challenge(Only take effect when difficulty is Alpha/Omega):",
     "challenge_tip_desc0_0": "完成该挑战需要保持这些规则{%s}月",
     "challenge_tip_desc0_1": "完成该挑战需要保持这些规则直至玩家满级",
     "challenge_tip_desc1": "玩家满级",
