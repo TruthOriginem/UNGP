@@ -123,6 +123,8 @@ public class UNGP_PhasingGhost extends UNGP_BaseRuleEffect implements UNGP_Comba
                                 ShipAPI spawnedGhost = fleetManager.spawnShipOrWing(variant, toSpawn, RANDOM.nextFloat() * 360f);
                                 fleetManager.setSuppressDeploymentMessages(wasSuppressed);
                                 engine.getCombatUI().addMessage(0, rule.getCorrectColor(), rule.getExtra1());
+                                Global.getSoundPlayer().playSound("UNGP_phasingghost_activate", 1f, 1f, toSpawn, new Vector2f());
+                                Global.getSoundPlayer().playUISound("UNGP_phasingghost_warning", 1f, 1f);
                                 engine.addPlugin(new PhasingFadeInPlugin(spawnedGhost));
                             }
                         }

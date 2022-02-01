@@ -124,7 +124,7 @@ public class UNGP_BloodLust extends UNGP_BaseRuleEffect implements UNGP_Campaign
 
         @Override
         public void reportBattleOccurred(CampaignFleetAPI fleet, CampaignFleetAPI primaryWinner, BattleAPI battle) {
-            if (primaryWinner.isPlayerFleet()) {
+            if (battle.isPlayerInvolved()) {
                 saveDataInCampaign(0, 0);
             }
         }
