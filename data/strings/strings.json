@@ -40,7 +40,7 @@
     "d_rulepick_button": "选择专家模式规则",
     "d_rulepick_couldChallenge": "(可进行专家挑战)",
     "d_rulepick_title": "专家模式规则选择",
-    "d_rulepick_desc": "请遵循以下指示:\n -%s 消耗Cost点\n -%s 增加Cost点\n -%s 选择规则时只可选择一种\n -剩余Cost大于等于0才能开启专家模式\n -按SHIFT切换信息显示模式/A,D键以翻页\n -专家等级为Omega时可以进行专家挑战",
+    "d_rulepick_desc": "请遵循以下指示:\n -%s 消耗Cost点\n -%s 增加Cost点\n -%s 选择规则时只可选择一种\n -剩余Cost大于等于0才能开启专家模式\n -按SHIFT切换信息显示模式/A,D键以翻页\n -专家等级为Alpha/Omega时可以进行专家挑战",
     "d_rulepick_warning": "您之前已经选过规则了，您要重选吗?",
     "d_rulepick_level": "专家等级: %s",
     "d_rulepick_cost": "剩余Cost点: %s",
@@ -81,6 +81,7 @@
     "repick_blocked": "当前专家挑战不允许重选规则",
     "repick_rules": "重选专家规则",
     "front_desc": "当专家等级为 %s 时效果如下:",
+    "any": "任意",
     "isBonus": "正面规则",
     "notBonus": "负面规则",
     "golden_rule": "黄金规则",
@@ -104,7 +105,10 @@
     "button_details": "规则详尽信息",
     "button_details_tooltip": "查看当前专家等级内所有生效规则的效果。",
     "button_tips": "规则生涯提示",
-    "button_tips_tooltip": "查看部分规则在生涯储存的额外信息。"
+    "button_tips_tooltip": "查看部分规则在生涯储存的额外信息。",
+    "button_feedback": "深层同调",
+    "button_feedback_tips": "上传你当前规则列表，获取 %s 点故事点的奖励...",
+    "button_feedback_tips_detailed": "匿名上传你的规则列表至该mod的数据库用于调查与分析，相关代码可在mod源码中查询，不会上传任何其他信息。仅收集该mod自带规则，且每次mod更新后数据都会被删除。按下确认即表示你已同意以下声明：本人已详细复核以上内容，并确认无误。"
   },
   "UNGP_rule_impl": {
     "halved": "减半",

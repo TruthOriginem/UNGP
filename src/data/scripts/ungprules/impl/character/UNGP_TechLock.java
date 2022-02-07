@@ -21,12 +21,12 @@ public class UNGP_TechLock extends UNGP_BaseRuleEffect implements UNGP_Character
 
     @Override
     public void applyPlayerCharacterStats(MutableCharacterStatsAPI stats) {
-        stats.getShipOrdnancePointBonus().modifyPercent(rule.getBuffID(), -reduction * 100f);
+        stats.getShipOrdnancePointBonus().modifyPercent(buffID, -reduction * 100f);
     }
 
     @Override
     public void unapplyPlayerCharacterStats(MutableCharacterStatsAPI stats) {
-        stats.getShipOrdnancePointBonus().unmodify(rule.getBuffID());
+        stats.getShipOrdnancePointBonus().unmodify(buffID);
 
     }
 

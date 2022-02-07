@@ -20,7 +20,7 @@ public class UNGP_Ying extends UNGP_BaseRuleEffect implements UNGP_TweakBeforeAp
     }
 
     @Override
-    public String getDescriptionParams(int index,UNGP_SpecialistSettings.Difficulty difficulty) {
+    public String getDescriptionParams(int index, UNGP_SpecialistSettings.Difficulty difficulty) {
         if (index == 0) return UNGP_RulesManager.getBonusString(false);
         if (index == 1) return UNGP_RulesManager.getBonusString(true);
         return null;
@@ -38,6 +38,7 @@ public class UNGP_Ying extends UNGP_BaseRuleEffect implements UNGP_TweakBeforeAp
         WeightedRandomPicker<URule> picker = new WeightedRandomPicker<>(getRandom());
         List<URule> rulesToPick = getAllRulesCopy();
         rulesToPick.removeAll(originalActiveRules);
+        rulesToPick.removeAll(activeRules);
         //如果有另一个就全可以选
         for (URule tmp : rulesToPick) {
             if (tmp == rule) continue;

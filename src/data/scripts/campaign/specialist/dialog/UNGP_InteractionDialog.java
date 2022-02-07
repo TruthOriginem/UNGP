@@ -81,6 +81,7 @@ public class UNGP_InteractionDialog implements InteractionDialogPlugin {
     private SettingEntry<Float> setting_inheritCreditsRatio = new SettingEntry<>(0f);
     private SettingEntry<Float> setting_inheritBPsRatio = new SettingEntry<>(0f);
     private SettingEntry<Difficulty> setting_difficulty = new SettingEntry<>(null);
+    private SettingEntry<Boolean> setting_uploadRules = new SettingEntry<>(false);
 
     private List<URule> pickedRules = new ArrayList<>();
 

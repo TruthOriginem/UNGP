@@ -1,3 +1,20 @@
+1.6.1 2022/2/7
+调整相位幽灵的概率。
+Hss Phoenix现在会在生涯里提示生效舰船名。(modder可通过给舰船添加"ungp_onslaught"的tag来将其视作攻势)
+优化规则显示。
+修复部分bug并对非rules部分底层修改。
+
+增加负面规则：遗忘症
+增加正面规则：战斗续行
+
+Tweaked the chance mechanism of Phasing Ghost.
+Hss Phoenix now could indicate the ships that take effect in intel tips. Modders could add "ungp_onslaught" tag to ship to make it counted as "onslaught" by Hss Phoenix.
+Optimized the showing of rules.
+Fixed some bugs and tweaked little about some codes.
+
+Add new negative rule: Amnesia
+Add new positive rule: Endurance
+
 1.6.0 2022/1/27
 兼容0.95.1a。
 本次更新不能中途加入存档，建议先保存重生点。

@@ -62,13 +62,13 @@ public class UNGP_PhasingGhost extends UNGP_BaseRuleEffect implements UNGP_Comba
     private class GhostManager {
         private IntervalUtil checkInterval = new IntervalUtil(55f, 65f);
         private float rollChance = chance;
+        private String lastGeneratedHullId;
 
         public void advance(CombatEngineAPI engine, float amount) {
             checkInterval.advance(amount);
             ShipAPI.HullSize biggestHullSize = ShipAPI.HullSize.DEFAULT;
             if (checkInterval.intervalElapsed()) {
                 if (roll(rollChance)) {
-                    rollChance /= 2f;
                     Vector2f toSpawn = null;
                     WeightedRandomPicker<ShipAPI> spawnLocks = new WeightedRandomPicker<>();
                     for (ShipAPI ship : engine.getShips()) {
@@ -92,8 +92,8 @@ public class UNGP_PhasingGhost extends UNGP_BaseRuleEffect implements UNGP_Comba
                             case FIGHTER:
                                 break;
                             case FRIGATE:
-                                hullPicker.add("afflictor");
-                                hullPicker.add("shade");
+                                hullPicker.add("afflictor", 10f);
+                                hullPicker.add("shade", 10f);
                                 break;
                             case DESTROYER:
                                 hullPicker.add("afflictor", 8);
@@ -107,14 +107,21 @@ public class UNGP_PhasingGhost extends UNGP_BaseRuleEffect implements UNGP_Comba
                                 hullPicker.add("doom", 4);
                                 break;
                             case CAPITAL_SHIP:
-                                hullPicker.add("afflictor");
-                                hullPicker.add("shade");
-                                hullPicker.add("harbinger");
-                                hullPicker.add("doom");
+                                hullPicker.add("afflictor", 10f);
+                                hullPicker.add("shade", 10f);
+                                hullPicker.add("harbinger", 10f);
+                                hullPicker.add("doom", 10f);
                                 break;
                         }
                         String hull = hullPicker.pick();
                         if (hull != null) {
+                            // 隐藏机制 重复的船概率减半
+                            if (lastGeneratedHullId != null) {
+                                int index = hullPicker.getItems().indexOf(lastGeneratedHullId);
+                                if (index != -1) {
+                                    hullPicker.setWeight(index, hullPicker.getWeight(index) * 0.5f);
+                                }
+                            }
                             String variant = getVariant(hull);
                             if (variant != null) {
                                 CombatFleetManagerAPI fleetManager = engine.getFleetManager(FleetSide.ENEMY);
@@ -126,6 +133,11 @@ public class UNGP_PhasingGhost extends UNGP_BaseRuleEffect implements UNGP_Comba
                                 Global.getSoundPlayer().playSound("UNGP_phasingghost_activate", 1f, 1f, toSpawn, new Vector2f());
                                 Global.getSoundPlayer().playUISound("UNGP_phasingghost_warning", 1f, 1f);
                                 engine.addPlugin(new PhasingFadeInPlugin(spawnedGhost));
+                                // 成功生成的话
+                                // 每生成一次，概率下降
+                                rollChance *= 0.9f;
+                                rollChance /= 2f;
+                                lastGeneratedHullId = hull;
                             }
                         }
                     }

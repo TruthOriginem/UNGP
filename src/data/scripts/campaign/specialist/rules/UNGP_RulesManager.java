@@ -249,11 +249,13 @@ public class UNGP_RulesManager {
         private UNGP_RuleInfo ruleInfo;
         private boolean isMilestoneRollLocked = true;
         private boolean isMilestoneProvider = false;
+        private boolean isDescAffectedByLevel;
 
         URule(UNGP_RuleInfo info) {
             this.buffID = "ungp_" + info.getId();
             this.ruleInfo = info;
             this.ruleInfo.getEffectPlugin().setRule(this);
+            this.isDescAffectedByLevel = isDescAffectedByLevel();
         }
 
         public String getId() {
@@ -338,28 +340,85 @@ public class UNGP_RulesManager {
                 tooltip.addPara(rules_i18n.get("rule_source") + ruleInfo.getSource(), Misc.getGrayColor(), pad * 0.5f);
                 tooltip.setParaFontDefault();
             }
-            Difficulty difficulty = getGlobalDifficulty();
-            tooltip.addPara(rules_i18n.get("front_desc"), pad * 0.5f, Misc.getBasePlayerColor(), difficulty.color,
-                            difficulty.name);
         }
 
         public void addDesc(TooltipMakerAPI tooltip, float pad, String prefix, Difficulty difficulty) {
-            String[] values = new String[10];
-            for (int i = 0; i < 10; i++) {
-                values[i] = getRuleEffect().getDescriptionParams(i, difficulty);
+            String[] values;
+            if (difficulty == null) {
+                values = getDescriptionParams(Difficulty.GAMMA);
+            } else {
+                values = getDescriptionParams(difficulty);
             }
             Color highlightColor = isBonus() ? Misc.getHighlightColor() : Misc.getNegativeHighlightColor();
             tooltip.addPara(prefix + ruleInfo.getDesc(), pad, highlightColor, values);
-
         }
 
         public void addDesc(TooltipMakerAPI tooltip, float pad, String prefix) {
             addDesc(tooltip, pad, prefix, getGlobalDifficulty());
         }
 
+        public void addDescToItem(TooltipMakerAPI tooltip, float pad, String prefix, boolean isExpanded) {
+            if (!isDescAffectedByLevel) {
+                tooltip.addPara(rules_i18n.get("front_desc"), pad * 0.5f, Misc.getBasePlayerColor(), Misc.getHighlightColor(), rules_i18n.get("any"));
+                addDesc(tooltip, pad, prefix, null);
+            } else {
+                Difficulty difficulty = UNGP_RulesManager.getGlobalDifficulty();
+                if (isExpanded) {
+                    for (Difficulty itemDifficulty : Difficulty.values()) {
+                        tooltip.addPara(rules_i18n.get("front_desc"), pad * 0.5f,
+                                        difficulty == itemDifficulty ? Misc.getGrayColor() : Misc.getBasePlayerColor(),
+                                        itemDifficulty.color, itemDifficulty.name);
+                        addDesc(tooltip, pad, prefix, itemDifficulty);
+                        tooltip.addSpacer(pad * 0.5f);
+                    }
+                } else {
+                    tooltip.addPara(rules_i18n.get("front_desc"), pad * 0.5f, Misc.getBasePlayerColor(), difficulty.color, difficulty.name);
+                    addDesc(tooltip, pad, prefix, difficulty);
+                }
+            }
+        }
+
+        public String[] getDescriptionParams(Difficulty difficulty) {
+            String[] values = new String[10];
+            for (int i = 0; i < 10; i++) {
+                values[i] = getRuleEffect().getDescriptionParams(i, difficulty);
+            }
+            return values;
+        }
+
+        /**
+         * @return true if the difficulty level description won't change at any level, by checking description params
+         */
+        public boolean isDescAffectedByLevel() {
+            String lastCompared = null;
+            for (Difficulty difficulty : Difficulty.values()) {
+                String[] values = getDescriptionParams(difficulty);
+                StringBuilder sb = new StringBuilder();
+                for (String value : values) {
+                    sb.append(value);
+                }
+                if (lastCompared == null) {
+                    lastCompared = sb.toString();
+                } else {
+                    String compared = sb.toString();
+                    if (!lastCompared.contentEquals(compared)) {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+
+        /**
+         * For roll tag
+         *
+         * @param tooltip
+         * @param pad
+         * @param prefix
+         */
         public void addRollDesc(TooltipMakerAPI tooltip, float pad, String prefix) {
             if (!isBasicallyRollable()) {
-                tooltip.addPara(prefix + rules_i18n.get("not_rollable"), Misc.getGrayColor(), 10f);
+                tooltip.addPara(prefix + rules_i18n.get("not_rollable"), Misc.getGrayColor(), pad);
             }
         }
 
@@ -369,7 +428,7 @@ public class UNGP_RulesManager {
                 final List<UNGP_ChallengeInfo> challengesCopy = UNGP_ChallengeManager.getChallengeInfosCopy();
                 List<UNGP_ChallengeInfo> provider = new ArrayList<>();
                 for (UNGP_ChallengeInfo challengeInfo : challengesCopy) {
-                    if (challengeInfo.getMilestoneToUnlock().equals(getId())) {
+                    if (challengeInfo.getMilestoneToUnlock().equals(this)) {
                         provider.add(challengeInfo);
                     }
                 }
@@ -435,7 +494,7 @@ public class UNGP_RulesManager {
         }
 
         public boolean isTooltipExpandable() {
-            return isMilestoneProvider;
+            return isMilestoneProvider || isDescAffectedByLevel;
         }
 
         public void addDesc(TooltipMakerAPI tooltip, float pad) {

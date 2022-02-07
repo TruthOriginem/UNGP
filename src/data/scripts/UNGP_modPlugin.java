@@ -8,6 +8,7 @@ import data.scripts.campaign.UNGP_SharedData;
 import data.scripts.campaign.everyframe.UNGP_CampaignPlugin;
 import data.scripts.campaign.everyframe.UNGP_UITimeScript;
 import data.scripts.campaign.specialist.UNGP_PlayerFleetMemberBuff;
+import data.scripts.campaign.everyframe.UNGP_SpecialistWidgetPlugin;
 import data.scripts.campaign.specialist.challenges.UNGP_ChallengeManager;
 import data.scripts.campaign.specialist.items.UNGP_RuleItem;
 import data.scripts.campaign.specialist.rules.UNGP_RulesManager;
@@ -18,7 +19,7 @@ public class UNGP_modPlugin extends BaseModPlugin {
 
     @Override
     public void onApplicationLoad() {
-        UNGP_LoadingChecker.checkLoad();
+        UNGP_LoadingChecker.runCheckProcess();
 
         UNGPFont.init();
         UNGP_RuleItem.loadSprite();
@@ -45,6 +46,7 @@ public class UNGP_modPlugin extends BaseModPlugin {
             Global.getSector().addScript(new UNGP_CampaignPlugin());
         }
         Global.getSector().addTransientScript(new UNGP_UITimeScript());
+        Global.getSector().addTransientScript(new UNGP_SpecialistWidgetPlugin());
     }
 
     @Override

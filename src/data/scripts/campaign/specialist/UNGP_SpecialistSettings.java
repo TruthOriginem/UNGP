@@ -56,11 +56,15 @@ public final class UNGP_SpecialistSettings {
         /**
          * @param base
          * @param fullExtraValue
-         * @param max            A limitation
+         * @param maxOrMin       A cap, a limitation
          * @return
          */
-        public float getLinearValue(float base, float fullExtraValue, float max) {
-            return Math.min(getLinearValue(base, fullExtraValue), max);
+        public float getLinearValue(float base, float fullExtraValue, float maxOrMin) {
+            if (fullExtraValue > 0) {
+                return Math.min(getLinearValue(base, fullExtraValue), maxOrMin);
+            } else {
+                return Math.max(getLinearValue(base, fullExtraValue), maxOrMin);
+            }
         }
 
         /**

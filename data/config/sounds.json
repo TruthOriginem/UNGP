@@ -7,6 +7,9 @@
   "UNGP_glados_chosen": [
     {"file": "sounds/fx/trigger/UNGP_glados_chosen.ogg", "pitch": 1, "volume": 1},
   ],
+  "UNGP_deep_sync": [
+    {"file": "sounds/fx/other/UNGP_deep_sync.ogg", "pitch": 1, "volume": 1},
+  ],
   "UNGP_fraudulent_activate": [
     {"file": "sounds/fx/trigger/UNGP_fraudulent_activate.ogg", "pitch": 1, "volume": 1},
   ],
