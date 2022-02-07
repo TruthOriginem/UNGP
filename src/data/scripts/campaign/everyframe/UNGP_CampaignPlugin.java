@@ -145,13 +145,13 @@ public class UNGP_CampaignPlugin implements EveryFrameScript, CampaignInputListe
         // 以下专家模式才可触发
         if (!inGameData.isHardMode()) return;
 
-        // 调整专家模式UI的位置
-        if (!uiEntity.isInCurrentLocation()) {
-            LocationAPI currentLocation = sector.getCurrentLocation();
-            uiEntity.getContainingLocation().removeEntity(uiEntity);
-            currentLocation.addEntity(uiEntity);
-            uiEntity.setContainingLocation(currentLocation);
-        }
+//        // 调整专家模式UI的位置
+//        if (uiEntity != null && !uiEntity.isInCurrentLocation()) {
+//            LocationAPI currentLocation = sector.getCurrentLocation();
+//            uiEntity.getContainingLocation().removeEntity(uiEntity);
+//            currentLocation.addEntity(uiEntity);
+//            uiEntity.setContainingLocation(currentLocation);
+//        }
 
         int currentDay = clock.getDay();
         int currentYear = clock.getCycle();
