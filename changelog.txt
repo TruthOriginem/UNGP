@@ -1,3 +1,10 @@
+1.6.2 2022/2/13
+修复部分显示bug。
+现在记录重生点时可以将存档里玩家拥有的物品/舰船价值额外加入继承星币中。
+
+Fixed some visual bugs.
+Now items, ships owned by player can be accounted in credits while recording the save point.
+
 1.6.1 2022/2/7
 调整相位幽灵的概率。
 Hss Phoenix现在会在生涯里提示生效舰船名。(modder可通过给舰船添加"ungp_onslaught"的tag来将其视作攻势)

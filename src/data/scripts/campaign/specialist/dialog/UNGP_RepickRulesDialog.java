@@ -96,6 +96,7 @@ public class UNGP_RepickRulesDialog implements InteractionDialogPlugin {
             if (!pickedList.isEmpty() && couldRepick) {
                 inGameData.reduceTimesToChangeSpecialistMode();
                 inGameData.saveActivatedRules(pickedList);
+                UNGP_Feedback.setFeedBackList(pickedList);
                 UNGP_Feedback.resetFeedbackSent();
                 UNGP_RulesManager.updateRulesCache();
             }

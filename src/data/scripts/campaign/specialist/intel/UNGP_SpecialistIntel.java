@@ -199,7 +199,7 @@ public class UNGP_SpecialistIntel extends BaseIntelPlugin {
                 buttonGroup.addButton(uploadButton);
                 buttonGroup.addButton(repickButton);
 
-                buttonGroup.addToTooltip(tooltip, buttonPad);
+                buttonGroup.updateTooltip(tooltip, buttonPad);
                 repickRect.addTooltip();
             }
         }

@@ -60,7 +60,7 @@ public class UNGP_PhasingGhost extends UNGP_BaseRuleEffect implements UNGP_Comba
     }
 
     private class GhostManager {
-        private IntervalUtil checkInterval = new IntervalUtil(55f, 65f);
+        private IntervalUtil checkInterval = new IntervalUtil(55, 65f);
         private float rollChance = chance;
         private String lastGeneratedHullId;
 
@@ -131,7 +131,7 @@ public class UNGP_PhasingGhost extends UNGP_BaseRuleEffect implements UNGP_Comba
                                 fleetManager.setSuppressDeploymentMessages(wasSuppressed);
                                 engine.getCombatUI().addMessage(0, rule.getCorrectColor(), rule.getExtra1());
                                 Global.getSoundPlayer().playSound("UNGP_phasingghost_activate", 1f, 1f, toSpawn, new Vector2f());
-                                Global.getSoundPlayer().playUISound("UNGP_phasingghost_warning", 1f, 1f);
+                                Global.getSoundPlayer().playUISound("UNGP_phasingghost_warning", 1f, 0.4f);
                                 engine.addPlugin(new PhasingFadeInPlugin(spawnedGhost));
                                 // 成功生成的话
                                 // 每生成一次，概率下降

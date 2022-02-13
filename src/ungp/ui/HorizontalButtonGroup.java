@@ -22,7 +22,7 @@ public class HorizontalButtonGroup {
         buttons.add(button);
     }
 
-    public void addToTooltip(TooltipMakerAPI tooltip, float buttonPad) {
+    public void updateTooltip(TooltipMakerAPI tooltip, float buttonPad) {
         for (int i = 1; i < buttons.size(); i++) {
             ButtonAPI button = buttons.get(i);
             ButtonAPI prevButton = buttons.get(i - 1);

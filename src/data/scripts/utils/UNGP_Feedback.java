@@ -18,6 +18,7 @@ public class UNGP_Feedback {
      */
     private static final String API_URL = "https://originem.jnxyp.net/api/ungp/sc?rules=";
     private static final String FEEDBACK_SENT_KEY = "UNGP_feedbackSent";
+    private static final String FEEDBACK_LIST_KEY = "UNGP_feedbackList";
 
     public static boolean getFeedbackSent() {
         return Global.getSector().getPersistentData().containsKey(FEEDBACK_SENT_KEY);
@@ -32,6 +33,21 @@ public class UNGP_Feedback {
     }
 
     /**
+     * only called after inherit and repick.
+     *
+     * @param rules
+     */
+    public static void setFeedBackList(List<UNGP_RulesManager.URule> rules) {
+        StringBuilder sb = new StringBuilder();
+        for (UNGP_RulesManager.URule rule : rules) {
+            sb.append(rule.getId());
+            sb.append("|");
+        }
+        sb.deleteCharAt(sb.length() - 1);
+        Global.getSector().getPersistentData().put(FEEDBACK_LIST_KEY, sb.toString());
+    }
+
+    /**
      * Send how players pick rules to certain server for analysis.
      * The server only runs one time per 5 seconds.
      * Player SHOULD be able to cancel this.
@@ -39,13 +55,19 @@ public class UNGP_Feedback {
      * @param rules
      */
     public static void sendPlayerRulesToServer(List<UNGP_RulesManager.URule> rules) {
-        if (rules.isEmpty()) return;
         StringBuilder sb = new StringBuilder(API_URL);
-        for (UNGP_RulesManager.URule rule : rules) {
-            sb.append(rule.getId());
-            sb.append("|");
+
+        String ruleString = (String) Global.getSector().getPersistentData().get(FEEDBACK_LIST_KEY);
+        if (ruleString != null) {
+            sb.append(ruleString);
+        } else {
+            if (rules.isEmpty()) return;
+            for (UNGP_RulesManager.URule rule : rules) {
+                sb.append(rule.getId());
+                sb.append("|");
+            }
+            sb.deleteCharAt(sb.length() - 1);
         }
-        sb.deleteCharAt(sb.length() - 1);
         final String url = sb.toString();
         Thread thread = new Thread(new Runnable() {
             @Override

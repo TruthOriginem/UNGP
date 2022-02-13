@@ -263,8 +263,8 @@ public class UNGP_RulePickListener implements CargoPickerListener {
      * @param baseDialog
      */
     public void showCargoPickerDialog(InteractionDialogAPI baseDialog) {
-        float width = Global.getSettings().getScreenWidthPixels() * 0.8f;
-        float height = Global.getSettings().getScreenHeightPixels() * 0.8f;
+        float width = Global.getSettings().getScreenWidth() * 0.8f;
+        float height = Global.getSettings().getScreenHeight() * 0.8f;
         baseDialog.showCargoPickerDialog(d_i18n.get("rulepick_title"), d_i18n.get("confirm"), d_i18n.get("cancel"), false,
                                          Math.max(280f, width * 0.2f),
                                          width,
