@@ -13,10 +13,10 @@ public class UNGP_DangerousSector extends UNGP_MemberBuffRuleEffect {
         multiplier = getValueByDifficulty(0, difficulty);
     }
 
-    //1.5~2
+    //2~3
     @Override
     public float getValueByDifficulty(int index, UNGP_SpecialistSettings.Difficulty difficulty) {
-        if (index == 0) return difficulty.getLinearValue(1.5f, 0.5f);
+        if (index == 0) return difficulty.getLinearValue(2f, 1f);
         return 0;
     }
 

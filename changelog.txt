@@ -1,3 +1,21 @@
+1.6.3 2022/2/14
+规则数值修正:
+风暴骑手cost点数: -1 -> -2
+危险星域影响倍率: 1.5~2 -> 2~3
+幅能导流阻塞基础数值提高5%
+破片坟场基础数值各提高100%/150%
+Order66 友军伤害: 50%~100% -> 100%~200%
+
+优化残骸整理工序数值: 15%~30% -> 15%~25%
+
+Storm Rider: Cost -1 -> -2
+Dangerous Sector: Multiplier 1.5~2 -> 2~3
+Blocked Flux Conduits: Base value increased by 5%
+Fragment Graveyard: Base value increased by 100%/150%
+Order66: Friendly Damage 50%~100% -> 100%~200%
+
+Optimised Derelict Processing: 15%~30% -> 15%~25%
+
 1.6.2 2022/2/13
 修复部分显示bug。
 现在记录重生点时可以将存档里玩家拥有的物品/舰船价值额外加入继承星币中。

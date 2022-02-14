@@ -10,7 +10,7 @@ import data.scripts.ungprules.tags.UNGP_CombatTag;
 import static data.scripts.campaign.specialist.UNGP_SpecialistSettings.Difficulty;
 
 public class UNGP_BlockedFluxConduits extends UNGP_BaseRuleEffect implements UNGP_CombatTag {
-    private float fluxReduction = 20f;
+    private float fluxReduction = 25f;
 
     @Override
     public void updateDifficultyCache(Difficulty difficulty) {
@@ -19,7 +19,7 @@ public class UNGP_BlockedFluxConduits extends UNGP_BaseRuleEffect implements UNG
 
     @Override
     public float getValueByDifficulty(int index, Difficulty difficulty) {
-        if (index == 0) return difficulty.getLinearValue(20f, 10f);
+        if (index == 0) return difficulty.getLinearValue(25f, 10f);
         return 0;
     }
 
@@ -44,21 +44,20 @@ public class UNGP_BlockedFluxConduits extends UNGP_BaseRuleEffect implements UNG
         ShieldAPI shield = ship.getShield();
         if (shield != null) {
             MutableShipStatsAPI stats = ship.getMutableStats();
-            String id = rule.getBuffID();
             if (shield.isOn()) {
                 float arcLevel = 1f - shield.getActiveArc() / shield.getArc();
                 arcLevel = Math.min(Math.max(0, arcLevel), 1);
                 arcLevel *= arcLevel;
                 arcLevel = 1f - arcLevel;
                 float finalReduction = fluxReduction * arcLevel;
-                stats.getFluxDissipation().modifyPercent(id, -finalReduction);
+                stats.getFluxDissipation().modifyPercent(buffID, -finalReduction);
                 if (engine.getPlayerShip() == ship) {
-                    engine.maintainStatusForPlayerShip(id, rule.getSpritePath(),
+                    engine.maintainStatusForPlayerShip(buffID, rule.getSpritePath(),
                                                        rule.getName(),
                                                        rule.getExtra1() + (int) finalReduction + "%", true);
                 }
             } else {
-                stats.getFluxDissipation().unmodify(id);
+                stats.getFluxDissipation().unmodify(buffID);
             }
         }
     }

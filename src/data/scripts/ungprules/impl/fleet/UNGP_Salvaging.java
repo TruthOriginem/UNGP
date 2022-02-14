@@ -16,7 +16,7 @@ public class UNGP_Salvaging extends UNGP_BaseRuleEffect implements UNGP_PlayerFl
 
     @Override
     public float getValueByDifficulty(int index, UNGP_SpecialistSettings.Difficulty difficulty) {
-        if (index == 0) return difficulty.getLinearValue(0.15f, 0.15f);
+        if (index == 0) return difficulty.getLinearValue(0.15f, 0.1f);
         return 0;
     }
 

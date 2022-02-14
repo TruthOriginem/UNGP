@@ -42,7 +42,7 @@ ew_smog,Ew Smog,Increase the cap of ECM,The maximum ECM rating + %s,-4,TRUE,,gra
 ,,,,,,,,,,,,,
 salvaging,Optimised Derelict Processing,Salvaging buffs,"Increases the resources gained from salvaging abandoned stations, derelicts, floating hulks, and others by %s (Including rare items))",-2,TRUE,,graphics/icons/ungp/salvaging.png,data.scripts.ungprules.impl.fleet.UNGP_Salvaging,,,,,
 efficient_fuel,Voyager,Sail farer,Fuel consumption x %s,-2,TRUE,,graphics/icons/ungp/efficient_fuel.png,data.scripts.ungprules.impl.fleet.UNGP_EfficientFuel,,,,,
-storm_rider,Storm Rider,"""Storm in my command!""",Your fleet will be immune to hyperspace storm,-1,TRUE,,graphics/icons/ungp/storm_rider.png,data.scripts.ungprules.impl.fleet.UNGP_StormRider,,,,,
+storm_rider,Storm Rider,"""Storm in my command!""",Your fleet will be immune to hyperspace storm,-2,TRUE,,graphics/icons/ungp/storm_rider.png,data.scripts.ungprules.impl.fleet.UNGP_StormRider,,,,,
 bustling_fungus,Bustling Fungus,Lower maintenance cost while staying still,"After being immobile for %s day's, ships' repair speed + %s,maintenance - %s",-1,TRUE,,graphics/icons/ungp/bustling_fungus.png,data.scripts.ungprules.impl.fleet.UNGP_BustlingFungus,REFITTING NOW...,,,,
 endurance,Endurance,Recover CR while low,"Once a player ship's CR falls below %s of the max CR, it directly gains the CR value for one deployment of the required CR. The cooldown time for this effect is %s days per ship.",-2,TRUE,,graphics/icons/ungp/endurance.png,data.scripts.ungprules.impl.fleet.UNGP_Endurance,%s 's cooldown is %s days,,,,议长√
 ,,,,,,,,,,,,,
