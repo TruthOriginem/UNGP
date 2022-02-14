@@ -7,7 +7,7 @@
     {"id": "lw_lazylib", "name": "LazyLib"},
   ],
   "description": "A mod with a similar 'new game plus' function.\n Left ctrl+P to call the menu",
-  "gameVersion": "0.95.1-RC6",
+  "gameVersion": "0.95.1a-RC6",
   "jars": ["jars/ungp.jar"],
   "modPlugin": "data.scripts.UNGP_modPlugin",
 }
