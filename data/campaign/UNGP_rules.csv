@@ -42,7 +42,7 @@ ew_smog,电子烟幕,提升电子战强度上限,我方电子战强度上限 +{%
 ,,,,,,,,,,,,,
 salvaging,优化残骸整理工序,强化垃圾佬,+ %s 打捞的收益(包括稀有物资),-2,TRUE,,graphics/icons/ungp/salvaging.png,data.scripts.ungprules.impl.fleet.UNGP_Salvaging,,,,,和莱√
 efficient_fuel,远洋专长,提高航行距离,玩家舰队燃油消耗 x %s,-2,TRUE,,graphics/icons/ungp/efficient_fuel.png,data.scripts.ungprules.impl.fleet.UNGP_EfficientFuel,,,,,影之光√
-storm_rider,风暴骑手,"""狂风!听我号令!""",玩家舰队不会在超空间风暴中受损,-1,TRUE,,graphics/icons/ungp/storm_rider.png,data.scripts.ungprules.impl.fleet.UNGP_StormRider,,,,,和莱√
+storm_rider,风暴骑手,"""狂风!听我号令!""",玩家舰队不会在超空间风暴中受损,-2,TRUE,,graphics/icons/ungp/storm_rider.png,data.scripts.ungprules.impl.fleet.UNGP_StormRider,,,,,和莱√
 bustling_fungus,爆裂真菌,原地不动时休整舰队,"大地图中,玩家舰队静止不动{%s}天后,舰船维修速度+{%s},每月维护补给-{%s}",-1,TRUE,,graphics/icons/ungp/bustling_fungus.png,data.scripts.ungprules.impl.fleet.UNGP_BustlingFungus,开始休整...,,,,议长√
 endurance,战斗续行,低战备时即时回复,一旦玩家舰船战备值低于当前最大战备值的{%s}，直接获得一次作战所需战备的战备值。每艘船触发后的冷却时间是{%s}天。,-2,TRUE,,graphics/icons/ungp/endurance.png,data.scripts.ungprules.impl.fleet.UNGP_Endurance,%s 的冷却时间是 %s 天,,,,议长√
 ,,,,,,,,,,,,,

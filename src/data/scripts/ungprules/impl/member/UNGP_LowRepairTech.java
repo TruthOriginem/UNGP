@@ -12,6 +12,7 @@ public class UNGP_LowRepairTech extends UNGP_MemberBuffRuleEffect {
         reduction = getValueByDifficulty(0, difficulty);
     }
 
+    //0.15~0.25
     @Override
     public float getValueByDifficulty(int index, UNGP_SpecialistSettings.Difficulty difficulty) {
         if (index == 0) return difficulty.getLinearValue(0.15f, 0.1f);
