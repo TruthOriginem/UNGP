@@ -114,7 +114,8 @@
     "button_tips_tooltip": "Check extra information of all selected rules.",
     "button_feedback": "Deep Sync",
     "button_feedback_tips": "Upload your rules list, and gain %s story points...",
-    "button_feedback_tips_detailed": "Anonymously upload your rules list to the mod's database for investigation and analysis. The relevant code can be found in the mod source code and no other information will be uploaded. Only the original rules will be collected, and the data will be deleted after each mod update. Pressing confirm means you agree to the following statement: I have reviewed the above content in detail and confirmed it is correct."
+    "button_feedback_tips_detailed": "Anonymously upload your rules list to the mod's database for investigation and analysis. The relevant code can be found in the mod source code and no other information will be uploaded. Only the original rules will be collected, and the data will be deleted after each mod update. Pressing confirm means you agree to the following statement: I have reviewed the above content in detail and confirmed it is correct.",
+    "button_feedback_url": "https://originem.jnxyp.net/api/ungp/sc_e?rules="
   },
   "UNGP_rule_impl": {
     "halved": "halved",

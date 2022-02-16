@@ -113,7 +113,8 @@
     "button_tips_tooltip": "查看部分规则在生涯储存的额外信息。",
     "button_feedback": "深层同调",
     "button_feedback_tips": "上传你当前规则列表，获取 %s 点故事点的奖励...",
-    "button_feedback_tips_detailed": "匿名上传你的规则列表至该mod的数据库用于调查与分析，相关代码可在mod源码中查询，不会上传任何其他信息。仅收集该mod自带规则，且每次mod更新后数据都会被删除。按下确认即表示你已同意以下声明：本人已详细复核以上内容，并确认无误。"
+    "button_feedback_tips_detailed": "匿名上传你的规则列表至该mod的数据库用于调查与分析，相关代码可在mod源码中查询，不会上传任何其他信息。仅收集该mod自带规则，且每次mod更新后数据都会被删除。按下确认即表示你已同意以下声明：本人已详细复核以上内容，并确认无误。",
+    "button_feedback_url": "https://originem.jnxyp.net/api/ungp/sc?rules="
   },
   "UNGP_rule_impl": {
     "halved": "减半",

@@ -13,10 +13,6 @@ import java.util.List;
 
 public class UNGP_Feedback {
     private static final Logger LOGGER = Global.getLogger(UNGP_Feedback.class);
-    /**
-     * Has request times limitation
-     */
-    private static final String API_URL = "https://originem.jnxyp.net/api/ungp/sc?rules=";
     private static final String FEEDBACK_SENT_KEY = "UNGP_feedbackSent";
     private static final String FEEDBACK_LIST_KEY = "UNGP_feedbackList";
 
@@ -51,11 +47,14 @@ public class UNGP_Feedback {
      * Send how players pick rules to certain server for analysis.
      * The server only runs one time per 5 seconds.
      * Player SHOULD be able to cancel this.
+     * <p>
+     * Has request times limitation
      *
      * @param rules
      */
     public static void sendPlayerRulesToServer(List<UNGP_RulesManager.URule> rules) {
-        StringBuilder sb = new StringBuilder(API_URL);
+        final String apiUrl = UNGP_RulesManager.rules_i18n.get("button_feedback_url");
+        StringBuilder sb = new StringBuilder(apiUrl);
 
         String ruleString = (String) Global.getSector().getPersistentData().get(FEEDBACK_LIST_KEY);
         if (ruleString != null) {
@@ -86,7 +85,7 @@ public class UNGP_Feedback {
                     conn.getInputStream().close();
                     LOGGER.info("Successfully send " + url);
                 } catch (Exception e) {
-                    LOGGER.info("Error connecting to " + API_URL);
+                    LOGGER.info("Error connecting to " + apiUrl);
                     LOGGER.info(e);
                 }
             }
