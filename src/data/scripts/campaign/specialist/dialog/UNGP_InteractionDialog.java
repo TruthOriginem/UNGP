@@ -376,7 +376,7 @@ public class UNGP_InteractionDialog implements InteractionDialogPlugin {
             case CHOOSE_RECORD_SLOT_0:
             case CHOOSE_RECORD_SLOT_1:
             case CHOOSE_RECORD_SLOT_2:
-                dialog.showCustomDialog(720f, 120f, new RecordDialogDelegate(selectedOption));
+                dialog.showCustomDialog(720f, 160f, new RecordDialogDelegate(selectedOption));
                 addLeaveButton();
                 break;
             case BACK_TO_MENU:
@@ -755,7 +755,7 @@ public class UNGP_InteractionDialog implements InteractionDialogPlugin {
 
             @Override
             public float getTooltipWidth(Object tooltipParam) {
-                return 180f;
+                return 200f;
             }
 
             @Override
@@ -949,9 +949,10 @@ public class UNGP_InteractionDialog implements InteractionDialogPlugin {
                         }
                         if (recordShip) {
                             FleetDataAPI mothballedShips = storageCargo.getMothballedShips();
-                            for (FleetMemberAPI member : mothballedShips.getMembersListCopy()) {
-                                extraCredits += member.getBaseValue();
-                            }
+                            if (mothballedShips != null)
+                                for (FleetMemberAPI member : mothballedShips.getMembersListCopy()) {
+                                    extraCredits += member.getBaseValue();
+                                }
                         }
                     }
                 }
@@ -972,9 +973,10 @@ public class UNGP_InteractionDialog implements InteractionDialogPlugin {
             }
             if (recordShip) {
                 FleetDataAPI mothballedShips = playerCargo.getMothballedShips();
-                for (FleetMemberAPI member : mothballedShips.getMembersListCopy()) {
-                    extraCredits += member.getBaseValue();
-                }
+                if (mothballedShips != null)
+                    for (FleetMemberAPI member : mothballedShips.getMembersListCopy()) {
+                        extraCredits += member.getBaseValue();
+                    }
             }
             textPanel.addPara(d_i18n.get("recordExtraCredits_success") + " %s ", Misc.getHighlightColor(), Misc.getDGSCredits(extraCredits));
             toRecordInheritData.inheritCredits += extraCredits;

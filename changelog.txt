@@ -54,7 +54,7 @@ Add new positive rule: Endurance
 0.95.1a coming!
 While in specialist mode, you could click the up-left icon to go directly to the specialist mode intel.
 Canceled the limitation of specialist level.
-Now specialist levels are ： Gamma, Beta, Alpha, Omega, which corresponds 1, 10, 20, 30.
+Now specialist levels are: Gamma, Beta, Alpha, Omega, which corresponds 1, 10, 20, 30.
 Tweaked many base codes, please each modder who implements this mod take a look at it.
 
 Add new negative rule: Blood Lust, Fraudulent, Phasing Ghost.
