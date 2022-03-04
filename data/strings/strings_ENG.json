@@ -103,7 +103,7 @@
     "challenge_intel_name": "Specialist Challenges",
     "challenge_intel_desc": "Learn more information in Intel[E]",
     "challenge_intel_running": "Running Challenges",
-    "challenge_intel_canceled": "Cancelled Challenges",
+    "challenge_intel_cancelled": "Cancelled Challenges",
     "challenge_intel_completed": "Completed Challenges",
     "cost_point": "Cost: %s",
     "repick_desc": "You have the option to repick your rules every cycle. Warning: You may fail the Specialist challenge if you pick other rules.",

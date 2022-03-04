@@ -1,3 +1,17 @@
+1.6.4 2022/3/4
+规则修正:
+海军条约降低的战备大幅度减少，总共最多只能减少30%。cost点数 +4 -> +3
+接近战进阶教本现在增益包括500射程的武器。
+Hss Phoenix 机动性增益 50% -> 100%， CR上限 5% -> 10%
+
+修复了一些bug。
+
+Naval Treaty: The reduction of CR has been much declined. Now has a cap and the penalty shrinks down while have more design types. Cost +4 -> +3
+Guide to Dogfighting: Now the range buff includes the 500 range.
+Hss Phoenix: Maneuver buff 50% -> 100%, max CR 5% -> 10%
+
+Fixed some bugs.
+
 1.6.3 2022/2/14
 规则数值修正:
 风暴骑手cost点数: -1 -> -2

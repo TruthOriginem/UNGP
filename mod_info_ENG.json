@@ -1,8 +1,8 @@
 {
   "id": "ungp",
   "name": "Unofficial New Game Plus",
-  "author": "Originem\nCode Assistant: AnyIDElse\nTranslated By RUA,Fax,ILLEXIUS,Hisidine\nSprites by Originem, Light of Shadow, Helai\nIdeas from Haixian Group\nSpecial Thanks: Game-icons.net,15.ai",
-  "version": {"major": 1, "minor": 6, "patch": 3},
+  "author": "Originem\nCode Assistant: AnyIDElse\nTranslated By RUA, Fax, ILLEXIUS, Hisidine\nSprites by Originem, Light of Shadow, Helai\nIdeas from Haixian Group\nSpecial Thanks: Game-icons.net,15.ai",
+  "version": {"major": 1, "minor": 6, "patch": 4},
   "dependencies": [
     {"id": "lw_lazylib", "name": "LazyLib"},
   ],

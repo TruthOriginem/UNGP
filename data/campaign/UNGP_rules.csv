@@ -2,7 +2,7 @@ id,name,short,desc,cost,isBonus,isGolden,spritePath,effectPlugin,extra1,extra2,s
 techlock,科技封锁,降低装配点数,玩家舰船装配点数 - %s,3,FALSE,,graphics/icons/ungp/techlock.png,data.scripts.ungprules.impl.character.UNGP_TechLock,,,,,影之光√
 galatia_underachiever,学院差生,降低指挥能力,"战斗开始时命令点数-{%s},且整场战斗中命令点数恢复速度-{%s}",2,FALSE,,graphics/icons/ungp/galatia_underachiever.png,data.scripts.ungprules.impl.character.UNGP_GalatiaUnderachiever,,,,,议长√
 ,,,,,,,,,,,,,
-naval_treaty,海军条约,"舰船混搭时,降低最大战备","玩家舰队舰船设计类型超过{%s}种时,每超出一种将使最大战备降低{%s}",4,FALSE,,graphics/icons/ungp/naval_treaty.png,data.scripts.ungprules.impl.fleet.UNGP_NavalTreaty,,,,,和莱√
+naval_treaty,海军条约,"舰船混搭时,降低最大战备","玩家舰队非民用舰船设计类型超过{%s}种时,每超出一种都会降低所有舰船的最大战备，最多降低{%s}",3,FALSE,,graphics/icons/ungp/naval_treaty.png,data.scripts.ungprules.impl.fleet.UNGP_NavalTreaty,,,,,和莱√
 deep_space_fear,深空恐惧,超空间中传感器性能下降,"在超空间中,玩家舰队传感器强度x{%s},传感器截面/被探测范围x{%s}",1,FALSE,,graphics/icons/ungp/deep_space_fear.png,data.scripts.ungprules.impl.fleet.UNGP_DeepSpaceFear,,,,,议长√
 ancient_threat,远古威胁,"在余辉星系时,降低最大战备","在余辉星系时, 玩家舰船最大战备 -%s",1,FALSE,,graphics/icons/ungp/ancient_threat.png,data.scripts.ungprules.impl.fleet.UNGP_AncientThreat,,,,,和莱√
 disarmament_agreement,裁军协定,舰船超过一定数量时提高维护费,"玩家舰队成员数量超过{%s}艘时,每超出一艘,全体舰船维护所需补给提高{%s}",3,FALSE,,graphics/icons/ungp/disarmament_agreement.png,data.scripts.ungprules.impl.fleet.UNGP_DisarmamentAgreement,,,,,议长√
@@ -50,7 +50,7 @@ more_logistics,超额后勤改造,提高后勤插件上限,玩家舰船后勤插
 wide_radar,广域雷达,提高传感器强度,玩家舰船传感器强度 + %s,-1,TRUE,,graphics/icons/ungp/wide_radar.png,data.scripts.ungprules.impl.member.UNGP_WideRadar,,,,,影之光√
 elite_reserves,精英预备队,额外船员能提供最大战备,"超出必要船员的船员数额外提供最大战备,最多提供{%s}",-3,TRUE,,graphics/icons/ungp/elite_reserves.png,data.scripts.ungprules.impl.member.UNGP_EliteReserves,,,,,和莱√
 ,,,,,,,,,,,,,
-infighting_book,接近战进阶教本,增强低射程射弹武器,我方舰船原始射程低于 %s 的射弹武器伤害 + %s,-3,TRUE,,graphics/icons/ungp/infighting_book.png,data.scripts.ungprules.impl.combat.UNGP_InfightingBook,,,,,和莱√
+infighting_book,接近战进阶教本,增强低射程射弹武器,我方舰船原始射程小于等于 %s 的射弹武器伤害 + %s,-3,TRUE,,graphics/icons/ungp/infighting_book.png,data.scripts.ungprules.impl.combat.UNGP_InfightingBook,,,,,和莱√
 take_highland,我占有高地!,提高在信标附近的射程,在信标点附近{%s}距离的我方战舰武器射程+{%s},-3,TRUE,,graphics/icons/ungp/take_highland.png,data.scripts.ungprules.impl.combat.UNGP_TakeHighLand,"附近存在信标, 射程 x",,,,影之光√
 close_formation,密集阵型,舰船聚集时提高护盾抗性及耗散,"我方舰船相距{%s}以内时, 护盾抗性及幅能耗散x %s",-2,TRUE,,graphics/icons/ungp/close_formation.png,data.scripts.ungprules.impl.combat.UNGP_CloseFormation,护盾抗性及幅能耗散 x,,,,议长√
 experimental_shunt,试验性分流管,提供硬幅能耗散能力,我方舰船在战斗中获得{%s}的硬幅能耗散能力,-1,TRUE,,graphics/icons/ungp/experimental_shunt.png,data.scripts.ungprules.impl.combat.UNGP_ExperimentalShunt,,,,,议长√

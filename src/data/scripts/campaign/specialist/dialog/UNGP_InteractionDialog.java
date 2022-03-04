@@ -964,7 +964,8 @@ public class UNGP_InteractionDialog implements InteractionDialogPlugin {
                     }
                 }
             }
-            CargoAPI playerCargo = Global.getSector().getPlayerFleet().getCargo();
+            CampaignFleetAPI playerFleet = Global.getSector().getPlayerFleet();
+            CargoAPI playerCargo = playerFleet.getCargo();
             if (recordCargo) {
                 convertCargo.addAll(playerCargo);
                 for (CargoStackAPI stack : convertCargo.getStacksCopy()) {
@@ -972,9 +973,8 @@ public class UNGP_InteractionDialog implements InteractionDialogPlugin {
                 }
             }
             if (recordShip) {
-                FleetDataAPI mothballedShips = playerCargo.getMothballedShips();
-                if (mothballedShips != null)
-                    for (FleetMemberAPI member : mothballedShips.getMembersListCopy()) {
+                if (playerFleet.getFleetData() != null)
+                    for (FleetMemberAPI member : playerFleet.getFleetData().getMembersListCopy()) {
                         extraCredits += member.getBaseValue();
                     }
             }

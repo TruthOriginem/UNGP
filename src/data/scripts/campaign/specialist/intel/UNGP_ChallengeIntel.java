@@ -119,8 +119,8 @@ public class UNGP_ChallengeIntel extends BaseIntelPlugin {
     @Override
     protected void advanceImpl(float amount) {
         CampaignClockAPI clock = Global.getSector().getClock();
-        final int curMonth = clock.getMonth();
-        final int curDay = clock.getDay();
+        int curMonth = clock.getMonth();
+        int curDay = clock.getDay();
         // 每月提高一次
         if (curMonth != monthChecker) {
             monthChecker = curMonth;

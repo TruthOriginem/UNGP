@@ -14,8 +14,8 @@ import java.util.List;
 
 public class UNGP_HssPhoenix extends UNGP_MemberBuffRuleEffect {
     private static final float NORMAL_BONUS = 20f;
-    private static final float MANEUVER_BONUS = 50f;
-    private static final float CR_BONUS = 5f;
+    private static final float MANEUVER_BONUS = 100f;
+    private static final float CR_BONUS = 10f;
 
 
     @Override
