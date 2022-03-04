@@ -6,7 +6,7 @@ Hss Phoenix 机动性增益 50% -> 100%， CR上限 5% -> 10%
 
 修复了一些bug。
 
-Naval Treaty: The reduction of CR has been much declined. Now has a cap and the penalty shrinks down while have more design types. Cost +4 -> +3
+Arms Limitation Treaty: The reduction of CR has been much declined. Now has a cap and the penalty shrinks down while have more design types. Cost +4 -> +3
 Guide to Dogfighting: Now the range buff includes the 500 range.
 Hss Phoenix: Maneuver buff 50% -> 100%, max CR 5% -> 10%
 
