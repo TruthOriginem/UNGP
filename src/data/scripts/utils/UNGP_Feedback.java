@@ -68,6 +68,7 @@ public class UNGP_Feedback {
             sb.deleteCharAt(sb.length() - 1);
         }
         final String url = sb.toString();
+        LOGGER.info("Sending to " + url);
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -98,7 +99,7 @@ public class UNGP_Feedback {
         TrustManager[] tm = {new MyX509TrustManager()};
         SSLContext ctx = null;
         try {
-            ctx = SSLContext.getInstance("TLS");
+            ctx = SSLContext.getInstance("TLSv1.2");
             ctx.init(null, tm, null);
         } catch (Exception e) {
             e.printStackTrace();

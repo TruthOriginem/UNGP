@@ -95,7 +95,7 @@ public class UNGP_RulePickListener implements CargoPickerListener {
         float opad = 10f;
         Color highlight = Misc.getHighlightColor();
         Color negative = Misc.getNegativeHighlightColor();
-        // 满足挑战开启条件(专20)
+        // 满足挑战开启条件
         if (UNGP_ChallengeManager.isDifficultyEnough(difficulty)) {
             CargoAPI copy = combined.createCopy();
             if (pickedUp != null) {
@@ -206,10 +206,8 @@ public class UNGP_RulePickListener implements CargoPickerListener {
             isDPressed = false;
         }
 
-
         Color sectionColor = new Color(40, 40, 40);
         // 详情情况
-
         if (detailedMode) {
             panel.addSectionHeading(getBonusString(true) + String.format("(%d/%d)", rulePage + 1, maxPage + 1), getBonusColor(true), sectionColor, Alignment.MID, pad);
             for (int i = rulePage * 5; i < (rulePage + 1) * 5; i++) {

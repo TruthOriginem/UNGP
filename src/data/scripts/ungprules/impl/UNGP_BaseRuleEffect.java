@@ -7,6 +7,9 @@ import com.fs.starfarer.api.campaign.InteractionDialogAPI;
 import com.fs.starfarer.api.campaign.comm.CommMessageAPI;
 import com.fs.starfarer.api.combat.CombatEngineAPI;
 import com.fs.starfarer.api.combat.MutableShipStatsAPI;
+import com.fs.starfarer.api.combat.ShipHullSpecAPI;
+import com.fs.starfarer.api.fleet.FleetMemberAPI;
+import com.fs.starfarer.api.impl.campaign.ids.HullMods;
 import com.fs.starfarer.api.impl.campaign.intel.MessageIntel;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import data.scripts.campaign.UNGP_SharedData;
@@ -142,7 +145,7 @@ public abstract class UNGP_BaseRuleEffect implements UNGP_RuleEffectAPI {
     }
 
     /**
-     * Used for create MessageIntel
+     * Used for create MessageIntel, should call {@link UNGP_BaseRuleEffect#showMessage(MessageIntel)} after.
      *
      * @return
      */
@@ -202,7 +205,7 @@ public abstract class UNGP_BaseRuleEffect implements UNGP_RuleEffectAPI {
     /**
      * Called to save data.
      *
-     * @param slot To distinguish the different data
+     * @param slot To distinguish the different data, it's not the *saving slot*.
      * @param t
      * @param <T>
      */
@@ -249,6 +252,18 @@ public abstract class UNGP_BaseRuleEffect implements UNGP_RuleEffectAPI {
         final CampaignClockAPI clock = Global.getSector().getClock();
         String sb = Global.getSector().getSeedString() + rule.getId() + clock.getCycle() + clock.getMonth() + clock.getDay();
         return new Random(sb.hashCode());
+    }
+
+    /**
+     * The same check as {@link com.fs.starfarer.api.impl.campaign.skills.BaseSkillEffectDescription#isCivilian(FleetMemberAPI)}
+     *
+     * @param member
+     * @return
+     */
+    public static boolean isCivilian(FleetMemberAPI member) {
+        return member.getVariant() != null &&
+                ((member.getVariant().hasHullMod(HullMods.CIVGRADE) && !member.getVariant().hasHullMod(HullMods.MILITARIZED_SUBSYSTEMS))
+                        || (!member.getVariant().hasHullMod(HullMods.CIVGRADE) && member.getHullSpec().getHints().contains(ShipHullSpecAPI.ShipTypeHints.CIVILIAN)));
     }
 
 

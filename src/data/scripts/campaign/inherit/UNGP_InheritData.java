@@ -31,7 +31,6 @@ public class UNGP_InheritData {
     public List<String> hullmods;
     public List<String> completedChallenges;
 
-
     /**
      * 创建一个可被记录的重生点
      *
@@ -55,6 +54,11 @@ public class UNGP_InheritData {
         return inheritData;
     }
 
+    /**
+     * An empty data that for new players who want to use Specialist mode directly.
+     *
+     * @return
+     */
     public static UNGP_InheritData createEmptyData() {
         UNGP_InheritData inheritData = new UNGP_InheritData();
         inheritData.ungp_id = UUID.randomUUID().toString();

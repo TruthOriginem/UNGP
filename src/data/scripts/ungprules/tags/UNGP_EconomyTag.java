@@ -11,6 +11,11 @@ public interface UNGP_EconomyTag {
      */
     void applyPlayerMarket(MarketAPI market);
 
+    /**
+     * Would be called for all markets too.
+     *
+     * @param market
+     */
     void unapplyPlayerMarket(MarketAPI market);
 
     void applyAllMarket(MarketAPI market);
