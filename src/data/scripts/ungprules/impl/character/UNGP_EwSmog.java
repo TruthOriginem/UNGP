@@ -24,12 +24,12 @@ public class UNGP_EwSmog extends UNGP_BaseRuleEffect implements UNGP_CharacterTa
 
     @Override
     public void applyPlayerCharacterStats(MutableCharacterStatsAPI stats) {
-        stats.getDynamic().getMod(Stats.ELECTRONIC_WARFARE_FLAT).modifyFlat(rule.getBuffID(), ewBonus);
+        stats.getDynamic().getMod(Stats.ELECTRONIC_WARFARE_FLAT).modifyFlat(buffID, ewBonus);
     }
 
     @Override
     public void unapplyPlayerCharacterStats(MutableCharacterStatsAPI stats) {
-        stats.getDynamic().getMod(Stats.ELECTRONIC_WARFARE_FLAT).unmodifyFlat(rule.getBuffID());
+        stats.getDynamic().getMod(Stats.ELECTRONIC_WARFARE_FLAT).unmodifyFlat(buffID);
     }
 
     @Override

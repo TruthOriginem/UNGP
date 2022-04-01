@@ -1,13 +1,13 @@
 {
   "id": "ungp",
   "name": "Unofficial New Game Plus",
-  "author": "Originem\nCode Assistant: AnyIDElse\nTranslated By RUA,Fax,ILLEXIUS\nSprites by Originem, Light of Shadow, Helai\nIdeas from Haixian Group\nSpecial Thanks: Game-icons.net,15.ai",
-  "version": {"major": 1, "minor": 6, "patch": 0},
+  "author": "Originem\nCode Assistant: AnyIDElse\nTranslated By RUA, Fax, ILLEXIUS, Hisidine\nSprites by Originem, Light of Shadow, Helai\nIdeas from Haixian Group\nSpecial Thanks: Game-icons.net,15.ai",
+  "version": {"major": 1, "minor": 6, "patch": 4},
   "dependencies": [
     {"id": "lw_lazylib", "name": "LazyLib"},
   ],
   "description": "A mod with a similar 'new game plus' function.\n Left ctrl+P to call the menu",
-  "gameVersion": "0.95.1-RC6",
+  "gameVersion": "0.95.1a-RC6",
   "jars": ["jars/ungp.jar"],
   "modPlugin": "data.scripts.UNGP_modPlugin",
 }

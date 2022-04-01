@@ -1,3 +1,59 @@
+1.6.4 2022/3/4
+规则修正:
+海军条约降低的战备大幅度减少，总共最多只能减少30%。cost点数 +4 -> +3
+接近战进阶教本现在增益包括500射程的武器。
+Hss Phoenix 机动性增益 50% -> 100%， CR上限 5% -> 10%
+
+修复了一些bug。
+
+Arms Limitation Treaty: The reduction of CR has been much declined. Now has a cap and the penalty shrinks down while have more design types. Cost +4 -> +3
+Guide to Dogfighting: Now the range buff includes the 500 range.
+Hss Phoenix: Maneuver buff 50% -> 100%, max CR 5% -> 10%
+
+Fixed some bugs.
+
+1.6.3 2022/2/14
+规则数值修正:
+风暴骑手cost点数: -1 -> -2
+危险星域影响倍率: 1.5~2 -> 2~3
+幅能导流阻塞基础数值提高5%
+破片坟场基础数值各提高100%/150%
+Order66 友军伤害: 50%~100% -> 100%~200%
+
+优化残骸整理工序数值: 15%~30% -> 15%~25%
+
+Storm Rider: Cost -1 -> -2
+Dangerous Sector: Multiplier 1.5~2 -> 2~3
+Blocked Flux Conduits: Base value increased by 5%
+Fragment Graveyard: Base value increased by 100%/150%
+Order66: Friendly Damage 50%~100% -> 100%~200%
+
+Optimised Derelict Processing: 15%~30% -> 15%~25%
+
+1.6.2 2022/2/13
+修复部分显示bug。
+现在记录重生点时可以将存档里玩家拥有的物品/舰船价值额外加入继承星币中。
+
+Fixed some visual bugs.
+Now items, ships owned by player can be accounted in credits while recording the save point.
+
+1.6.1 2022/2/7
+调整相位幽灵的概率。
+Hss Phoenix现在会在生涯里提示生效舰船名。(modder可通过给舰船添加"ungp_onslaught"的tag来将其视作攻势)
+优化规则显示。
+修复部分bug并对非rules部分底层修改。
+
+增加负面规则：遗忘症
+增加正面规则：战斗续行
+
+Tweaked the chance mechanism of Phasing Ghost.
+Hss Phoenix now could indicate the ships that take effect in intel tips. Modders could add "ungp_onslaught" tag to ship to make it counted as "onslaught" by Hss Phoenix.
+Optimized the showing of rules.
+Fixed some bugs and tweaked little about some codes.
+
+Add new negative rule: Amnesia
+Add new positive rule: Endurance
+
 1.6.0 2022/1/27
 兼容0.95.1a。
 本次更新不能中途加入存档，建议先保存重生点。
@@ -12,7 +68,7 @@
 0.95.1a coming!
 While in specialist mode, you could click the up-left icon to go directly to the specialist mode intel.
 Canceled the limitation of specialist level.
-Now specialist levels are ： Gamma, Beta, Alpha, Omega, which corresponds 1, 10, 20, 30.
+Now specialist levels are: Gamma, Beta, Alpha, Omega, which corresponds 1, 10, 20, 30.
 Tweaked many base codes, please each modder who implements this mod take a look at it.
 
 Add new negative rule: Blood Lust, Fraudulent, Phasing Ghost.

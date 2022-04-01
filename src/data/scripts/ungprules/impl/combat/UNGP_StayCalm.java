@@ -116,7 +116,6 @@ public class UNGP_StayCalm extends UNGP_BaseRuleEffect implements UNGP_CombatTag
             data = new CalmData();
             putDataInEngine(engine, DATA_KEY, data);
         }
-        if (engine.isPaused()) amount = 0f;
         data.advance(engine, amount);
         if (data.state == CalmState.IDLE) {
             // 当玩家的船存在时

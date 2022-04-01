@@ -5,6 +5,7 @@ import com.fs.starfarer.api.combat.ShipAPI;
 
 /**
  * Implement it if you are a combat rule.
+ * amount equals to 0 while the engine is paused.
  */
 public interface UNGP_CombatTag {
     void advanceInCombat(CombatEngineAPI engine, float amount);

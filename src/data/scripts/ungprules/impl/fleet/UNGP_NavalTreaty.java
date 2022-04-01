@@ -1,8 +1,8 @@
 package data.scripts.ungprules.impl.fleet;
 
-import com.fs.starfarer.api.campaign.BuffManagerAPI;
 import com.fs.starfarer.api.campaign.CampaignFleetAPI;
 import com.fs.starfarer.api.fleet.FleetMemberAPI;
+import com.fs.starfarer.api.impl.campaign.ids.HullMods;
 import data.scripts.campaign.specialist.UNGP_SpecialistSettings;
 import data.scripts.ungprules.impl.UNGP_BaseRuleEffect;
 import data.scripts.ungprules.tags.UNGP_PlayerFleetTag;
@@ -13,25 +13,24 @@ import java.util.List;
 
 public class UNGP_NavalTreaty extends UNGP_BaseRuleEffect implements UNGP_PlayerFleetTag {
     private static final int THRESHOLD_DESIGN_TYPE_AMOUNT = 2;
-    private static final float MAX_CR_REDUCTION_PER_TYPE = 0.15f;
+    private static final float MAX_CR_REDUCTION = 0.3f;
 
     private class CRDeBuff extends UNGP_BaseBuff {
 
-        private int extraType;
+        private float crReduction;
 
-        public CRDeBuff(String id, int extraType) {
+        public CRDeBuff(String id, float crReduction) {
             super(id);
-            this.extraType = extraType;
+            this.crReduction = crReduction;
         }
 
         @Override
         public void apply(FleetMemberAPI member) {
-            decreaseMaxCR(member.getStats(), id, extraType * MAX_CR_REDUCTION_PER_TYPE, rule.getName());
-//            member.getStats().getMaxCombatReadiness().modifyFlat(id, -extraType * MAX_CR_REDUCTION_PER_TYPE, rule.getName());
+            decreaseMaxCR(member.getStats(), id, crReduction, rule.getName());
         }
 
-        public void setExtraType(int extraType) {
-            this.extraType = extraType;
+        public void setCrReduction(float crReduction) {
+            this.crReduction = crReduction;
         }
     }
 
@@ -51,25 +50,27 @@ public class UNGP_NavalTreaty extends UNGP_BaseRuleEffect implements UNGP_Player
         List<String> designTypes = new ArrayList<>();
         final List<FleetMemberAPI> members = fleet.getFleetData().getMembersListCopy();
         for (FleetMemberAPI member : members) {
-            String designType = member.getHullSpec().getManufacturer();
             if (member.isMothballed()) continue;
+            if (member.getVariant().hasHullMod(HullMods.CIVGRADE) || member.getVariant().hasHullMod(HullMods.MILITARIZED_SUBSYSTEMS))
+                continue;
+
+            String designType = member.getHullSpec().getManufacturer();
             if (!designTypes.contains(designType)) {
                 designTypes.add(designType);
             }
         }
-        int typeAmount = designTypes.size();
+        float typeAmount = designTypes.size();
         if (typeAmount > THRESHOLD_DESIGN_TYPE_AMOUNT) {
-            typeAmount -= THRESHOLD_DESIGN_TYPE_AMOUNT;
             String buffId = buffID;
             boolean needsSync = false;
+            float crReduction = MAX_CR_REDUCTION * (1f - THRESHOLD_DESIGN_TYPE_AMOUNT / typeAmount);
             for (FleetMemberAPI member : members) {
-                BuffManagerAPI.Buff test = member.getBuffManager().getBuff(buffId);
-                if (test instanceof CRDeBuff) {
-                    CRDeBuff buff = (CRDeBuff) test;
+                CRDeBuff buff = (CRDeBuff) member.getBuffManager().getBuff(buffId);
+                if (buff != null) {
                     buff.refresh();
-                    buff.setExtraType(typeAmount);
+                    buff.setCrReduction(crReduction);
                 } else {
-                    member.getBuffManager().addBuff(new CRDeBuff(buffId, typeAmount));
+                    member.getBuffManager().addBuff(new CRDeBuff(buffId, crReduction));
                     needsSync = true;
                 }
             }
@@ -87,7 +88,7 @@ public class UNGP_NavalTreaty extends UNGP_BaseRuleEffect implements UNGP_Player
     @Override
     public String getDescriptionParams(int index, UNGP_SpecialistSettings.Difficulty difficulty) {
         if (index == 0) return THRESHOLD_DESIGN_TYPE_AMOUNT + "";
-        if (index == 1) return (int) (MAX_CR_REDUCTION_PER_TYPE * 100f) + "%";
+        if (index == 1) return (int) (MAX_CR_REDUCTION * 100f) + "%";
         return super.getDescriptionParams(index, difficulty);
     }
 }

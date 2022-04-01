@@ -57,22 +57,18 @@ public class UNGP_RuleItem extends BaseSpecialItemPlugin {
     }
 
     public static void addRuleItemTooltip(TooltipMakerAPI tooltip, URule rule, boolean isExpanded) {
-        float opad = 10f;
+        float pad = 20f;
         RuleDescBackgroundPlugin.addToTooltip(tooltip, rule);
         tooltip.setTitleOrbitronLarge();
         Color c = Misc.getTextColor();
 
         tooltip.addTitle(rule.getName(), Misc.interpolateColor(rule.getCorrectColor(), c, 0.8f));
 
-        rule.addPreDesc(tooltip, opad * 2f);
-
-        rule.addDesc(tooltip, opad * 2f, BULLET_PREFIX);
-
-        rule.addRollDesc(tooltip, opad * 22f, BULLET_PREFIX);
-
-        rule.addChallengeRelatedDesc(tooltip, opad * 2f, BULLET_PREFIX, isExpanded);
-
-        rule.addCost(tooltip, opad * 2f);
+        rule.addPreDesc(tooltip, pad);
+        rule.addDescToItem(tooltip, pad, BULLET_PREFIX, isExpanded);
+        rule.addRollDesc(tooltip, pad, BULLET_PREFIX);
+        rule.addChallengeRelatedDesc(tooltip, pad, BULLET_PREFIX, isExpanded);
+        rule.addCost(tooltip, pad);
     }
 
     public static TooltipCreator createRuleItemTooltip(final URule rule) {

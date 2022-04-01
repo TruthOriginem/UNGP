@@ -18,7 +18,7 @@ public class UNGP_Order66 extends UNGP_BaseRuleEffect implements UNGP_CombatTag 
 
     @Override
     public float getValueByDifficulty(int index, UNGP_SpecialistSettings.Difficulty difficulty) {
-        if (index == 0) return difficulty.getLinearValue(50f, 50f);
+        if (index == 0) return difficulty.getLinearValue(100f, 100f);
         return 0f;
     }
 

@@ -36,7 +36,7 @@ public class UNGP_InfightingBook extends UNGP_BaseRuleEffect implements UNGP_Com
     public void applyPlayerShipInCombat(float amount, CombatEngineAPI engine, ShipAPI ship) {
         for (WeaponAPI weapon : ship.getAllWeapons()) {
             if (weapon.isDecorative() || weapon.isBeam() || weapon.isBurstBeam()) continue;
-            if (weapon.getSpec().getMaxRange() < 500) {
+            if (weapon.getSpec().getMaxRange() <= 500) {
                 weapon.getDamage().getModifier().modifyMult(buffID, 1f + multiplier);
             }
         }

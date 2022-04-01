@@ -1,14 +1,21 @@
 package data.scripts.ungprules.impl.member;
 
+import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.combat.MutableShipStatsAPI;
+import com.fs.starfarer.api.combat.ShipHullSpecAPI;
 import com.fs.starfarer.api.fleet.FleetMemberAPI;
+import com.fs.starfarer.api.ui.TooltipMakerAPI;
+import com.fs.starfarer.api.util.Misc;
 import data.scripts.campaign.specialist.UNGP_SpecialistSettings;
 import data.scripts.ungprules.impl.UNGP_MemberBuffRuleEffect;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class UNGP_HssPhoenix extends UNGP_MemberBuffRuleEffect {
     private static final float NORMAL_BONUS = 20f;
-    private static final float MANEUVER_BONUS = 50f;
-    private static final float CR_BONUS = 5f;
+    private static final float MANEUVER_BONUS = 100f;
+    private static final float CR_BONUS = 10f;
 
 
     @Override
@@ -41,9 +48,31 @@ public class UNGP_HssPhoenix extends UNGP_MemberBuffRuleEffect {
         stats.getMaxCombatReadiness().modifyFlat(id, CR_BONUS * 0.01f, rule.getName());
     }
 
+    @Override
+    public boolean addIntelTips(TooltipMakerAPI imageTooltip) {
+        imageTooltip.addPara(rule.getExtra1(), 0f);
+        List<String> names = new ArrayList<>();
+        for (ShipHullSpecAPI hullSpec : Global.getSettings().getAllShipHullSpecs()) {
+            if (isOnslaught(hullSpec) && !hullSpec.isDefaultDHull()) {
+                names.add(hullSpec.getNameWithDesignationWithDashClass());
+            }
+        }
+        imageTooltip.addPara(Misc.getAndJoined(names), Misc.getHighlightColor(), 5f);
+        return true;
+    }
 
+    /**
+     * For modders: if your ship has tag of "ungp_onslaught", your ship would be considered as onslaught-class too.
+     *
+     * @param member
+     * @return
+     */
     @Override
     public boolean canApply(FleetMemberAPI member) {
-        return member.isFlagship() && member.getHullId().contains("onslaught");
+        return member.isFlagship() && isOnslaught(member.getHullSpec());
+    }
+
+    public static boolean isOnslaught(ShipHullSpecAPI hullSpec) {
+        return hullSpec.getHullId().contains("onslaught") || hullSpec.getTags().contains("ungp_onslaught");
     }
 }

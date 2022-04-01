@@ -27,7 +27,7 @@ public class UNGP_MakeAnException extends UNGP_BaseRuleEffect implements UNGP_Ca
 
     @Override
     public float getValueByDifficulty(int index, UNGP_SpecialistSettings.Difficulty difficulty) {
-        if (index == 0) return difficulty.getLinearValue(0.5f, 0.5f);
+        if (index == 0) return difficulty.getLinearValue(0.5f, 0.5f, 1f);
         return 0;
     }
 

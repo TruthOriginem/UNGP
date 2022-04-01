@@ -48,16 +48,16 @@ public class UNGP_SpecialistCombatPlugin extends BaseEveryFrameCombatPlugin {
                 }
                 for (URule rule : activatedRules) {
                     UNGP_RuleEffectAPI ruleEffect = rule.getRuleEffect();
+                    boolean addMessage = false;
                     if (ruleEffect instanceof UNGP_CombatTag) {
                         tags.add((UNGP_CombatTag) ruleEffect);
-                        if (rule.isBonus()) {
-                            bonusMessages.add(rule.generateCombatTips(difficulty));
-                        } else {
-                            notBonusMessages.add(rule.generateCombatTips(difficulty));
-                        }
+                        addMessage = true;
                     }
                     if (ruleEffect instanceof UNGP_CombatInitTag) {
                         ((UNGP_CombatInitTag) ruleEffect).init(engine);
+                        addMessage = true;
+                    }
+                    if (addMessage) {
                         if (rule.isBonus()) {
                             bonusMessages.add(rule.generateCombatTips(difficulty));
                         } else {
@@ -87,6 +87,8 @@ public class UNGP_SpecialistCombatPlugin extends BaseEveryFrameCombatPlugin {
         }
 
         if (!isHardMode) return;
+        if (engine.isPaused())
+            amount = 0;
         for (UNGP_CombatTag tag : tags) {
             tag.advanceInCombat(engine, amount);
         }

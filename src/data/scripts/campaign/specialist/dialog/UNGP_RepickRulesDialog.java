@@ -14,6 +14,7 @@ import com.fs.starfarer.api.util.Misc;
 import data.scripts.campaign.UNGP_InGameData;
 import data.scripts.campaign.specialist.rules.UNGP_RulePickListener;
 import data.scripts.campaign.specialist.rules.UNGP_RulesManager;
+import data.scripts.utils.UNGP_Feedback;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -95,6 +96,8 @@ public class UNGP_RepickRulesDialog implements InteractionDialogPlugin {
             if (!pickedList.isEmpty() && couldRepick) {
                 inGameData.reduceTimesToChangeSpecialistMode();
                 inGameData.saveActivatedRules(pickedList);
+                UNGP_Feedback.setFeedBackList(pickedList);
+                UNGP_Feedback.resetFeedbackSent();
                 UNGP_RulesManager.updateRulesCache();
             }
             dialog.dismiss();

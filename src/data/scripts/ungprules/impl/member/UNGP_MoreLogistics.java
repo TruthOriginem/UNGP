@@ -15,7 +15,7 @@ public class UNGP_MoreLogistics extends UNGP_MemberBuffRuleEffect {
 
     @Override
     public float getValueByDifficulty(int index, UNGP_SpecialistSettings.Difficulty difficulty) {
-        if (index == 0) return (int) (difficulty.getLinearValue(1f, 1));
+        if (index == 0) return difficulty == UNGP_SpecialistSettings.Difficulty.OMEGA ? 2 : 1;
         return 0;
     }
 

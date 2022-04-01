@@ -38,6 +38,7 @@ public class UNGP_Yang extends UNGP_BaseRuleEffect implements UNGP_TweakBeforeAp
         WeightedRandomPicker<URule> picker = new WeightedRandomPicker<>(getRandom());
         List<URule> rulesToPick = getAllRulesCopy();
         rulesToPick.removeAll(originalActiveRules);
+        rulesToPick.removeAll(activeRules);
         //如果有另一个就全可以选
         for (URule tmp : rulesToPick) {
             if (tmp == rule) continue;

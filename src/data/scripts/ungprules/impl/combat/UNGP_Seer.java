@@ -42,10 +42,6 @@ public class UNGP_Seer extends UNGP_BaseRuleEffect implements UNGP_CombatTag {
             putDataInEngine(engine, buffID, data);
         }
 
-        if (engine.isPaused()) {
-            amount = 0f;
-        }
-
         data.timeLeftForThisStage -= amount;
         if (data.timeLeftForThisStage <= 0f) {
             data.isEffecting = !data.isEffecting;

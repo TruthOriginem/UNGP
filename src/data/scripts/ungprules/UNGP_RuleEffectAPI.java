@@ -20,6 +20,7 @@ public interface UNGP_RuleEffectAPI {
 
     /**
      * Get the values depending on the difficulty level, these values should be saved in the object of the rule class.
+     * Better use {@link Difficulty#getLinearValue(float, float)}
      * 根据专家等级获得指定值，这个值应该被储存在规则类中
      *
      * @param index

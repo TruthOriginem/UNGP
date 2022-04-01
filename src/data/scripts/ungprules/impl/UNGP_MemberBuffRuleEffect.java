@@ -14,6 +14,6 @@ public abstract class UNGP_MemberBuffRuleEffect extends UNGP_BaseRuleEffect impl
 
     @Override
     public String getBuffID() {
-        return rule.getBuffID();
+        return buffID;
     }
 }

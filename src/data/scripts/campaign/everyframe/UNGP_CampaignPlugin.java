@@ -18,7 +18,6 @@ import data.scripts.ungprules.tags.UNGP_CampaignTag;
 import data.scripts.ungprules.tags.UNGP_PlayerFleetMemberTag;
 import data.scripts.ungprules.tags.UNGP_PlayerFleetTag;
 import data.scripts.utils.SimpleI18n;
-import data.scripts.utils.UNGP_UIEntityPlugin;
 import org.lwjgl.input.Keyboard;
 
 import java.util.List;
@@ -61,17 +60,21 @@ public class UNGP_CampaignPlugin implements EveryFrameScript, CampaignInputListe
     /**
      * The entity loaded has a custom plugin {@link data.scripts.utils.UNGP_UIEntityPlugin}
      */
+    @Deprecated
     public static void loadUIEntity() {
         UNGP_CampaignPlugin plugin = UNGP_CampaignPlugin.getInstance();
         plugin.uiEntity = Global.getSector().getEntityById(ENTITY_ID);
-        if (plugin.uiEntity == null) {
-            plugin.uiEntity = Global.getSector().getCurrentLocation().addCustomEntity(ENTITY_ID, null, "ungp_ui", null);
+//        if (plugin.uiEntity == null) {
+//            plugin.uiEntity = Global.getSector().getCurrentLocation().addCustomEntity(ENTITY_ID, null, "ungp_ui", null);
+//        }
+        if (plugin.uiEntity != null) {
+            plugin.uiEntity.setExpired(true);
         }
     }
 
     public UNGP_CampaignPlugin() {
         inGameData = new UNGP_InGameData();
-        Global.getSector().getListenerManager().addListener((CampaignInputListener) this);
+        Global.getSector().getListenerManager().addListener(this);
         Global.getSector().getPersistentData().put(KEY, this);
         CampaignClockAPI clock = Global.getSector().getClock();
         oneDayChecker = clock.getDay();
@@ -142,13 +145,13 @@ public class UNGP_CampaignPlugin implements EveryFrameScript, CampaignInputListe
         // 以下专家模式才可触发
         if (!inGameData.isHardMode()) return;
 
-        // 调整专家模式UI的位置
-        if (!uiEntity.isInCurrentLocation()) {
-            LocationAPI currentLocation = sector.getCurrentLocation();
-            uiEntity.getContainingLocation().removeEntity(uiEntity);
-            currentLocation.addEntity(uiEntity);
-            uiEntity.setContainingLocation(currentLocation);
-        }
+//        // 调整专家模式UI的位置
+//        if (uiEntity != null && !uiEntity.isInCurrentLocation()) {
+//            LocationAPI currentLocation = sector.getCurrentLocation();
+//            uiEntity.getContainingLocation().removeEntity(uiEntity);
+//            currentLocation.addEntity(uiEntity);
+//            uiEntity.setContainingLocation(currentLocation);
+//        }
 
         int currentDay = clock.getDay();
         int currentYear = clock.getCycle();
@@ -245,17 +248,15 @@ public class UNGP_CampaignPlugin implements EveryFrameScript, CampaignInputListe
 
     @Override
     public void processCampaignInputPreFleetControl(List<InputEventAPI> events) {
-        if (uiEntity != null) {
-            if (!UNGP_RulesManager.isSpecialistMode()) {
-                return;
-            }
-            for (InputEventAPI event : events) {
-                if (event.isLMBDownEvent() && UNGP_UIEntityPlugin.specialistIconRect.contains(event.getX(), event.getY())) {
-                    Global.getSector().getCampaignUI().showCoreUITab(CoreUITabId.INTEL, UNGP_SpecialistIntel.getInstance());
-                    Global.getSoundPlayer().playUISound("ui_button_pressed", 1f, 1f);
-                    event.consume();
-                    break;
-                }
+        if (!UNGP_RulesManager.isSpecialistMode()) {
+            return;
+        }
+        for (InputEventAPI event : events) {
+            if (event.isLMBDownEvent() && UNGP_SpecialistWidgetPlugin.inWidgetRect(event.getX(), event.getY())) {
+                Global.getSector().getCampaignUI().showCoreUITab(CoreUITabId.INTEL, UNGP_SpecialistIntel.getInstance());
+                Global.getSoundPlayer().playUISound("ui_button_pressed", 1f, 1f);
+                event.consume();
+                break;
             }
         }
     }

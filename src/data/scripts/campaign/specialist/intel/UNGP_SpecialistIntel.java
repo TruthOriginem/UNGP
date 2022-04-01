@@ -11,6 +11,8 @@ import data.scripts.campaign.specialist.challenges.UNGP_ChallengeManager;
 import data.scripts.campaign.specialist.dialog.UNGP_RepickRulesDialog;
 import data.scripts.campaign.specialist.items.UNGP_RuleItem;
 import data.scripts.campaign.specialist.rules.UNGP_RulesManager;
+import data.scripts.utils.UNGP_Feedback;
+import ungp.ui.HorizontalButtonGroup;
 import ungp.ui.UIRect;
 
 import java.awt.*;
@@ -27,6 +29,7 @@ import static data.scripts.campaign.specialist.rules.UNGP_RulesManager.*;
 
 public class UNGP_SpecialistIntel extends BaseIntelPlugin {
     private static final String KEY = "UNGP_SI";
+    private static final String FEED_BACK = "UNGP_feedBack";
 
     public static class RuleMessage {
         URule rule;
@@ -184,9 +187,19 @@ public class UNGP_SpecialistIntel extends BaseIntelPlugin {
                 }
                 Color buttonBase = Misc.getBasePlayerColor();
                 Color buttonDark = Misc.getDarkPlayerColor();
-                ButtonAPI button = tooltip.addButton(rules_i18n.get("repick_rules"), KEY, buttonBase, buttonDark, Alignment.MID, CutStyle.C2_MENU, repickRect.getWidth(), repickRect.getHeight() * 0.35f, 20f);
+
+                HorizontalButtonGroup buttonGroup = new HorizontalButtonGroup();
+                float repickRectWidth = repickRect.getWidth();
+                float buttonPad = 10f;
+                ButtonAPI uploadButton = tooltip.addButton(rules_i18n.get("button_feedback"), FEED_BACK, Misc.getStoryOptionColor(), Misc.getStoryDarkColor(), Alignment.MID, CutStyle.C2_MENU, repickRectWidth * 0.3f, repickRect.getHeight() * 0.35f, 20f);
+                uploadButton.setEnabled(!UNGP_Feedback.getFeedbackSent());
+                ButtonAPI repickButton = tooltip.addButton(rules_i18n.get("repick_rules"), KEY, buttonBase, buttonDark, Alignment.MID, CutStyle.C2_MENU, repickRectWidth * 0.7f - buttonPad, repickRect.getHeight() * 0.35f, 20f);
                 // 设置重选
-                button.setEnabled(!lockedBecauseOfChallenges && inGameData.getTimesToChangeSpecialistMode() > 0);
+                repickButton.setEnabled(!lockedBecauseOfChallenges && inGameData.getTimesToChangeSpecialistMode() > 0);
+                buttonGroup.addButton(uploadButton);
+                buttonGroup.addButton(repickButton);
+
+                buttonGroup.updateTooltip(tooltip, buttonPad);
                 repickRect.addTooltip();
             }
         }
@@ -315,10 +328,32 @@ public class UNGP_SpecialistIntel extends BaseIntelPlugin {
     }
 
     @Override
+    public boolean doesButtonHaveConfirmDialog(Object buttonId) {
+        if (buttonId == FEED_BACK) return true;
+        return super.doesButtonHaveConfirmDialog(buttonId);
+    }
+
+    @Override
+    public void createConfirmationPrompt(Object buttonId, TooltipMakerAPI prompt) {
+        if (buttonId == FEED_BACK) {
+            prompt.addPara(rules_i18n.get("button_feedback_tips"), 0f, Misc.getStoryOptionColor(), "1");
+            prompt.addPara(rules_i18n.get("button_feedback_tips_detailed"), Misc.getGrayColor(), 20f).italicize();
+        }
+        super.createConfirmationPrompt(buttonId, prompt);
+    }
+
+    @Override
     public void buttonPressConfirmed(Object buttonId, IntelUIAPI ui) {
         if (buttonId == KEY) {
             ui.showDialog(null, new UNGP_RepickRulesDialog(ui, this));
             UNGP_SpecialistBackgroundUI.stopTicking();
+        }
+        if (buttonId == FEED_BACK) {
+            UNGP_Feedback.sendPlayerRulesToServer(UNGP_InGameData.getDataInSave().getActivatedRules());
+            UNGP_Feedback.setFeedBackSent();
+            Global.getSoundPlayer().playUISound("UNGP_deep_sync", 1f, 1f);
+            Global.getSector().getPlayerStats().addStoryPoints(1);
+            ui.updateUIForItem(this);
         }
         if (buttonId == OPTION_ID_DETAILS || buttonId == OPTION_ID_TIPS) {
             checkedButton = buttonId;
