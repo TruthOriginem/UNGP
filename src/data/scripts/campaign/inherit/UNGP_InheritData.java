@@ -1,7 +1,6 @@
 package data.scripts.campaign.inherit;
 
 import com.fs.starfarer.api.Global;
-import com.fs.starfarer.api.campaign.FactionAPI;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
 import data.scripts.campaign.UNGP_InGameData;
@@ -9,6 +8,9 @@ import data.scripts.campaign.specialist.UNGP_SpecialistSettings.Difficulty;
 import data.scripts.campaign.specialist.challenges.UNGP_ChallengeInfo;
 import data.scripts.campaign.specialist.challenges.UNGP_ChallengeManager;
 import data.scripts.campaign.specialist.rules.UNGP_RulesManager;
+import data.scripts.ungpsaves.UNGP_DataSaverAPI;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -18,18 +20,17 @@ import java.util.UUID;
 import static data.scripts.campaign.UNGP_Settings.d_i18n;
 
 public class UNGP_InheritData {
+    private static final List<UNGP_DataSaverAPI> SAVER_INSTANCES = new ArrayList<>();
     public static final String DEFAULT_NAME = "[Anonymous]";
+    public static final String BULLETED_PREFIX = "       ";
 
     public String ungp_id;
     public String lastPlayerName;
     public int cycle;
     public boolean isHardMode;
     public int inheritCredits;
-    public List<String> fighters;
-    public List<String> ships;
-    public List<String> weapons;
-    public List<String> hullmods;
     public List<String> completedChallenges;
+    public List<UNGP_DataSaverAPI> dataSavers;
 
     /**
      * 创建一个可被记录的重生点
@@ -44,13 +45,11 @@ public class UNGP_InheritData {
         inheritData.cycle = inGameData.getCurCycle() + 1;
         inheritData.isHardMode = inGameData.isHardMode();
         inheritData.inheritCredits = (int) Global.getSector().getPlayerFleet().getCargo().getCredits().get();
-        FactionAPI playerFaction = Global.getSector().getPlayerFaction();
-        inheritData.ships = new ArrayList<>(playerFaction.getKnownShips());
-        inheritData.fighters = new ArrayList<>(playerFaction.getKnownFighters());
-        inheritData.weapons = new ArrayList<>(playerFaction.getKnownWeapons());
-        inheritData.hullmods = new ArrayList<>(playerFaction.getKnownHullMods());
         inheritData.completedChallenges = new ArrayList<>(inGameData.getCompletedChallenges());
-
+        inheritData.dataSavers = new ArrayList<>();
+        for (UNGP_DataSaverAPI saverInstance : SAVER_INSTANCES) {
+            inheritData.dataSavers.add(saverInstance.createSaverBasedOnCurrentGame(inGameData));
+        }
         return inheritData;
     }
 
@@ -66,11 +65,11 @@ public class UNGP_InheritData {
         inheritData.cycle = 0;
         inheritData.isHardMode = false;
         inheritData.inheritCredits = 0;
-        inheritData.ships = new ArrayList<>();
-        inheritData.fighters = new ArrayList<>();
-        inheritData.weapons = new ArrayList<>();
-        inheritData.hullmods = new ArrayList<>();
         inheritData.completedChallenges = new ArrayList<>();
+        inheritData.dataSavers = new ArrayList<>();
+        for (UNGP_DataSaverAPI saverInstance : SAVER_INSTANCES) {
+            inheritData.dataSavers.add(saverInstance.createEmptySaver());
+        }
         return inheritData;
     }
 
@@ -92,7 +91,6 @@ public class UNGP_InheritData {
     public void addDescriptionTooltip(TooltipMakerAPI root, String descKey) {
         TooltipMakerAPI section;
         Color hl = Misc.getHighlightColor();
-        String bulletedPrefix = "       ";
         // Cycle Name
         if (!lastPlayerName.contentEquals(UNGP_InheritData.DEFAULT_NAME)) {
             section = root.beginImageWithText("graphics/icons/reports/officers24.png", 24f);
@@ -104,21 +102,16 @@ public class UNGP_InheritData {
         section = root.beginImageWithText("graphics/icons/reports/generic_income.png", 24f);
         section.addPara(d_i18n.get(descKey + "_2"), 3f);
         root.addImageWithText(5f);
-        root.addPara(bulletedPrefix + Misc.getDGSCredits(inheritCredits), hl, 5f);
-        // BPs
-        section = root.beginImageWithText("graphics/icons/reports/exports24.png", 24f);
-        section.addPara(d_i18n.get(descKey + "_3"), 3f);
-        root.addImageWithText(5f);
-        root.addPara(d_i18n.get("data_bps"), 5f, hl,
-                     bulletedPrefix + ships.size(),
-                     bulletedPrefix + fighters.size(),
-                     bulletedPrefix + weapons.size(),
-                     bulletedPrefix + hullmods.size());
+        root.addPara(BULLETED_PREFIX + Misc.getDGSCredits(inheritCredits), hl, 5f);
+        // Savers
+        for (UNGP_DataSaverAPI dataSaver : dataSavers) {
+            dataSaver.addSaverInfo(root, descKey);
+        }
         // Completed challenges
         section = root.beginImageWithText("graphics/icons/reports/hazard_pay2.png", 24f);
         section.addPara(d_i18n.get(descKey + "_4"), 3f);
         root.addImageWithText(5f);
-        root.setBulletedListMode(bulletedPrefix);
+        root.setBulletedListMode(BULLETED_PREFIX);
         if (completedChallenges.isEmpty()) {
             root.addPara(d_i18n.get("challenge_empty"), Misc.getGrayColor(), 5f);
         } else {
@@ -130,5 +123,27 @@ public class UNGP_InheritData {
             }
         }
         root.setBulletedListMode(null);
+    }
+
+    public static List<UNGP_DataSaverAPI> getSaverInstancesCopy() {
+        return new ArrayList<>(SAVER_INSTANCES);
+    }
+
+    private static final String SAVER_CLASS_PATH = "data/campaign/UNGP_dataSavers.csv";
+
+    public static void loadAllSavers() {
+        try {
+            ClassLoader classLoader = Global.getSettings().getScriptClassLoader();
+            JSONArray ruleInfos = Global.getSettings().getMergedSpreadsheetDataForMod("id", SAVER_CLASS_PATH, "ungp");
+            for (int i = 0, len = ruleInfos.length(); i < len; i++) {
+                JSONObject row = ruleInfos.getJSONObject(i);
+                String saverClassName = row.getString("saverClass");
+                Class<?> saverClass = classLoader.loadClass(saverClassName);
+                SAVER_INSTANCES.add((UNGP_DataSaverAPI) saverClass.newInstance());
+            }
+        } catch (Exception e) {
+            Global.getLogger(UNGP_InheritData.class).error(e);
+            throw new RuntimeException("Failed to load UNGP data savers:", e);
+        }
     }
 }
