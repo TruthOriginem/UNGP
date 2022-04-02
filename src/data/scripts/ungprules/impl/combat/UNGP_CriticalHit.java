@@ -20,8 +20,7 @@ public class UNGP_CriticalHit extends UNGP_BaseRuleEffect implements UNGP_Combat
     public float getValueByDifficulty(int index, UNGP_SpecialistSettings.Difficulty difficulty) {
         return 0;
     }
-
-
+    
     @Override
     public String getDescriptionParams(int index, UNGP_SpecialistSettings.Difficulty difficulty) {
         if (index == 0) return getPercentString(CRITICAL_HIT_CHANCE * 100f);

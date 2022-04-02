@@ -19,6 +19,7 @@ import static data.scripts.campaign.specialist.rules.UNGP_RulesManager.URule;
 import static data.scripts.campaign.specialist.rules.UNGP_RulesManager.getAllRulesCopy;
 
 public class UNGP_BirthdayPresent extends UNGP_BaseRuleEffect implements UNGP_CampaignTag {
+
     @Override
     public void updateDifficultyCache(UNGP_SpecialistSettings.Difficulty difficulty) {
         int[] giftTime = getDataInCampaign(0);

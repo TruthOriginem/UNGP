@@ -11,7 +11,6 @@ public class UNGP_CenturyWar extends UNGP_BaseRuleEffect implements UNGP_CombatT
     private float damageMultiplier;
     private float rangeBonus;
 
-
     @Override
     public void updateDifficultyCache(UNGP_SpecialistSettings.Difficulty difficulty) {
         damageMultiplier = 1f - getValueByDifficulty(0, difficulty) * 0.01f;

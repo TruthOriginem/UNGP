@@ -6,34 +6,36 @@ import data.scripts.campaign.specialist.UNGP_SpecialistSettings;
 import data.scripts.ungprules.impl.UNGP_BaseRuleEffect;
 import data.scripts.ungprules.tags.UNGP_CharacterTag;
 
-public class UNGP_EwSmog extends UNGP_BaseRuleEffect implements UNGP_CharacterTag {
+public class UNGP_Besieged extends UNGP_BaseRuleEffect implements UNGP_CharacterTag {
 
-    private float ewBonus;
+    private float dp;
 
     @Override
     public void updateDifficultyCache(UNGP_SpecialistSettings.Difficulty difficulty) {
-        ewBonus = getValueByDifficulty(0, difficulty);
+        dp = getValueByDifficulty(0, difficulty);
     }
 
     @Override
     public float getValueByDifficulty(int index, UNGP_SpecialistSettings.Difficulty difficulty) {
-        if (index == 0) return difficulty.getLinearValue(5f, 5f);
+        if (index == 0) return difficulty.getLinearValue(0.04f, 0.04f);
         return super.getValueByDifficulty(index, difficulty);
     }
 
     @Override
     public void applyPlayerCharacterStats(MutableCharacterStatsAPI stats) {
-        stats.getDynamic().getMod(Stats.ELECTRONIC_WARFARE_FLAT).modifyFlat(buffID, ewBonus);
-    }
+        stats.getDynamic().getMod(Stats.DEPLOYMENT_POINTS_FRACTION_OF_BATTLE_SIZE_BONUS_MOD).modifyFlat(buffID, -dp);
+		stats.getDynamic().getMod(Stats.DEPLOYMENT_POINTS_MIN_FRACTION_OF_BATTLE_SIZE_BONUS_MOD).modifyFlat(buffID, -dp);
+	}
 
     @Override
     public void unapplyPlayerCharacterStats(MutableCharacterStatsAPI stats) {
-        stats.getDynamic().getMod(Stats.ELECTRONIC_WARFARE_FLAT).unmodifyFlat(buffID);
-    }
+        stats.getDynamic().getMod(Stats.DEPLOYMENT_POINTS_FRACTION_OF_BATTLE_SIZE_BONUS_MOD).unmodifyFlat(buffID);
+		stats.getDynamic().getMod(Stats.DEPLOYMENT_POINTS_MIN_FRACTION_OF_BATTLE_SIZE_BONUS_MOD).unmodifyFlat(buffID);
+	}
 
     @Override
     public String getDescriptionParams(int index, UNGP_SpecialistSettings.Difficulty difficulty) {
-        if (index == 0) return getPercentString(getValueByDifficulty(index, difficulty));
+        if (index == 0) return getPercentString(getValueByDifficulty(index, difficulty) * 100f);
         return super.getDescriptionParams(index, difficulty);
     }
 }

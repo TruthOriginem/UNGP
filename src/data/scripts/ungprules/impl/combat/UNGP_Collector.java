@@ -42,10 +42,11 @@ public class UNGP_Collector extends UNGP_BaseRuleEffect implements UNGP_CombatIn
         public static final String DEBUFF_ID = "UNGP_collector_debuff";
         private float hiddenCoolDown = 0f; // 隐藏CD，每0.1秒才能触发一次
 
-        public CollectorListener(CombatEngineAPI engine) {
+        public CollectorListener(final CombatEngineAPI engine) {
             engine.addPlugin(new BaseEveryFrameCombatPlugin() {
                 @Override
                 public void advance(float amount, List<InputEventAPI> events) {
+					if (engine.isPaused()) return;
                     CollectorListener.this.advance(amount);
                 }
             });

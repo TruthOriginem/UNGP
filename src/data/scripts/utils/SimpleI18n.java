@@ -1,7 +1,7 @@
 package data.scripts.utils;
 
 import com.fs.starfarer.api.Global;
-import de.unkrig.commons.nullanalysis.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 public class SimpleI18n {
     public static class I18nSection {

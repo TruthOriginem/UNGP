@@ -32,7 +32,6 @@ public class UNGP_BustlingFungus extends UNGP_BaseRuleEffect implements UNGP_Cam
 
     }
 
-
     @Override
     public void updateDifficultyCache(UNGP_SpecialistSettings.Difficulty difficulty) {
 
