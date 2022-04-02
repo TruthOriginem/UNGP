@@ -11,7 +11,7 @@ import com.fs.starfarer.api.util.IntervalUtil;
 import data.scripts.campaign.UNGP_InGameData;
 import data.scripts.campaign.inherit.UNGP_InheritManager;
 import data.scripts.campaign.specialist.UNGP_PlayerFleetMemberBuff;
-import data.scripts.campaign.specialist.dialog.UNGP_InteractionDialog;
+import data.scripts.campaign.ui.UNGP_InteractionDialog;
 import data.scripts.campaign.specialist.intel.UNGP_SpecialistIntel;
 import data.scripts.campaign.specialist.rules.UNGP_RulesManager;
 import data.scripts.ungprules.tags.UNGP_CampaignTag;

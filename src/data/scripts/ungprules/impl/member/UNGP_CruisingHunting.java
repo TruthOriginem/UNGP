@@ -25,7 +25,7 @@ public class UNGP_CruisingHunting extends UNGP_MemberBuffRuleEffect implements U
 
     @Override
     public float getValueByDifficulty(int index, UNGP_SpecialistSettings.Difficulty difficulty) {
-        if (index == 0) return difficulty.getLinearValue(0.1f, 0.05f);
+        if (index == 0) return difficulty.getLinearValue(0.08f, 0.04f);
         return super.getValueByDifficulty(index, difficulty);
     }
 

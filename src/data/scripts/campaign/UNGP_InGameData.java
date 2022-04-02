@@ -24,7 +24,7 @@ public final class UNGP_InGameData {
     private boolean inherited = false;//是否已经继承了上个重生点
     private boolean passedInheritTime = false;
     private boolean isHardMode = false;
-    private float timesToChangeSpecialistMode = 0f;
+    private float timesToChangeSpecialistMode = 0f; // 更换专家模式的次数
     private MutableStat changeTimeStat = new MutableStat(1f); // 用于标明每年可以获得多少次重启次数
     private List<String> activatedRuleIDs = new ArrayList<>();
     private List<String> completedChallenges = new ArrayList<>();
@@ -113,7 +113,7 @@ public final class UNGP_InGameData {
      * 是否能被继承
      * @return 满级返回true
      */
-    public boolean couldBeRecorded() {
+    public boolean couldStartRecord() {
         if (!isRecorded()) {
             if (Global.getSettings().getBoolean("noLevelLimit")) {
                 return true;

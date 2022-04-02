@@ -30,11 +30,6 @@ public final class UNGP_UITimeScript implements EveryFrameScript {
         return script;
     }
 
-//    public static void setInstance(UNGP_UITimeScript instance) {
-//        Global.getSector().getTransientScripts()
-//        UNGP_UITimeScript.instance = instance;
-//    }
-
     @Override
     public boolean isDone() {
         return false;
@@ -51,10 +46,10 @@ public final class UNGP_UITimeScript implements EveryFrameScript {
         if (intervalMap.isEmpty()) return;
         long curSystemTime = System.nanoTime();
         long diff = curSystemTime - systemTime;
-        float deltaTime = diff / 1000000000f;
-        for (IntervalUtil intervalUtil : intervalMap.values()) {
-            if (deltaTime < intervalUtil.getIntervalDuration()) {
-                intervalUtil.advance(deltaTime);
+        float deltaTime = Math.min(diff / 1000000000f, 1f);
+        for (IntervalUtil interval : intervalMap.values()) {
+            if (deltaTime < interval.getIntervalDuration()) {
+                interval.advance(deltaTime);
             }
         }
         systemTime = curSystemTime;

@@ -1,3 +1,21 @@
+1.6.5 2022
+规则修正：
+临危不惧：时间流速从50%->66%
+幅能导流阻塞：幅能耗散下降基础数值25%->15%
+远洋围猎：部署减少10%~15%->8%~12%
+科技革命：增加装配点5%~10%->8%~10%
+
+UI优化。
+现在关于市场的规则在每次生效前都会全部取消一次。
+
+Stay Calm: Reduce time flow by 50% -> 66%
+Blocked Flux Conduits: The basic reduction of flux dissipation: 25% -> 15%
+Cruising Hunting: Deploy Cost Reduction 10%~15% > 8%~12%
+Tech Revolution: Add OP 5%~10%->8%~10%
+
+UI optimization.
+Now rules related to Market would unapply the stats after each economy update.
+
 1.6.4 2022/3/4
 规则修正:
 海军条约降低的战备大幅度减少，总共最多只能减少30%。cost点数 +4 -> +3

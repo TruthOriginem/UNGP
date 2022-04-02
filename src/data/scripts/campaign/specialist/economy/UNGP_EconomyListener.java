@@ -24,7 +24,6 @@ public class UNGP_EconomyListener implements EconomyUpdateListener {
     public static void unapplyMarkets(UNGP_EconomyTag tag) {
         for (MarketAPI market : Global.getSector().getEconomy().getMarketsCopy()) {
             tag.unapplyAllMarket(market);
-            if (!market.isPlayerOwned()) continue;
             tag.unapplyPlayerMarket(market);
         }
     }
@@ -33,6 +32,8 @@ public class UNGP_EconomyListener implements EconomyUpdateListener {
         List<MarketAPI> markets = Global.getSector().getEconomy().getMarketsCopy();
         for (MarketAPI market : markets) {
             for (UNGP_EconomyTag tag : ECONOMY_TAGS_ITG) {
+                tag.unapplyAllMarket(market);
+                tag.unapplyPlayerMarket(market);
                 tag.applyAllMarket(market);
             }
             if (!market.isPlayerOwned()) continue;

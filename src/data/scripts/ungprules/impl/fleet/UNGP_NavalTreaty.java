@@ -2,7 +2,6 @@ package data.scripts.ungprules.impl.fleet;
 
 import com.fs.starfarer.api.campaign.CampaignFleetAPI;
 import com.fs.starfarer.api.fleet.FleetMemberAPI;
-import com.fs.starfarer.api.impl.campaign.ids.HullMods;
 import data.scripts.campaign.specialist.UNGP_SpecialistSettings;
 import data.scripts.ungprules.impl.UNGP_BaseRuleEffect;
 import data.scripts.ungprules.tags.UNGP_PlayerFleetTag;
@@ -51,9 +50,7 @@ public class UNGP_NavalTreaty extends UNGP_BaseRuleEffect implements UNGP_Player
         final List<FleetMemberAPI> members = fleet.getFleetData().getMembersListCopy();
         for (FleetMemberAPI member : members) {
             if (member.isMothballed()) continue;
-            if (member.getVariant().hasHullMod(HullMods.CIVGRADE) || member.getVariant().hasHullMod(HullMods.MILITARIZED_SUBSYSTEMS))
-                continue;
-
+            if (isCivilian(member)) continue;
             String designType = member.getHullSpec().getManufacturer();
             if (!designTypes.contains(designType)) {
                 designTypes.add(designType);

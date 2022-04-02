@@ -50,7 +50,7 @@ public interface UNGP_RuleEffectAPI {
     void unapplyGlobalStats();
 
     /**
-     * Would be called if the rule was removed after reselection or other reasons like rules which may remove others.
+     * Would be called when the rule was removed after reselection or other reasons like rules which may remove others.
      * Should only put some global cleansing code here.
      * 该规则被移除时会被调用，一般往里放清理全局数据的代码
      */

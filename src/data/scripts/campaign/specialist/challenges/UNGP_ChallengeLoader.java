@@ -9,6 +9,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Only used for loading challenge info.
+ */
 public class UNGP_ChallengeLoader {
     public static final String EMPTY = "[EMPTY]";
     private static final String FILE_PATH = "data/campaign/UNGP_challenges.csv";

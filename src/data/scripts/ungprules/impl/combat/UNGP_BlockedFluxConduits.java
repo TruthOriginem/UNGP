@@ -10,7 +10,7 @@ import data.scripts.ungprules.tags.UNGP_CombatTag;
 import static data.scripts.campaign.specialist.UNGP_SpecialistSettings.Difficulty;
 
 public class UNGP_BlockedFluxConduits extends UNGP_BaseRuleEffect implements UNGP_CombatTag {
-    private float fluxReduction = 25f;
+    private float fluxReduction = 15f;
 
     @Override
     public void updateDifficultyCache(Difficulty difficulty) {
@@ -19,7 +19,7 @@ public class UNGP_BlockedFluxConduits extends UNGP_BaseRuleEffect implements UNG
 
     @Override
     public float getValueByDifficulty(int index, Difficulty difficulty) {
-        if (index == 0) return difficulty.getLinearValue(25f, 10f);
+        if (index == 0) return difficulty.getLinearValue(15f, 10f);
         return 0;
     }
 

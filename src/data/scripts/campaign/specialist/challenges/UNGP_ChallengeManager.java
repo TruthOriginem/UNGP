@@ -43,7 +43,7 @@ public class UNGP_ChallengeManager {
      * Called After the first pick of rules. Called before the random rules take effect.
      */
     public static UNGP_ChallengeIntel confirmChallenges(UNGP_InGameData inGameData) {
-        // 低于专20无法开启挑战
+        // 低于Alpha无法开启挑战
         if (!isDifficultyEnough(inGameData.getDifficulty())) return null;
         Global.getSector().getPersistentData().put("UNGP_challenge_start", true);
         if (!Global.getSector().getIntelManager().hasIntelOfClass(UNGP_ChallengeIntel.class)) {

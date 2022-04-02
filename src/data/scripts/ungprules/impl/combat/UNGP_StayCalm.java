@@ -18,7 +18,7 @@ public class UNGP_StayCalm extends UNGP_BaseRuleEffect implements UNGP_CombatTag
     private static final String DATA_KEY = "UNGP_calm_data";
     private static final float PREDICT_TIME = 2f;
     private static final float HIT_POINTS_THRESHOLD = 0.2f;
-    private static final float TIME_MULTIPLIER = 0.5f;
+    private static final float TIME_MULTIPLIER = 0.33f;
     private static final float COOL_DOWN = 15f;
     private static final float FADE_IN_SPEED = 10f;
     private static final float FADE_OUT_SPEED = 5f;
@@ -102,7 +102,7 @@ public class UNGP_StayCalm extends UNGP_BaseRuleEffect implements UNGP_CombatTag
     public String getDescriptionParams(int index, Difficulty difficulty) {
         if (index == 0) return getFactorString(PREDICT_TIME);
         if (index == 1) return getPercentString(HIT_POINTS_THRESHOLD * 100f);
-        if (index == 2) return getPercentString((1f - TIME_MULTIPLIER) * 100f);
+        if (index == 2) return getPercentString((TIME_MULTIPLIER) * 100f);
         if (index == 3) return getFactorString(PREDICT_TIME);
         if (index == 4) return getFactorString(COOL_DOWN);
         return super.getDescriptionParams(index, difficulty);
