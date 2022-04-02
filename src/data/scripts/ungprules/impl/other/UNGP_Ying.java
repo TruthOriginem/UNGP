@@ -30,7 +30,7 @@ public class UNGP_Ying extends UNGP_BaseRuleEffect implements UNGP_TweakBeforeAp
     public void tweakBeforeApply(List<URule> activeRules, List<URule> originalActiveRules) {
         boolean containsYang = false;
         for (URule tmp : originalActiveRules) {
-            if (tmp.getId().equals("yang")) {
+            if (tmp.getId().contentEquals("yang")) {
                 containsYang = true;
                 break;
             }

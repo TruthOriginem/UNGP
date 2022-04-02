@@ -120,6 +120,10 @@
   },
   "UNGP_rule_impl": {
     "halved": "halved",
-    "ct": "Critical Hit!"
+    "ct": "Critical Hit!",
+
+    "ct_7": "+7%",
+    "ct_77": "+77%!",
+    "ct_777": "+777%!"
   }
 }

@@ -596,7 +596,7 @@ public class UNGP_RulesManager {
 
         public static URule getByID(String id) {
             for (URule rule : ALL_RULES) {
-                if (rule.getId().equals(id)) {
+                if (rule.getId().contentEquals(id)) {
                     return rule;
                 }
             }

@@ -94,7 +94,7 @@ public class UNGP_InheritData {
         Color hl = Misc.getHighlightColor();
         String bulletedPrefix = "       ";
         // Cycle Name
-        if (!lastPlayerName.equals(UNGP_InheritData.DEFAULT_NAME)) {
+        if (!lastPlayerName.contentEquals(UNGP_InheritData.DEFAULT_NAME)) {
             section = root.beginImageWithText("graphics/icons/reports/officers24.png", 24f);
             section.addPara(d_i18n.get(descKey + "_0") + "%s", 0f, hl, "" + (cycle - 1));
             section.addPara(d_i18n.get(descKey + "_1") + "%s", 3f, hl, lastPlayerName);

@@ -52,6 +52,6 @@ public class UNGP_ChallengeLoader {
     }
 
     public static boolean isEmpty(String target) {
-        return target == null || target.isEmpty() || target.equals(EMPTY);
+        return target == null || target.isEmpty() || target.contentEquals(EMPTY);
     }
 }
