@@ -24,14 +24,14 @@ public class UNGP_FullOfCompany extends UNGP_BaseRuleEffect implements UNGP_Twea
     }
 
     @Override
-	public void tweakBeforeApply(List<URule> activeRules, List<URule> originalActiveRules) {
-		if (!Global.getSector().getPersistentData().containsKey(buffID)) {
-			Global.getSector().getPlayerFaction().setRelationship(Factions.PIRATES, RepLevel.FRIENDLY);
-			Global.getSector().getPlayerFaction().setRelationship(Factions.INDEPENDENT, RepLevel.FRIENDLY);
-			Global.getSector().getPersistentData().put(buffID, true);
-		}
-	}
-    
+    public void tweakBeforeApply(List<URule> activeRules, List<URule> originalActiveRules) {
+        if (!Global.getSector().getPersistentData().containsKey(buffID)) {
+            Global.getSector().getPlayerFaction().setRelationship(Factions.PIRATES, RepLevel.FRIENDLY);
+            Global.getSector().getPlayerFaction().setRelationship(Factions.INDEPENDENT, RepLevel.FRIENDLY);
+            Global.getSector().getPersistentData().put(buffID, true);
+        }
+    }
+
     @Override
     public String getDescriptionParams(int index, UNGP_SpecialistSettings.Difficulty difficulty) {
         if (index == 0) return RepLevel.FRIENDLY.getDisplayName();
