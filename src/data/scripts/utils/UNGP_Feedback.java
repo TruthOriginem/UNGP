@@ -53,7 +53,7 @@ public class UNGP_Feedback {
      * @param rules
      */
     public static void sendPlayerRulesToServer(List<UNGP_RulesManager.URule> rules) {
-        final String apiUrl = UNGP_RulesManager.rules_i18n.get("button_feedback_url");
+        final String apiUrl = Constants.rules_i18n.get("button_feedback_url");
         StringBuilder sb = new StringBuilder(apiUrl);
 
         String ruleString = (String) Global.getSector().getPersistentData().get(FEEDBACK_LIST_KEY);

@@ -1,6 +1,5 @@
 package data.scripts.campaign;
 
-import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.combat.MutableStat;
 import data.scripts.campaign.everyframe.UNGP_CampaignPlugin;
 import data.scripts.campaign.specialist.rules.UNGP_RulesManager;
@@ -115,12 +114,12 @@ public final class UNGP_InGameData {
      */
     public boolean couldStartRecord() {
         if (!isRecorded()) {
-            if (Global.getSettings().getBoolean("noLevelLimit")) {
+            if (UNGP_Settings.isNoLevelLimit()) {
                 return true;
             }
             return UNGP_Settings.reachMaxLevel();
         }
-        return Global.getSettings().getBoolean("noTimesLimit");
+        return UNGP_Settings.isNoTimesLimit();
     }
 
     public Difficulty getDifficulty() {

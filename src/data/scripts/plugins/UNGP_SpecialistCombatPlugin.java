@@ -6,11 +6,12 @@ import com.fs.starfarer.api.combat.ShipAPI;
 import com.fs.starfarer.api.input.InputEventAPI;
 import com.fs.starfarer.api.util.Misc;
 import data.scripts.campaign.UNGP_InGameData;
+import data.scripts.campaign.specialist.UNGP_SpecialistSettings;
 import data.scripts.ungprules.UNGP_RuleEffectAPI;
 import data.scripts.ungprules.tags.UNGP_CombatInitTag;
 import data.scripts.ungprules.tags.UNGP_CombatTag;
 import data.scripts.ungprules.tags.UNGP_TweakBeforeApplyCombatTag;
-import data.scripts.utils.SimpleI18n.I18nSection;
+import data.scripts.utils.Constants;
 import data.scripts.utils.UNGPUtils;
 
 import java.util.ArrayList;
@@ -21,11 +22,9 @@ import static data.scripts.campaign.specialist.rules.UNGP_RulesManager.COMBAT_RU
 import static data.scripts.campaign.specialist.rules.UNGP_RulesManager.URule;
 
 public class UNGP_SpecialistCombatPlugin extends BaseEveryFrameCombatPlugin {
-    private static final I18nSection i18n = new I18nSection("UNGP", "hm", true);
-
     private CombatEngineAPI engine;
     private boolean init = false;
-    private boolean isHardMode = false;
+    private boolean isSpecialistMode = false;
 
     private List<UNGP_CombatTag> tags = new ArrayList<>();
     private List<Object[]> bonusMessages = new ArrayList<>();
@@ -36,8 +35,8 @@ public class UNGP_SpecialistCombatPlugin extends BaseEveryFrameCombatPlugin {
         if (engine.isInCampaign() || engine.isInCampaignSim()) {
             //处理
             UNGP_InGameData inGameData = UNGP_InGameData.getDataInSave();
-            if (inGameData != null && inGameData.isHardMode()) {
-                isHardMode = true;
+            if (inGameData != null && inGameData.isHardMode() && UNGP_SpecialistSettings.isRulesEnabledInSimulation()) {
+                isSpecialistMode = true;
                 Difficulty difficulty = inGameData.getDifficulty();
                 List<URule> originalRules = new ArrayList<>(COMBAT_RULES_IN_THIS_GAME);
                 List<URule> activatedRules = new ArrayList<>(originalRules);
@@ -73,20 +72,20 @@ public class UNGP_SpecialistCombatPlugin extends BaseEveryFrameCombatPlugin {
     public void advance(float amount, List<InputEventAPI> events) {
         if (!init) {
             init = true;
-            if (isHardMode) {
+            if (isSpecialistMode) {
                 for (Object[] messageArray : bonusMessages) {
                     engine.getCombatUI().addMessage(0, messageArray);
                 }
                 for (Object[] messageArray : notBonusMessages) {
                     engine.getCombatUI().addMessage(0, messageArray);
                 }
-                engine.getCombatUI().addMessage(0, Misc.getHighlightColor(), i18n.get("start"));
+                engine.getCombatUI().addMessage(0, Misc.getHighlightColor(), Constants.root_i18n.get("specialist_mode_combat_loading"));
                 bonusMessages.clear();
                 notBonusMessages.clear();
             }
         }
 
-        if (!isHardMode) return;
+        if (!isSpecialistMode) return;
         if (engine.isPaused())
             amount = 0;
         for (UNGP_CombatTag tag : tags) {

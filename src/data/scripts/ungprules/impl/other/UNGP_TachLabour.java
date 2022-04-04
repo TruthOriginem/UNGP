@@ -5,13 +5,8 @@ import com.fs.starfarer.api.campaign.RepLevel;
 import com.fs.starfarer.api.impl.campaign.ids.Factions;
 import data.scripts.campaign.specialist.UNGP_SpecialistSettings;
 import data.scripts.ungprules.impl.UNGP_BaseRuleEffect;
-import data.scripts.ungprules.tags.UNGP_TweakBeforeApplyTag;
 
-import java.util.List;
-
-import static data.scripts.campaign.specialist.rules.UNGP_RulesManager.URule;
-
-public class UNGP_TachLabour extends UNGP_BaseRuleEffect implements UNGP_TweakBeforeApplyTag {
+public class UNGP_TachLabour extends UNGP_BaseRuleEffect {
 
     @Override
     public void updateDifficultyCache(UNGP_SpecialistSettings.Difficulty difficulty) {
@@ -23,14 +18,15 @@ public class UNGP_TachLabour extends UNGP_BaseRuleEffect implements UNGP_TweakBe
         return 0;
     }
 
+
     @Override
-	public void tweakBeforeApply(List<URule> activeRules, List<URule> originalActiveRules) {
-		if (!Global.getSector().getPersistentData().containsKey(buffID)) {
-			Global.getSector().getPlayerFaction().setRelationship(Factions.REMNANTS, RepLevel.COOPERATIVE);
-			Global.getSector().getPersistentData().put(buffID, true);
-		}
-	}
-    
+    public void applyGlobalStats() {
+        if (!Global.getSector().getPersistentData().containsKey(buffID)) {
+            Global.getSector().getPlayerFaction().setRelationship(Factions.REMNANTS, RepLevel.COOPERATIVE);
+            Global.getSector().getPersistentData().put(buffID, true);
+        }
+    }
+
     @Override
     public String getDescriptionParams(int index, UNGP_SpecialistSettings.Difficulty difficulty) {
         if (index == 0) return RepLevel.COOPERATIVE.getDisplayName();

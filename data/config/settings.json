@@ -1,13 +1,11 @@
 {
-  "noLevelLimit": false, # set true to cancel the record level limit
-  "noTimesLimit": false, # set true to make record could be done for unlimited times
-  "createEmptySavepoint": false, # set true to automatically generate a empty savepoint
   "plugins": {
     "UNGP_SpecialistCombatPlugin": "data.scripts.plugins.UNGP_SpecialistCombatPlugin",
   },
   "graphics": {
     "icons": {
-      "UNGP_hmlogo": "graphics/icons/UNGP_hmode_logo.png",
+      "UNGP_specialist_mode_logo": "graphics/icons/UNGP_specialist_mode_logo.png",
+      "UNGP_intel_icon": "graphics/icons/UNGP_intel_icon.png",
       "UNGP_itemBG": "graphics/icons/cargo/UNGP_ruleItemBG.png",
       "UNGP_itemBG_mask": "graphics/icons/cargo/UNGP_ruleItemBG_mask.png",
       "rule_negative": "graphics/icons/negative_icon.png",

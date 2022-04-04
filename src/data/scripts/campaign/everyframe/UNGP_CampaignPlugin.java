@@ -9,11 +9,11 @@ import com.fs.starfarer.api.fleet.FleetMemberAPI;
 import com.fs.starfarer.api.input.InputEventAPI;
 import com.fs.starfarer.api.util.IntervalUtil;
 import data.scripts.campaign.UNGP_InGameData;
-import data.scripts.campaign.inherit.UNGP_InheritManager;
+import data.scripts.campaign.UNGP_Settings;
 import data.scripts.campaign.specialist.UNGP_PlayerFleetMemberBuff;
-import data.scripts.campaign.ui.UNGP_InteractionDialog;
 import data.scripts.campaign.specialist.intel.UNGP_SpecialistIntel;
 import data.scripts.campaign.specialist.rules.UNGP_RulesManager;
+import data.scripts.campaign.ui.UNGP_InteractionDialog;
 import data.scripts.ungprules.tags.UNGP_CampaignTag;
 import data.scripts.ungprules.tags.UNGP_PlayerFleetMemberTag;
 import data.scripts.ungprules.tags.UNGP_PlayerFleetTag;
@@ -114,14 +114,12 @@ public class UNGP_CampaignPlugin implements EveryFrameScript, CampaignInputListe
                         newGameCheckDays -= days;
                     } else {
                         newGameChecked = true;
-                        if (UNGP_InheritManager.savePointsExist()) {
-                            sector.getCampaignUI().showConfirmDialog(i18n.get("message"), i18n.get("yes"), i18n.get("no"), new Script() {
-                                @Override
-                                public void run() {
-                                    shouldShowDialog = true;
-                                }
-                            }, null);
-                        }
+                        sector.getCampaignUI().showConfirmDialog(i18n.get("message"), i18n.get("yes"), i18n.get("no"), new Script() {
+                            @Override
+                            public void run() {
+                                shouldShowDialog = true;
+                            }
+                        }, null);
                     }
                 }
                 // 一天后就算错过时间了
@@ -133,7 +131,8 @@ public class UNGP_CampaignPlugin implements EveryFrameScript, CampaignInputListe
         }
         if (!sector.getCampaignUI().isShowingDialog()) {
             // 打开界面
-            if (Keyboard.isKeyDown(Keyboard.KEY_LCONTROL) && Keyboard.isKeyDown(Keyboard.KEY_P)) {
+            if (Keyboard.isKeyDown(UNGP_Settings.getShowMenuKey1())
+                    && Keyboard.isKeyDown(UNGP_Settings.getShowMenuKey2())) {
                 shouldShowDialog = true;
             }
             if (shouldShowDialog) {
@@ -228,7 +227,7 @@ public class UNGP_CampaignPlugin implements EveryFrameScript, CampaignInputListe
     }
 
 
-    private boolean showUNGPDialog() {
+    public boolean showUNGPDialog() {
         return Global.getSector().getCampaignUI().showInteractionDialog(new UNGP_InteractionDialog(inGameData), Global.getSector().getPlayerFleet());
     }
 
@@ -243,7 +242,6 @@ public class UNGP_CampaignPlugin implements EveryFrameScript, CampaignInputListe
 
     @Override
     public void processCampaignInputPreCore(List<InputEventAPI> events) {
-
     }
 
     @Override

@@ -11,6 +11,7 @@ import data.scripts.campaign.specialist.challenges.UNGP_ChallengeManager;
 import data.scripts.campaign.specialist.dialog.UNGP_RepickRulesDialog;
 import data.scripts.campaign.specialist.items.UNGP_RuleItem;
 import data.scripts.campaign.specialist.rules.UNGP_RulesManager;
+import data.scripts.utils.Constants;
 import data.scripts.utils.UNGP_Feedback;
 import ungp.ui.HorizontalButtonGroup;
 import ungp.ui.UIRect;
@@ -59,6 +60,7 @@ public class UNGP_SpecialistIntel extends BaseIntelPlugin {
     private static final Object OPTION_ID_DETAILS = new Object();
     private static final Object OPTION_ID_TIPS = new Object();
     private static Object checkedButton = OPTION_ID_DETAILS;
+    private ButtonAPI simulationCheckBox;
 
     @Override
     public void notifyPlayerAboutToOpenIntelScreen() {
@@ -133,7 +135,7 @@ public class UNGP_SpecialistIntel extends BaseIntelPlugin {
                 tooltip = checkBoxRect.beginTooltip(panel, false);
                 final float checkBoxRectWidth = checkBoxRect.getWidth();
                 final float checkBoxRectHeight = checkBoxRect.getHeight();
-                ButtonAPI button_details = tooltip.addAreaCheckbox(rules_i18n.get("button_details"), OPTION_ID_DETAILS,
+                ButtonAPI button_details = tooltip.addAreaCheckbox(Constants.rules_i18n.get("button_details"), OPTION_ID_DETAILS,
                                                                    Misc.getBasePlayerColor(), Misc.getDarkPlayerColor(), Misc.getBrightPlayerColor(),
                                                                    checkBoxRectWidth, checkBoxRectHeight * 0.4f, 0f);
                 tooltip.addTooltipToPrevious(new TooltipCreator() {
@@ -149,11 +151,11 @@ public class UNGP_SpecialistIntel extends BaseIntelPlugin {
 
                     @Override
                     public void createTooltip(TooltipMakerAPI tooltip, boolean expanded, Object tooltipParam) {
-                        tooltip.addPara(rules_i18n.get("button_details_tooltip"), 0f);
+                        tooltip.addPara(Constants.rules_i18n.get("button_details_tooltip"), 0f);
                     }
                 }, TooltipLocation.LEFT);
                 button_details.setChecked(checkedButton == OPTION_ID_DETAILS);
-                ButtonAPI button_tips = tooltip.addAreaCheckbox(rules_i18n.get("button_tips"), OPTION_ID_TIPS,
+                ButtonAPI button_tips = tooltip.addAreaCheckbox(Constants.rules_i18n.get("button_tips"), OPTION_ID_TIPS,
                                                                 Misc.getBasePlayerColor(), Misc.getDarkPlayerColor(), Misc.getBrightPlayerColor(),
                                                                 checkBoxRectWidth, checkBoxRectHeight * 0.4f, checkBoxRectHeight * 0.2f);
                 tooltip.addTooltipToPrevious(new TooltipCreator() {
@@ -169,7 +171,7 @@ public class UNGP_SpecialistIntel extends BaseIntelPlugin {
 
                     @Override
                     public void createTooltip(TooltipMakerAPI tooltip, boolean expanded, Object tooltipParam) {
-                        tooltip.addPara(rules_i18n.get("button_tips_tooltip"), 0f);
+                        tooltip.addPara(Constants.rules_i18n.get("button_tips_tooltip"), 0f);
                     }
                 }, TooltipLocation.LEFT);
                 button_tips.setChecked(checkedButton == OPTION_ID_TIPS);
@@ -178,12 +180,12 @@ public class UNGP_SpecialistIntel extends BaseIntelPlugin {
             UIRect repickRect = titleRectSplits[2].shrink(contentShrink);
             {
                 tooltip = repickRect.beginTooltip(panel, false);
-                tooltip.addPara(rules_i18n.get("current_cycle") + "%s", 0f, positiveColor, Global.getSector().getClock().getCycle() + "").setAlignment(Alignment.RMID);
+                tooltip.addPara(Constants.rules_i18n.get("current_cycle") + "%s", 0f, positiveColor, Global.getSector().getClock().getCycle() + "").setAlignment(Alignment.RMID);
                 boolean lockedBecauseOfChallenges = UNGP_ChallengeManager.isRepickLockedByChallenges();
                 if (lockedBecauseOfChallenges) {
-                    tooltip.addPara(rules_i18n.get("repick_blocked"), Misc.getNegativeHighlightColor(), 0f).setAlignment(Alignment.RMID);
+                    tooltip.addPara(Constants.rules_i18n.get("repick_blocked"), Misc.getNegativeHighlightColor(), 0f).setAlignment(Alignment.RMID);
                 } else {
-                    tooltip.addPara(rules_i18n.get("current_times_to_refresh") + "%s", 0f, positiveColor, rules_i18n.get("repick_rules"), inGameData.getTimesToChangeSpecialistMode() + "").setAlignment(Alignment.RMID);
+                    tooltip.addPara(Constants.rules_i18n.get("current_times_to_refresh") + "%s", 0f, positiveColor, Constants.rules_i18n.get("repick_rules"), inGameData.getTimesToChangeSpecialistMode() + "").setAlignment(Alignment.RMID);
                 }
                 Color buttonBase = Misc.getBasePlayerColor();
                 Color buttonDark = Misc.getDarkPlayerColor();
@@ -191,9 +193,9 @@ public class UNGP_SpecialistIntel extends BaseIntelPlugin {
                 HorizontalButtonGroup buttonGroup = new HorizontalButtonGroup();
                 float repickRectWidth = repickRect.getWidth();
                 float buttonPad = 10f;
-                ButtonAPI uploadButton = tooltip.addButton(rules_i18n.get("button_feedback"), FEED_BACK, Misc.getStoryOptionColor(), Misc.getStoryDarkColor(), Alignment.MID, CutStyle.C2_MENU, repickRectWidth * 0.3f, repickRect.getHeight() * 0.35f, 20f);
+                ButtonAPI uploadButton = tooltip.addButton(Constants.rules_i18n.get("button_feedback"), FEED_BACK, Misc.getStoryOptionColor(), Misc.getStoryDarkColor(), Alignment.MID, CutStyle.C2_MENU, repickRectWidth * 0.3f, repickRect.getHeight() * 0.35f, 20f);
                 uploadButton.setEnabled(!UNGP_Feedback.getFeedbackSent());
-                ButtonAPI repickButton = tooltip.addButton(rules_i18n.get("repick_rules"), KEY, buttonBase, buttonDark, Alignment.MID, CutStyle.C2_MENU, repickRectWidth * 0.7f - buttonPad, repickRect.getHeight() * 0.35f, 20f);
+                ButtonAPI repickButton = tooltip.addButton(Constants.rules_i18n.get("repick_rules"), KEY, buttonBase, buttonDark, Alignment.MID, CutStyle.C2_MENU, repickRectWidth * 0.7f - buttonPad, repickRect.getHeight() * 0.35f, 20f);
                 // 设置重选
                 repickButton.setEnabled(!lockedBecauseOfChallenges && inGameData.getTimesToChangeSpecialistMode() > 0);
                 buttonGroup.addButton(uploadButton);
@@ -276,11 +278,19 @@ public class UNGP_SpecialistIntel extends BaseIntelPlugin {
                 UIRect[] gameStateRectSplits = gameStateRect.splitVertically(30f);
                 UIRect gameStateRectTitle = gameStateRectSplits[0].shrink(contentShrink);
                 {
+//                    UIRect[] gameStateRectTitleSplits = gameStateRectTitle.splitHorizontally(0.5f, 0.5f);
+//                    gameStateRectTitleSplits
                     // 状态标题
                     tooltip = gameStateRectTitle.beginTooltip(panel, false);
                     tooltip.setParaOrbitronLarge();
-                    tooltip.addPara(rules_i18n.get("suited_state"), Misc.getButtonTextColor(), 0f);
+                    tooltip.addPara(Constants.rules_i18n.get("suited_state"), Misc.getButtonTextColor(), 0f);
+                    float titleWidth = tooltip.computeStringWidth(Constants.rules_i18n.get("suited_state")) + 10;
+                    PositionAPI titlePos = tooltip.getPrev().getPosition();
                     tooltip.setParaFontDefault();
+                    simulationCheckBox = tooltip.addCheckbox(20f, titlePos.getHeight(), Constants.rules_i18n.get("enable_in_simulation"), ButtonAPI.UICheckboxSize.SMALL, 0f);
+                    simulationCheckBox.getPosition().inTL(titleWidth, 0);
+                    simulationCheckBox.setChecked(UNGP_SpecialistSettings.isRulesEnabledInSimulation());
+                    tooltip.addSpacer(0f).getPosition().inTL(titlePos.getX(), titlePos.getHeight());
                     addLine(tooltip, gameStateRectTitle.getWidth() - 5f, 1f, 3f);
                     gameStateRectTitle.addTooltip();
                 }
@@ -290,7 +300,7 @@ public class UNGP_SpecialistIntel extends BaseIntelPlugin {
                     tooltip.addSpacer(5f);
                     if (!campaignRules.isEmpty()) {
                         tooltip.setParaOrbitronLarge();
-                        tooltip.addPara(rules_i18n.get("campaign_state"), 0f);
+                        tooltip.addPara(Constants.rules_i18n.get("campaign_state"), 0f);
                         tooltip.setParaFontDefault();
                         tooltip.addSpacer(5f);
                         for (URule rule : campaignRules) {
@@ -302,7 +312,7 @@ public class UNGP_SpecialistIntel extends BaseIntelPlugin {
                     }
                     if (!combatRules.isEmpty()) {
                         tooltip.setParaOrbitronLarge();
-                        tooltip.addPara(rules_i18n.get("combat_state"), 10f);
+                        tooltip.addPara(Constants.rules_i18n.get("combat_state"), 10f);
                         tooltip.setParaFontDefault();
                         tooltip.addSpacer(5f);
                         for (URule rule : combatRules) {
@@ -328,6 +338,13 @@ public class UNGP_SpecialistIntel extends BaseIntelPlugin {
     }
 
     @Override
+    public void reportPlayerClickedOn() {
+        if (simulationCheckBox != null) {
+            UNGP_SpecialistSettings.setRulesEnabledInSimulation(simulationCheckBox.isChecked());
+        }
+    }
+
+    @Override
     public boolean doesButtonHaveConfirmDialog(Object buttonId) {
         if (buttonId == FEED_BACK) return true;
         return super.doesButtonHaveConfirmDialog(buttonId);
@@ -336,8 +353,8 @@ public class UNGP_SpecialistIntel extends BaseIntelPlugin {
     @Override
     public void createConfirmationPrompt(Object buttonId, TooltipMakerAPI prompt) {
         if (buttonId == FEED_BACK) {
-            prompt.addPara(rules_i18n.get("button_feedback_tips"), 0f, Misc.getStoryOptionColor(), "1");
-            prompt.addPara(rules_i18n.get("button_feedback_tips_detailed"), Misc.getGrayColor(), 20f).italicize();
+            prompt.addPara(Constants.rules_i18n.get("button_feedback_tips"), 0f, Misc.getStoryOptionColor(), "1");
+            prompt.addPara(Constants.rules_i18n.get("button_feedback_tips_detailed"), Misc.getGrayColor(), 20f).italicize();
         }
         super.createConfirmationPrompt(buttonId, prompt);
     }
@@ -384,11 +401,11 @@ public class UNGP_SpecialistIntel extends BaseIntelPlugin {
     }
 
     public String getDesc() {
-        return rules_i18n.get("mode_desc");
+        return Constants.rules_i18n.get("mode_desc");
     }
 
     public String getName() {
-        return rules_i18n.get("mode_name");
+        return Constants.rules_i18n.get("mode_name");
     }
 
     @Override

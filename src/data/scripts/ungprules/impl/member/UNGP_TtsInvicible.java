@@ -41,9 +41,9 @@ public class UNGP_TtsInvicible extends UNGP_MemberBuffRuleEffect {
         stats.getEnergyWeaponDamageMult().modifyPercent(id, DAMAGE_BONUS);
         stats.getBallisticWeaponDamageMult().modifyPercent(id, DAMAGE_BONUS);
         stats.getMissileWeaponDamageMult().modifyPercent(id, DAMAGE_BONUS);
-		stats.getEnergyRoFMult().modifyPercent(id, DAMAGE_BONUS);
-		stats.getBallisticRoFMult().modifyPercent(id, DAMAGE_BONUS);
-		stats.getMissileRoFMult().modifyPercent(id, DAMAGE_BONUS);
+        stats.getEnergyRoFMult().modifyPercent(id, DAMAGE_BONUS);
+        stats.getBallisticRoFMult().modifyPercent(id, DAMAGE_BONUS);
+        stats.getMissileRoFMult().modifyPercent(id, DAMAGE_BONUS);
 
         stats.getMaxCombatReadiness().modifyFlat(id, CR_BONUS * 0.01f, rule.getName());
     }

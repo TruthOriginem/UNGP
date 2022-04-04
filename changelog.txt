@@ -5,7 +5,13 @@
 远洋围猎：部署减少10%~15%->8%~12%
 科技革命：增加装配点5%~10%->8%~10%
 
+增加正面规则: TTS Invicible, 鬼魅玲珑, 高级热力学, 幸运7, 前速子技工, 宾客盈门
+增加负面规则: 团团围困, 打击学派, 多层装甲, 重磅狙击, 危险战区, 通货膨胀
+
 UI优化。
+添加一个能打开重生主界面的玩家能力。
+现在专家模式可以通过网络界面设置战斗规则是否在模拟战生效。
+将设置从settings.json移动至mod根目录下的UNGP_OPTIONS.ini
 现在关于市场的规则在每次生效前都会全部取消一次。
 
 Stay Calm: Reduce time flow by 50% -> 66%
@@ -13,7 +19,13 @@ Blocked Flux Conduits: The basic reduction of flux dissipation: 25% -> 15%
 Cruising Hunting: Deploy Cost Reduction 10%~15% > 8%~12%
 Tech Revolution: Add OP 5%~10%->8%~10%
 
+Add new positive rules: Sneaker, Thermodynamics, Lucky Seven, Tachyon Labour, Full of Company
+Add new negative rules: Besieged, Striker School, Layered Armor, Explosive Sniper, Danger Zone, Inflation
+
 UI optimization.
+Added an ability to open the main menu of UNGP.
+Now could set if combat rules enabled in simulation in the specialist mode intel.
+Moved settings from settings.json to the "UNGP_OPTIONS.ini" located at the root folder of the mod.
 Now rules related to Market would unapply the stats after each economy update.
 
 1.6.4 2022/3/4

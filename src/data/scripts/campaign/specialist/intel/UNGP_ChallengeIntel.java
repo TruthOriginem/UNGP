@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.Set;
 
 import static com.fs.starfarer.api.campaign.comm.IntelInfoPlugin.IntelSortTier.TIER_0;
-import static data.scripts.campaign.specialist.rules.UNGP_RulesManager.rules_i18n;
+import static data.scripts.utils.Constants.rules_i18n;
 
 public class UNGP_ChallengeIntel extends BaseIntelPlugin {
     public static final class UNGP_ChallengeProgress {

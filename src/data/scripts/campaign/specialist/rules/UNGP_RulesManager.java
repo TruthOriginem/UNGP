@@ -17,7 +17,7 @@ import data.scripts.campaign.specialist.items.UNGP_RuleItem;
 import data.scripts.campaign.specialist.rules.UNGP_RuleInfoLoader.UNGP_RuleInfo;
 import data.scripts.ungprules.UNGP_RuleEffectAPI;
 import data.scripts.ungprules.tags.*;
-import data.scripts.utils.SimpleI18n.I18nSection;
+import data.scripts.utils.Constants;
 import org.apache.log4j.Logger;
 
 import java.awt.*;
@@ -27,7 +27,6 @@ import java.util.Comparator;
 import java.util.List;
 
 public class UNGP_RulesManager {
-    public static final I18nSection rules_i18n = new I18nSection("UNGP_rules", "", false);
     private static final Color BONUS_COLOR = new Color(50, 255, 50);
     private static final Color NOT_BONUS_COLOR = new Color(255, 50, 50);
     private static final Color GOLDEN_COLOR = new Color(255, 215, 0);
@@ -248,8 +247,18 @@ public class UNGP_RulesManager {
         private String buffID;
         private UNGP_RuleInfo ruleInfo;
         private boolean isMilestoneRollLocked = true;
+        /**
+         * If this rule is one of the conditions of some challenges
+         */
         private boolean isMilestoneProvider = false;
+        /**
+         * Would be initialized only when the rule is loaded
+         */
         private boolean isDescAffectedByLevel;
+        /**
+         * Only used for deep sync feedback.
+         */
+        private int pickedTimes = -1;
 
         URule(UNGP_RuleInfo info) {
             this.buffID = "ungp_" + info.getId();
@@ -337,7 +346,7 @@ public class UNGP_RulesManager {
             tooltip.addImageWithText(pad * 0.5f);
             if (!isDefaultSource()) {
                 tooltip.setParaFontVictor14();
-                tooltip.addPara(rules_i18n.get("rule_source") + ruleInfo.getSource(), Misc.getGrayColor(), pad * 0.5f);
+                tooltip.addPara(Constants.rules_i18n.get("rule_source") + ruleInfo.getSource(), Misc.getGrayColor(), pad * 0.5f);
                 tooltip.setParaFontDefault();
             }
         }
@@ -359,20 +368,20 @@ public class UNGP_RulesManager {
 
         public void addDescToItem(TooltipMakerAPI tooltip, float pad, String prefix, boolean isExpanded) {
             if (!isDescAffectedByLevel) {
-                tooltip.addPara(rules_i18n.get("front_desc"), pad * 0.5f, Misc.getBasePlayerColor(), Misc.getHighlightColor(), rules_i18n.get("any"));
+                tooltip.addPara(Constants.rules_i18n.get("front_desc"), pad * 0.5f, Misc.getBasePlayerColor(), Misc.getHighlightColor(), Constants.rules_i18n.get("any"));
                 addDesc(tooltip, pad, prefix, null);
             } else {
                 Difficulty difficulty = UNGP_RulesManager.getGlobalDifficulty();
                 if (isExpanded) {
                     for (Difficulty itemDifficulty : Difficulty.values()) {
-                        tooltip.addPara(rules_i18n.get("front_desc"), pad * 0.5f,
+                        tooltip.addPara(Constants.rules_i18n.get("front_desc"), pad * 0.5f,
                                         difficulty == itemDifficulty ? Misc.getGrayColor() : Misc.getBasePlayerColor(),
                                         itemDifficulty.color, itemDifficulty.name);
                         addDesc(tooltip, pad, prefix, itemDifficulty);
                         tooltip.addSpacer(pad * 0.5f);
                     }
                 } else {
-                    tooltip.addPara(rules_i18n.get("front_desc"), pad * 0.5f, Misc.getBasePlayerColor(), difficulty.color, difficulty.name);
+                    tooltip.addPara(Constants.rules_i18n.get("front_desc"), pad * 0.5f, Misc.getBasePlayerColor(), difficulty.color, difficulty.name);
                     addDesc(tooltip, pad, prefix, difficulty);
                 }
             }
@@ -418,7 +427,7 @@ public class UNGP_RulesManager {
          */
         public void addRollDesc(TooltipMakerAPI tooltip, float pad, String prefix) {
             if (!isBasicallyRollable()) {
-                tooltip.addPara(prefix + rules_i18n.get("not_rollable"), Misc.getGrayColor(), pad);
+                tooltip.addPara(prefix + Constants.rules_i18n.get("not_rollable"), Misc.getGrayColor(), pad);
             }
         }
 
@@ -433,7 +442,7 @@ public class UNGP_RulesManager {
                     }
                 }
                 if (!provider.isEmpty()) {
-                    tooltip.addPara(rules_i18n.get("milestone_tip"), Misc.getBasePlayerColor(), pad);
+                    tooltip.addPara(Constants.rules_i18n.get("milestone_tip"), Misc.getBasePlayerColor(), pad);
                     tooltip.addSpacer(10f);
                     tooltip.setBulletedListMode(detailPrefix);
                     for (UNGP_ChallengeInfo challengeInfo : provider) {
@@ -452,7 +461,7 @@ public class UNGP_RulesManager {
                     }
                 }
                 if (!provider.isEmpty()) {
-                    tooltip.addPara(rules_i18n.get("challenge_tip"), Misc.getBasePlayerColor(), pad);
+                    tooltip.addPara(Constants.rules_i18n.get("challenge_tip"), Misc.getBasePlayerColor(), pad);
                     tooltip.addSpacer(10f);
                     tooltip.setBulletedListMode(detailPrefix);
                     for (UNGP_ChallengeInfo challengeInfo : provider) {
@@ -464,22 +473,22 @@ public class UNGP_RulesManager {
                             // 打印要求
                             StringBuilder requirementSb = new StringBuilder();
                             if (challengeInfo.getDurationByMonth() == -1) {
-                                requirementSb.append(rules_i18n.get("challenge_tip_desc0_1"));
+                                requirementSb.append(Constants.rules_i18n.get("challenge_tip_desc0_1"));
                                 requirementSb.append("\n");
                             } else {
-                                requirementSb.append(rules_i18n.format("challenge_tip_desc0_0", "" + challengeInfo.getDurationByMonth()));
+                                requirementSb.append(Constants.rules_i18n.format("challenge_tip_desc0_0", "" + challengeInfo.getDurationByMonth()));
                                 requirementSb.append("\n");
                                 if (challengeInfo.isNeedMaxLevel()) {
-                                    requirementSb.append(rules_i18n.get("challenge_tip_desc1"));
+                                    requirementSb.append(Constants.rules_i18n.get("challenge_tip_desc1"));
                                     requirementSb.append("\n");
                                 }
                             }
                             if (challengeInfo.getPositiveLimitation() >= 0) {
-                                requirementSb.append(rules_i18n.format("challenge_tip_desc2", "" + challengeInfo.getPositiveLimitation()));
+                                requirementSb.append(Constants.rules_i18n.format("challenge_tip_desc2", "" + challengeInfo.getPositiveLimitation()));
                                 requirementSb.append("\n");
                             }
                             if (!challengeInfo.canReselectRules()) {
-                                requirementSb.append(rules_i18n.get("challenge_tip_desc3"));
+                                requirementSb.append(Constants.rules_i18n.get("challenge_tip_desc3"));
                                 requirementSb.append("\n");
                             }
                             requirementSb.deleteCharAt(requirementSb.length() - 1);
@@ -556,7 +565,7 @@ public class UNGP_RulesManager {
                 highlight = getHighlightColor(false);
                 costString = "" + cost;
             }
-            tooltip.addPara(rules_i18n.get("cost_point"), pad, baseColor, highlight, costString);
+            tooltip.addPara(Constants.rules_i18n.get("cost_point"), pad, baseColor, highlight, costString);
             tooltip.setParaFontDefault();
         }
 
@@ -644,9 +653,9 @@ public class UNGP_RulesManager {
      */
     public static String getBonusString(boolean isBonus) {
         if (isBonus) {
-            return rules_i18n.get("isBonus");
+            return Constants.rules_i18n.get("isBonus");
         } else {
-            return rules_i18n.get("notBonus");
+            return Constants.rules_i18n.get("notBonus");
         }
     }
 
@@ -654,11 +663,11 @@ public class UNGP_RulesManager {
      * @return "黄金规则"
      */
     public static String getGoldenString() {
-        return rules_i18n.get("golden_rule");
+        return Constants.rules_i18n.get("golden_rule");
     }
 
     public static String getMilestoneString() {
-        return rules_i18n.get("milestone_rule");
+        return Constants.rules_i18n.get("milestone_rule");
     }
 
     /**

@@ -4,6 +4,7 @@ import com.fs.starfarer.api.BaseModPlugin;
 import com.fs.starfarer.api.Global;
 import com.thoughtworks.xstream.XStream;
 import data.scripts.campaign.UNGP_InGameData;
+import data.scripts.campaign.UNGP_Settings;
 import data.scripts.campaign.UNGP_SharedData;
 import data.scripts.campaign.everyframe.UNGP_CampaignPlugin;
 import data.scripts.campaign.everyframe.UNGP_SpecialistWidgetPlugin;
@@ -21,6 +22,7 @@ public class UNGP_modPlugin extends BaseModPlugin {
     @Override
     public void onApplicationLoad() {
         UNGP_LoadingChecker.runCheckProcess();
+        UNGP_Settings.loadSettings();
 
         UNGPFont.init();
         UNGP_RuleItem.loadSprite();
@@ -44,6 +46,9 @@ public class UNGP_modPlugin extends BaseModPlugin {
         }
         Global.getSector().addTransientScript(new UNGP_UITimeScript());
         Global.getSector().addTransientScript(new UNGP_SpecialistWidgetPlugin());
+        if (!Global.getSector().getCharacterData().getAbilities().contains("UNGP_checkSavepoint")) {
+            Global.getSector().getCharacterData().addAbility("UNGP_checkSavepoint");
+        }
     }
 
     @Override

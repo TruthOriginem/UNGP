@@ -1,5 +1,6 @@
 package data.scripts.campaign.ui;
 
+import com.fs.starfarer.api.EveryFrameScript;
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.Script;
 import com.fs.starfarer.api.campaign.*;
@@ -103,9 +104,7 @@ public class UNGP_InteractionDialog implements InteractionDialogPlugin {
         pregenInheritData = UNGP_InheritData.createInheritData(inGameData);
         UNGP_InheritManager.loadAllSlots();
 
-//        TooltipMakerAPI fakeTooltip = textPanel.beginTooltip();
-//        textPanel.addTooltip();
-
+        // The right view of the interaction dialog
         uiPanelPlugin = new UNGP_InteractionPanelPlugin();
         uiPanelPlugin.update(visual);
         initMenu();
@@ -413,13 +412,39 @@ public class UNGP_InteractionDialog implements InteractionDialogPlugin {
             inGameData.setDifficulty(setting_difficulty.get());
             inGameData.saveActivatedRules(pickedRules);
             UNGP_Feedback.setFeedBackList(pickedRules);
-            UNGP_SpecialistIntel intel = new UNGP_SpecialistIntel();
+            final UNGP_SpecialistIntel intel = new UNGP_SpecialistIntel();
             Global.getSector().getIntelManager().addIntel(intel, false, textPanel);
             UNGP_ChallengeIntel challengeIntel = UNGP_ChallengeManager.confirmChallenges(inGameData);
             if (challengeIntel != null) {
                 Global.getSector().getIntelManager().addIntelToTextPanel(challengeIntel, textPanel);
             }
             UNGP_RulesManager.updateRulesCache();
+            // Open the specialist intel
+            Global.getSector().addTransientScript(new EveryFrameScript() {
+                private float elapsed = 0f;
+                private boolean isDone = false;
+
+                @Override
+                public boolean isDone() {
+                    return isDone;
+                }
+
+                @Override
+                public boolean runWhilePaused() {
+                    return false;
+                }
+
+                @Override
+                public void advance(float amount) {
+                    if (isDone()) return;
+                    elapsed += amount;
+                    if (elapsed > 0.1f) {
+                        isDone = true;
+                        Global.getSector().getCampaignUI().showCoreUITab(CoreUITabId.INTEL, intel);
+                        Global.getSector().removeTransientScript(this);
+                    }
+                }
+            });
         }
     }
 
