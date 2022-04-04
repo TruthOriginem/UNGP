@@ -2,22 +2,16 @@ package data.scripts.campaign.ui;
 
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.Script;
-import com.fs.starfarer.api.SettingsAPI;
 import com.fs.starfarer.api.campaign.*;
 import com.fs.starfarer.api.campaign.econ.Industry;
 import com.fs.starfarer.api.campaign.econ.MarketAPI;
 import com.fs.starfarer.api.campaign.rules.MemoryAPI;
 import com.fs.starfarer.api.combat.EngagementResultAPI;
-import com.fs.starfarer.api.combat.ShipHullSpecAPI;
 import com.fs.starfarer.api.fleet.FleetMemberAPI;
 import com.fs.starfarer.api.impl.campaign.rulecmd.AddRemoveCommodity;
 import com.fs.starfarer.api.input.InputEventAPI;
-import com.fs.starfarer.api.loading.FighterWingSpecAPI;
-import com.fs.starfarer.api.loading.HullModSpecAPI;
-import com.fs.starfarer.api.loading.WeaponSpecAPI;
 import com.fs.starfarer.api.ui.*;
 import com.fs.starfarer.api.util.Misc;
-import com.fs.starfarer.api.util.WeightedRandomPicker;
 import data.scripts.campaign.UNGP_InGameData;
 import data.scripts.campaign.UNGP_Settings;
 import data.scripts.campaign.inherit.UNGP_InheritData;
@@ -29,6 +23,8 @@ import data.scripts.campaign.specialist.intel.UNGP_SpecialistIntel;
 import data.scripts.campaign.specialist.rules.UNGP_RulePickListener;
 import data.scripts.campaign.specialist.rules.UNGP_RulesManager;
 import data.scripts.campaign.specialist.rules.UNGP_RulesManager.URule;
+import data.scripts.ungpsaves.UNGP_DataSaverAPI;
+import data.scripts.ungpsaves.impl.UNGP_BlueprintsDataSaver;
 import data.scripts.utils.UNGP_Feedback;
 import org.lwjgl.input.Keyboard;
 import ungp.ui.CheckBoxGroup;
@@ -37,6 +33,7 @@ import ungp.ui.SettingEntry;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -75,10 +72,10 @@ public class UNGP_InteractionDialog implements InteractionDialogPlugin {
 
     private UNGP_InGameData inGameData;
 
-    private UNGP_InheritData lastInheritData;
+    private UNGP_InheritData pickedInheritData;
     private OptionID choseInheritSlotOptionID = null;
 
-    private UNGP_InheritData toRecordInheritData;
+    private UNGP_InheritData pregenInheritData;
     private boolean isSpecialistMode = false;
 
     // inherit setting entry
@@ -103,7 +100,7 @@ public class UNGP_InteractionDialog implements InteractionDialogPlugin {
         visual = dialog.getVisualPanel();
         sector = Global.getSector();
 
-        toRecordInheritData = UNGP_InheritData.createInheritData(inGameData);
+        pregenInheritData = UNGP_InheritData.createInheritData(inGameData);
         UNGP_InheritManager.loadAllSlots();
 
 //        TooltipMakerAPI fakeTooltip = textPanel.beginTooltip();
@@ -139,7 +136,7 @@ public class UNGP_InteractionDialog implements InteractionDialogPlugin {
         if (inGameData.isHardMode()) {
             difficulty = inGameData.getDifficulty();
         }
-        toRecordInheritData.addRecordTooltip(toRecordInfo, difficulty);
+        pregenInheritData.addRecordTooltip(toRecordInfo, difficulty);
         textPanel.addTooltip();
         options.addOption(d_i18n.get("help"), OptionID.HELP);
         addLeaveButton();
@@ -160,12 +157,12 @@ public class UNGP_InteractionDialog implements InteractionDialogPlugin {
                 slotID = 2;
                 break;
         }
-        lastInheritData = UNGP_InheritManager.getDataFromSlot(slotID);
+        pickedInheritData = UNGP_InheritManager.getDataFromSlot(slotID);
         Color nC = Misc.getNegativeHighlightColor();
-        if (lastInheritData != null) {
+        if (pickedInheritData != null) {
             choseInheritSlotOptionID = option;
             TooltipMakerAPI inheritDataInfo = textPanel.beginTooltip();
-            lastInheritData.addInheritTooltip(inheritDataInfo);
+            pickedInheritData.addInheritTooltip(inheritDataInfo);
             textPanel.addTooltip();
 
             //如果没有继承过或者没有超过时限
@@ -264,7 +261,7 @@ public class UNGP_InteractionDialog implements InteractionDialogPlugin {
             case CHECK_RECORD_SLOTS: {
                 TooltipMakerAPI recordInfo = textPanel.beginTooltip();
                 textPanel.addPara(d_i18n.get("recordInfo"));
-                toRecordInheritData.addRecordTooltip(recordInfo, inGameData.getDifficulty());
+                pregenInheritData.addRecordTooltip(recordInfo, inGameData.getDifficulty());
                 textPanel.addTooltip();
                 textPanel.addPara(d_i18n.get("checkRecordSlot"));
                 // 三个重生槽位
@@ -305,7 +302,7 @@ public class UNGP_InteractionDialog implements InteractionDialogPlugin {
                 final Difficulty difficulty = setting_difficulty.get();
                 UNGP_RulesManager.setStaticDifficulty(difficulty);
                 UNGP_RulePickListener pickListener = new UNGP_RulePickListener(pickedRules,
-                                                                               lastInheritData.completedChallenges,
+                                                                               pickedInheritData.completedChallenges,
                                                                                difficulty, new Script() {
                     @Override
                     public void run() {
@@ -332,7 +329,7 @@ public class UNGP_InteractionDialog implements InteractionDialogPlugin {
                             uiPanelPlugin.addTooltip(10f, tooltip);
 
                         } else {
-                            List<UNGP_ChallengeInfo> runnableChallenges = UNGP_ChallengeManager.getRunnableChallenges(difficulty, pickedRules, lastInheritData.completedChallenges);
+                            List<UNGP_ChallengeInfo> runnableChallenges = UNGP_ChallengeManager.getRunnableChallenges(difficulty, pickedRules, pickedInheritData.completedChallenges);
                             if (!runnableChallenges.isEmpty()) {
                                 tooltip.addPara(d_i18n.get("rulepick_runnableChallenges"), Misc.getHighlightColor(), 10f);
                                 uiPanelPlugin.addTooltip(20f, tooltip);
@@ -383,99 +380,20 @@ public class UNGP_InteractionDialog implements InteractionDialogPlugin {
      * 继承重生点
      */
     private void inherit() {
-        int creditsInherited = (int) (lastInheritData.inheritCredits * setting_inheritCreditsRatio.get());
+        int creditsInherited = (int) (pickedInheritData.inheritCredits * setting_inheritCreditsRatio.get());
         sector.getPlayerFleet().getCargo().getCredits().add(creditsInherited);
         AddRemoveCommodity.addCreditsGainText(creditsInherited, textPanel);
-        FactionAPI player = sector.getPlayerFaction();
         float inheritBPPercent = setting_inheritBPsRatio.get();
-        int shipAmount = (int) (inheritBPPercent * lastInheritData.ships.size());
-        int fighterAmount = (int) (inheritBPPercent * lastInheritData.fighters.size());
-        int weaponAmount = (int) (inheritBPPercent * lastInheritData.weapons.size());
-        int hullmodAmount = (int) (inheritBPPercent * lastInheritData.hullmods.size());
-        List<String> curShipBps = new ArrayList<>();
-        List<String> curFighterBps = new ArrayList<>();
-        List<String> curWeaponBps = new ArrayList<>();
-        List<String> curHullmodBps = new ArrayList<>();
-        SettingsAPI setting = Global.getSettings();
-
-        for (ShipHullSpecAPI spec : setting.getAllShipHullSpecs()) {
-            curShipBps.add(spec.getHullId());
+        Map<String, Object> dataSaverParams = new HashMap<>();
+        dataSaverParams.put("inheritBPPercent", inheritBPPercent);
+        for (UNGP_DataSaverAPI dataSaver : pickedInheritData.dataSavers) {
+            TooltipMakerAPI tooltip = textPanel.beginTooltip();
+            dataSaver.startInheritDataFromSaver(tooltip, dataSaverParams);
+            textPanel.addTooltip();
         }
-        for (FighterWingSpecAPI spec : setting.getAllFighterWingSpecs()) {
-            curFighterBps.add(spec.getId());
-        }
-        for (WeaponSpecAPI spec : setting.getAllWeaponSpecs()) {
-            curWeaponBps.add(spec.getWeaponId());
-        }
-        for (HullModSpecAPI spec : setting.getAllHullModSpecs()) {
-            curHullmodBps.add(spec.getId());
-        }
-
-
-        int inheritedShip = 0;
-        int inheritedFighter = 0;
-        int inheritedWeapon = 0;
-        int inheritedHullmod = 0;
-
-        WeightedRandomPicker<String> picker = new WeightedRandomPicker<>();
-        for (String bp : lastInheritData.ships) {
-            if (curShipBps.contains(bp) && !player.knowsShip(bp)) {
-                picker.add(bp);
-            }
-        }
-        for (int i = 0; i < shipAmount; i++) {
-            if (picker.isEmpty()) break;
-            String bpId = picker.pickAndRemove();
-            player.addKnownShip(bpId, true);
-            inheritedShip++;
-        }
-        picker = new WeightedRandomPicker<>();
-        for (String bp : lastInheritData.fighters) {
-            if (curFighterBps.contains(bp) && !player.knowsFighter(bp)) {
-                picker.add(bp);
-            }
-        }
-        for (int i = 0; i < fighterAmount; i++) {
-            if (picker.isEmpty()) break;
-            String bpId = picker.pickAndRemove();
-            player.addKnownFighter(bpId, true);
-            inheritedFighter++;
-        }
-        picker = new WeightedRandomPicker<>();
-        for (String bp : lastInheritData.weapons) {
-            if (curWeaponBps.contains(bp) && !player.knowsWeapon(bp)) {
-                picker.add(bp);
-            }
-        }
-        for (int i = 0; i < weaponAmount; i++) {
-            if (picker.isEmpty()) break;
-            String bpId = picker.pickAndRemove();
-            player.addKnownWeapon(bpId, true);
-            inheritedWeapon++;
-        }
-        picker = new WeightedRandomPicker<>();
-        for (String bp : lastInheritData.hullmods) {
-            if (curHullmodBps.contains(bp) && !player.knowsHullMod(bp)) {
-                picker.add(bp);
-            }
-        }
-        for (int i = 0; i < hullmodAmount; i++) {
-            if (picker.isEmpty()) break;
-            String bpId = picker.pickAndRemove();
-            player.addKnownHullMod(bpId);
-            inheritedHullmod++;
-        }
-
-        textPanel.setFontSmallInsignia();
-        textPanel.addPara(d_i18n.get("inheritedBP"), Misc.getPositiveHighlightColor(), Misc.getHighlightColor(),
-                          "" + inheritedShip,
-                          "" + inheritedFighter,
-                          "" + inheritedWeapon,
-                          "" + inheritedHullmod);
-
         // Add points: skill points/story points
-        int addSkillPoints = UNGP_Settings.getBonusSkillPoints(lastInheritData.cycle);
-        int addStoryPoints = UNGP_Settings.getBonusStoryPoints(lastInheritData.cycle);
+        int addSkillPoints = UNGP_Settings.getBonusSkillPoints(pickedInheritData.cycle);
+        int addStoryPoints = UNGP_Settings.getBonusStoryPoints(pickedInheritData.cycle);
         textPanel.addPara(d_i18n.get("inheritedPoints"), Misc.getPositiveHighlightColor(), Misc.getHighlightColor(),
                           addSkillPoints + "");
         sector.getPlayerStats().addPoints(addSkillPoints);
@@ -487,10 +405,10 @@ public class UNGP_InteractionDialog implements InteractionDialogPlugin {
         if (isSpecialistMode)
             textPanel.addPara(d_i18n.get("hardModeYes"), Misc.getNegativeHighlightColor());
 
-        inGameData.setCurCycle(lastInheritData.cycle);
+        inGameData.setCurCycle(pickedInheritData.cycle);
         inGameData.setInherited(true);
         inGameData.setHardMode(isSpecialistMode);
-        inGameData.setCompletedChallenges(lastInheritData.completedChallenges);
+        inGameData.setCompletedChallenges(pickedInheritData.completedChallenges);
         if (isSpecialistMode) {
             inGameData.setDifficulty(setting_difficulty.get());
             inGameData.saveActivatedRules(pickedRules);
@@ -512,7 +430,7 @@ public class UNGP_InteractionDialog implements InteractionDialogPlugin {
      */
     private void record(OptionID option) {
         inGameData.setRecorded(true);
-        saveRecordByChosenOption(toRecordInheritData, option);
+        saveRecordByChosenOption(pregenInheritData, option);
         Global.getSoundPlayer().playUISound("ui_rep_raise", 1, 1);
         textPanel.addPara(d_i18n.get("recordSuccess"));
     }
@@ -554,14 +472,21 @@ public class UNGP_InteractionDialog implements InteractionDialogPlugin {
      */
     private void updateOptionsFromSettings() {
         if (options.hasOption(OptionID.INHERIT)) {
-            final int creditsInherited = (int) (lastInheritData.inheritCredits * setting_inheritCreditsRatio.get());
-            final int bpInherited = (int) ((lastInheritData.ships.size() +
-                    lastInheritData.fighters.size() +
-                    lastInheritData.weapons.size() +
-                    lastInheritData.hullmods.size())
-                    * setting_inheritBPsRatio.get());
-            final int addSkillPoints = UNGP_Settings.getBonusSkillPoints(lastInheritData.cycle);
-            final int addStoryPoints = UNGP_Settings.getBonusStoryPoints(lastInheritData.cycle);
+            final int creditsInherited = (int) (pickedInheritData.inheritCredits * setting_inheritCreditsRatio.get());
+            int bpInheritGeneratedByDataSaver = 0;
+            for (UNGP_DataSaverAPI dataSaver : pickedInheritData.dataSavers) {
+                if (dataSaver instanceof UNGP_BlueprintsDataSaver) {
+                    UNGP_BlueprintsDataSaver blueprintsDataSaver = (UNGP_BlueprintsDataSaver) dataSaver;
+                    bpInheritGeneratedByDataSaver = (int) ((blueprintsDataSaver.ships.size() +
+                            blueprintsDataSaver.fighters.size() +
+                            blueprintsDataSaver.weapons.size() +
+                            blueprintsDataSaver.hullmods.size())
+                            * setting_inheritBPsRatio.get());
+                }
+            }
+            final int bpInherited = bpInheritGeneratedByDataSaver;
+            final int addSkillPoints = UNGP_Settings.getBonusSkillPoints(pickedInheritData.cycle);
+            final int addStoryPoints = UNGP_Settings.getBonusStoryPoints(pickedInheritData.cycle);
             final boolean isSpecialistMode = this.isSpecialistMode;
             final Difficulty difficulty = setting_difficulty.get();
 
@@ -975,7 +900,7 @@ public class UNGP_InteractionDialog implements InteractionDialogPlugin {
                     }
             }
             textPanel.addPara(d_i18n.get("recordExtraCredits_success") + " %s ", Misc.getHighlightColor(), Misc.getDGSCredits(extraCredits));
-            toRecordInheritData.inheritCredits += extraCredits;
+            pregenInheritData.inheritCredits += extraCredits;
             record(selectedOption);
         }
 

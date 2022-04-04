@@ -8,6 +8,7 @@ import data.scripts.campaign.UNGP_SharedData;
 import data.scripts.campaign.everyframe.UNGP_CampaignPlugin;
 import data.scripts.campaign.everyframe.UNGP_SpecialistWidgetPlugin;
 import data.scripts.campaign.everyframe.UNGP_UITimeScript;
+import data.scripts.campaign.inherit.UNGP_InheritData;
 import data.scripts.campaign.specialist.UNGP_PlayerFleetMemberBuff;
 import data.scripts.campaign.specialist.challenges.UNGP_ChallengeManager;
 import data.scripts.campaign.specialist.items.UNGP_RuleItem;
@@ -23,6 +24,7 @@ public class UNGP_modPlugin extends BaseModPlugin {
 
         UNGPFont.init();
         UNGP_RuleItem.loadSprite();
+        UNGP_InheritData.loadAllSavers();
         // 规则与挑战
         UNGP_RulesManager.initOrReloadRules();
         UNGP_ChallengeManager.initOrReloadChallengeInfos();

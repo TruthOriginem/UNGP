@@ -2,6 +2,7 @@ package data.scripts.campaign.inherit;
 
 import com.fs.starfarer.api.Global;
 import data.scripts.UNGP_modPlugin;
+import data.scripts.ungpsaves.UNGP_DataSaverAPI;
 import org.json.JSONArray;
 import org.lazywizard.lazylib.JSONUtils;
 
@@ -70,11 +71,10 @@ public class UNGP_InheritManager {
             jsonObject.put("isHardMode", inheritData.isHardMode);
             jsonObject.put("inheritCredits", inheritData.inheritCredits);
             jsonObject.put("completedChallenges", inheritData.completedChallenges);
-            jsonObject.put("ships", inheritData.ships);
-            jsonObject.put("fighters", inheritData.fighters);
-            jsonObject.put("weapons", inheritData.weapons);
-            jsonObject.put("hullmods", inheritData.hullmods);
 
+            for (UNGP_DataSaverAPI dataSaver : inheritData.dataSavers) {
+                dataSaver.saveDataToSavepointSlot(jsonObject);
+            }
             jsonObject.save();
         } catch (Exception ignored) {
         }
@@ -99,10 +99,13 @@ public class UNGP_InheritManager {
             inheritData.inheritCredits = jsonObject.getInt("inheritCredits");
 
             inheritData.completedChallenges = new ArrayList<>();
-            inheritData.ships = new ArrayList<>();
-            inheritData.fighters = new ArrayList<>();
-            inheritData.weapons = new ArrayList<>();
-            inheritData.hullmods = new ArrayList<>();
+            inheritData.dataSavers = new ArrayList<>();
+
+            for (UNGP_DataSaverAPI saverInstance : UNGP_InheritData.getSaverInstancesCopy()) {
+                UNGP_DataSaverAPI emptySaver = saverInstance.createEmptySaver();
+                emptySaver.loadDataFromSavepointSlot(jsonObject);
+                inheritData.dataSavers.add(emptySaver);
+            }
 
             JSONArray array;
             array = jsonObject.optJSONArray("completedChallenges");
@@ -111,35 +114,7 @@ public class UNGP_InheritManager {
                     inheritData.completedChallenges.add(array.getString(i));
                 }
             }
-
-            array = jsonObject.optJSONArray("ships");
-            if (array != null) {
-                for (int i = 0; i < array.length(); i++) {
-                    inheritData.ships.add(array.getString(i));
-                }
-            }
-
-            array = jsonObject.optJSONArray("fighters");
-            if (array != null) {
-                for (int i = 0; i < array.length(); i++) {
-                    inheritData.fighters.add(array.getString(i));
-                }
-            }
-
-            array = jsonObject.optJSONArray("weapons");
-            if (array != null) {
-                for (int i = 0; i < array.length(); i++) {
-                    inheritData.weapons.add(array.getString(i));
-                }
-            }
-
-            array = jsonObject.optJSONArray("hullmods");
-            if (array != null) {
-                for (int i = 0; i < array.length(); i++) {
-                    inheritData.hullmods.add(array.getString(i));
-                }
-            }
-
+//
             return inheritData;
 
         } catch (Exception ignored) {
