@@ -16,12 +16,12 @@ import java.awt.*;
 import java.util.LinkedList;
 import java.util.List;
 
-public class UNGP_ImperialMajesty extends UNGP_BaseRuleEffect implements UNGP_CombatInitTag {
+public class UNGP_SymbolPerseus extends UNGP_BaseRuleEffect implements UNGP_CombatInitTag {
 
     public static final float MAX_TIME_PERIOD = 10f;
 	public static final float TIME_TICK = 0.1f;
 
-	public static final int KILL_COUNT = 3;
+	public static final int MIN_KILL_COUNT = 2;
 	public static final float FLUX_DECREASE_FACTOR = 0.2f;
 
 	@Override
@@ -32,24 +32,24 @@ public class UNGP_ImperialMajesty extends UNGP_BaseRuleEffect implements UNGP_Co
     @Override
     public String getDescriptionParams(int index, UNGP_SpecialistSettings.Difficulty difficulty) {
         if (index == 0) return getFactorString(MAX_TIME_PERIOD);
-        if (index == 1) return getFactorString(KILL_COUNT);
+        if (index == 1) return getFactorString(MIN_KILL_COUNT);
 		if (index == 2) return getPercentString(FLUX_DECREASE_FACTOR * 100f);
         return super.getDescriptionParams(index, difficulty);
     }
 
     @Override
     public void init(CombatEngineAPI engine) {
-        engine.getListenerManager().addListener(new ImperialMajestyListener(engine));
+        engine.getListenerManager().addListener(new SymbolPerseusListener(engine));
     }
 
-    public static class ImperialMajestyListener implements HullDamageAboutToBeTakenListener, AdvanceableListener {
+    public static class SymbolPerseusListener implements HullDamageAboutToBeTakenListener, AdvanceableListener {
 
 		private final IntervalUtil interval = new IntervalUtil(TIME_TICK, TIME_TICK);
 		private final LinkedList<Integer> killCount = new LinkedList<>();
 		private ShipAPI checkThisShipIfKilled = null;
 		private int killCountInThisCheck = 0;
 
-		public ImperialMajestyListener(final CombatEngineAPI engine) {
+		public SymbolPerseusListener(final CombatEngineAPI engine) {
 			for (int i = 0; i < MAX_TIME_PERIOD / TIME_TICK; i++) {
 				killCount.add(0);
 			}
@@ -58,7 +58,7 @@ public class UNGP_ImperialMajesty extends UNGP_BaseRuleEffect implements UNGP_Co
 				@Override
 				public void advance(float amount, List<InputEventAPI> events) {
 					if (engine.isPaused()) return;
-					ImperialMajestyListener.this.advance(amount);
+					SymbolPerseusListener.this.advance(amount);
 				}
 			});
 		}
@@ -78,25 +78,22 @@ public class UNGP_ImperialMajesty extends UNGP_BaseRuleEffect implements UNGP_Co
 			if (interval.intervalElapsed()) {
 				killCount.removeFirst();
 				killCount.addLast(killCountInThisCheck);
-				killCountInThisCheck = 0;
 
 				int sum = 0;
 				for (int i : killCount) {
 					sum += i;
 				}
 
-				if (sum >= KILL_COUNT) {
+				boolean allowBonus = sum > MIN_KILL_COUNT;
+				if (allowBonus && killCountInThisCheck > 0) {
 					ShipAPI player = Global.getCombatEngine().getPlayerShip();
 					player.getFluxTracker().decreaseFlux(player.getMaxFlux() * FLUX_DECREASE_FACTOR);
 					player.setJitterUnder(this, Color.CYAN, 2f, 5, 10f);
 					Global.getSoundPlayer().playSound("system_emp_emitter_impact", 1f, 1f, player.getLocation(), new Vector2f());
-					// maybe add some visual effect there will be better
-
-					killCount.clear();
-					for (int i = 0; i < MAX_TIME_PERIOD / TIME_TICK; i++) {
-						killCount.add(0);
-					}
+					// maybe add some visual effect here will be better
 				}
+
+				killCountInThisCheck = 0;
 			}
 		}
 
