@@ -7,18 +7,21 @@ import data.scripts.campaign.specialist.UNGP_SpecialistSettings;
 import data.scripts.ungprules.impl.UNGP_BaseRuleEffect;
 import data.scripts.ungprules.tags.UNGP_CombatTag;
 
-public class UNGP_LayeredArmor extends UNGP_BaseRuleEffect implements UNGP_CombatTag {
+public class UNGP_ExplosiveSniper extends UNGP_BaseRuleEffect implements UNGP_CombatTag {
 
-	private float increase;
+	private float speedIncrease;
+	private float turnIncrease;
 
     @Override
     public void updateDifficultyCache(UNGP_SpecialistSettings.Difficulty difficulty) {
-        increase = getValueByDifficulty(0, difficulty);
+        speedIncrease = getValueByDifficulty(0, difficulty);
+		turnIncrease = getValueByDifficulty(1, difficulty);
     }
 
     @Override
     public float getValueByDifficulty(int index, UNGP_SpecialistSettings.Difficulty difficulty) {
-        if (index == 0) return difficulty.getLinearValue(120f, 120f);
+        if (index == 0) return difficulty.getLinearValue(20f, 30f);
+		if (index == 1) return difficulty.getLinearValue(10f, 10f);
         return 1f;
     }
 
@@ -30,7 +33,10 @@ public class UNGP_LayeredArmor extends UNGP_BaseRuleEffect implements UNGP_Comba
     @Override
     public void applyEnemyShipInCombat(float amount, ShipAPI enemy) {
         MutableShipStatsAPI stats = enemy.getMutableStats();
-        stats.getEffectiveArmorBonus().modifyFlat(buffID, increase);
+        stats.getMissileMaxSpeedBonus().modifyPercent(buffID, speedIncrease);
+        stats.getMissileAccelerationBonus().modifyPercent(buffID, speedIncrease);
+        stats.getMissileTurnAccelerationBonus().modifyPercent(buffID, turnIncrease);
+        stats.getMissileMaxTurnRateBonus().modifyPercent(buffID, turnIncrease);
     }
 
     @Override
@@ -40,7 +46,8 @@ public class UNGP_LayeredArmor extends UNGP_BaseRuleEffect implements UNGP_Comba
 
     @Override
     public String getDescriptionParams(int index, UNGP_SpecialistSettings.Difficulty difficulty) {
-        if (index == 0) return getFactorString(getValueByDifficulty(index, difficulty));
+        if (index == 0) return getPercentString(getValueByDifficulty(index, difficulty));
+		if (index == 1) return getPercentString(getValueByDifficulty(index, difficulty));
         return null;
     }
 }

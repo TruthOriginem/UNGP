@@ -12,10 +12,10 @@ import data.scripts.ungprules.impl.UNGP_MemberBuffRuleEffect;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UNGP_HssPhoenix extends UNGP_MemberBuffRuleEffect {
+public class UNGP_TtsInvicible extends UNGP_MemberBuffRuleEffect {
 
-    private static final float NORMAL_BONUS = 20f;
-    private static final float MANEUVER_BONUS = 100f;
+    private static final float NORMAL_BONUS = 50f;
+    private static final float DAMAGE_BONUS = 15f;
     private static final float CR_BONUS = 10f;
 
     @Override
@@ -26,7 +26,7 @@ public class UNGP_HssPhoenix extends UNGP_MemberBuffRuleEffect {
     @Override
     public String getDescriptionParams(int index, UNGP_SpecialistSettings.Difficulty difficulty) {
         if (index == 0) return getPercentString(NORMAL_BONUS);
-        if (index == 1) return getPercentString(MANEUVER_BONUS);
+        if (index == 1) return getPercentString(DAMAGE_BONUS);
         if (index == 2) return getPercentString(CR_BONUS);
         return super.getDescriptionParams(index, difficulty);
     }
@@ -35,15 +35,15 @@ public class UNGP_HssPhoenix extends UNGP_MemberBuffRuleEffect {
     public void applyPlayerFleetMemberInCampaign(FleetMemberAPI member) {
         MutableShipStatsAPI stats = member.getStats();
         String id = buffID;
-        stats.getHullBonus().modifyPercent(id, NORMAL_BONUS);
-        stats.getArmorBonus().modifyPercent(id, NORMAL_BONUS);
-        stats.getFluxCapacity().modifyPercent(id, NORMAL_BONUS);
-        stats.getFluxDissipation().modifyPercent(id, NORMAL_BONUS);
-        stats.getMaxSpeed().modifyPercent(id, MANEUVER_BONUS);
-        stats.getAcceleration().modifyPercent(id, MANEUVER_BONUS);
-        stats.getDeceleration().modifyPercent(id, MANEUVER_BONUS);
-        stats.getMaxTurnRate().modifyPercent(id, MANEUVER_BONUS);
-        stats.getTurnAcceleration().modifyPercent(id, MANEUVER_BONUS);
+        stats.getShieldUpkeepMult().modifyMult(id, 1f - NORMAL_BONUS * 0.01f);
+        stats.getShieldUnfoldRateMult().modifyPercent(id, NORMAL_BONUS);
+        stats.getShieldTurnRateMult().modifyPercent(id, NORMAL_BONUS);
+        stats.getEnergyWeaponDamageMult().modifyPercent(id, DAMAGE_BONUS);
+        stats.getBallisticWeaponDamageMult().modifyPercent(id, DAMAGE_BONUS);
+        stats.getMissileWeaponDamageMult().modifyPercent(id, DAMAGE_BONUS);
+		stats.getEnergyRoFMult().modifyPercent(id, DAMAGE_BONUS);
+		stats.getBallisticRoFMult().modifyPercent(id, DAMAGE_BONUS);
+		stats.getMissileRoFMult().modifyPercent(id, DAMAGE_BONUS);
 
         stats.getMaxCombatReadiness().modifyFlat(id, CR_BONUS * 0.01f, rule.getName());
     }
@@ -53,7 +53,7 @@ public class UNGP_HssPhoenix extends UNGP_MemberBuffRuleEffect {
         imageTooltip.addPara(rule.getExtra1(), 0f);
         List<String> names = new ArrayList<>();
         for (ShipHullSpecAPI hullSpec : Global.getSettings().getAllShipHullSpecs()) {
-            if (isOnslaught(hullSpec) && !hullSpec.isDefaultDHull()) {
+            if (isParagon(hullSpec) && !hullSpec.isDefaultDHull()) {
                 names.add(hullSpec.getNameWithDesignationWithDashClass());
             }
         }
@@ -62,17 +62,17 @@ public class UNGP_HssPhoenix extends UNGP_MemberBuffRuleEffect {
     }
 
     /**
-     * For modders: if your ship has tag of "ungp_onslaught", your ship would be considered as onslaught-class too.
+     * For modders: if your ship has tag of "ungp_paragon", your ship would be considered as paragon-class too.
      *
      * @param member
      * @return
      */
     @Override
     public boolean canApply(FleetMemberAPI member) {
-        return member.isFlagship() && isOnslaught(member.getHullSpec());
+        return member.isFlagship() && isParagon(member.getHullSpec());
     }
 
-    public static boolean isOnslaught(ShipHullSpecAPI hullSpec) {
-        return hullSpec.getHullId().contains("onslaught") || hullSpec.getTags().contains("ungp_onslaught");
+    public static boolean isParagon(ShipHullSpecAPI hullSpec) {
+        return hullSpec.getHullId().contains("paragon") || hullSpec.getTags().contains("ungp_paragon");
     }
 }
