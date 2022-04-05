@@ -8,7 +8,8 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import static data.scripts.campaign.specialist.rules.UNGP_RulesManager.*;
+import static data.scripts.campaign.specialist.rules.UNGP_RulesManager.URule;
+import static data.scripts.campaign.specialist.rules.UNGP_RulesManager.getMilestoneColor;
 
 public final class UNGP_ChallengeInfo {
     private String id;
@@ -105,6 +106,33 @@ public final class UNGP_ChallengeInfo {
         }
         sb.deleteCharAt(sb.length() - 1);
         return sb.toString();
+    }
+
+    public String getConnectedRuleNamesReplacedWithEscapeCharacter() {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < rulesRequired.size(); i++) {
+            sb.append(" %s ");
+            sb.append("+");
+        }
+        sb.deleteCharAt(sb.length() - 1);
+        return sb.toString();
+    }
+
+    public String[] getRuleNames() {
+        String[] array = new String[rulesRequired.size()];
+        for (int i = 0; i < array.length; i++) {
+            array[i] = rulesRequired.get(i).getName();
+        }
+        return array;
+    }
+
+    public Color[] getRuleColors() {
+        Color[] array = new Color[rulesRequired.size()];
+        for (int i = 0; i < array.length; i++) {
+            URule rule = rulesRequired.get(i);
+            array[i] = rule.getCorrectColor().darker();
+        }
+        return array;
     }
 
     public void createTooltip(TooltipMakerAPI tooltip, float pad, int elapsedMonth) {

@@ -75,14 +75,7 @@ public class UNGP_Feedback {
                 try {
                     URL connURL = new URL(url);
                     HttpsURLConnection conn = (HttpsURLConnection) connURL.openConnection();
-                    SSLContext ctx = MyX509TrustManagerUtils();
-                    conn.setSSLSocketFactory(ctx.getSocketFactory());
-                    conn.setHostnameVerifier(new HostnameVerifier() {
-                        @Override
-                        public boolean verify(String s, SSLSession sslSession) {
-                            return true;
-                        }
-                    });
+                    setHttpProtocol(conn);
                     conn.getInputStream().close();
                     LOGGER.info("Successfully send " + url);
                 } catch (Exception e) {
@@ -93,6 +86,17 @@ public class UNGP_Feedback {
         });
         thread.setDaemon(true);
         thread.start();
+    }
+
+    public static void setHttpProtocol(HttpsURLConnection conn) {
+        SSLContext ctx = MyX509TrustManagerUtils();
+        conn.setSSLSocketFactory(ctx.getSocketFactory());
+        conn.setHostnameVerifier(new HostnameVerifier() {
+            @Override
+            public boolean verify(String s, SSLSession sslSession) {
+                return true;
+            }
+        });
     }
 
     private static SSLContext MyX509TrustManagerUtils() {
@@ -110,27 +114,27 @@ public class UNGP_Feedback {
     private static class MyX509TrustManager extends X509ExtendedTrustManager {
 
         @Override
-        public void checkClientTrusted(X509Certificate[] x509Certificates, String s, Socket socket) throws CertificateException {
+        public void checkClientTrusted(X509Certificate[] x509Certificates, String s, Socket socket) {
 
         }
 
         @Override
-        public void checkServerTrusted(X509Certificate[] x509Certificates, String s, Socket socket) throws CertificateException {
+        public void checkServerTrusted(X509Certificate[] x509Certificates, String s, Socket socket) {
 
         }
 
         @Override
-        public void checkClientTrusted(X509Certificate[] x509Certificates, String s, SSLEngine sslEngine) throws CertificateException {
+        public void checkClientTrusted(X509Certificate[] x509Certificates, String s, SSLEngine sslEngine) {
 
         }
 
         @Override
-        public void checkServerTrusted(X509Certificate[] x509Certificates, String s, SSLEngine sslEngine) throws CertificateException {
+        public void checkServerTrusted(X509Certificate[] x509Certificates, String s, SSLEngine sslEngine) {
 
         }
 
         @Override
-        public void checkClientTrusted(X509Certificate[] x509Certificates, String s) throws CertificateException {
+        public void checkClientTrusted(X509Certificate[] x509Certificates, String s) {
 
         }
 
