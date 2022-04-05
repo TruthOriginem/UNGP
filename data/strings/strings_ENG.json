@@ -71,11 +71,15 @@
     "d_back": "Back",
     "d_menu": "Welcome to the main menu of UNGP. What would you like to do? \nCheck savepoint:  View your savepoint, and you can choose whether to inherit it.\nRecord savepoint: Save your current game status and overwrite your last savepoint.",
     "d_helpInfo": "This mod enables a multi-gamecycle feature.\n\nAfter reaching max level, you can record a savepoint (recording your save), which would save your blueprints (except industry blueprints), credits and current gamecycle number.\n\nYou can record ONCE for each save, and you can have three savepoints for all of your saves.\n\nIn a new campaign game, you have 1 day to check your savepoint, and decide whether to inherit your previous gamecycle or not. If you choose to inherit, you can get part of the resources of your previous gamecycle and skillpoints. Note that savepoint will not disappear after inheriting, you could inherit it in another save, and only by reaching maxlevel can you record a savepoint again.(You could check the setting file)\n\nSpecialist mode can be enabled in any gamecycle for a more customized game!",
-    "c_message": "You have loaded the UNGP Mod. Would you like to check and inherit the savepoint immediately? (you can also use left CTRL + P to call out the UNGP menu)",
+    "c_message": "You have loaded the UNGP Mod. Would you like to check the savepoint? (you can also use the given ability to call out the UNGP menu)",
     "c_yes": "Yes",
     "c_no": "No",
     "c_hmbonus": "Specialist mode bonus",
-    "hm_start": "Loading Specialist mode...Completed!",
+    "specialist_mode_combat_loading": "Loading Specialist mode...Completed!",
+  },
+  "UNGP_abilities": {
+    "checkSavepoint_title": "UNGP-Open the main menu",
+    "checkSavepoint_desc": "Activate this ability to open the main menu of UNGP.\n\nYou could also press %s + %s to open that menu."
   },
   "UNGP_rules": {
     "mode_name": "Specialist mode",
@@ -83,6 +87,7 @@
     "suited_state": "Suited State",
     "campaign_state": "Campaign Layer",
     "combat_state": "Combat Layer",
+    "enable_in_simulation": "Enable Rules in Simulation",
     "current_cycle": "Current Cycle:",
     "current_times_to_refresh": "You could %s with times of:",
     "repick_blocked": "You can't repick because of the current challenges.",
@@ -121,7 +126,6 @@
   "UNGP_rule_impl": {
     "halved": "halved",
     "ct": "Critical Hit!",
-
     "ct_7": "+7%",
     "ct_77": "+77%!",
     "ct_777": "+777%!"

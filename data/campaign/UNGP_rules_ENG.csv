@@ -1,7 +1,7 @@
 id,name,short,desc,cost,isBonus,isGolden,spritePath,effectPlugin,extra1,extra2,source,tags,spriteAuthor
 techlock,Technology Blockade,Reduce OP,OP - %s,3,FALSE,,graphics/icons/ungp/techlock.png,data.scripts.ungprules.impl.character.UNGP_TechLock,,,,,
 galatia_underachiever,Galatia Underachiever,Reduce the ability of command,"Command points -%s at the beginning of the battle, and command point recovery rate -%s during the whole battle ",2,FALSE,,graphics/icons/ungp/galatia_underachiever.png,data.scripts.ungprules.impl.character.UNGP_GalatiaUnderachiever,,,,,议长√
-besieged,团团围困,降低可用部署点,"战斗开始时可用部署点降低总战场规模的 %s",4,FALSE,,graphics/icons/ungp/besieged.png,data.scripts.ungprules.impl.character.UNGP_Besieged,,,,,议长√
+besieged,Besieged,Reduce avaiable deployment points,"At the start of a battle, available deployment points are reduced by %s of the battle size",4,FALSE,,graphics/icons/ungp/besieged.png,data.scripts.ungprules.impl.character.UNGP_Besieged,,,,,议长√
 ,,,,,,,,,,,,,
 naval_treaty,Arms Limitation Treaty,Limit mixing different design types of ships,"When the fleet contains ships of more than %s different design types, decreases max CR by %s at maximum",3,FALSE,,graphics/icons/ungp/naval_treaty.png,data.scripts.ungprules.impl.fleet.UNGP_NavalTreaty,,,,,
 deep_space_fear,Deep Space Phobia,Decrease the performance of sensors in hyperspace,"While in hyperspace,the sensor strength x %s, sensor profile and detected range x %s",1,FALSE,,graphics/icons/ungp/deep_space_fear.png,data.scripts.ungprules.impl.fleet.UNGP_DeepSpaceFear,,,,,
@@ -14,9 +14,9 @@ dangerous_sector,Dangerous Sector,Increase special terrain effect,Special terrai
 ,,,,,,,,,,,,,
 edamage_increase,Naval Arms Race,Increase enemy damage,Enemy damage x %s,3,FALSE,,graphics/icons/ungp/edamage_increase.png,data.scripts.ungprules.impl.combat.UNGP_EnemyDamageIncrease,,,,,
 edamage_decrease,Guard Fleet,Increase enemy resistance ,Enemy damage taken x %s,4,FALSE,,graphics/icons/ungp/edamage_decrease.png,data.scripts.ungprules.impl.combat.UNGP_EnemyDamageTakenReduction,,,,,
-striker_school,打击学派,提高敌方航母性能,"敌方航母整备恢复速率 + %s，整备下降速率 - %s，战机连队更换速率 + %s",2,FALSE,,graphics/icons/ungp/striker_school.png,data.scripts.ungprules.impl.combat.UNGP_StrikerSchool,,,,,议长√
-layered_armor,多层装甲,提高敌方装甲,敌方装甲计算值 + %s,3,FALSE,,graphics/icons/ungp/layered_armor.png,data.scripts.ungprules.impl.combat.UNGP_LayeredArmor,,,,,议长√
-explosive_sniper,重磅狙击,提高敌方导弹速度,敌方导弹飞行速度 + %s，导弹机动性 + %s,2,FALSE,,graphics/icons/ungp/explosive_sniper.png,data.scripts.ungprules.impl.combat.UNGP_ExplosiveSniper,,,,,议长√
+striker_school,Striker School,Increase the performance of enemy carriers,敌方航母整备恢复速率 + %s，整备下降速率 - %s，战机连队更换速率 + %s,2,FALSE,,graphics/icons/ungp/striker_school.png,data.scripts.ungprules.impl.combat.UNGP_StrikerSchool,,,,,议长√
+layered_armor,Layered Armor,Increase enemy effective armor,敌方装甲计算值 + %s,3,FALSE,,graphics/icons/ungp/layered_armor.png,data.scripts.ungprules.impl.combat.UNGP_LayeredArmor,,,,,议长√
+explosive_sniper,Explosive Sniper,Increase the speed of enemy missiles,敌方导弹飞行速度 + %s，导弹机动性 + %s,2,FALSE,,graphics/icons/ungp/explosive_sniper.png,data.scripts.ungprules.impl.combat.UNGP_ExplosiveSniper,,,,,议长√
 low_interchangeability,Low Compatibility,Increase weapon & engine repair time,Repair time and damage taken by the ship's engines and weapons x %s,2,FALSE,,graphics/icons/ungp/low_interchangeability.png,data.scripts.ungprules.impl.combat.UNGP_LowIInterchangeability,,,,,
 wholesale_shells,Wholesale Shells,Part of shells got damp,Weapons shooting ballistic-type projectile have a %s chance to deal %s times damage,1,FALSE,,graphics/icons/ungp/wholesale_shells.png,data.scripts.ungprules.impl.combat.UNGP_WholeShells,Amount of damage reduction:,,,,
 twice_the_effort,Emergent Airforce Rebuild,Fighter refit affects fighters performance,"Fighters' damage and resistance are affected by the replacement rate; when the rate is at %s, fighters' performance - %s",2,FALSE,,graphics/icons/ungp/twice_the_effort.png,data.scripts.ungprules.impl.combat.UNGP_TwiceTheEffort,CURRENT FIGHTER PERFORMANCE:,,,,
@@ -26,7 +26,7 @@ century_war,Century War,Enhance the enemy station,Enemy stations take %s less da
 fragment_graveyard,Fragment Graveyard,Flying fragments!,Wreckage from destroyed ships is increased in speed by %s and mass by %s.,1,FALSE,,graphics/icons/ungp/fragment_graveyard.png,data.scripts.ungprules.impl.combat.UNGP_FragmentGraveyard,,,,,议长√
 order66,Order 66,Hold your fire!,Friendly fire damage + %s,1,FALSE,,graphics/icons/ungp/order66.png,data.scripts.ungprules.impl.combat.UNGP_Order66,,,,,议长√
 phasing_ghost,Phasing Ghost,Phase ship reinforcements,"Every %s seconds, the enemy has a %s chance of receiving reinforcements from a phase ship. A successful reinforcement reduces the chance of the next reinforcement to %s x, a failure increases the probability of the next reinforcement to %s x. Phase ships spawn near random enemy ships, limited to Afflictor, Shade, Harbinger and Doom, with the probability of spawning depending on the biggest hull size on the field.",4,FALSE,,graphics/icons/ungp/phasing_ghost.png,data.scripts.ungprules.impl.combat.UNGP_PhasingGhost,Ghost Invasion... ,,,,议长√
-danger_zone,危险战区,敌方舰船将持续布雷,根据敌方舰船规模，其每隔 %s/%s/%s/%s 秒都将在一艘随机我方舰船附近生成一枚造成 %s 高爆伤害的空雷。,3,FALSE,,graphics/icons/ungp/danger_zone.png,data.scripts.ungprules.impl.combat.UNGP_DangerZone,,,,,议长√
+danger_zone,Danger Zone,Enemy ships will keep laying mines,每个敌方舰船，根据其规模，每隔 %s/%s/%s/%s 秒都将在一艘随机我方舰船附近生成一枚造成 %s 高爆伤害的空雷。,3,FALSE,,graphics/icons/ungp/danger_zone.png,data.scripts.ungprules.impl.combat.UNGP_DangerZone,,,,,议长√
 ,,,,,,,,,,,,,
 trade_embargo,Trade Embargo,Reduce the accessibility of colonies,Every hostile market near the player's colony within %s LY reduces accessibility by %s ,1,FALSE,,graphics/icons/ungp/trade_embargo.png,data.scripts.ungprules.impl.economy.UNGP_TradeEmbargo,,,,,议长√
 spy,Spy,Reduce the stability of colonies,Every hostile market near the player's colony within %s LY reduces stability by %s ,1,FALSE,,graphics/icons/ungp/spy.png,data.scripts.ungprules.impl.economy.UNGP_Spy,,,,,议长√
@@ -35,11 +35,11 @@ fraudulent,Fraudulent,Potential loss of credits in each transaction,"Each time p
 no_way_back,No Way Back,Decrease the number of rules reselection,The rate of gaining specialist rule reselections x %s (once a year becomes once every %s years),1,FALSE,,graphics/icons/ungp/no_way_back.png,data.scripts.ungprules.impl.other.UNGP_NoWayBack,,,,,
 work_hard,Work Harder!,You are a capitalist,"When the ratio of marines to crew is lower than %s, there is a %s chance of riot per day, which will cause a random ship to lose %s combat readiness, and %s of crew will die from this riot",2,FALSE,,graphics/icons/ungp/work_hard.png,data.scripts.ungprules.impl.other.UNGP_WorkHard,"Crews riot, %s suffer an accident! %s crews dead...",You need %s more marines to suppress the riot!,,,
 monotonous_teller,Monotonous Teller,Keep losing story points,"Every %s days, lose %s story point (cannot drop below zero)",2,FALSE,,graphics/icons/ungp/monotonous_teller.png,data.scripts.ungprules.impl.other.UNGP_MonotonousTeller,"The upper narrative audience thinks your story is still not good enough, deducting your %s story points...",,,,议长√
-inflation,通货膨胀,钱变得越来越不值钱,每月开始时，损失当前星币的 %s,1,FALSE,,graphics/icons/ungp/inflation.png,data.scripts.ungprules.impl.other.UNGP_Inflation,这个资本操纵的世界蒸发了你 %s 星币,,,,议长√
+inflation,Inflation,Money is becoming less and less valuable,每月开始时，损失当前星币的 %s,1,FALSE,,graphics/icons/ungp/inflation.png,data.scripts.ungprules.impl.other.UNGP_Inflation,这个资本操纵的世界蒸发了你 %s 星币,,,,议长√
 ,,,,,,,,,,,,,
 tech_revolution,Technological Revolution,Increase OP,OP + %s,-3,TRUE,TRUE,graphics/icons/ungp/tech_revolution.png,data.scripts.ungprules.impl.character.UNGP_TechRevolution,,,,,
 hss_phoenix,HSS Phoenix,Increase the performance of Flagship: Onslaught ,"When the flagship is an Onslaught series ship, the ship gains %s hitpoints, armor, flux performance and %s max speed and maneuverability, %s max combat readiness.",-4,TRUE,TRUE,graphics/icons/ungp/hss_phoenix.png,data.scripts.ungprules.impl.member.UNGP_HssPhoenix,Onslaughts in game:,,,,
-tts_invicible,TTS Invicible,提高旗舰:典范的性能,"若玩家旗舰为典范系列战舰，该舰船获得 %s 护盾展开、转向、维持加成，%s 伤害与射速加成及 %s 最大战备值加成",-4,TRUE,TRUE,graphics/icons/ungp/tts_invicible.png,data.scripts.ungprules.impl.member.UNGP_TtsInvicible,对以下舰船生效:,,,,议长√
+tts_invicible,TTS Invicible,Increase the performance of Flagship: Paragon,若玩家旗舰为典范系列战舰，该舰船获得 %s 护盾展开、转向、维持加成，%s 伤害与射速加成及 %s 最大战备值加成,-4,TRUE,TRUE,graphics/icons/ungp/tts_invicible.png,data.scripts.ungprules.impl.member.UNGP_TtsInvicible,对以下舰船生效:,,,,议长√
 shield_specialization,Shield Specialization,Boost shield parameters,"Shield resistance, turn and unfold rate +%s, upkeep cost -%s",-4,TRUE,TRUE,graphics/icons/ungp/shield_specialization.png,data.scripts.ungprules.impl.member.UNGP_ShieldSpecialization,,,,,
 stay_calm,Stay Calm,Missile incoming!,"If the total damage of the missile/torpedo hitting the flagship within %s seconds exceeds %s of the max hitpoints, the time flow rate becomes %s for %s seconds. This effect has a cooldown of {%s} seconds.",-2,TRUE,TRUE,graphics/icons/ungp/stay_calm.png,data.scripts.ungprules.impl.combat.UNGP_StayCalm,Remain %s seconds,%s seconds cool down,,,
 gravity_disruptor,Gravity Disruptor,Disrupt the time flow,"The time scale of player's ships +%s, enemy ships -%s",-3,TRUE,TRUE,graphics/icons/ungp/gravity_disruptor.png,data.scripts.ungprules.impl.combat.UNGP_GravityDisruptor,Now your time scale is %s,,,,议长√
@@ -51,8 +51,8 @@ salvaging,Optimised Derelict Processing,Salvaging buffs,"Increases the resources
 efficient_fuel,Voyager,Sail farer,Fuel consumption x %s,-2,TRUE,,graphics/icons/ungp/efficient_fuel.png,data.scripts.ungprules.impl.fleet.UNGP_EfficientFuel,,,,,
 storm_rider,Storm Rider,"""Storm in my command!""",Your fleet is immune to damage from hyperspace storms,-2,TRUE,,graphics/icons/ungp/storm_rider.png,data.scripts.ungprules.impl.fleet.UNGP_StormRider,,,,,
 bustling_fungus,Bustling Fungus,Lower maintenance cost while staying still,"After being immobile for %s day(s), ships' repair speed + %s,maintenance - %s",-1,TRUE,,graphics/icons/ungp/bustling_fungus.png,data.scripts.ungprules.impl.fleet.UNGP_BustlingFungus,REFITTING NOW...,,,,
-sneaker,鬼魅玲珑,提高缓慢移动速度,"大地图中，玩家舰队缓慢移动或匿踪时最大速度 + %s",-1,TRUE,,graphics/icons/ungp/sneaker.png,data.scripts.ungprules.impl.fleet.UNGP_Sneaker,,,,,议长√
-thermodynamics,高级热力学,提高紧急加速速度,"大地图中，玩家舰队紧急加速时，速度提升至满",-2,TRUE,,graphics/icons/ungp/thermodynamics.png,data.scripts.ungprules.impl.fleet.UNGP_Thermodynamics,,,,,议长√
+sneaker,Sneaker,提高缓慢移动速度,大地图中，玩家舰队缓慢移动或匿踪时最大速度 + %s,-1,TRUE,,graphics/icons/ungp/sneaker.png,data.scripts.ungprules.impl.fleet.UNGP_Sneaker,,,,,议长√
+thermodynamics,Thermodynamics,提高紧急加速速度,大地图中，玩家舰队紧急加速时，速度提升至满,-2,TRUE,,graphics/icons/ungp/thermodynamics.png,data.scripts.ungprules.impl.fleet.UNGP_Thermodynamics,,,,,议长√
 endurance,Endurance,Recover CR while low,"Once a player ship's CR falls below %s of the max CR, it directly gains the CR value for one deployment of the required CR. The cooldown time for this effect is %s days per ship.",-2,TRUE,,graphics/icons/ungp/endurance.png,data.scripts.ungprules.impl.fleet.UNGP_Endurance,%s 's cooldown is %s days,,,,议长√
 ,,,,,,,,,,,,,
 more_logistics,Logistics Overhaul,Increase Max Logistical Hullmod,Max Logistics Hullmod + %s,-1,TRUE,,graphics/icons/ungp/more_logistics.png,data.scripts.ungprules.impl.member.UNGP_MoreLogistics,,,,,
@@ -64,7 +64,7 @@ take_highland,I Have the High Ground!,Increase weapon range when close to object
 close_formation,Naval Phalanx,Increase the shield resistance & flux dissipation when ships gather,"When a friendly ship is within %s range, player/ally ships' shield resistance and dissipation x %s",-2,TRUE,,graphics/icons/ungp/close_formation.png,data.scripts.ungprules.impl.combat.UNGP_CloseFormation,SHIELD RESITANCE & FLUX DISSIPATION x,,,,
 experimental_shunt,Experimental Shunt,Enable dissipation of hard flux,Gain %s hard flux dissipation while in combat.,-1,TRUE,,graphics/icons/ungp/experimental_shunt.png,data.scripts.ungprules.impl.combat.UNGP_ExperimentalShunt,,,,,
 critical_hit,Critical Hit,Flagship has chance to do double damage,Any damage dealt by the flagship has a %s chance of being doubled (only shown when the original damage is above 100),-2,TRUE,,graphics/icons/ungp/critical_hit.png,data.scripts.ungprules.impl.combat.UNGP_CriticalHit,,,,,
-lucky_seven,幸运7,来自艾莉娜的祝福,玩家旗舰使用射弹武器或导弹武器造成的每第 %s 次伤害提高 %s 或 %s 或...?,-1,TRUE,,graphics/icons/ungp/lucky_seven.png,data.scripts.ungprules.impl.combat.UNGP_LuckySeven,,,,,议长√
+lucky_seven,Lucky Seven,来自艾莉娜的祝福,玩家旗舰使用射弹武器或导弹武器造成的每第 %s 次伤害提高 %s 或 %s 或...?,-1,TRUE,,graphics/icons/ungp/lucky_seven.png,data.scripts.ungprules.impl.combat.UNGP_LuckySeven,,,,,议长√
 seer,Seer,See through their veil!,"Every %s seconds, clear the fog of war for %s seconds",-1,TRUE,,graphics/icons/ungp/seer.png,data.scripts.ungprules.impl.combat.UNGP_Seer,,,,,议长√
 son_of_core,Son of Core,Reduce the damage from automated ships,Ballistic/Energy/Missile weapon damage from enemy automated ships -%s,-3,TRUE,,graphics/icons/ungp/son_of_core.png,data.scripts.ungprules.impl.combat.UNGP_SonOfCore,,,,,议长√
 ,,,,,,,,,,,,,
@@ -77,8 +77,8 @@ black_in_black,Black in Black,Swim in the black market,All factions maintain min
 ,,,,,,,,,,,,,
 make_an_exception,Make an Exception,Avoid the Hegemony AI Inspection,"When the player is not hostile with the Hegemony, the AI Inspection has a %s probability of insiders appearing to help the player set things right with money",-2,TRUE,,graphics/icons/ungp/make_an_exception.png,data.scripts.ungprules.impl.other.UNGP_MakeAnException,Some people help you sort everything out on the Hegemony AI Inspection...,,,,议长√
 ,,,,,,,,,,,,,
-tach_labour,前速子技工,与余辉开局友好,第一次被选取时，将玩家与余辉的关系设为 %s,-1,TRUE,,graphics/icons/ungp/tach_labour.png,data.scripts.ungprules.impl.other.UNGP_TachLabour,,,,,议长√
-full_of_company,宾客盈门,与自由联盟和海盗开局友好,第一次被选取时，将玩家与自由联盟、海盗的关系设为 %s,-1,TRUE,,graphics/icons/ungp/full_of_company.png,data.scripts.ungprules.impl.other.UNGP_FullOfCompany,,,,,议长√
+tach_labour,Tachyon Labour,与余辉开局友好,第一次被选取时，将玩家与余辉的关系设为 %s,-1,TRUE,,graphics/icons/ungp/tach_labour.png,data.scripts.ungprules.impl.other.UNGP_TachLabour,,,,,议长√
+full_of_company,Full of Company,与自由联盟和海盗开局友好,第一次被选取时，将玩家与自由联盟、海盗的关系设为 %s,-1,TRUE,,graphics/icons/ungp/full_of_company.png,data.scripts.ungprules.impl.other.UNGP_FullOfCompany,,,,,议长√
 ,,,,,,,,,,,,,
 ying,Yin,Choose Negative Rules Randomly,"After the Specialist mode rule is selected and confirmed, the rule will be deleted and an unselected %s is added at random. When ""Yang"" is selected, the unselected %s will also be randomized.",2,FALSE,,graphics/icons/ungp/ying.png,data.scripts.ungprules.impl.other.UNGP_Ying,Randomly get %s,,,no_roll,
 yang,Yang,Choose Positive Rules Randomly,"After the Specialist mode rule is selected and confirmed, the rule will be deleted and an unselected %s is added at random. When ""Yang"" is selected, the unselected %s will also be randomized.",-2,TRUE,,graphics/icons/ungp/yang.png,data.scripts.ungprules.impl.other.UNGP_Yang,Randomly get %s,,,no_roll,

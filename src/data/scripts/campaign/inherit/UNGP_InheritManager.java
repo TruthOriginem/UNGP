@@ -125,8 +125,7 @@ public class UNGP_InheritManager {
     public static boolean savePointsExist() {
         return Global.getSettings().fileExistsInCommon(getSaveFileName(0)) ||
                 Global.getSettings().fileExistsInCommon(getSaveFileName(1)) ||
-                Global.getSettings().fileExistsInCommon(getSaveFileName(2)) ||
-                Global.getSettings().getBoolean("createEmptySavepoint");
+                Global.getSettings().fileExistsInCommon(getSaveFileName(2));
     }
 
     private static String getSaveFileName(int slotID) {

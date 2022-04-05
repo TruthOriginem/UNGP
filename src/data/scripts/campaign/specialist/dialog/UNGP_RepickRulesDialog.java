@@ -24,7 +24,7 @@ import static data.scripts.campaign.UNGP_Settings.d_i18n;
 import static data.scripts.campaign.specialist.UNGP_SpecialistSettings.Difficulty;
 import static data.scripts.campaign.specialist.UNGP_SpecialistSettings.rulesMeetCondition;
 import static data.scripts.campaign.specialist.rules.UNGP_RulesManager.URule;
-import static data.scripts.campaign.specialist.rules.UNGP_RulesManager.rules_i18n;
+import static data.scripts.utils.Constants.rules_i18n;
 
 /**
  * 重选的dialog而已

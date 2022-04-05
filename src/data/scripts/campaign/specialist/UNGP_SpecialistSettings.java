@@ -1,5 +1,6 @@
 package data.scripts.campaign.specialist;
 
+import com.fs.starfarer.api.Global;
 import data.scripts.campaign.specialist.rules.UNGP_RulesManager.URule;
 
 import java.awt.*;
@@ -8,16 +9,13 @@ import java.util.List;
 public final class UNGP_SpecialistSettings {
     @Deprecated
     public static final int MAX_DIFFICULTY = Difficulty.ALPHA.legacyLevel;
+    public static final String RULES_ENABLE_IN_SIMULATION = "UNGP_rulesEnableInSimulation";
 
     public enum Difficulty {
         GAMMA("Gamma", 1, 0f, "graphics/icons/UNGP_difficulty_gamma.png", new Color(232, 154, 65), 4, 8),
         BETA("Beta", 10, 0.5f, "graphics/icons/UNGP_difficulty_beta.png", new Color(179, 225, 41), 8, 20),
         ALPHA("Alpha", 20, 1f, "graphics/icons/UNGP_difficulty_alpha.png", new Color(119, 255, 230), 12, 42),
         OMEGA("Omega", 30, 1.5f, "graphics/icons/UNGP_difficulty_omega.png", new Color(145, 70, 255), 20, 64);
-//        GAMMA("Gamma", 1, new Color(232, 154, 65), 4, 8),
-//        BETA("Beta", 8, new Color(179, 225, 41), 6, 18),
-//        ALPHA("Alpha", 15, new Color(119, 255, 230), 9, 27),
-//        OMEGA("Omega", 20, new Color(145, 70, 255), 12, 48);
 
         public String name;
         @Deprecated
@@ -114,7 +112,20 @@ public final class UNGP_SpecialistSettings {
         return size <= difficulty.maxRules && size >= difficulty.minRules;
     }
 
+    public static boolean isRulesEnabledInSimulation() {
+        Boolean enable = (Boolean) Global.getSector().getPersistentData().get(RULES_ENABLE_IN_SIMULATION);
+        if (enable == null) {
+            enable = true;
+            setRulesEnabledInSimulation(true);
+        }
+        return enable;
+    }
+
+    public static void setRulesEnabledInSimulation(boolean enable) {
+        Global.getSector().getPersistentData().put(RULES_ENABLE_IN_SIMULATION, enable);
+    }
+
     public static String getSpecialistModeIconPath() {
-        return "graphics/icons/UNGP_hmode_logo.png";
+        return "graphics/icons/UNGP_specialist_mode_logo.png";
     }
 }

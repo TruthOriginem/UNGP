@@ -2,6 +2,7 @@ package data.scripts.campaign.specialist.challenges;
 
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
+import data.scripts.utils.Constants;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -116,12 +117,12 @@ public final class UNGP_ChallengeInfo {
             imageTooltip.addPara(getConnectedRuleNames(), grayColor, 5f);
 
             if (durationByMonth != -1) {
-                imageTooltip.addPara(rules_i18n.format("challenge_tip_desc0_0", "" + (durationByMonth - elapsedMonth)), grayColor, 5f);
+                imageTooltip.addPara(Constants.rules_i18n.format("challenge_tip_desc0_0", "" + (durationByMonth - elapsedMonth)), grayColor, 5f);
             } else {
-                imageTooltip.addPara(rules_i18n.get("challenge_tip_desc0_1"), grayColor, 5f);
+                imageTooltip.addPara(Constants.rules_i18n.get("challenge_tip_desc0_1"), grayColor, 5f);
             }
             if (!canReselectRules) {
-                imageTooltip.addPara(rules_i18n.get("challenge_tip_desc3"), grayColor, 5f);
+                imageTooltip.addPara(Constants.rules_i18n.get("challenge_tip_desc3"), grayColor, 5f);
             }
             tooltip.addImageWithText(pad);
         }
