@@ -83,6 +83,7 @@ public class UNGP_DangerZone extends UNGP_BaseRuleEffect implements UNGP_CombatT
             ShipAPI victim = cache.pick();
             cache.clear();
 
+            if (victim == null) return;
             Vector2f target = findClearLocation(victim);
             if (target != null) {
                 spawnMine(ship, target);
