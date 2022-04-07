@@ -25,15 +25,15 @@ public class UNGP_Inflation extends UNGP_BaseRuleEffect implements UNGP_Campaign
     @Override
     public void advanceInCampaign(float amount, TempCampaignParams params) {
         if (params.isOneMonthPassed()) {
-			CampaignFleetAPI player = Global.getSector().getPlayerFleet();
-			float credits = player.getCargo().getCredits().get();
-			int toReduce = (int)(credits * reducePercent);
-			if (toReduce > 0) {
-				player.getCargo().getCredits().subtract(toReduce);
+            CampaignFleetAPI player = Global.getSector().getPlayerFleet();
+            float credits = player.getCargo().getCredits().get();
+            int toReduce = (int) (credits * reducePercent * 0.01f);
+            if (toReduce > 0) {
+                player.getCargo().getCredits().subtract(toReduce);
 
-				UNGP_SpecialistIntel.RuleMessage message = new UNGP_SpecialistIntel.RuleMessage(rule, rule.getExtra1(), "" + toReduce);
-				message.send();
-			}
+                UNGP_SpecialistIntel.RuleMessage message = new UNGP_SpecialistIntel.RuleMessage(rule, rule.getExtra1(), "" + toReduce);
+                message.send();
+            }
         }
     }
 
