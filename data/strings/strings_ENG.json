@@ -99,12 +99,16 @@
     "golden_rule": "Golden Rule",
     "milestone_rule": "Milestone Rule",
     "not_rollable": "If another rule has the effect of acquiring other rules, this rule will not be counted.",
-    "challenge_tip": "Specialist Challenge(Only take effect when difficulty is Alpha/Omega):",
+    "challenge_tip": "Specialist Challenge:",
+    "challenge_tip_difficultyNotMeet": "Challenges are unavailable, make sure your difficulty is %s or %s",
     "challenge_tip_desc0_0": "Completing this challenge requires maintaining these rules %s months",
     "challenge_tip_desc0_1": "Completing this challenge requires maintaining these rules until player reach max level",
     "challenge_tip_desc1": "Player reach max level",
     "challenge_tip_desc2": "The number of positive rules must not be greater than %s",
     "challenge_tip_desc3": "The challenge prohibits the repick of rules",
+    "challenge_tip_completed": "Completed",
+    "challenge_tip_uncompleted": "Uncompleted",
+    "challenge_tip_rules_prefix": "Required rules:",
     "milestone_tip": "This rule is from:",
     "challenge_intel_name": "Specialist Challenges",
     "challenge_intel_desc": "Learn more information in Intel[E]",
@@ -121,7 +125,9 @@
     "button_feedback": "Deep Sync",
     "button_feedback_tips": "Upload your rules list, and gain %s story points...",
     "button_feedback_tips_detailed": "Anonymously upload your rules list to the mod's database for investigation and analysis. The relevant code can be found in the mod source code and no other information will be uploaded. Only the original rules will be collected, and the data will be deleted after each mod update. Pressing confirm means you agree to the following statement: I have reviewed the above content in detail and confirmed it is correct.",
-    "button_feedback_url": "https://originem.jnxyp.net/api/ungp/sc_e?rules="
+    "button_feedback_url": "https://originem.jnxyp.net/api/ungp/sc_e?rules=",
+    "pick_times_collection_url": "https://originem.jnxyp.net/static/UNGP_collection_ENG.txt",
+    "pick_times_desc": "%s picked times: %s "
   },
   "UNGP_rule_impl": {
     "halved": "halved",

@@ -5,7 +5,10 @@ import com.fs.starfarer.api.campaign.CampaignFleetAPI;
 import com.fs.starfarer.api.campaign.CargoAPI;
 import com.fs.starfarer.api.campaign.SpecialItemData;
 import com.fs.starfarer.api.characters.MutableCharacterStatsAPI;
+import com.fs.starfarer.api.ui.Alignment;
+import com.fs.starfarer.api.ui.LabelAPI;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
+import com.fs.starfarer.api.ui.UIComponentAPI;
 import com.fs.starfarer.api.util.Misc;
 import data.scripts.UNGP_modPlugin;
 import data.scripts.campaign.UNGP_InGameData;
@@ -17,14 +20,20 @@ import data.scripts.campaign.specialist.items.UNGP_RuleItem;
 import data.scripts.campaign.specialist.rules.UNGP_RuleInfoLoader.UNGP_RuleInfo;
 import data.scripts.ungprules.UNGP_RuleEffectAPI;
 import data.scripts.ungprules.tags.*;
-import data.scripts.utils.Constants;
+import data.scripts.utils.UNGP_Feedback;
 import org.apache.log4j.Logger;
+import org.json.JSONException;
+import org.json.JSONObject;
 
+import javax.net.ssl.HttpsURLConnection;
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
 import java.util.List;
+import java.util.*;
+
+import static data.scripts.utils.Constants.rules_i18n;
 
 public class UNGP_RulesManager {
     private static final Color BONUS_COLOR = new Color(50, 255, 50);
@@ -57,6 +66,7 @@ public class UNGP_RulesManager {
     public static void initOrReloadRules() {
         loadAllRules(UNGP_RuleInfoLoader.LoadAllInfos());
     }
+
 
     /**
      * Should be called after {@link UNGP_ChallengeManager#initOrReloadChallengeInfos()} to tag all the rules which provides the challenge
@@ -234,6 +244,14 @@ public class UNGP_RulesManager {
      * The sealed class of single rule, each rule should only have one object of this class
      */
     public static final class URule {
+        public void setPickedTimes(int pickedTimes) {
+            this.pickedTimes = pickedTimes;
+        }
+
+        public int getPickedTimes() {
+            return pickedTimes;
+        }
+
         public enum Tags {
             NO_ROLL("no_roll"),
             MILESTONE("milestone");
@@ -346,7 +364,7 @@ public class UNGP_RulesManager {
             tooltip.addImageWithText(pad * 0.5f);
             if (!isDefaultSource()) {
                 tooltip.setParaFontVictor14();
-                tooltip.addPara(Constants.rules_i18n.get("rule_source") + ruleInfo.getSource(), Misc.getGrayColor(), pad * 0.5f);
+                tooltip.addPara(rules_i18n.get("rule_source") + ruleInfo.getSource(), Misc.getGrayColor(), pad * 0.5f);
                 tooltip.setParaFontDefault();
             }
         }
@@ -368,20 +386,20 @@ public class UNGP_RulesManager {
 
         public void addDescToItem(TooltipMakerAPI tooltip, float pad, String prefix, boolean isExpanded) {
             if (!isDescAffectedByLevel) {
-                tooltip.addPara(Constants.rules_i18n.get("front_desc"), pad * 0.5f, Misc.getBasePlayerColor(), Misc.getHighlightColor(), Constants.rules_i18n.get("any"));
+                tooltip.addPara(rules_i18n.get("front_desc"), pad * 0.5f, Misc.getBasePlayerColor(), Misc.getHighlightColor(), rules_i18n.get("any"));
                 addDesc(tooltip, pad, prefix, null);
             } else {
                 Difficulty difficulty = UNGP_RulesManager.getGlobalDifficulty();
                 if (isExpanded) {
                     for (Difficulty itemDifficulty : Difficulty.values()) {
-                        tooltip.addPara(Constants.rules_i18n.get("front_desc"), pad * 0.5f,
+                        tooltip.addPara(rules_i18n.get("front_desc"), pad * 0.5f,
                                         difficulty == itemDifficulty ? Misc.getGrayColor() : Misc.getBasePlayerColor(),
                                         itemDifficulty.color, itemDifficulty.name);
                         addDesc(tooltip, pad, prefix, itemDifficulty);
                         tooltip.addSpacer(pad * 0.5f);
                     }
                 } else {
-                    tooltip.addPara(Constants.rules_i18n.get("front_desc"), pad * 0.5f, Misc.getBasePlayerColor(), difficulty.color, difficulty.name);
+                    tooltip.addPara(rules_i18n.get("front_desc"), pad * 0.5f, Misc.getBasePlayerColor(), difficulty.color, difficulty.name);
                     addDesc(tooltip, pad, prefix, difficulty);
                 }
             }
@@ -427,12 +445,13 @@ public class UNGP_RulesManager {
          */
         public void addRollDesc(TooltipMakerAPI tooltip, float pad, String prefix) {
             if (!isBasicallyRollable()) {
-                tooltip.addPara(prefix + Constants.rules_i18n.get("not_rollable"), Misc.getGrayColor(), pad);
+                tooltip.addPara(prefix + rules_i18n.get("not_rollable"), Misc.getGrayColor(), pad);
             }
         }
 
         public void addChallengeRelatedDesc(TooltipMakerAPI tooltip, float pad, String detailPrefix, boolean showMore) {
             Color grayColor = Misc.getGrayColor();
+            // when the rule is milestone rule
             if (isMileStone()) {
                 final List<UNGP_ChallengeInfo> challengesCopy = UNGP_ChallengeManager.getChallengeInfosCopy();
                 List<UNGP_ChallengeInfo> provider = new ArrayList<>();
@@ -442,7 +461,7 @@ public class UNGP_RulesManager {
                     }
                 }
                 if (!provider.isEmpty()) {
-                    tooltip.addPara(Constants.rules_i18n.get("milestone_tip"), Misc.getBasePlayerColor(), pad);
+                    tooltip.addPara(rules_i18n.get("milestone_tip"), Misc.getBasePlayerColor(), pad);
                     tooltip.addSpacer(10f);
                     tooltip.setBulletedListMode(detailPrefix);
                     for (UNGP_ChallengeInfo challengeInfo : provider) {
@@ -461,41 +480,34 @@ public class UNGP_RulesManager {
                     }
                 }
                 if (!provider.isEmpty()) {
-                    tooltip.addPara(Constants.rules_i18n.get("challenge_tip"), Misc.getBasePlayerColor(), pad);
+                    boolean hasUncompletedChallenges = false;
+                    boolean difficultyEnough = UNGP_ChallengeManager.isDifficultyEnough(getGlobalDifficulty());
+                    // 专家挑战
+                    tooltip.addPara(rules_i18n.get("challenge_tip"), Misc.getBasePlayerColor(), pad);
                     tooltip.addSpacer(10f);
-                    tooltip.setBulletedListMode(detailPrefix);
                     for (UNGP_ChallengeInfo challengeInfo : provider) {
-                        String sb = challengeInfo.getName() +
-                                " : " +
-                                challengeInfo.getConnectedRuleNames();
-                        tooltip.addPara(sb, getMilestoneColor(), 5f);
-                        if (showMore) {
-                            // 打印要求
-                            StringBuilder requirementSb = new StringBuilder();
-                            if (challengeInfo.getDurationByMonth() == -1) {
-                                requirementSb.append(Constants.rules_i18n.get("challenge_tip_desc0_1"));
-                                requirementSb.append("\n");
-                            } else {
-                                requirementSb.append(Constants.rules_i18n.format("challenge_tip_desc0_0", "" + challengeInfo.getDurationByMonth()));
-                                requirementSb.append("\n");
-                                if (challengeInfo.isNeedMaxLevel()) {
-                                    requirementSb.append(Constants.rules_i18n.get("challenge_tip_desc1"));
-                                    requirementSb.append("\n");
-                                }
-                            }
-                            if (challengeInfo.getPositiveLimitation() >= 0) {
-                                requirementSb.append(Constants.rules_i18n.format("challenge_tip_desc2", "" + challengeInfo.getPositiveLimitation()));
-                                requirementSb.append("\n");
-                            }
-                            if (!challengeInfo.canReselectRules()) {
-                                requirementSb.append(Constants.rules_i18n.get("challenge_tip_desc3"));
-                                requirementSb.append("\n");
-                            }
-                            requirementSb.deleteCharAt(requirementSb.length() - 1);
-                            tooltip.setParaSmallInsignia();
-                            tooltip.addPara(requirementSb.toString(), grayColor, 5f);
-                            tooltip.setParaFontDefault();
+                        tooltip.setBulletedListMode(detailPrefix);
+                        boolean isChallengeCompleted = !UNGP_ChallengeManager.getTemporaryCompletedChallenges().isEmpty() && UNGP_ChallengeManager.getTemporaryCompletedChallenges().contains(challengeInfo.getId());
+                        tooltip.addSpacer(5f);
+                        // 完成/未完成？
+                        if (isChallengeCompleted) {
+                            tooltip.addPara(challengeInfo.getName() + " - " + rules_i18n.get("challenge_tip_completed"),
+                                            grayColor, 0);
+                        } else {
+                            tooltip.addPara(challengeInfo.getName() + " - %s", 0, getMilestoneColor(), Misc.getNegativeHighlightColor(), rules_i18n.get("challenge_tip_uncompleted"));
+                            hasUncompletedChallenges = true;
                         }
+                        // F1 信息
+                        if (showMore) {
+                            tooltip.setBulletedListMode(detailPrefix + "  -");
+                            challengeInfo.showChallengeDetails(tooltip, grayColor);
+                        }
+                    }
+                    // 如果存在未完成挑战的同时，难度等级不够
+                    if (hasUncompletedChallenges && !difficultyEnough) {
+                        tooltip.setBulletedListMode(detailPrefix);
+                        tooltip.addPara(rules_i18n.get("challenge_tip_difficultyNotMeet"), 5f, Misc.getNegativeHighlightColor(), grayColor,
+                                        Difficulty.ALPHA.name, Difficulty.OMEGA.name).setHighlightColors(Difficulty.ALPHA.color, Difficulty.OMEGA.color);
                     }
                 }
             }
@@ -549,9 +561,19 @@ public class UNGP_RulesManager {
             return messageList.toArray();
         }
 
-        public void addCost(TooltipMakerAPI tooltip, float pad) {
+        public void addCostAndPickTimes(TooltipMakerAPI tooltip, float pad) {
+            UIComponentAPI spacer = tooltip.addSpacer(pickedTimes > 0 ? pad - 12f : pad);
+            LabelAPI para = null;
+            if (pickedTimes > 0) {
+                tooltip.setParaFontVictor14();
+                para = tooltip.addPara(rules_i18n.get("pick_times_desc"), 0f, Misc.getGrayColor(), Misc.getStoryOptionColor(),
+                                       rules_i18n.get("button_feedback"), "" + pickedTimes);
+                para.setAlignment(Alignment.RMID);
+                para.setOpacity(0.8f);
+                para.getPosition().inBR(0f, 5f);
+                tooltip.setParaFontDefault();
+            }
             int cost = getCost();
-            tooltip.setParaOrbitronLarge();
             String costString;
             Color baseColor = Misc.getBasePlayerColor();
             Color highlight;
@@ -565,7 +587,11 @@ public class UNGP_RulesManager {
                 highlight = getHighlightColor(false);
                 costString = "" + cost;
             }
-            tooltip.addPara(Constants.rules_i18n.get("cost_point"), pad, baseColor, highlight, costString);
+            tooltip.setParaOrbitronLarge();
+            LabelAPI costLabel = tooltip.addPara(rules_i18n.get("cost_point"), 0f, baseColor, highlight, costString);
+            if (para != null) {
+                costLabel.getPosition().belowLeft(spacer, costLabel.getPosition().getHeight() - 8f);
+            }
             tooltip.setParaFontDefault();
         }
 
@@ -645,6 +671,43 @@ public class UNGP_RulesManager {
         for (UNGP_RuleInfo info : ruleInfos) {
             ALL_RULES.add(new URule(info));
         }
+        loadPickTimes();
+    }
+
+    /**
+     * Load from server
+     */
+    public static void loadPickTimes() {
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                String url = rules_i18n.get("pick_times_collection_url");
+                try {
+                    URL connURL = new URL(url);
+                    HttpsURLConnection conn = (HttpsURLConnection) connURL.openConnection();
+                    UNGP_Feedback.setHttpProtocol(conn);
+                    InputStream stream = conn.getInputStream();
+                    Scanner scanner = (new Scanner(stream, "utf-8")).useDelimiter("\\A");
+                    if (scanner.hasNext()) {
+                        String collectionText = scanner.next();
+                        try {
+                            JSONObject jsonObject = new JSONObject(collectionText);
+                            for (UNGP_RulesManager.URule rule : ALL_RULES) {
+                                rule.setPickedTimes(jsonObject.optInt(rule.getId(), -1));
+                            }
+                            LOGGER.info("Successfully loaded the pick times of rules from deep sync...");
+                        } catch (JSONException e) {
+                            LOGGER.warn("Error loading json...");
+                        }
+                    }
+                    stream.close();
+                } catch (IOException e) {
+                    LOGGER.warn("Error loading rules' pick times, but it doesn't matter...\n" + e);
+                }
+            }
+        });
+        thread.setDaemon(true);
+        thread.start();
     }
 
     /**
@@ -653,9 +716,9 @@ public class UNGP_RulesManager {
      */
     public static String getBonusString(boolean isBonus) {
         if (isBonus) {
-            return Constants.rules_i18n.get("isBonus");
+            return rules_i18n.get("isBonus");
         } else {
-            return Constants.rules_i18n.get("notBonus");
+            return rules_i18n.get("notBonus");
         }
     }
 
@@ -663,11 +726,11 @@ public class UNGP_RulesManager {
      * @return "黄金规则"
      */
     public static String getGoldenString() {
-        return Constants.rules_i18n.get("golden_rule");
+        return rules_i18n.get("golden_rule");
     }
 
     public static String getMilestoneString() {
-        return Constants.rules_i18n.get("milestone_rule");
+        return rules_i18n.get("milestone_rule");
     }
 
     /**

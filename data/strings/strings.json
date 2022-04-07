@@ -99,12 +99,16 @@
     "milestone_rule": "成就规则",
     "cost_point": "Cost点数: %s",
     "not_rollable": "如果其他规则拥有随机获得规则的效果，本规则将不被计入。",
-    "challenge_tip": "专家挑战(仅可在专家等级为Alpha/Omega时挑战):",
+    "challenge_tip": "专家挑战:",
+    "challenge_tip_difficultyNotMeet": "无法进行挑战，请确保专家等级为 %s 或 %s",
     "challenge_tip_desc0_0": "完成该挑战需要保持这些规则{%s}月",
     "challenge_tip_desc0_1": "完成该挑战需要保持这些规则直至玩家满级",
     "challenge_tip_desc1": "玩家满级",
     "challenge_tip_desc2": "正面规则数不得大于{%s}",
     "challenge_tip_desc3": "该挑战禁止重选规则",
+    "challenge_tip_completed": "已完成",
+    "challenge_tip_uncompleted": "未完成",
+    "challenge_tip_rules_prefix": "前置规则:",
     "milestone_tip": "该成就规则来自于专家挑战：",
     "challenge_intel_name": "专家挑战",
     "challenge_intel_desc": "通过网络信息[E]了解详情",
@@ -120,7 +124,9 @@
     "button_feedback": "深层同调",
     "button_feedback_tips": "上传你当前规则列表，获取 %s 点故事点的奖励...",
     "button_feedback_tips_detailed": "匿名上传你的规则列表至该mod的数据库用于调查与分析，相关代码可在mod源码中查询，不会上传任何其他信息。仅收集该mod自带规则，且每次mod更新后数据都会被删除。按下确认即表示你已同意以下声明：本人已详细复核以上内容，并确认无误。",
-    "button_feedback_url": "https://originem.jnxyp.net/api/ungp/sc?rules="
+    "button_feedback_url": "https://originem.jnxyp.net/api/ungp/sc?rules=",
+    "pick_times_collection_url": "https://originem.jnxyp.net/static/UNGP_collection.txt",
+    "pick_times_desc": "该规则在 %s 的记录中已被选取 %s 次"
   },
   "UNGP_rule_impl": {
     "halved": "减半",

@@ -2,13 +2,14 @@ package data.scripts.campaign.specialist.challenges;
 
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
-import data.scripts.utils.Constants;
 
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import static data.scripts.campaign.specialist.rules.UNGP_RulesManager.*;
+import static data.scripts.campaign.specialist.rules.UNGP_RulesManager.URule;
+import static data.scripts.campaign.specialist.rules.UNGP_RulesManager.getMilestoneColor;
+import static data.scripts.utils.Constants.rules_i18n;
 
 public final class UNGP_ChallengeInfo {
     private String id;
@@ -107,6 +108,33 @@ public final class UNGP_ChallengeInfo {
         return sb.toString();
     }
 
+    public String getConnectedRuleNamesReplacedWithEscapeCharacter() {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < rulesRequired.size(); i++) {
+            sb.append(" %s ");
+            sb.append("+");
+        }
+        sb.deleteCharAt(sb.length() - 1);
+        return sb.toString();
+    }
+
+    public String[] getRuleNames() {
+        String[] array = new String[rulesRequired.size()];
+        for (int i = 0; i < array.length; i++) {
+            array[i] = rulesRequired.get(i).getName();
+        }
+        return array;
+    }
+
+    public Color[] getRuleColors() {
+        Color[] array = new Color[rulesRequired.size()];
+        for (int i = 0; i < array.length; i++) {
+            URule rule = rulesRequired.get(i);
+            array[i] = rule.getCorrectColor().darker();
+        }
+        return array;
+    }
+
     public void createTooltip(TooltipMakerAPI tooltip, float pad, int elapsedMonth) {
         URule unlockRule = milestoneToUnlock;
         if (unlockRule != null) {
@@ -114,17 +142,42 @@ public final class UNGP_ChallengeInfo {
             imageTooltip.addPara(name, getMilestoneColor(), 0);
 
             Color grayColor = Misc.getGrayColor();
-            imageTooltip.addPara(getConnectedRuleNames(), grayColor, 5f);
-
-            if (durationByMonth != -1) {
-                imageTooltip.addPara(Constants.rules_i18n.format("challenge_tip_desc0_0", "" + (durationByMonth - elapsedMonth)), grayColor, 5f);
-            } else {
-                imageTooltip.addPara(Constants.rules_i18n.get("challenge_tip_desc0_1"), grayColor, 5f);
-            }
-            if (!canReselectRules) {
-                imageTooltip.addPara(Constants.rules_i18n.get("challenge_tip_desc3"), grayColor, 5f);
-            }
+            showChallengeDetails(imageTooltip, grayColor);
+//            imageTooltip.addPara(getConnectedRuleNames(), grayColor, 5f);
+//
+//            if (durationByMonth != -1) {
+//                imageTooltip.addPara(Constants.rules_i18n.format("challenge_tip_desc0_0", "" + (durationByMonth - elapsedMonth)), grayColor, 5f);
+//            } else {
+//                imageTooltip.addPara(Constants.rules_i18n.get("challenge_tip_desc0_1"), grayColor, 5f);
+//            }
+//            if (!canReselectRules) {
+//                imageTooltip.addPara(Constants.rules_i18n.get("challenge_tip_desc3"), grayColor, 5f);
+//            }
             tooltip.addImageWithText(pad);
+        }
+    }
+
+    public void showChallengeDetails(TooltipMakerAPI tooltip, Color color) {
+        tooltip.addPara(rules_i18n.get("challenge_tip_rules_prefix")
+                                + getConnectedRuleNamesReplacedWithEscapeCharacter(),
+                        5f,
+                        color,
+                        color,
+                        getRuleNames()).setHighlightColors(getRuleColors());
+        // 所有要求
+        if (getDurationByMonth() == -1) {
+            tooltip.addPara(rules_i18n.get("challenge_tip_desc0_1"), color, 0f);
+        } else {
+            tooltip.addPara(rules_i18n.get("challenge_tip_desc0_0"), color, 0f);
+            if (isNeedMaxLevel()) {
+                tooltip.addPara(rules_i18n.get("challenge_tip_desc1"), color, 0f);
+            }
+        }
+        if (getPositiveLimitation() >= 0) {
+            tooltip.addPara(rules_i18n.format("challenge_tip_desc2", "" + getPositiveLimitation()), color, 0f);
+        }
+        if (!canReselectRules()) {
+            tooltip.addPara(rules_i18n.get("challenge_tip_desc3"), color, 0f);
         }
     }
 

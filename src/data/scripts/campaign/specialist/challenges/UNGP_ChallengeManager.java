@@ -155,4 +155,15 @@ public class UNGP_ChallengeManager {
     public static List<UNGP_ChallengeInfo> getChallengeInfosCopy() {
         return new ArrayList<>(ID_TO_CHALLENGE_INFO_MAP.values());
     }
+
+    private static final transient List<String> TEMPORARY_COMPLETED_CHALLENGES = new ArrayList<>();
+
+    public static void setTemporaryCompletedChallenges(List<String> challenges) {
+        TEMPORARY_COMPLETED_CHALLENGES.clear();
+        TEMPORARY_COMPLETED_CHALLENGES.addAll(challenges);
+    }
+
+    public static List<String> getTemporaryCompletedChallenges() {
+        return TEMPORARY_COMPLETED_CHALLENGES;
+    }
 }

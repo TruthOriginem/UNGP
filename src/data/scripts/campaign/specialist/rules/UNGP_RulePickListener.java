@@ -75,6 +75,7 @@ public class UNGP_RulePickListener implements CargoPickerListener {
 
     private void initUIData() {
         UNGP_RuleItemConnectBGManager.clear();
+        UNGP_ChallengeManager.setTemporaryCompletedChallenges(completedChallenges);
         Global.getSoundPlayer().playCustomMusic(1, 1, "UNGP_rulepicker_bgm", true);
         UNGP_UITimeScript.addInterval("2secs", new IntervalUtil(2f, 2f));
         UNGP_UITimeScript.addInterval("6secs", new IntervalUtil(6f, 6f));
@@ -82,6 +83,7 @@ public class UNGP_RulePickListener implements CargoPickerListener {
 
     private void clearUIData() {
         UNGP_RuleItemConnectBGManager.clear();
+        UNGP_ChallengeManager.getTemporaryCompletedChallenges().clear();
         Global.getSoundPlayer().playCustomMusic(1, 1, null);
         UNGP_UITimeScript.removeInterval("2secs");
         UNGP_UITimeScript.removeInterval("6secs");

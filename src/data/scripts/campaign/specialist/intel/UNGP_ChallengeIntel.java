@@ -275,7 +275,7 @@ public class UNGP_ChallengeIntel extends BaseIntelPlugin {
                 return rule.getSpritePath();
             }
         }
-        return Global.getSettings().getSpriteName("icons", "UNGP_hmlogo");
+        return Global.getSettings().getSpriteName("icons", "UNGP_specialist_mode_logo");
     }
 
     @Override

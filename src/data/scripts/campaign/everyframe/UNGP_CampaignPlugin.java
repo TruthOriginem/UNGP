@@ -228,6 +228,7 @@ public class UNGP_CampaignPlugin implements EveryFrameScript, CampaignInputListe
 
 
     public boolean showUNGPDialog() {
+        newGameChecked = true;
         return Global.getSector().getCampaignUI().showInteractionDialog(new UNGP_InteractionDialog(inGameData), Global.getSector().getPlayerFleet());
     }
 
