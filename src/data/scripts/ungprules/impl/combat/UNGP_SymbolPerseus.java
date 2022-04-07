@@ -22,7 +22,7 @@ public class UNGP_SymbolPerseus extends UNGP_BaseRuleEffect implements UNGP_Comb
     public static final float TIME_TICK = 0.1f;
 
     public static final int MIN_KILL_COUNT = 2;
-    public static final float FLUX_DECREASE_FACTOR = 0.2f;
+    public static final float FLUX_DECREASE_FACTOR = 0.15f;
 
     @Override
     public float getValueByDifficulty(int index, UNGP_SpecialistSettings.Difficulty difficulty) {
