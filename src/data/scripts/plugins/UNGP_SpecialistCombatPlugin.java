@@ -35,7 +35,9 @@ public class UNGP_SpecialistCombatPlugin extends BaseEveryFrameCombatPlugin {
         if (engine.isInCampaign() || engine.isInCampaignSim()) {
             //处理
             UNGP_InGameData inGameData = UNGP_InGameData.getDataInSave();
-            if (inGameData != null && inGameData.isHardMode() && UNGP_SpecialistSettings.isRulesEnabledInSimulation()) {
+            if (inGameData != null && inGameData.isHardMode()) {
+                // 如果取消模拟战
+                if (engine.isInCampaignSim() && !UNGP_SpecialistSettings.isRulesEnabledInSimulation()) return;
                 isSpecialistMode = true;
                 Difficulty difficulty = inGameData.getDifficulty();
                 List<URule> originalRules = new ArrayList<>(COMBAT_RULES_IN_THIS_GAME);

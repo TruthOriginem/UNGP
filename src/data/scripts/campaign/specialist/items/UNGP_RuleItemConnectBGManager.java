@@ -16,6 +16,12 @@ public class UNGP_RuleItemConnectBGManager {
     public static final Set<URule> HIGHLIGHT_RULE_LIST = new HashSet<>();
     private static boolean isDirty = true;
 
+    /**
+     * Rule item background highlighted.
+     *
+     * @param rule
+     * @return
+     */
     public static boolean canRuleHighlighted(URule rule) {
         return HIGHLIGHT_RULE_LIST.contains(rule);
     }
@@ -33,6 +39,7 @@ public class UNGP_RuleItemConnectBGManager {
         }
         //
         for (UNGP_ChallengeInfo challengeInfo : UNGP_ChallengeManager.getChallengeInfosCopy()) {
+            // 已完成的不显示
             if (completedChallenges.contains(challengeInfo.getId())) {
                 continue;
             }

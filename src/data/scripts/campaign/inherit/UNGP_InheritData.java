@@ -62,7 +62,7 @@ public class UNGP_InheritData {
         UNGP_InheritData inheritData = new UNGP_InheritData();
         inheritData.ungp_id = UUID.randomUUID().toString();
         inheritData.lastPlayerName = "UNGP-NewFound";
-        inheritData.cycle = 0;
+        inheritData.cycle = 1;
         inheritData.isHardMode = false;
         inheritData.inheritCredits = 0;
         inheritData.completedChallenges = new ArrayList<>();
@@ -94,7 +94,7 @@ public class UNGP_InheritData {
         // Cycle Name
         if (!lastPlayerName.contentEquals(UNGP_InheritData.DEFAULT_NAME)) {
             section = root.beginImageWithText("graphics/icons/reports/officers24.png", 24f);
-            section.addPara(d_i18n.get(descKey + "_0") + "%s", 0f, hl, "" + (cycle - 1));
+            section.addPara(d_i18n.get(descKey + "_0") + "%s", 0f, hl, "" + (cycle));
             section.addPara(d_i18n.get(descKey + "_1") + "%s", 3f, hl, lastPlayerName);
             root.addImageWithText(5f);
         }
@@ -125,12 +125,47 @@ public class UNGP_InheritData {
         root.setBulletedListMode(null);
     }
 
+    public Color getColorByCycle() {
+        if (cycle < 5) {
+            return Misc.getButtonTextColor();
+        } else if (cycle < 10) {
+            return Difficulty.GAMMA.color;
+        } else if (cycle < 25) {
+            return Difficulty.BETA.color;
+        } else if (cycle < 50) {
+            return Difficulty.ALPHA.color;
+        } else if (cycle < 100) {
+            return Difficulty.OMEGA.color;
+        } else {
+            return UNGP_RulesManager.getGoldenColor();
+        }
+    }
+
+    public String getPrefixByCycle() {
+        if (cycle < 5) {
+            return "";
+        } else if (cycle < 10) {
+            return "γ - ";
+        } else if (cycle < 25) {
+            return "β - ";
+        } else if (cycle < 50) {
+            return "α - ";
+        } else if (cycle < 100) {
+            return "Ω - ";
+        } else {
+            return "Ψ - ";
+        }
+    }
+
     public static List<UNGP_DataSaverAPI> getSaverInstancesCopy() {
         return new ArrayList<>(SAVER_INSTANCES);
     }
 
     private static final String SAVER_CLASS_PATH = "data/campaign/UNGP_dataSavers.csv";
 
+    /**
+     * Haven't completed yet.
+     */
     public static void loadAllSavers() {
         try {
             ClassLoader classLoader = Global.getSettings().getScriptClassLoader();

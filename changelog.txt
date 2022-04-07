@@ -1,4 +1,4 @@
-1.6.5 2022
+1.7.0 2022/4/7
 规则修正：
 临危不惧：时间流速从50%->66%
 幅能导流阻塞：幅能耗散下降基础数值25%->15%
@@ -9,6 +9,7 @@
 增加负面规则: 团团围困, 打击学派, 多层装甲, 重磅狙击, 危险战区, 通货膨胀
 
 UI优化。
+现在高周目的重生点条目有特殊前缀及颜色。
 添加一个能打开重生主界面的玩家能力。
 现在专家模式可以通过网络界面设置战斗规则是否在模拟战生效。
 将设置从settings.json移动至mod根目录下的UNGP_OPTIONS.ini
@@ -23,6 +24,7 @@ Add new positive rules: Sneaker, Thermodynamics, Lucky Seven, Tachyon Labour, Fu
 Add new negative rules: Besieged, Striker School, Layered Armor, Explosive Sniper, Danger Zone, Inflation
 
 UI optimization.
+Now the high-cycle savepoint slots would have special prefix and color.
 Added an ability to open the main menu of UNGP.
 Now could set if combat rules enabled in simulation in the specialist mode intel.
 Moved settings from settings.json to the "UNGP_OPTIONS.ini" located at the root folder of the mod.

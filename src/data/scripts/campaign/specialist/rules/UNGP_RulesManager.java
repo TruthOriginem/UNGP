@@ -500,27 +500,7 @@ public class UNGP_RulesManager {
                         // F1 信息
                         if (showMore) {
                             tooltip.setBulletedListMode(detailPrefix + "  -");
-                            tooltip.addPara(rules_i18n.get("challenge_tip_rules_prefix")
-                                                    + challengeInfo.getConnectedRuleNamesReplacedWithEscapeCharacter(),
-                                            5f,
-                                            grayColor,
-                                            grayColor,
-                                            challengeInfo.getRuleNames()).setHighlightColors(challengeInfo.getRuleColors());
-                            // 所有要求
-                            if (challengeInfo.getDurationByMonth() == -1) {
-                                tooltip.addPara(rules_i18n.get("challenge_tip_desc0_1"), grayColor, 0f);
-                            } else {
-                                tooltip.addPara(rules_i18n.get("challenge_tip_desc0_0"), grayColor, 0f);
-                                if (challengeInfo.isNeedMaxLevel()) {
-                                    tooltip.addPara(rules_i18n.get("challenge_tip_desc1"), grayColor, 0f);
-                                }
-                            }
-                            if (challengeInfo.getPositiveLimitation() >= 0) {
-                                tooltip.addPara(rules_i18n.format("challenge_tip_desc2", "" + challengeInfo.getPositiveLimitation()), grayColor, 0f);
-                            }
-                            if (!challengeInfo.canReselectRules()) {
-                                tooltip.addPara(rules_i18n.get("challenge_tip_desc3"), grayColor, 0f);
-                            }
+                            challengeInfo.showChallengeDetails(tooltip, grayColor);
                         }
                     }
                     // 如果存在未完成挑战的同时，难度等级不够
