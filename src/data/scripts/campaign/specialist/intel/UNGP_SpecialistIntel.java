@@ -60,7 +60,7 @@ public class UNGP_SpecialistIntel extends BaseIntelPlugin {
     private static final Object OPTION_ID_DETAILS = new Object();
     private static final Object OPTION_ID_TIPS = new Object();
     private static Object checkedButton = OPTION_ID_DETAILS;
-    private ButtonAPI simulationCheckBox;
+    private transient ButtonAPI simulationCheckBox = null;
 
     @Override
     public void notifyPlayerAboutToOpenIntelScreen() {
