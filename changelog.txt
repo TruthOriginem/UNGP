@@ -1,3 +1,10 @@
+1.7.1 2022/4/8
+积累修复。
+挑战：但他是绝对的 现在允许一个正面规则存在。
+
+Bug fixes...
+Specialist challenge: But "it" is absolute now allow one positive rule.
+
 1.7.0 2022/4/7
 规则修正：
 临危不惧：时间流速从50%->66%

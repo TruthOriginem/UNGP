@@ -46,7 +46,7 @@ public class UNGP_CampaignPlugin implements EveryFrameScript, CampaignInputListe
     private float newGameCheckDays = 0.1f;
     private boolean newGameChecked = false;
     private boolean shouldShowDialog = false;
-    private SectorEntityToken uiEntity;
+    private SectorEntityToken uiEntity = null;
 
     public static UNGP_CampaignPlugin getInstance() {
         UNGP_CampaignPlugin plugin = (UNGP_CampaignPlugin) Global.getSector().getPersistentData().get(KEY);
