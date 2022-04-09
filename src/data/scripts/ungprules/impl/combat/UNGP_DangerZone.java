@@ -41,8 +41,8 @@ public class UNGP_DangerZone extends UNGP_BaseRuleEffect implements UNGP_CombatT
 	@Override
 	public float getValueByDifficulty(int index, UNGP_SpecialistSettings.Difficulty difficulty) {
 		if (index == 0) return difficulty.getLinearValue(1f, 1f);
-		if (index == 1) return difficulty.getLinearValue(8f, 6f);
-		if (index == 2) return difficulty.getLinearValue(0.5f, 1f);
+		if (index == 1) return difficulty.getLinearValue(10f, 6f);
+		if (index == 2) return difficulty.getLinearValue(1f, 1f);
 		return 0f;
 	}
 
@@ -117,7 +117,7 @@ public class UNGP_DangerZone extends UNGP_BaseRuleEffect implements UNGP_CombatT
 
 	public static void spawnMine(ShipAPI source, Vector2f mineLoc) {
 		CombatEngineAPI engine = Global.getCombatEngine();
-		Vector2f currLoc = Misc.getPointAtRadius(mineLoc, 60f + (float) Math.random() * 80f);
+		Vector2f currLoc = Misc.getPointAtRadius(mineLoc, 40f + (float) Math.random() * 80f);
 		MissileAPI mine = (MissileAPI) engine.spawnProjectile(source, null,
 				"minelayer2", currLoc, (float) Math.random() * 360f, null);
 
