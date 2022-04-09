@@ -20,6 +20,8 @@ import java.util.Map;
 public class UNGP_DangerZone extends UNGP_BaseRuleEffect implements UNGP_CombatTag {
 
     private float spawnRateMult;
+    private float poolMaxSize;
+    private float cooldownRateMult;
     private static final Map<ShipAPI.HullSize, Float> BASE_SPAWN_TIME = new HashMap<>();
 
     static {
@@ -31,12 +33,16 @@ public class UNGP_DangerZone extends UNGP_BaseRuleEffect implements UNGP_CombatT
 
     @Override
     public void updateDifficultyCache(UNGP_SpecialistSettings.Difficulty difficulty) {
-        this.spawnRateMult = getValueByDifficulty(0, difficulty);
+        spawnRateMult = getValueByDifficulty(0, difficulty);
+        poolMaxSize = getValueByDifficulty(1, difficulty);
+		cooldownRateMult = getValueByDifficulty(2, difficulty);
     }
 
     @Override
     public float getValueByDifficulty(int index, UNGP_SpecialistSettings.Difficulty difficulty) {
         if (index == 0) return difficulty.getLinearValue(1f, 1f);
+        if (index == 1) return difficulty.getLinearValue(10f, 8f);
+		if (index == 2) return difficulty.getLinearValue(1f, 1f);
         return 0f;
     }
 
@@ -63,33 +69,46 @@ public class UNGP_DangerZone extends UNGP_BaseRuleEffect implements UNGP_CombatT
         if (ship.isDrone() || ship.isFighter()) return;
         if (ship.isStation() || ship.isStationModule()) return;
 
-        if (ship.getCustomData().get(buffID) == null) {
-            float rate = BASE_SPAWN_TIME.get(ship.getHullSize()) / spawnRateMult;
-            ship.setCustomData(buffID, new IntervalUtil(rate, rate));
-        }
+        CombatEngineAPI engine = Global.getCombatEngine();
+		Float cooldownPool = getDataInEngine(engine, buffID);
+		if (cooldownPool == null) {
+			cooldownPool = 0f;
+			putDataInEngine(engine, buffID, cooldownPool);
+		}
 
-        IntervalUtil timer = (IntervalUtil) ship.getCustomData().get(buffID);
-        timer.advance(amount);
+		cooldownPool = Math.max(cooldownPool - amount * cooldownRateMult, 0f);
+		if (cooldownPool < poolMaxSize) {
+			if (ship.getCustomData().get(buffID) == null) {
+				float rate = BASE_SPAWN_TIME.get(ship.getHullSize()) / spawnRateMult;
+				ship.setCustomData(buffID, new IntervalUtil(rate, rate));
+			}
 
-        if (timer.intervalElapsed()) {
-            for (ShipAPI victim : AIUtils.getEnemiesOnMap(ship)) {
-                if (victim.isFighter() || victim.isDrone()) continue;
-                if (victim.isStation() || victim.isStationModule()) continue;
-                if (victim.getTravelDrive() != null && victim.getTravelDrive().isActive()) continue;
+			IntervalUtil timer = (IntervalUtil) ship.getCustomData().get(buffID);
+			timer.advance(amount);
 
-                cache.add(victim, victim.getHullSize().ordinal());
-            }
+			if (timer.intervalElapsed()) {
+				for (ShipAPI victim : AIUtils.getEnemiesOnMap(ship)) {
+					if (victim.isFighter() || victim.isDrone()) continue;
+					if (victim.isStation() || victim.isStationModule()) continue;
+					if (victim.getTravelDrive() != null && victim.getTravelDrive().isActive()) continue;
 
-            ShipAPI victim = cache.pick();
-            if (victim != null) {
-                cache.clear();
+					cache.add(victim, victim.getHullSize().ordinal());
+				}
 
-                Vector2f target = findClearLocation(victim);
-                if (target != null) {
-                    spawnMine(ship, target);
-                }
-            }
-        }
+				ShipAPI victim = cache.pick();
+				if (victim != null) {
+					cache.clear();
+
+					Vector2f target = findClearLocation(victim);
+					if (target != null) {
+						spawnMine(ship, target);
+						cooldownPool += 1f;
+					}
+				}
+			}
+		}
+
+		putDataInEngine(engine, buffID, cooldownPool);
     }
 
     @Override
