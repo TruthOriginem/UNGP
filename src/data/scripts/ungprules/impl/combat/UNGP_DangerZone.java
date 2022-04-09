@@ -19,134 +19,153 @@ import java.util.Map;
 
 public class UNGP_DangerZone extends UNGP_BaseRuleEffect implements UNGP_CombatTag {
 
-    private float spawnRateMult;
-    private static final Map<ShipAPI.HullSize, Float> BASE_SPAWN_TIME = new HashMap<>();
+	private float spawnRateMult;
+	private float poolMaxSize;
+	private float cooldownRateMult;
+	private static final Map<ShipAPI.HullSize, Float> BASE_SPAWN_TIME = new HashMap<>();
 
-    static {
-        BASE_SPAWN_TIME.put(ShipAPI.HullSize.CAPITAL_SHIP, 10f);
-        BASE_SPAWN_TIME.put(ShipAPI.HullSize.CRUISER, 12f);
-        BASE_SPAWN_TIME.put(ShipAPI.HullSize.DESTROYER, 16f);
-        BASE_SPAWN_TIME.put(ShipAPI.HullSize.FRIGATE, 20f);
-    }
+	static {
+		BASE_SPAWN_TIME.put(ShipAPI.HullSize.CAPITAL_SHIP, 10f);
+		BASE_SPAWN_TIME.put(ShipAPI.HullSize.CRUISER, 14f);
+		BASE_SPAWN_TIME.put(ShipAPI.HullSize.DESTROYER, 20f);
+		BASE_SPAWN_TIME.put(ShipAPI.HullSize.FRIGATE, 30f);
+	}
 
-    @Override
-    public void updateDifficultyCache(UNGP_SpecialistSettings.Difficulty difficulty) {
-        this.spawnRateMult = getValueByDifficulty(0, difficulty);
-    }
+	@Override
+	public void updateDifficultyCache(UNGP_SpecialistSettings.Difficulty difficulty) {
+		spawnRateMult = getValueByDifficulty(0, difficulty);
+		poolMaxSize = getValueByDifficulty(1, difficulty);
+		cooldownRateMult = getValueByDifficulty(2, difficulty);
+	}
 
-    @Override
-    public float getValueByDifficulty(int index, UNGP_SpecialistSettings.Difficulty difficulty) {
-        if (index == 0) return difficulty.getLinearValue(1f, 1f);
-        return 0f;
-    }
+	@Override
+	public float getValueByDifficulty(int index, UNGP_SpecialistSettings.Difficulty difficulty) {
+		if (index == 0) return difficulty.getLinearValue(1f, 1f);
+		if (index == 1) return difficulty.getLinearValue(8f, 6f);
+		if (index == 2) return difficulty.getLinearValue(0.5f, 1f);
+		return 0f;
+	}
 
-    @Override
-    public String getDescriptionParams(int index, UNGP_SpecialistSettings.Difficulty difficulty) {
-        float rate = getValueByDifficulty(0, difficulty);
-        if (index == 0) return getFactorString(BASE_SPAWN_TIME.get(ShipAPI.HullSize.FRIGATE) / rate);
-        if (index == 1) return getFactorString(BASE_SPAWN_TIME.get(ShipAPI.HullSize.DESTROYER) / rate);
-        if (index == 2) return getFactorString(BASE_SPAWN_TIME.get(ShipAPI.HullSize.CRUISER) / rate);
-        if (index == 3) return getFactorString(BASE_SPAWN_TIME.get(ShipAPI.HullSize.CAPITAL_SHIP) / rate);
-        if (index == 4) return "2000";
-        return null;
-    }
+	@Override
+	public String getDescriptionParams(int index, UNGP_SpecialistSettings.Difficulty difficulty) {
+		float rate = getValueByDifficulty(0, difficulty);
+		if (index == 0) return getFactorString(BASE_SPAWN_TIME.get(ShipAPI.HullSize.FRIGATE) / rate);
+		if (index == 1) return getFactorString(BASE_SPAWN_TIME.get(ShipAPI.HullSize.DESTROYER) / rate);
+		if (index == 2) return getFactorString(BASE_SPAWN_TIME.get(ShipAPI.HullSize.CRUISER) / rate);
+		if (index == 3) return getFactorString(BASE_SPAWN_TIME.get(ShipAPI.HullSize.CAPITAL_SHIP) / rate);
+		if (index == 4) return "2000";
+		return null;
+	}
 
-    @Override
-    public void advanceInCombat(CombatEngineAPI engine, float amount) {
-    }
+	@Override
+	public void advanceInCombat(CombatEngineAPI engine, float amount) {
+	}
 
-    private final WeightedRandomPicker<ShipAPI> cache = new WeightedRandomPicker<>();
+	private final WeightedRandomPicker<ShipAPI> cache = new WeightedRandomPicker<>();
 
-    @Override
-    public void applyEnemyShipInCombat(float amount, ShipAPI ship) {
-        if (!ship.isAlive()) return;
-        if (ship.isDrone() || ship.isFighter()) return;
-        if (ship.isStationModule()) return;
+	@Override
+	public void applyEnemyShipInCombat(float amount, ShipAPI ship) {
+		if (!ship.isAlive()) return;
+		if (ship.isDrone() || ship.isFighter()) return;
+		if (ship.isStation() || ship.isStationModule()) return;
 
-        if (ship.getCustomData().get(buffID) == null) {
-            float rate = BASE_SPAWN_TIME.get(ship.getHullSize()) / spawnRateMult;
-            ship.setCustomData(buffID, new IntervalUtil(rate, rate));
-        }
+		CombatEngineAPI engine = Global.getCombatEngine();
+		Float cooldownPool = getDataInEngine(engine, buffID);
+		if (cooldownPool == null) {
+			cooldownPool = 0f;
+			putDataInEngine(engine, buffID, cooldownPool);
+		}
 
-        IntervalUtil timer = (IntervalUtil) ship.getCustomData().get(buffID);
-        timer.advance(amount);
+		cooldownPool = Math.max(cooldownPool - amount * cooldownRateMult, 0f);
+		if (ship.getCustomData().get(buffID) == null) {
+			float rate = BASE_SPAWN_TIME.get(ship.getHullSize()) / spawnRateMult;
+			ship.setCustomData(buffID, new IntervalUtil(rate, rate));
+		}
 
-        if (timer.intervalElapsed()) {
-            for (ShipAPI victim : AIUtils.getEnemiesOnMap(ship)) {
-                if (victim.isFighter() || victim.isDrone()) continue;
-                if (victim.isStation() || victim.isStationModule()) continue;
-                if (victim.getTravelDrive() != null && victim.getTravelDrive().isActive()) continue;
+		if (cooldownPool < poolMaxSize) { // prevent burst mine spawning
+			IntervalUtil timer = (IntervalUtil) ship.getCustomData().get(buffID);
+			timer.advance(amount);
 
-                cache.add(victim, victim.getHullSize().ordinal());
-            }
+			if (timer.intervalElapsed()) {
+				for (ShipAPI victim : AIUtils.getEnemiesOnMap(ship)) {
+					if (victim.isFighter() || victim.isDrone()) continue;
+					if (victim.isStation() || victim.isStationModule()) continue;
+					if (victim.getTravelDrive() != null && victim.getTravelDrive().isActive()) continue;
 
-            ShipAPI victim = cache.pick();
-            if (victim != null) {
-                cache.clear();
+					cache.add(victim, victim.getHullSize().ordinal());
+				}
 
-                Vector2f target = findClearLocation(victim);
-                if (target != null) {
-                    spawnMine(ship, target);
-                }
-            }
-        }
-    }
+				ShipAPI victim = cache.pick();
+				if (victim != null) {
+					cache.clear();
 
-    @Override
-    public void applyPlayerShipInCombat(float amount, CombatEngineAPI engine, ShipAPI ship) {
-    }
+					Vector2f target = findClearLocation(victim);
+					if (target != null) {
+						spawnMine(ship, target);
+						cooldownPool += 1f;
+					}
+				}
+			}
+		}
 
-    public static void spawnMine(ShipAPI source, Vector2f mineLoc) {
-        CombatEngineAPI engine = Global.getCombatEngine();
-        Vector2f currLoc = Misc.getPointAtRadius(mineLoc, 50f + (float) Math.random() * 50f);
-        MissileAPI mine = (MissileAPI) engine.spawnProjectile(source, null,
-                                                              "minelayer2", currLoc, (float) Math.random() * 360f, null);
+		putDataInEngine(engine, buffID, cooldownPool);
+	}
 
-        if (source != null) {
-            Global.getCombatEngine().applyDamageModifiersToSpawnedProjectileWithNullWeapon(source, WeaponAPI.WeaponType.MISSILE, false, mine.getDamage());
-        }
+	@Override
+	public void applyPlayerShipInCombat(float amount, CombatEngineAPI engine, ShipAPI ship) {
+	}
 
-        mine.setFlightTime((float) Math.random());
-        mine.fadeOutThenIn(1f);
+	public static void spawnMine(ShipAPI source, Vector2f mineLoc) {
+		CombatEngineAPI engine = Global.getCombatEngine();
+		Vector2f currLoc = Misc.getPointAtRadius(mineLoc, 60f + (float) Math.random() * 80f);
+		MissileAPI mine = (MissileAPI) engine.spawnProjectile(source, null,
+				"minelayer2", currLoc, (float) Math.random() * 360f, null);
 
-        Global.getSoundPlayer().playSound("mine_spawn", 1f, 1f, mine.getLocation(), mine.getVelocity());
-    }
+		if (source != null) {
+			Global.getCombatEngine().applyDamageModifiersToSpawnedProjectileWithNullWeapon(source, WeaponAPI.WeaponType.MISSILE, false, mine.getDamage());
+		}
 
-    public static Vector2f findClearLocation(ShipAPI victim) {
+		mine.setFlightTime((float) Math.random());
+		mine.fadeOutThenIn(1f);
 
-        List<Vector2f> tested = new ArrayList<>();
-        for (float angle = 0; angle <= 360f; angle += 10f) {
+		Global.getSoundPlayer().playSound("mine_spawn", 1f, 1f, mine.getLocation(), mine.getVelocity());
+	}
 
-            Vector2f mineLoc = MathUtils.getRandomPointOnCircumference(victim.getLocation(), victim.getCollisionRadius() + 400f + 200f * (float) Math.random());
-            float minOk = 400f + victim.getCollisionRadius();
-            if (!isAreaClear(mineLoc, minOk)) continue;
+	public static Vector2f findClearLocation(ShipAPI victim) {
 
-            tested.add(mineLoc);
-        }
+		List<Vector2f> tested = new ArrayList<>();
+		for (float angle = 0; angle <= 360f; angle += 10f) {
 
-        if (tested.isEmpty()) return null; // shouldn't happen
-        return tested.get((int) (Math.random() * tested.size()));
-    }
+			Vector2f mineLoc = MathUtils.getRandomPointOnCircumference(victim.getLocation(), victim.getCollisionRadius() + 400f + 200f * (float) Math.random());
+			float minOk = 400f + victim.getCollisionRadius();
+			if (!isAreaClear(mineLoc, minOk)) continue;
 
-    public static boolean isAreaClear(Vector2f loc, float range) {
-        CombatEngineAPI engine = Global.getCombatEngine();
-        for (ShipAPI other : engine.getShips()) {
-            if (other.isFighter()) continue;
-            if (other.isDrone()) continue;
+			tested.add(mineLoc);
+		}
 
-            float dist = Misc.getDistance(loc, other.getLocation());
-            if (dist < range) {
-                return false;
-            }
-        }
+		if (tested.isEmpty()) return null; // shouldn't happen
+		return tested.get((int) (Math.random() * tested.size()));
+	}
 
-        for (CombatEntityAPI other : Global.getCombatEngine().getAsteroids()) {
-            float dist = Misc.getDistance(loc, other.getLocation());
-            if (dist < other.getCollisionRadius() + 100f) {
-                return false;
-            }
-        }
+	public static boolean isAreaClear(Vector2f loc, float range) {
+		CombatEngineAPI engine = Global.getCombatEngine();
+		for (ShipAPI other : engine.getShips()) {
+			if (other.isFighter()) continue;
+			if (other.isDrone()) continue;
 
-        return true;
-    }
+			float dist = Misc.getDistance(loc, other.getLocation());
+			if (dist < range) {
+				return false;
+			}
+		}
+
+		for (CombatEntityAPI other : Global.getCombatEngine().getAsteroids()) {
+			float dist = Misc.getDistance(loc, other.getLocation());
+			if (dist < other.getCollisionRadius() + 100f) {
+				return false;
+			}
+		}
+
+		return true;
+	}
 }
