@@ -24,9 +24,9 @@ public class UNGP_DangerZone extends UNGP_BaseRuleEffect implements UNGP_CombatT
 
     static {
         BASE_SPAWN_TIME.put(ShipAPI.HullSize.CAPITAL_SHIP, 10f);
-        BASE_SPAWN_TIME.put(ShipAPI.HullSize.CRUISER, 12f);
-        BASE_SPAWN_TIME.put(ShipAPI.HullSize.DESTROYER, 16f);
-        BASE_SPAWN_TIME.put(ShipAPI.HullSize.FRIGATE, 20f);
+        BASE_SPAWN_TIME.put(ShipAPI.HullSize.CRUISER, 14f);
+        BASE_SPAWN_TIME.put(ShipAPI.HullSize.DESTROYER, 20f);
+        BASE_SPAWN_TIME.put(ShipAPI.HullSize.FRIGATE, 30f);
     }
 
     @Override
@@ -61,7 +61,7 @@ public class UNGP_DangerZone extends UNGP_BaseRuleEffect implements UNGP_CombatT
     public void applyEnemyShipInCombat(float amount, ShipAPI ship) {
         if (!ship.isAlive()) return;
         if (ship.isDrone() || ship.isFighter()) return;
-        if (ship.isStationModule()) return;
+        if (ship.isStation() || ship.isStationModule()) return;
 
         if (ship.getCustomData().get(buffID) == null) {
             float rate = BASE_SPAWN_TIME.get(ship.getHullSize()) / spawnRateMult;
@@ -98,7 +98,7 @@ public class UNGP_DangerZone extends UNGP_BaseRuleEffect implements UNGP_CombatT
 
     public static void spawnMine(ShipAPI source, Vector2f mineLoc) {
         CombatEngineAPI engine = Global.getCombatEngine();
-        Vector2f currLoc = Misc.getPointAtRadius(mineLoc, 50f + (float) Math.random() * 50f);
+        Vector2f currLoc = Misc.getPointAtRadius(mineLoc, 60f + (float) Math.random() * 80f);
         MissileAPI mine = (MissileAPI) engine.spawnProjectile(source, null,
                                                               "minelayer2", currLoc, (float) Math.random() * 360f, null);
 
