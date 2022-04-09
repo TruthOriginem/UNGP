@@ -42,7 +42,7 @@ public class UNGP_DangerZone extends UNGP_BaseRuleEffect implements UNGP_CombatT
 	public float getValueByDifficulty(int index, UNGP_SpecialistSettings.Difficulty difficulty) {
 		if (index == 0) return difficulty.getLinearValue(1f, 1f);
 		if (index == 1) return difficulty.getLinearValue(8f, 6f);
-		if (index == 2) return difficulty.getLinearValue(1f, 1f);
+		if (index == 2) return difficulty.getLinearValue(0.5f, 1f);
 		return 0f;
 	}
 
