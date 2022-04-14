@@ -65,11 +65,11 @@ public class UNGP_LuckySeven extends UNGP_BaseRuleEffect implements UNGP_CombatT
 							Global.getCombatEngine().addFloatingText(point, i18n.get("ct_777"), 40f, Color.red, target, 1f, 0f);
 							damage.getModifier().modifyPercent(buffID, 777f);
 						} else {
-							Global.getCombatEngine().addFloatingText(point, i18n.get("ct_77"), 30f, Color.red, target, 1f, 0f);
+							if (damage.getDamage() >= 150f) Global.getCombatEngine().addFloatingText(point, i18n.get("ct_77"), 30f, Color.red, target, 1f, 0f);
 							damage.getModifier().modifyPercent(buffID, 77f);
 						}
 					} else {
-						if (damage.getDamage() >= 100) Global.getCombatEngine().addFloatingText(point, i18n.get("ct_7"), 20f, Color.red, target, 1f, 0f);
+						if (damage.getDamage() >= 250f) Global.getCombatEngine().addFloatingText(point, i18n.get("ct_7"), 20f, Color.red, target, 1f, 0f);
 						damage.getModifier().modifyPercent(buffID, 7f);
 					}
 
