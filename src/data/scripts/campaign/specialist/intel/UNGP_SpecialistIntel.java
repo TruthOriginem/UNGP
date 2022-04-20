@@ -221,7 +221,7 @@ public class UNGP_SpecialistIntel extends BaseIntelPlugin {
                     tooltip.setParaOrbitronLarge();
                     tooltip.addPara(UNGP_RulesManager.getBonusString(true), UNGP_RulesManager.getBonusColor(true), 0f);
                     tooltip.setParaFontDefault();
-                    addLine(tooltip, positiveRectTitle.getWidth() - 5f, 1f, 3f);
+                    addLine(tooltip, positiveRectTitle.getWidth() - 5f, 3f);
                     positiveRectTitle.addTooltip();
                 }
                 UIRect positiveRectContent = positiveRectSplits[1].shrink(contentShrink);
@@ -252,7 +252,7 @@ public class UNGP_SpecialistIntel extends BaseIntelPlugin {
                     tooltip.setParaOrbitronLarge();
                     tooltip.addPara(UNGP_RulesManager.getBonusString(false), UNGP_RulesManager.getBonusColor(false), 0f);
                     tooltip.setParaFontDefault();
-                    addLine(tooltip, negativeRectTitle.getWidth() - 5f, 1f, 3f);
+                    addLine(tooltip, negativeRectTitle.getWidth() - 5f, 3f);
                     negativeRectTitle.addTooltip();
                 }
                 UIRect negativeRectContent = negativeRectSplits[1].shrink(contentShrink);
@@ -291,7 +291,7 @@ public class UNGP_SpecialistIntel extends BaseIntelPlugin {
                     simulationCheckBox.getPosition().inTL(titleWidth, 0);
                     simulationCheckBox.setChecked(UNGP_SpecialistSettings.isRulesEnabledInSimulation());
                     tooltip.addSpacer(0f).getPosition().inTL(titlePos.getX(), titlePos.getHeight());
-                    addLine(tooltip, gameStateRectTitle.getWidth() - 5f, 1f, 3f);
+                    addLine(tooltip, gameStateRectTitle.getWidth() - 5f, 3f);
                     gameStateRectTitle.addTooltip();
                 }
                 UIRect gameStateRectContent = gameStateRectSplits[1].shrink(contentShrink);
@@ -328,13 +328,10 @@ public class UNGP_SpecialistIntel extends BaseIntelPlugin {
         }
     }
 
-    private void addLine(TooltipMakerAPI tooltip, float width, float height, float pad) {
-        ButtonAPI button = tooltip.addButton("", new Object(), width, height, pad);
-        button.setEnabled(false);
-        button.setButtonDisabledPressedSound(null);
-        button.setButtonPressedSound(null);
-        button.setMouseOverSound(null);
-        button.setChecked(true);
+    private void addLine(TooltipMakerAPI tooltip, float width, float pad) {
+        Color color = new Color(77, 150, 154, 200);
+        LabelAPI heading = tooltip.addSectionHeading("", color, color, Alignment.MID, pad);
+        heading.getPosition().setSize(width, 1);
     }
 
     @Override

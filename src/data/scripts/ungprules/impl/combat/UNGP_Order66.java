@@ -64,7 +64,7 @@ public class UNGP_Order66 extends UNGP_BaseRuleEffect implements UNGP_CombatTag 
                     return buffID;
                 }
 
-            } else if (param instanceof CombatEntityAPI) { // collision, yeah
+            } else if (param instanceof CombatEntityAPI && !(param instanceof EmpArcEntityAPI)) { // collision, yeah
                 CombatEntityAPI crash = (CombatEntityAPI) param;
                 if (crash.getOwner() == target.getOwner()) {
                     damage.getModifier().modifyPercent(buffID, damageBonus);

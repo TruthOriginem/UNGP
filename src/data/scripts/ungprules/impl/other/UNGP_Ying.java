@@ -4,13 +4,10 @@ import com.fs.starfarer.api.impl.campaign.intel.MessageIntel;
 import com.fs.starfarer.api.util.Misc;
 import com.fs.starfarer.api.util.WeightedRandomPicker;
 import data.scripts.campaign.specialist.UNGP_SpecialistSettings;
-import data.scripts.campaign.specialist.challenges.UNGP_ChallengeInfo;
-import data.scripts.campaign.specialist.challenges.UNGP_ChallengeManager;
 import data.scripts.campaign.specialist.rules.UNGP_RulesManager;
 import data.scripts.ungprules.impl.UNGP_BaseRuleEffect;
 import data.scripts.ungprules.tags.UNGP_TweakBeforeApplyTag;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static data.scripts.campaign.specialist.rules.UNGP_RulesManager.URule;
@@ -31,10 +28,10 @@ public class UNGP_Ying extends UNGP_BaseRuleEffect implements UNGP_TweakBeforeAp
 
     @Override
     public void tweakBeforeApply(List<URule> activeRules, List<URule> originalActiveRules) {
-    	int positive = 0;
+//    	int positive = 0;
         boolean containsYang = false;
         for (URule tmp : originalActiveRules) {
-        	if (tmp.isBonus()) positive++;
+//        	if (tmp.isBonus()) positive++;
             if (tmp.getId().contentEquals("yang")) {
                 containsYang = true;
             }
@@ -54,24 +51,24 @@ public class UNGP_Ying extends UNGP_BaseRuleEffect implements UNGP_TweakBeforeAp
                 picker.add(tmp);
             }
         }
-
-		boolean challenge = false;
-		UNGP_ChallengeInfo info = UNGP_ChallengeManager.getChallengeInfo("dao_of_randomness");
-		if (info != null) {
-			challenge = !info.isAbovePositiveLimitation(positive);
-			if (challenge) for (URule rule : info.getRulesRequired()) {
-				if (!originalActiveRules.contains(rule)) {
-					challenge = false;
-					break;
-				}
-			}
-		}
-
-		if (challenge) {
-			for (URule rule : new ArrayList<>(picker.getItems())) {
-				if (rule.isBonus()) picker.remove(rule);
-			}
-		}
+//
+//		boolean challenge = false;
+//		UNGP_ChallengeInfo info = UNGP_ChallengeManager.getChallengeInfo("dao_of_randomness");
+//		if (info != null) {
+//			challenge = !info.isAbovePositiveLimitation(positive);
+//			if (challenge) for (URule rule : info.getRulesRequired()) {
+//				if (!originalActiveRules.contains(rule)) {
+//					challenge = false;
+//					break;
+//				}
+//			}
+//		}
+//
+//		if (challenge) {
+//			for (URule rule : new ArrayList<>(picker.getItems())) {
+//				if (rule.isBonus()) picker.remove(rule);
+//			}
+//		}
 
         if (!picker.isEmpty()) {
             URule rolled = picker.pick();

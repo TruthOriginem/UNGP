@@ -1,11 +1,11 @@
 package data.scripts.ungprules.impl.combat;
 
-import com.fs.starfarer.api.combat.CombatEngineAPI;
-import com.fs.starfarer.api.combat.ShipAPI;
-import com.fs.starfarer.api.combat.WeaponAPI;
+import com.fs.starfarer.api.combat.*;
+import com.fs.starfarer.api.combat.listeners.DamageDealtModifier;
 import data.scripts.campaign.specialist.UNGP_SpecialistSettings;
 import data.scripts.ungprules.impl.UNGP_BaseRuleEffect;
 import data.scripts.ungprules.tags.UNGP_CombatTag;
+import org.lwjgl.util.vector.Vector2f;
 
 public class UNGP_InfightingBook extends UNGP_BaseRuleEffect implements UNGP_CombatTag {
     private float multiplier;
@@ -34,11 +34,31 @@ public class UNGP_InfightingBook extends UNGP_BaseRuleEffect implements UNGP_Com
 
     @Override
     public void applyPlayerShipInCombat(float amount, CombatEngineAPI engine, ShipAPI ship) {
-        for (WeaponAPI weapon : ship.getAllWeapons()) {
-            if (weapon.isDecorative() || weapon.isBeam() || weapon.isBurstBeam()) continue;
-            if (weapon.getSpec().getMaxRange() <= 500) {
-                weapon.getDamage().getModifier().modifyMult(buffID, 1f + multiplier);
+//        for (WeaponAPI weapon : ship.getAllWeapons()) {
+//            if (weapon.isDecorative() || weapon.isBeam() || weapon.isBurstBeam()) continue;
+//            if (weapon.getSpec().getMaxRange() <= 500) {
+//                weapon.getDamage().getModifier().modifyMult(buffID, 1f + multiplier);
+//            }
+//        }
+        if (!ship.hasListenerOfClass(InfightingBookDamageModifier.class)) {
+            ship.addListener(new InfightingBookDamageModifier());
+        }
+    }
+
+    private class InfightingBookDamageModifier implements DamageDealtModifier {
+        @Override
+        public String modifyDamageDealt(Object param, CombatEntityAPI target, DamageAPI damage, Vector2f point, boolean shieldHit) {
+            WeaponAPI weapon;
+            if (param instanceof DamagingProjectileAPI) {
+                weapon = ((DamagingProjectileAPI) param).getWeapon();
+                if (weapon.getSpec().getMaxRange() <= 500) {
+                    damage.getModifier().modifyMult(buffID, 1f + multiplier);
+                    return buffID;
+                }
+            } else {
+                return null;
             }
+            return null;
         }
     }
 
