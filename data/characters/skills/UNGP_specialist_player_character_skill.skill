@@ -1,0 +1,16 @@
+{
+	"id":"UNGP_specialist_player_character_skill",
+	"governingAptitude":"technology",
+	"compressHullmods":false,
+	"scope":"CUSTOM",
+	"scopeStr":"UNGP",
+	"effectGroups":[
+		{
+			"requiredSkillLevel":1,
+			"effectBasedOnLevel":false,
+			"effects":[
+				{"type":"CHARACTER_STATS", "script":"data.scripts.campaign.specialist.skills.UNGP_SpecialistSkills$UNGP_SpecialistCharacterSkill"},
+			]
+		},
+	],
+}

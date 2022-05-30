@@ -1,20 +1,17 @@
 package data.scripts.ungprules.impl.member;
 
+import com.fs.starfarer.api.campaign.FleetDataAPI;
 import com.fs.starfarer.api.combat.CombatEngineAPI;
-import com.fs.starfarer.api.combat.CombatFleetManagerAPI;
+import com.fs.starfarer.api.combat.MutableShipStatsAPI;
 import com.fs.starfarer.api.combat.ShipAPI;
-import com.fs.starfarer.api.combat.StatBonus;
 import com.fs.starfarer.api.fleet.FleetMemberAPI;
 import com.fs.starfarer.api.impl.campaign.ids.Stats;
-import com.fs.starfarer.api.mission.FleetSide;
 import data.scripts.campaign.specialist.UNGP_SpecialistSettings;
-import data.scripts.ungprules.impl.UNGP_MemberBuffRuleEffect;
+import data.scripts.ungprules.impl.UNGP_BaseRuleEffect;
 import data.scripts.ungprules.tags.UNGP_CombatInitTag;
-import data.scripts.ungprules.tags.UNGP_CombatTag;
+import data.scripts.ungprules.tags.UNGP_PlayerShipSkillTag;
 
-import java.util.List;
-
-public class UNGP_CruisingHunting extends UNGP_MemberBuffRuleEffect implements UNGP_CombatTag, UNGP_CombatInitTag {
+public class UNGP_CruisingHunting extends UNGP_BaseRuleEffect implements UNGP_CombatInitTag, UNGP_PlayerShipSkillTag {
     private static final int DP_REDUCTION_FLAT = 2;
     private float dpReductionFactor;
 
@@ -29,18 +26,6 @@ public class UNGP_CruisingHunting extends UNGP_MemberBuffRuleEffect implements U
         return super.getValueByDifficulty(index, difficulty);
     }
 
-    @Override
-    public void applyPlayerFleetMemberInCampaign(FleetMemberAPI member) {
-        float dp = member.getDeploymentPointsCost();
-        int reduction = (int) Math.ceil(Math.max(DP_REDUCTION_FLAT, dp * dpReductionFactor));
-        member.getStats().getDynamic().getMod(Stats.DEPLOYMENT_POINTS_MOD).modifyFlat(buffID, -reduction);
-    }
-
-    @Override
-    public boolean canApply(FleetMemberAPI member) {
-        return member.isCruiser();
-    }
-
 
     @Override
     public String getDescriptionParams(int index, UNGP_SpecialistSettings.Difficulty difficulty) {
@@ -49,45 +34,24 @@ public class UNGP_CruisingHunting extends UNGP_MemberBuffRuleEffect implements U
         return super.getDescriptionParams(index, difficulty);
     }
 
-    private int skipFrames = 0;
-
-    @Override
-    public void advanceInCombat(CombatEngineAPI engine, float amount) {
-        skipFrames++;
-        if (skipFrames >= 60) {
-            skipFrames = 0;
-        } else {
-            return;
-        }
-        CombatFleetManagerAPI fleetManager = engine.getFleetManager(FleetSide.PLAYER);
-        List<FleetMemberAPI> members = fleetManager.getReservesCopy();
-        members.addAll(fleetManager.getDeployedCopy());
-        for (FleetMemberAPI member : members) {
-            if (canApply(member)) {
-                StatBonus mod = member.getStats().getDynamic().getMod(Stats.DEPLOYMENT_POINTS_MOD);
-                if (!mod.getFlatBonuses().containsKey(buffID)) {
-                    float dp = member.getDeploymentPointsCost();
-                    int reduction = (int) Math.ceil(Math.max(DP_REDUCTION_FLAT, dp * dpReductionFactor));
-                    mod.modifyFlat(buffID, -reduction);
-                }
-            }
-        }
-    }
-
-    @Override
-    public void applyEnemyShipInCombat(float amount, ShipAPI enemy) {
-
-    }
-
-    @Override
-    public void applyPlayerShipInCombat(float amount, CombatEngineAPI engine, ShipAPI ship) {
-
-    }
 
     @Override
     public void init(CombatEngineAPI engine) {
-        skipFrames = 70;
-        advanceInCombat(engine, 0);
-        skipFrames = 70;
+        // do nothing, just for tag
+    }
+
+    @Override
+    public void apply(FleetDataAPI fleetData, FleetMemberAPI member, MutableShipStatsAPI stats, ShipAPI.HullSize hullSize) {
+        if (hullSize == ShipAPI.HullSize.CRUISER) {
+            // How vanilla works
+            float dp = stats.getSuppliesToRecover().getBaseValue();
+            int reduction = (int) Math.ceil(Math.max(DP_REDUCTION_FLAT, dp * dpReductionFactor));
+            stats.getDynamic().getMod(Stats.DEPLOYMENT_POINTS_MOD).modifyFlat(buffID, -reduction);
+        }
+    }
+
+    @Override
+    public void unapply(MutableShipStatsAPI stats, ShipAPI.HullSize hullSize) {
+        stats.getDynamic().getMod(Stats.DEPLOYMENT_POINTS_MOD).unmodify(buffID);
     }
 }

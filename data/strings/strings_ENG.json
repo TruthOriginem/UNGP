@@ -62,6 +62,7 @@
     "d_inheritConfirmTip_p2": "You would gain %s story points.",
     "d_inheritedBP": " You have inherited:\n %s ship blueprints\n %s fighter blueprints\n %s weapon blueprints\n %s hullmod blueprints",
     "d_inheritedPoints": "You have acquired %s skillpoints",
+    "d_inherit_choose_background": "Choose your background",
     "d_on": "enabled",
     "d_off": "disabled",
     "d_help": "Help",
