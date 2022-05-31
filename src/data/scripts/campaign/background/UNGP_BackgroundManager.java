@@ -1,6 +1,7 @@
 package data.scripts.campaign.background;
 
 import com.fs.starfarer.api.Global;
+import com.fs.starfarer.api.campaign.rules.MemoryAPI;
 import com.fs.starfarer.api.graphics.SpriteAPI;
 import data.scripts.ungpbackgrounds.UNGP_BackgroundPluginAPI;
 import data.scripts.ungpbackgrounds.impl.UNGP_Nothing;
@@ -13,8 +14,9 @@ import static data.scripts.utils.UNGPUtils.EMPTY;
 import static data.scripts.utils.UNGPUtils.isEmpty;
 
 public class UNGP_BackgroundManager {
-    private static final String FILE_PATH = "data/campaign/UNGP_backgrounds.csv";
+    public static final String MEM_PLAYER_BACKGROUND_KEY = "$UNGP_player_background";
 
+    private static final String FILE_PATH = "data/campaign/UNGP_backgrounds.csv";
     private static final Map<String, UNGP_Background> BACKGROUND_MAP = new HashMap<>();
 
     private static UNGP_Background DEFAULT_BACKGROUND;
@@ -96,5 +98,18 @@ public class UNGP_BackgroundManager {
 
     public static UNGP_Background getDefaultBackground() {
         return DEFAULT_BACKGROUND;
+    }
+
+    public static UNGP_Background getPlayerBackground() {
+        MemoryAPI memoryWithoutUpdate = Global.getSector().getCharacterData().getMemoryWithoutUpdate();
+        if (memoryWithoutUpdate.contains(MEM_PLAYER_BACKGROUND_KEY)) {
+            return BACKGROUND_MAP.get(memoryWithoutUpdate.getString(MEM_PLAYER_BACKGROUND_KEY));
+        } else {
+            return DEFAULT_BACKGROUND;
+        }
+    }
+
+    public static void setPlayerBackground(UNGP_Background background) {
+        Global.getSector().getCharacterData().getMemoryWithoutUpdate().set(MEM_PLAYER_BACKGROUND_KEY, background.getId());
     }
 }

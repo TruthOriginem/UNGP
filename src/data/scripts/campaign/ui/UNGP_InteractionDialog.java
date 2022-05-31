@@ -86,37 +86,6 @@ public class UNGP_InteractionDialog implements InteractionDialogPlugin {
     private UNGP_InheritData pregenInheritData;
     private boolean isSpecialistMode = false;
 
-    //    // inherit setting entry
-//    private InheritSettingEntry<Float> settingEntry_inheritCreditsRatio = new InheritSettingEntry<Float>(0f, 5) {
-//        @Override
-//        public void initParams(int optionSize) {
-//            entryTitle = d_i18n.get("inheritCredits");
-//            entryTitleColor = Misc.getPositiveHighlightColor();
-//            for (int i = 0; i < optionSize; i++) {
-//                float percentage = Math.min(1, i * 0.25f);
-//                optionValues[i] = percentage;
-//                optionNames[i] = (int) (percentage * 100f) + "%";
-//                optionBaseColor[i] = Misc.getBasePlayerColor();
-//                optionDarkColor[i] = Misc.getDarkPlayerColor();
-//                optionBrightColor[i] = Misc.getBrightPlayerColor();
-//            }
-//        }
-//    };
-//    private InheritSettingEntry<Float> settingEntry_inheritBPsRatio = new InheritSettingEntry<Float>(0f, 5) {
-//        @Override
-//        public void initParams(int optionSize) {
-//            entryTitle = d_i18n.get("inheritBPs");
-//            entryTitleColor = Misc.getPositiveHighlightColor();
-//            for (int i = 0; i < optionSize; i++) {
-//                float percentage = Math.min(1, i * 0.25f);
-//                optionValues[i] = percentage;
-//                optionNames[i] = (int) (percentage * 100f) + "%";
-//                optionBaseColor[i] = Misc.getBasePlayerColor();
-//                optionDarkColor[i] = Misc.getDarkPlayerColor();
-//                optionBrightColor[i] = Misc.getBrightPlayerColor();
-//            }
-//        }
-//    };
     private InheritSettingEntry<Difficulty> settingEntry_difficulty = new InheritSettingEntry<Difficulty>(null, Difficulty.values().length + 1) {
         @Override
         public void initParams(int optionSize) {
@@ -456,7 +425,6 @@ public class UNGP_InteractionDialog implements InteractionDialogPlugin {
 
         // Credits
         int creditsInherited = (int) (pickedInheritData.inheritCredits * inherit_creditsFactor);
-//        int creditsInherited = (int) (pickedInheritData.inheritCredits * settingEntry_inheritCreditsRatio.getValue());
         sector.getPlayerFleet().getCargo().getCredits().add(creditsInherited);
         AddRemoveCommodity.addCreditsGainText(creditsInherited, textPanel);
         // Blueprints
@@ -468,17 +436,13 @@ public class UNGP_InteractionDialog implements InteractionDialogPlugin {
             dataSaver.startInheritDataFromSaver(tooltip, dataSaverParams);
             textPanel.addTooltip();
         }
-        // Add points: skill points/story points
-//        int addSkillPoints = UNGP_Settings.getBonusSkillPoints(pickedInheritData.cycle);
-//        int addStoryPoints = UNGP_Settings.getBonusStoryPoints(pickedInheritData.cycle);
-//        textPanel.addPara(d_i18n.get("inheritedPoints"), Misc.getPositiveHighlightColor(), Misc.getHighlightColor(),
-//                          addSkillPoints + "");
-//        sector.getPlayerStats().addPoints(addSkillPoints);
-//        sector.getPlayerStats().addStoryPoints(addStoryPoints, textPanel, true);
 
         TooltipMakerAPI tooltip = textPanel.beginTooltip();
+
         plugin.afterConfirm(pickedInheritData);
         plugin.addAfterConfirmTooltip(tooltip, pickedInheritData);
+        UNGP_BackgroundManager.setPlayerBackground(pickedBackground);
+
         textPanel.addTooltip();
 
         textPanel.setFontInsignia();
@@ -601,8 +565,6 @@ public class UNGP_InteractionDialog implements InteractionDialogPlugin {
                 }
             }
             final int bpInherited = bpInheritGeneratedByDataSaver;
-//            final int addSkillPoints = UNGP_Settings.getBonusSkillPoints(pickedInheritData.cycle);
-//            final int addStoryPoints = UNGP_Settings.getBonusStoryPoints(pickedInheritData.cycle);
             final boolean isSpecialistMode = this.isSpecialistMode;
             final Difficulty difficulty = settingEntry_difficulty.getValue();
 

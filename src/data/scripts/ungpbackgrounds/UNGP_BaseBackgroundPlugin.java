@@ -10,7 +10,10 @@ import com.fs.starfarer.api.combat.ShipHullSpecAPI;
 import com.fs.starfarer.api.combat.ShipVariantAPI;
 import com.fs.starfarer.api.fleet.FleetMemberAPI;
 import com.fs.starfarer.api.fleet.FleetMemberType;
+import com.fs.starfarer.api.ui.Alignment;
+import com.fs.starfarer.api.ui.LabelAPI;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
+import com.fs.starfarer.api.ui.UIComponentAPI;
 import com.fs.starfarer.api.util.Misc;
 import data.scripts.campaign.inherit.UNGP_InheritData;
 import org.jetbrains.annotations.Nullable;
@@ -22,34 +25,33 @@ import java.util.*;
 import static data.scripts.campaign.UNGP_Settings.d_i18n;
 
 public abstract class UNGP_BaseBackgroundPlugin implements UNGP_BackgroundPluginAPI {
-    protected enum BackgroundBonusType {
-        SKILL, // item = skill id, param1 = skill level
-        CARGO_STACK, // item = id / special data, param1 = size(float), param2 = CargoItemType
-        SHIP // item = variant id, param1 = quantity
+    protected interface BackgroundBonusScript {
+        void addBonusTooltip(TooltipMakerAPI tooltip, UNGP_InheritData pickedInheritData, boolean isLimited, boolean showLimit);
+
+        void afterConfirm(UNGP_InheritData pickedInheritData);
     }
 
-    protected class BackgroundBonus {
+    protected enum BackgroundBonusType {
+        SKILL, // skill id, skill level
+        CARGO_STACK, // CargoItemType, id / special data, size(float)
+        SHIP, //variant id, quantity
+        SKILL_POINTS, // size(int)
+        STORY_POINTS, // size(int)
+        SCRIPT // BackgroundBonusScript
+    }
+
+    protected static class BackgroundBonus {
         protected BackgroundBonusType type;
-        protected Object item;
-        protected Object param1;
-        protected Object param2;
+        protected Object[] params;
 
-        public BackgroundBonus(BackgroundBonusType type, Object item, Object param1) {
+        public BackgroundBonus(BackgroundBonusType type, Object... params) {
             this.type = type;
-            this.item = item;
-            this.param1 = param1;
-        }
-
-        public BackgroundBonus(BackgroundBonusType type, Object item, Object param1, Object param2) {
-            this.type = type;
-            this.item = item;
-            this.param1 = param1;
-            this.param2 = param2;
+            this.params = params;
         }
 
         public CargoStackAPI createCargoStack() {
-            CargoStackAPI stack = Global.getFactory().createCargoStack(param2 == null ? CargoAPI.CargoItemType.RESOURCES : (CargoAPI.CargoItemType) param2, item, null);
-            stack.setSize((Float) param1);
+            CargoStackAPI stack = Global.getFactory().createCargoStack((CargoAPI.CargoItemType) params[0], params[1], null);
+            stack.setSize(Float.parseFloat(params[2].toString()));
             return stack;
         }
     }
@@ -58,7 +60,6 @@ public abstract class UNGP_BaseBackgroundPlugin implements UNGP_BackgroundPlugin
 
     public UNGP_BaseBackgroundPlugin() {
         initCycleBonus();
-
     }
 
     @Override
@@ -68,10 +69,7 @@ public abstract class UNGP_BaseBackgroundPlugin implements UNGP_BackgroundPlugin
 
     /**
      * @param cycle
-     * @param bonus Bonus Type:
-     *              SKILL, // item = skill id, param1 = skill level
-     *              CARGO_STACK, // item = id / special data, param1 = size(float), param2 = CargoItemType
-     *              SHIP // item = variant id, param1 = quantity
+     * @param bonus
      */
     protected void addCycleBonus(int cycle, BackgroundBonus bonus) {
         List<BackgroundBonus> bonusList = cycleBonusMap.get(cycle);
@@ -99,7 +97,7 @@ public abstract class UNGP_BaseBackgroundPlugin implements UNGP_BackgroundPlugin
 
     @Override
     public void addInheritCreditsAndBPsTooltip(TooltipMakerAPI tooltip, @Nullable UNGP_InheritData pickedInheritData) {
-        tooltip.addPara(d_i18n.get("inheritCredits") + ": %s", 0f, Misc.getHighlightColor(), (int) (getInheritCreditsFactor() * 100f) + "%");
+        tooltip.addPara(d_i18n.get("inheritCredits") + ": %s", 0f, Misc.getPositiveHighlightColor(), (int) (getInheritCreditsFactor() * 100f) + "%");
         tooltip.addPara(d_i18n.get("inheritBPs") + ": %s", 0f, Misc.getPositiveHighlightColor(), (int) (getInheritBlueprintsFactor() * 100f) + "%");
     }
 
@@ -113,6 +111,7 @@ public abstract class UNGP_BaseBackgroundPlugin implements UNGP_BackgroundPlugin
         if (!cycleBonusMap.isEmpty()) {
             Color hl = Misc.getHighlightColor();
             Color gray = Misc.getGrayColor();
+            Color base = Misc.getTextColor();
             float pad = 0f;
 
             int curCycle = 1;
@@ -128,61 +127,69 @@ public abstract class UNGP_BaseBackgroundPlugin implements UNGP_BackgroundPlugin
                         continue;
                     }
                 }
+                Color baseColor = isLimited ? gray : base;
+                Color highlightColor = isLimited ? gray : hl;
                 for (BackgroundBonus bonus : entry.getValue()) {
                     switch (bonus.type) {
                         case SKILL:
-                            String skillId = (String) bonus.item;
+                            String skillId = (String) bonus.params[0];
                             SkillSpecAPI skillSpec = Global.getSettings().getSkillSpec(skillId);
                             int level;
-                            if (bonus.param1 instanceof Integer) {
-                                level = (int) bonus.param1;
+                            if (bonus.params[1] instanceof Integer) {
+                                level = (int) bonus.params[1];
                             } else {
                                 level = 1;
                             }
-                            if (!isLimited) {
-                                if (level < 2) {
-                                    tooltip.addPara(d_i18n.get("bg_bonus_skill"), pad, hl, skillSpec.getName());
-                                } else {
-                                    tooltip.addPara(d_i18n.get("bg_bonus_skill_elite"), pad, Misc.getStoryOptionColor(), skillSpec.getName());
-                                }
+                            if (level < 2) {
+                                tooltip.addPara(d_i18n.get("bg_bonus_skill"), pad, baseColor, highlightColor, skillSpec.getName());
                             } else {
-                                if (level < 2) {
-                                    tooltip.addPara(d_i18n.format("bg_bonus_skill", skillSpec.getName())
-                                                            + d_i18n.format("bg_bonus_cycle_unlock_tip", "" + cycle), gray, pad);
-                                } else {
-                                    tooltip.addPara(d_i18n.format("bg_bonus_skill_elite", skillSpec.getName())
-                                                            + d_i18n.format("bg_bonus_cycle_unlock_tip", "" + cycle), gray, pad);
-                                }
+                                tooltip.addPara(d_i18n.get("bg_bonus_skill_elite"), pad, baseColor, isLimited ? gray : Misc.getStoryOptionColor(), skillSpec.getName());
+                            }
+                            if (isLimited || showLimit) {
+                                addUnlockCycleStringToTooltipAtRight(tooltip, cycle, gray, pad);
                             }
                             break;
                         case CARGO_STACK:
                             CargoStackAPI stack = bonus.createCargoStack();
-                            if (!isLimited) {
-                                tooltip.addPara(d_i18n.get("bg_bonus_item"), pad, hl, stack.getDisplayName(), (int) stack.getSize() + "");
-                            } else {
-                                tooltip.addPara(d_i18n.format("bg_bonus_item", stack.getDisplayName(), (int) stack.getSize() + "")
-                                                        + d_i18n.format("bg_bonus_cycle_unlock_tip", "" + cycle), gray, pad);
+                            tooltip.addPara(d_i18n.get("bg_bonus_item"), pad, baseColor, highlightColor, stack.getDisplayName(), (int) stack.getSize() + "");
+                            if (isLimited || showLimit) {
+                                addUnlockCycleStringToTooltipAtRight(tooltip, cycle, gray, pad);
                             }
                             break;
                         case SHIP:
-                            String variantId = (String) bonus.item;
+                            String variantId = (String) bonus.params[0];
                             int size;
-                            if (bonus.param1 instanceof Integer) {
-                                size = (int) bonus.param1;
+                            if (bonus.params[1] instanceof Integer) {
+                                size = (int) bonus.params[1];
                             } else {
                                 size = 1;
                             }
                             ShipVariantAPI variant = Global.getSettings().getVariant(variantId);
                             ShipHullSpecAPI hullSpec = variant.getHullSpec();
-                            if (!isLimited) {
-                                tooltip.addPara(d_i18n.get("bg_bonus_ship"), pad, hl, hullSpec.getHullNameWithDashClass(), size + "");
-                            } else {
-                                tooltip.addPara(d_i18n.format("bg_bonus_ship", hullSpec.getHullNameWithDashClass(), size + "")
-                                                        + d_i18n.format("bg_bonus_cycle_unlock_tip", "" + cycle), gray, pad);
+                            tooltip.addPara(d_i18n.get("bg_bonus_ship"), pad, baseColor, highlightColor, hullSpec.getHullNameWithDashClass(), size + "");
+                            if (isLimited || showLimit) {
+                                addUnlockCycleStringToTooltipAtRight(tooltip, cycle, gray, pad);
                             }
+                            break;
+                        case SKILL_POINTS:
+                            tooltip.addPara(d_i18n.get("bg_bonus_skill_point"), pad, baseColor, highlightColor, (int) bonus.params[0] + "");
+                            if (isLimited || showLimit) {
+                                addUnlockCycleStringToTooltipAtRight(tooltip, cycle, gray, pad);
+                            }
+                            break;
+                        case STORY_POINTS:
+                            tooltip.addPara(d_i18n.get("bg_bonus_story_point"), pad, baseColor, highlightColor, (int) bonus.params[0] + "");
+                            if (isLimited || showLimit) {
+                                addUnlockCycleStringToTooltipAtRight(tooltip, cycle, gray, pad);
+                            }
+                            break;
+                        case SCRIPT:
+                            BackgroundBonusScript script = (BackgroundBonusScript) bonus.params[0];
+                            script.addBonusTooltip(tooltip, pickedInheritData, isLimited, showLimit);
                             break;
                     }
                 }
+                tooltip.addSpacer(0f);
             }
         }
     }
@@ -197,9 +204,7 @@ public abstract class UNGP_BaseBackgroundPlugin implements UNGP_BackgroundPlugin
             }
             MutableCharacterStatsAPI playerStats = Global.getSector().getPlayerStats();
             CampaignFleetAPI playerFleet = Global.getSector().getPlayerFleet();
-            Iterator<Map.Entry<Integer, List<BackgroundBonus>>> iterator = cycleBonusMap.entrySet().iterator();
-            while (iterator.hasNext()) {
-                Map.Entry<Integer, List<BackgroundBonus>> entry = iterator.next();
+            for (Map.Entry<Integer, List<BackgroundBonus>> entry : cycleBonusMap.entrySet()) {
                 int cycle = entry.getKey();
                 if (curCycle < cycle) {
                     continue;
@@ -207,10 +212,10 @@ public abstract class UNGP_BaseBackgroundPlugin implements UNGP_BackgroundPlugin
                 for (BackgroundBonus bonus : entry.getValue()) {
                     switch (bonus.type) {
                         case SKILL:
-                            String skillId = (String) bonus.item;
+                            String skillId = (String) bonus.params[0];
                             int level;
-                            if (bonus.param1 instanceof Integer) {
-                                level = (int) bonus.param1;
+                            if (bonus.params[1] instanceof Integer) {
+                                level = (int) bonus.params[1];
                             } else {
                                 level = 1;
                             }
@@ -228,10 +233,10 @@ public abstract class UNGP_BaseBackgroundPlugin implements UNGP_BackgroundPlugin
                             playerFleet.getCargo().addFromStack(stack);
                             break;
                         case SHIP:
-                            String variantId = (String) bonus.item;
+                            String variantId = (String) bonus.params[0];
                             int size;
-                            if (bonus.param1 instanceof Integer) {
-                                size = (int) bonus.param1;
+                            if (bonus.params[1] instanceof Integer) {
+                                size = (int) bonus.params[1];
                             } else {
                                 size = 1;
                             }
@@ -242,6 +247,17 @@ public abstract class UNGP_BaseBackgroundPlugin implements UNGP_BackgroundPlugin
                                 playerFleet.getFleetData().addFleetMember(member);
                             }
                             break;
+
+                        case SKILL_POINTS:
+                            playerStats.addPoints((Integer) bonus.params[0]);
+                            break;
+                        case STORY_POINTS:
+                            playerStats.addStoryPoints((Integer) bonus.params[0]);
+                            break;
+                        case SCRIPT:
+                            BackgroundBonusScript script = (BackgroundBonusScript) bonus.params[0];
+                            script.afterConfirm(pickedInheritData);
+                            break;
                     }
                 }
             }
@@ -250,24 +266,37 @@ public abstract class UNGP_BaseBackgroundPlugin implements UNGP_BackgroundPlugin
                     String skillId = entry.getKey();
                     int level = entry.getValue();
                     int curLevel = (int) playerStats.getSkillLevel(skillId);
-                    if (level > curLevel) {
-                        playerStats.setSkillLevel(skillId, level);
-                    }
-                    if (level >= curLevel) {
+                    if (curLevel > 0 && level >= curLevel) {
                         playerStats.addPoints(1);
                         if (curLevel >= 2) {
                             playerStats.addStoryPoints(1);
                         }
+                    }
+                    if (level > curLevel) {
+                        playerStats.setSkillLevel(skillId, level);
                     }
                 }
             }
         }
     }
 
+    protected String getUnlockCycleString(int cycle) {
+        return d_i18n.format("bg_bonus_cycle_unlock_tip", "" + cycle);
+    }
+
+    protected void addUnlockCycleStringToTooltipAtRight(TooltipMakerAPI tooltip, int cycle, Color gray, float pad) {
+        UIComponentAPI prev = tooltip.getPrev();
+        float height = prev.getPosition().getHeight();
+        tooltip.addSpacer(-height);
+        LabelAPI unlockTip = tooltip.addPara(getUnlockCycleString(cycle), gray, pad);
+        unlockTip.setAlignment(Alignment.RMID);
+    }
+
     @Override
     public void addAfterConfirmTooltip(TooltipMakerAPI tooltip, UNGP_InheritData pickedInheritData) {
         addBonusTooltip(tooltip, pickedInheritData, false);
     }
+
 
     @Override
     public boolean isUnlocked(UNGP_InheritData pickedInheritData) {

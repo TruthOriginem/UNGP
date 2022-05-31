@@ -15,12 +15,12 @@ public interface UNGP_BackgroundPluginAPI {
     void initCycleBonus();
 
     /**
-     * @return 0~1
+     * @return 0 ~ 1
      */
     float getInheritCreditsFactor();
 
     /**
-     * @return 0~1
+     * @return 0 ~ 1
      */
     float getInheritBlueprintsFactor();
 
