@@ -24,14 +24,14 @@ public class UNGP_Besieged extends UNGP_BaseRuleEffect implements UNGP_Character
     @Override
     public void applyPlayerCharacterStats(MutableCharacterStatsAPI stats) {
         stats.getDynamic().getMod(Stats.DEPLOYMENT_POINTS_FRACTION_OF_BATTLE_SIZE_BONUS_MOD).modifyFlat(buffID, -dp);
-		stats.getDynamic().getMod(Stats.DEPLOYMENT_POINTS_MIN_FRACTION_OF_BATTLE_SIZE_BONUS_MOD).modifyFlat(buffID, -dp);
-	}
+        stats.getDynamic().getMod(Stats.DEPLOYMENT_POINTS_MIN_FRACTION_OF_BATTLE_SIZE_BONUS_MOD).modifyFlat(buffID, -dp);
+    }
 
     @Override
     public void unapplyPlayerCharacterStats(MutableCharacterStatsAPI stats) {
         stats.getDynamic().getMod(Stats.DEPLOYMENT_POINTS_FRACTION_OF_BATTLE_SIZE_BONUS_MOD).unmodifyFlat(buffID);
-		stats.getDynamic().getMod(Stats.DEPLOYMENT_POINTS_MIN_FRACTION_OF_BATTLE_SIZE_BONUS_MOD).unmodifyFlat(buffID);
-	}
+        stats.getDynamic().getMod(Stats.DEPLOYMENT_POINTS_MIN_FRACTION_OF_BATTLE_SIZE_BONUS_MOD).unmodifyFlat(buffID);
+    }
 
     @Override
     public String getDescriptionParams(int index, UNGP_SpecialistSettings.Difficulty difficulty) {

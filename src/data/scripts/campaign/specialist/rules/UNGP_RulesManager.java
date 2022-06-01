@@ -20,6 +20,7 @@ import data.scripts.campaign.specialist.items.UNGP_RuleItem;
 import data.scripts.campaign.specialist.rules.UNGP_RuleInfoLoader.UNGP_RuleInfo;
 import data.scripts.ungprules.UNGP_RuleEffectAPI;
 import data.scripts.ungprules.tags.*;
+import data.scripts.utils.UNGPUtils;
 import data.scripts.utils.UNGP_Feedback;
 import org.apache.log4j.Logger;
 import org.json.JSONException;
@@ -55,7 +56,9 @@ public class UNGP_RulesManager {
     public static List<UNGP_CampaignTag> CAMPAIGN_TAGS_ITG = new ArrayList<>();
     public static List<UNGP_PlayerFleetTag> PLAYER_FLEET_TAGS_ITG = new ArrayList<>();
     public static List<UNGP_PlayerFleetMemberTag> PLAYER_FLEET_MEMBER_TAGS_ITG = new ArrayList<>();
-    public static boolean needUpdateCache = false;
+    public static List<UNGP_PlayerShipSkillTag> PLAYER_SHIP_SKILL_TAGS_ITG = new ArrayList<>();
+    public static List<UNGP_PlayerCharacterStatsSkillTag> PLAYER_CHARACTER_SKILL_TAGS_ITG = new ArrayList<>();
+    private static boolean needUpdateCache = false;
     // 2 static values that avoids calling inGameData occasionally
     private static boolean isSpecialistMode = false;
     private static Difficulty globalDifficulty = null;
@@ -87,6 +90,9 @@ public class UNGP_RulesManager {
         needUpdateCache = true;
     }
 
+    public static boolean isCacheNeedUpdate() {
+        return needUpdateCache;
+    }
 
     /**
      * ***主要入口***
@@ -106,6 +112,8 @@ public class UNGP_RulesManager {
             ECONOMY_TAGS_ITG.clear();
             PLAYER_FLEET_TAGS_ITG.clear();
             PLAYER_FLEET_MEMBER_TAGS_ITG.clear();
+            PLAYER_SHIP_SKILL_TAGS_ITG.clear();
+            PLAYER_CHARACTER_SKILL_TAGS_ITG.clear();
             // 已生效的规则，在最后会重新保存
             List<URule> activatedRules = inGameData.getActivatedRules();
             CampaignFleetAPI playerFleet = Global.getSector().getPlayerFleet();
@@ -194,6 +202,12 @@ public class UNGP_RulesManager {
                 if (effect instanceof UNGP_CampaignTag) {
                     CAMPAIGN_TAGS_ITG.add((UNGP_CampaignTag) effect);
                 }
+                if (effect instanceof UNGP_PlayerShipSkillTag) {
+                    PLAYER_SHIP_SKILL_TAGS_ITG.add((UNGP_PlayerShipSkillTag) effect);
+                }
+                if (effect instanceof UNGP_PlayerCharacterStatsSkillTag) {
+                    PLAYER_CHARACTER_SKILL_TAGS_ITG.add((UNGP_PlayerCharacterStatsSkillTag) effect);
+                }
             }
             if (!ECONOMY_TAGS_ITG.isEmpty()) {
                 UNGP_EconomyListener.addListener();
@@ -203,8 +217,32 @@ public class UNGP_RulesManager {
             setStaticSpecialistMode(inGameData.isHardMode());
             inGameData.saveActivatedRules(activatedRules);
             UNGP_ChallengeManager.updateChallengeProgress(inGameData);
+            updateSpecialistSkills(playerStats);
+            if (playerFleet != null)
+                playerFleet.forceSync();
             LOGGER.info("Rule caches update completed.");
         }
+        needUpdateCache = false;
+    }
+
+    /**
+     * Add/Remove the skill if didn't pick related rules.
+     *
+     * @param stats
+     */
+    private static void updateSpecialistSkills(MutableCharacterStatsAPI stats) {
+        if (stats == null) return;
+        if (PLAYER_SHIP_SKILL_TAGS_ITG.isEmpty()) {
+            stats.setSkillLevel("UNGP_specialist_player_ship_skill", 0);
+        } else {
+            stats.setSkillLevel("UNGP_specialist_player_ship_skill", 1);
+        }
+        if (PLAYER_CHARACTER_SKILL_TAGS_ITG.isEmpty()) {
+            stats.setSkillLevel("UNGP_specialist_player_character_skill", 0);
+        } else {
+            stats.setSkillLevel("UNGP_specialist_player_character_skill", 1);
+        }
+        stats.refreshCharacterStatsEffects();
     }
 
     public static Difficulty getGlobalDifficulty() {
@@ -308,7 +346,7 @@ public class UNGP_RulesManager {
         }
 
         public boolean isDefaultSource() {
-            return UNGP_RuleInfoLoader.isEmpty(ruleInfo.getSource());
+            return UNGPUtils.isEmpty(ruleInfo.getSource());
         }
 
         public boolean isBonus() {
@@ -526,13 +564,6 @@ public class UNGP_RulesManager {
             tooltip.addPara(ruleInfo.getShortDesc(), pad);
         }
 
-//        public String getDesc(int difficulty) {
-//            String[] values = new String[10];
-//            for (int i = 0; i < 10; i++) {
-//                values[i] = getRuleEffect().getDescriptionParams(i, difficulty);
-//            }
-//            return String.format(ruleInfo.getDesc(), values);
-//        }
 
         /**
          * Would be shown at the beginning of the battle

@@ -7,10 +7,9 @@ import com.fs.starfarer.api.campaign.InteractionDialogAPI;
 import com.fs.starfarer.api.campaign.comm.CommMessageAPI;
 import com.fs.starfarer.api.combat.CombatEngineAPI;
 import com.fs.starfarer.api.combat.MutableShipStatsAPI;
-import com.fs.starfarer.api.combat.ShipHullSpecAPI;
 import com.fs.starfarer.api.fleet.FleetMemberAPI;
-import com.fs.starfarer.api.impl.campaign.ids.HullMods;
 import com.fs.starfarer.api.impl.campaign.intel.MessageIntel;
+import com.fs.starfarer.api.impl.campaign.skills.BaseSkillEffectDescription;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import data.scripts.campaign.UNGP_SharedData;
 import data.scripts.campaign.specialist.UNGP_PlayerFleetMemberBuff;
@@ -261,9 +260,10 @@ public abstract class UNGP_BaseRuleEffect implements UNGP_RuleEffectAPI {
      * @return
      */
     public static boolean isCivilian(FleetMemberAPI member) {
-        return member.getVariant() != null &&
-                ((member.getVariant().hasHullMod(HullMods.CIVGRADE) && !member.getVariant().hasHullMod(HullMods.MILITARIZED_SUBSYSTEMS))
-                        || (!member.getVariant().hasHullMod(HullMods.CIVGRADE) && member.getHullSpec().getHints().contains(ShipHullSpecAPI.ShipTypeHints.CIVILIAN)));
+        return BaseSkillEffectDescription.isCivilian(member);
+//        return member.getVariant() != null &&
+//                ((member.getVariant().hasHullMod(HullMods.CIVGRADE) && !member.getVariant().hasHullMod(HullMods.MILITARIZED_SUBSYSTEMS))
+//                        || (!member.getVariant().hasHullMod(HullMods.CIVGRADE) && member.getHullSpec().getHints().contains(ShipHullSpecAPI.ShipTypeHints.CIVILIAN)));
     }
 
 

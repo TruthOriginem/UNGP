@@ -9,8 +9,10 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+import static data.scripts.utils.UNGPUtils.EMPTY;
+import static data.scripts.utils.UNGPUtils.isEmpty;
+
 public final class UNGP_RuleInfoLoader {
-    private static final String EMPTY = "[EMPTY]";
     private static final String FILE_PATH = "data/campaign/UNGP_rules.csv";
 
     /**
@@ -161,7 +163,4 @@ public final class UNGP_RuleInfoLoader {
         return infos;
     }
 
-    public static boolean isEmpty(String target) {
-        return target == null || target.isEmpty() || target.contentEquals(EMPTY);
-    }
 }

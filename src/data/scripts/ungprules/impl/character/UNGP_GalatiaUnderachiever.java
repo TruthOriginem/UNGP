@@ -4,9 +4,9 @@ import com.fs.starfarer.api.characters.MutableCharacterStatsAPI;
 import com.fs.starfarer.api.impl.campaign.ids.Stats;
 import data.scripts.campaign.specialist.UNGP_SpecialistSettings;
 import data.scripts.ungprules.impl.UNGP_BaseRuleEffect;
-import data.scripts.ungprules.tags.UNGP_CharacterTag;
+import data.scripts.ungprules.tags.UNGP_PlayerCharacterStatsSkillTag;
 
-public class UNGP_GalatiaUnderachiever extends UNGP_BaseRuleEffect implements UNGP_CharacterTag {
+public class UNGP_GalatiaUnderachiever extends UNGP_BaseRuleEffect implements UNGP_PlayerCharacterStatsSkillTag {
     private int commandPointsReduction;
     private float commandRateReduction;
 
@@ -32,14 +32,14 @@ public class UNGP_GalatiaUnderachiever extends UNGP_BaseRuleEffect implements UN
     }
 
     @Override
-    public void applyPlayerCharacterStats(MutableCharacterStatsAPI stats) {
-        stats.getCommandPoints().modifyFlat(rule.getBuffID(), -commandPointsReduction);
-        stats.getDynamic().getStat(Stats.COMMAND_POINT_RATE_COMMANDER).modifyFlat(rule.getBuffID(), commandRateReduction);
+    public void apply(MutableCharacterStatsAPI stats) {
+        stats.getCommandPoints().modifyFlat(buffID, -commandPointsReduction);
+        stats.getDynamic().getStat(Stats.COMMAND_POINT_RATE_COMMANDER).modifyFlat(buffID, -commandRateReduction);
     }
 
     @Override
-    public void unapplyPlayerCharacterStats(MutableCharacterStatsAPI stats) {
-        stats.getCommandPoints().unmodify(rule.getBuffID());
-        stats.getDynamic().getStat(Stats.COMMAND_POINT_RATE_COMMANDER).unmodify(rule.getBuffID());
+    public void unapply(MutableCharacterStatsAPI stats) {
+        stats.getCommandPoints().unmodify(buffID);
+        stats.getDynamic().getStat(Stats.COMMAND_POINT_RATE_COMMANDER).unmodify(buffID);
     }
 }

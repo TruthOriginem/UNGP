@@ -95,8 +95,7 @@ public class UNGP_CampaignPlugin implements EveryFrameScript, CampaignInputListe
 
     @Override
     public void advance(float amount) {
-        if (needUpdateCache) {
-            needUpdateCache = false;
+        if (isCacheNeedUpdate()) {
             updateRulesCache();
         }
         // 初始变量设定
@@ -247,15 +246,14 @@ public class UNGP_CampaignPlugin implements EveryFrameScript, CampaignInputListe
 
     @Override
     public void processCampaignInputPreFleetControl(List<InputEventAPI> events) {
-        if (!UNGP_RulesManager.isSpecialistMode()) {
-            return;
-        }
-        for (InputEventAPI event : events) {
-            if (event.isLMBDownEvent() && UNGP_SpecialistWidgetPlugin.inWidgetRect(event.getX(), event.getY())) {
-                Global.getSector().getCampaignUI().showCoreUITab(CoreUITabId.INTEL, UNGP_SpecialistIntel.getInstance());
-                Global.getSoundPlayer().playUISound("ui_button_pressed", 1f, 1f);
-                event.consume();
-                break;
+        if (UNGP_RulesManager.isSpecialistMode()) {
+            for (InputEventAPI event : events) {
+                if (event.isLMBDownEvent() && UNGP_SpecialistWidgetPlugin.inWidgetRect(event.getX(), event.getY())) {
+                    Global.getSector().getCampaignUI().showCoreUITab(CoreUITabId.INTEL, UNGP_SpecialistIntel.getInstance());
+                    Global.getSoundPlayer().playUISound("ui_button_pressed", 1f, 1f);
+                    event.consume();
+                    break;
+                }
             }
         }
     }

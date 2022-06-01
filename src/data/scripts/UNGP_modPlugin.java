@@ -6,6 +6,7 @@ import com.thoughtworks.xstream.XStream;
 import data.scripts.campaign.UNGP_InGameData;
 import data.scripts.campaign.UNGP_Settings;
 import data.scripts.campaign.UNGP_SharedData;
+import data.scripts.campaign.background.UNGP_BackgroundManager;
 import data.scripts.campaign.everyframe.UNGP_CampaignPlugin;
 import data.scripts.campaign.everyframe.UNGP_SpecialistWidgetPlugin;
 import data.scripts.campaign.everyframe.UNGP_UITimeScript;
@@ -27,6 +28,7 @@ public class UNGP_modPlugin extends BaseModPlugin {
         UNGPFont.init();
         UNGP_RuleItem.loadSprite();
         UNGP_InheritData.loadAllSavers();
+        UNGP_BackgroundManager.loadAllBackgrounds();
         // 规则与挑战
         UNGP_RulesManager.initOrReloadRules();
         UNGP_ChallengeManager.initOrReloadChallengeInfos();

@@ -4,9 +4,9 @@ import com.fs.starfarer.api.characters.MutableCharacterStatsAPI;
 import com.fs.starfarer.api.impl.campaign.ids.Stats;
 import data.scripts.campaign.specialist.UNGP_SpecialistSettings;
 import data.scripts.ungprules.impl.UNGP_BaseRuleEffect;
-import data.scripts.ungprules.tags.UNGP_CharacterTag;
+import data.scripts.ungprules.tags.UNGP_PlayerCharacterStatsSkillTag;
 
-public class UNGP_EwSmog extends UNGP_BaseRuleEffect implements UNGP_CharacterTag {
+public class UNGP_EwSmog extends UNGP_BaseRuleEffect implements UNGP_PlayerCharacterStatsSkillTag {
 
     private float ewBonus;
 
@@ -22,12 +22,12 @@ public class UNGP_EwSmog extends UNGP_BaseRuleEffect implements UNGP_CharacterTa
     }
 
     @Override
-    public void applyPlayerCharacterStats(MutableCharacterStatsAPI stats) {
+    public void apply(MutableCharacterStatsAPI stats) {
         stats.getDynamic().getMod(Stats.ELECTRONIC_WARFARE_MAX).modifyFlat(buffID, ewBonus);
     }
 
     @Override
-    public void unapplyPlayerCharacterStats(MutableCharacterStatsAPI stats) {
+    public void unapply(MutableCharacterStatsAPI stats) {
         stats.getDynamic().getMod(Stats.ELECTRONIC_WARFARE_MAX).unmodifyFlat(buffID);
     }
 
@@ -36,4 +36,6 @@ public class UNGP_EwSmog extends UNGP_BaseRuleEffect implements UNGP_CharacterTa
         if (index == 0) return getPercentString(getValueByDifficulty(index, difficulty));
         return super.getDescriptionParams(index, difficulty);
     }
+
+
 }

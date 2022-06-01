@@ -1,3 +1,9 @@
+1.7.3 2022/5/1
+规则修正：
+多层装甲：cost点数3->4，数值曲线调整，现在战机收益仅为25%
+
+Layered Armor: Cost +3 > +4, tweaked the value curve, now fighters only have 25% bonus.
+
 1.7.2 2022/4/18
 危险战区调整，现在有隐藏的生成限制。
 调整Order66的机制，暂时去除电弧友伤。

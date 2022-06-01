@@ -51,10 +51,11 @@ public class UNGP_InfightingBook extends UNGP_BaseRuleEffect implements UNGP_Com
             WeaponAPI weapon;
             if (param instanceof DamagingProjectileAPI) {
                 weapon = ((DamagingProjectileAPI) param).getWeapon();
-                if (weapon.getSpec().getMaxRange() <= 500) {
-                    damage.getModifier().modifyMult(buffID, 1f + multiplier);
-                    return buffID;
-                }
+                if (weapon != null)
+                    if (weapon.getSpec().getMaxRange() <= 500) {
+                        damage.getModifier().modifyMult(buffID, 1f + multiplier);
+                        return buffID;
+                    }
             } else {
                 return null;
             }
