@@ -13,7 +13,7 @@ public class UNGP_Smuggler extends UNGP_BaseBackgroundPlugin {
 
     @Override
     public float getInheritBlueprintsFactor() {
-        return 0f;
+        return 0.25f;
     }
 
     @Override

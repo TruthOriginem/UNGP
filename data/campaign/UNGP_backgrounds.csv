@@ -1,17 +1,19 @@
 id,order,name,short,desc,spritePath,effectPlugin,extra1,extra2,source,tags,note
+#id,排序,名字,短描述,长描述或完整说明,贴图路径,代码路径,文字？,文字2？,mod来源,标签,开发者笔记
 nothing,0.01,一无所有,你好像在梦中体验过数次人生，但仅此而已了。,,graphics/icons/ungp_backgrounds/nothing.png,data.scripts.ungpbackgrounds.impl.UNGP_Nothing,,,,,
 poor_scientist,0.02,贫穷的科学家,不知怎地，脑海里一直记得一些奇怪的东西，而你觉得你能实现它——前提是有钱。,,graphics/icons/ungp_backgrounds/poor_scientist.png,data.scripts.ungpbackgrounds.impl.UNGP_PoorScientist,,,,,
 hacker,0.03,赛博骇客,你拥有的解密手段似乎还能应付一点英仙座的财政系统。,,graphics/icons/ungp_backgrounds/hacker.png,data.scripts.ungpbackgrounds.impl.UNGP_Hacker,,,,,
 genius,0.04,天才,你记住了很多东西——那些本应不属于你的东西。,,graphics/icons/ungp_backgrounds/genius.png,data.scripts.ungpbackgrounds.impl.UNGP_Genius,,,,,
 seeker,0.05,探索者,无论世界发生什么都与你无关，你只想挖掘星域里的未知。,,graphics/icons/ungp_backgrounds/seeker.png,data.scripts.ungpbackgrounds.impl.UNGP_Seeker,,,,,
 smuggler,0.06,走私者,活下去的希望是灰色的，充斥着卑劣与阴谋。,,graphics/icons/ungp_backgrounds/smuggler.png,data.scripts.ungpbackgrounds.impl.UNGP_Smuggler,,,,,获得50x粉针
-#avenger,0.07,复仇者,前生的仇恨痛彻心扉，哪怕是不属于你的，你现在都要拿走,,,,,,,,
-#hothead,0.08,冒失鬼,你准备齐全，信心满满准备开启新旅程，只是，你忘了带走一些已经打包好的东西,,,,,,,,
-#administrator,0.09,资深管理员,在这个动荡的星域，一个稳固的殖民地是一切的基础,,,,,,,,一个纳米锻炉和两个A核
-#traverser,0.1,穿越者,传送门很窄，所以你带上了你所有的存储设备，和所有没时间限制的星币凭证,,,,,,,,
-#capitalist,0.11,资本家,你认为只要有钱就无所不能，所有事情都是,,,,,,,,
-#time_accident,0.12,时空事故,原本你只是想寻找一些余辉星系，但是那个新来的笨蛋把你传送过来了，只能认命了，不是吗,,,,,,,,填满油箱 出生在随机一个红信标余辉星系（怎么回核心看玩家造化）
-#pacifist,0.13,和平主义者,你曾无数次在战争中化为焦尸。追求和平，但可惜，卢德左径与余晖并不是很好的交涉对象。,,,,,,,,得知开局时所有左径基地与余晖母舰的位置。
+admiral,0.07,海军上将,炮火连天的战场常常在你的梦中出现，你对星域中各种战舰的性能与战术用途都有着了解，不过最重要的还是宝贵的指挥经验。,,graphics/icons/ungp_backgrounds/admiral.png,data.scripts.ungpbackgrounds.impl.UNGP_Admiral,,,,,战斗中命令点数恢复速率翻倍。
+#avenger,0.08,复仇者,前生的仇恨痛彻心扉，哪怕是不属于你的，你现在都要拿走,,,,,,,,
+#hothead,0.09,冒失鬼,你准备齐全，信心满满准备开启新旅程，只是，你忘了带走一些已经打包好的东西,,,,,,,,
+#administrator,0.1,资深管理员,在这个动荡的星域，一个稳固的殖民地是一切的基础,,,,,,,,一个纳米锻炉和两个A核
+#traverser,0.11,穿越者,传送门很窄，所以你带上了你所有的存储设备，和所有没时间限制的星币凭证,,,,,,,,
+#capitalist,0.12,资本家,你认为只要有钱就无所不能，所有事情都是,,,,,,,,
+#time_accident,0.13,时空事故,原本你只是想寻找一些余辉星系，但是那个新来的笨蛋把你传送过来了，只能认命了，不是吗,,,,,,,,填满油箱 出生在随机一个红信标余辉星系（怎么回核心看玩家造化）
+#pacifist,0.14,和平主义者,你曾无数次在战争中化为焦尸。追求和平，但可惜，卢德左径与余晖并不是很好的交涉对象。,,,,,,,,得知开局时所有左径基地与余晖母舰的位置。
 # 高难/特殊,,,,,,,,,,,
 the_chosen_one,1.01,天选之子,"你能记得以前的一切。你，就是""那个人""。",,graphics/icons/ungp_backgrounds/the_chosen_one.png,data.scripts.ungpbackgrounds.impl.UNGP_TheChosenOne,,,,,继承全部星币和蓝图和殖民地选项之类的，且技能点+[周目数的开方]
 #the_cursed_one,1.02,天煞孤星,你没有从过去获得什么，但未来已经在向你索取了。,,,,,,,,
@@ -36,4 +38,3 @@ the_chosen_one,1.01,天选之子,"你能记得以前的一切。你，就是""�
 #fallen_pirate_king,,陨落的海盗王,像三流小说一样，在你的座驾爆炸之前你穿越到了很久之前，再来一次，向整个星域复仇。,,,,,,,,获得随机一艘海盗驱逐舰，获得所有海盗蓝图，与所有势力均为冷淡，与海盗友好
 #humanoid_disaster,,人形天灾,你的前世是一名残暴的国王。而现在，你来到了你的第二个王国。没人能够阻止你统治这片星区，速子科技不能，霸主也不能，你将称霸这片星区，或是将其化作一片焦土。,,,,,,,,与所有势力关系为仇恨
 #fallen_nobleman,,没落贵族,很久以前，你曾经过着奢侈的生活，风花雪月，金银财宝，而现在一切都已不再，留下的仅仅是你对政治与经济高度的敏感度。,,,,,,,,与所有势力提升关系时候效果翻1.5倍，即使不在通讯中继站附近也可以得知殖民地对各种货物的需求情况，酒馆运货任务收益翻1.5倍。
-#admiral,,海军上将,炮火连天的战场常常在你的梦中出现，你对星域中各种战舰的性能与战术用途都有着了解，不过最重要的还是宝贵的指挥经验。,,,,,,,,战斗中命令点数恢复速率翻倍。

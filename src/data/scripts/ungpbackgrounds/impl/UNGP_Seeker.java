@@ -9,13 +9,13 @@ import data.scripts.ungpbackgrounds.UNGP_BaseBackgroundPlugin;
 
 public class UNGP_Seeker extends UNGP_BaseBackgroundPlugin {
     @Override
-    public float getInheritBlueprintsFactor() {
-        return 0.5f;
+    public float getInheritCreditsFactor() {
+        return 0.25f;
     }
 
     @Override
-    public float getInheritCreditsFactor() {
-        return 0.5f;
+    public float getInheritBlueprintsFactor() {
+        return 0.75f;
     }
 
     @Override
