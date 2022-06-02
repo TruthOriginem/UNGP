@@ -31,4 +31,5 @@ public class UNGP_Seeker extends UNGP_BaseBackgroundPlugin {
         addCycleBonus(16, new BackgroundBonus(BackgroundBonusType.SKILL, Skills.HULL_RESTORATION, 1));
         addCycleBonus(25, new BackgroundBonus(BackgroundBonusType.SKILL, Skills.DERELICT_CONTINGENT, 1));
     }
+
 }

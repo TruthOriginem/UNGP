@@ -28,7 +28,6 @@ public class UNGP_InheritData {
     public String lastPlayerName;
     public int cycle;
     public boolean isHardMode;
-    public int inheritCredits;
     public List<String> completedChallenges;
     public List<UNGP_DataSaverAPI> dataSavers;
 
@@ -44,7 +43,6 @@ public class UNGP_InheritData {
         inheritData.lastPlayerName = Global.getSector().getPlayerPerson().getNameString();
         inheritData.cycle = inGameData.getCurCycle() + 1;
         inheritData.isHardMode = inGameData.isHardMode();
-        inheritData.inheritCredits = (int) Global.getSector().getPlayerFleet().getCargo().getCredits().get();
         inheritData.completedChallenges = new ArrayList<>(inGameData.getCompletedChallenges());
         inheritData.dataSavers = new ArrayList<>();
         for (UNGP_DataSaverAPI saverInstance : SAVER_INSTANCES) {
@@ -64,7 +62,6 @@ public class UNGP_InheritData {
         inheritData.lastPlayerName = "UNGP-NewFound";
         inheritData.cycle = 1;
         inheritData.isHardMode = false;
-        inheritData.inheritCredits = 0;
         inheritData.completedChallenges = new ArrayList<>();
         inheritData.dataSavers = new ArrayList<>();
         for (UNGP_DataSaverAPI saverInstance : SAVER_INSTANCES) {
@@ -98,11 +95,11 @@ public class UNGP_InheritData {
             section.addPara(d_i18n.get(descKey + "_1") + "%s", 3f, hl, lastPlayerName);
             root.addImageWithText(5f);
         }
-        // Credits
-        section = root.beginImageWithText("graphics/icons/reports/generic_income.png", 24f);
-        section.addPara(d_i18n.get(descKey + "_2"), 3f);
-        root.addImageWithText(5f);
-        root.addPara(BULLETED_PREFIX + Misc.getDGSCredits(inheritCredits), hl, 5f);
+//        // Credits
+//        section = root.beginImageWithText("graphics/icons/reports/generic_income.png", 24f);
+//        section.addPara(d_i18n.get(descKey + "_2"), 3f);
+//        root.addImageWithText(5f);
+//        root.addPara(BULLETED_PREFIX + Misc.getDGSCredits(inheritCredits), hl, 5f);
         // Savers
         for (UNGP_DataSaverAPI dataSaver : dataSavers) {
             dataSaver.addSaverInfo(root, descKey);

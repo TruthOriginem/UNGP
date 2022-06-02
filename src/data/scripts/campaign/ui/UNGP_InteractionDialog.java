@@ -9,7 +9,6 @@ import com.fs.starfarer.api.campaign.econ.MarketAPI;
 import com.fs.starfarer.api.campaign.rules.MemoryAPI;
 import com.fs.starfarer.api.combat.EngagementResultAPI;
 import com.fs.starfarer.api.fleet.FleetMemberAPI;
-import com.fs.starfarer.api.impl.campaign.rulecmd.AddRemoveCommodity;
 import com.fs.starfarer.api.input.InputEventAPI;
 import com.fs.starfarer.api.ui.*;
 import com.fs.starfarer.api.util.Misc;
@@ -30,6 +29,7 @@ import data.scripts.ungpbackgrounds.UNGP_BackgroundPluginAPI;
 import data.scripts.ungpsaves.UNGP_DataSaverAPI;
 import data.scripts.ungpsaves.UNGP_DataSaverSettingEntryAPI;
 import data.scripts.ungpsaves.impl.UNGP_BlueprintsDataSaver;
+import data.scripts.ungpsaves.impl.UNGP_CreditsDataSaver;
 import data.scripts.utils.UNGP_Feedback;
 import org.lwjgl.input.Keyboard;
 import ungp.ui.CheckBoxGroup;
@@ -417,20 +417,14 @@ public class UNGP_InteractionDialog implements InteractionDialogPlugin {
      * 继承重生点
      */
     private void inherit() {
-        float inherit_creditsFactor = 0f;
-        float inherit_bpsFactor = 0f;
         UNGP_BackgroundPluginAPI plugin = pickedBackground.getPlugin();
-        inherit_creditsFactor = plugin.getInheritCreditsFactor();
-        inherit_bpsFactor = plugin.getInheritBlueprintsFactor();
+        float inherit_creditsFactor = plugin.getInheritCreditsFactor();
+        float inherit_bpsFactor = plugin.getInheritBlueprintsFactor();
 
-        // Credits
-        int creditsInherited = (int) (pickedInheritData.inheritCredits * inherit_creditsFactor);
-        sector.getPlayerFleet().getCargo().getCredits().add(creditsInherited);
-        AddRemoveCommodity.addCreditsGainText(creditsInherited, textPanel);
-        // Blueprints
-        float inheritBPPercent = inherit_bpsFactor;
         Map<String, Object> dataSaverParams = new HashMap<>();
-        dataSaverParams.put("inheritBPPercent", inheritBPPercent);
+        dataSaverParams.put("inheritCreditsFactor", inherit_creditsFactor);
+        dataSaverParams.put("inheritBPFactor", inherit_bpsFactor);
+        dataSaverParams.put("background", pickedBackground);
         for (UNGP_DataSaverAPI dataSaver : pickedInheritData.dataSavers) {
             TooltipMakerAPI tooltip = textPanel.beginTooltip();
             dataSaver.startInheritDataFromSaver(tooltip, dataSaverParams);
@@ -438,11 +432,9 @@ public class UNGP_InteractionDialog implements InteractionDialogPlugin {
         }
 
         TooltipMakerAPI tooltip = textPanel.beginTooltip();
-
         plugin.afterConfirm(pickedInheritData);
         plugin.addAfterConfirmTooltip(tooltip, pickedInheritData);
         UNGP_BackgroundManager.setPlayerBackground(pickedBackground);
-
         textPanel.addTooltip();
 
         textPanel.setFontInsignia();
@@ -551,8 +543,8 @@ public class UNGP_InteractionDialog implements InteractionDialogPlugin {
                 inherit_bpsFactor = pickedBackground.getPlugin().getInheritBlueprintsFactor();
             }
 
-            final int creditsInherited = (int) (pickedInheritData.inheritCredits * inherit_creditsFactor);
             int bpInheritGeneratedByDataSaver = 0;
+            int creditsInheritGeneratedByDataSaver = 0;
             for (UNGP_DataSaverAPI dataSaver : pickedInheritData.dataSavers) {
                 if (dataSaver instanceof UNGP_BlueprintsDataSaver) {
                     UNGP_BlueprintsDataSaver blueprintsDataSaver = (UNGP_BlueprintsDataSaver) dataSaver;
@@ -561,10 +553,15 @@ public class UNGP_InteractionDialog implements InteractionDialogPlugin {
                             blueprintsDataSaver.weapons.size() +
                             blueprintsDataSaver.hullmods.size())
                             * inherit_bpsFactor);
-//                            * setting_inheritBPsRatio.get());
+                }
+                if (dataSaver instanceof UNGP_CreditsDataSaver) {
+                    UNGP_CreditsDataSaver creditsDataSaver = (UNGP_CreditsDataSaver) dataSaver;
+                    creditsInheritGeneratedByDataSaver = (int) (creditsDataSaver.credits * inherit_creditsFactor);
                 }
             }
             final int bpInherited = bpInheritGeneratedByDataSaver;
+            final int creditsInherited = creditsInheritGeneratedByDataSaver;
+
             final boolean isSpecialistMode = this.isSpecialistMode;
             final Difficulty difficulty = settingEntry_difficulty.getValue();
 
@@ -994,7 +991,11 @@ public class UNGP_InteractionDialog implements InteractionDialogPlugin {
                     }
             }
             textPanel.addPara(d_i18n.get("recordExtraCredits_success") + " %s ", Misc.getHighlightColor(), Misc.getDGSCredits(extraCredits));
-            pregenInheritData.inheritCredits += extraCredits;
+            for (UNGP_DataSaverAPI dataSaver : pregenInheritData.dataSavers) {
+                if (dataSaver instanceof UNGP_CreditsDataSaver) {
+                    ((UNGP_CreditsDataSaver) dataSaver).credits += extraCredits;
+                }
+            }
             record(selectedOption);
         }
 

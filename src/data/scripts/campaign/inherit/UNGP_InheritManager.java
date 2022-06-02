@@ -69,7 +69,7 @@ public class UNGP_InheritManager {
             jsonObject.put("lastPlayerName", inheritData.lastPlayerName);
             jsonObject.put("cycle", inheritData.cycle);
             jsonObject.put("isHardMode", inheritData.isHardMode);
-            jsonObject.put("inheritCredits", inheritData.inheritCredits);
+//            jsonObject.put("inheritCredits", inheritData.inheritCredits);
             jsonObject.put("completedChallenges", inheritData.completedChallenges);
 
             for (UNGP_DataSaverAPI dataSaver : inheritData.dataSavers) {
@@ -96,7 +96,7 @@ public class UNGP_InheritManager {
             inheritData.lastPlayerName = jsonObject.optString("lastPlayerName", DEFAULT_NAME);
             inheritData.cycle = jsonObject.getInt("cycle");
             inheritData.isHardMode = jsonObject.getBoolean("isHardMode");
-            inheritData.inheritCredits = jsonObject.getInt("inheritCredits");
+//            inheritData.inheritCredits = jsonObject.getInt("inheritCredits");
 
             inheritData.completedChallenges = new ArrayList<>();
             inheritData.dataSavers = new ArrayList<>();

@@ -94,11 +94,11 @@ public class UNGP_BlueprintsDataSaver implements UNGP_DataSaverAPI {
     @Override
     public void startInheritDataFromSaver(TooltipMakerAPI root, Map<String, Object> params) {
         FactionAPI player = Global.getSector().getPlayerFaction();
-        float inheritBPPercent = (float) params.get("inheritBPPercent");
-        int shipAmount = (int) (inheritBPPercent * ships.size());
-        int fighterAmount = (int) (inheritBPPercent * fighters.size());
-        int weaponAmount = (int) (inheritBPPercent * weapons.size());
-        int hullmodAmount = (int) (inheritBPPercent * hullmods.size());
+        float inheritBPFactor = (float) params.get("inheritBPFactor");
+        int shipAmount = (int) (inheritBPFactor * ships.size());
+        int fighterAmount = (int) (inheritBPFactor * fighters.size());
+        int weaponAmount = (int) (inheritBPFactor * weapons.size());
+        int hullmodAmount = (int) (inheritBPFactor * hullmods.size());
         List<String> curShipBps = new ArrayList<>();
         List<String> curFighterBps = new ArrayList<>();
         List<String> curWeaponBps = new ArrayList<>();

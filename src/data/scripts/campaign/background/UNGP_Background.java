@@ -13,9 +13,7 @@ import static data.scripts.campaign.UNGP_Settings.d_i18n;
 
 public class UNGP_Background {
     private String id;
-
     private float order;
-
     private String name;
     private String shortDescription;
     private String description;
@@ -68,6 +66,22 @@ public class UNGP_Background {
         return spritePath;
     }
 
+    public String getSource() {
+        return source;
+    }
+
+    public String getExtra1() {
+        return extra1;
+    }
+
+    public String getExtra2() {
+        return extra2;
+    }
+
+    public boolean hasTag(String tag) {
+        return tags.contains(tag);
+    }
+
     public Color getNameColor() {
         if (plugin != null && plugin.getOverrideNameColor() != null) {
             return plugin.getOverrideNameColor();
@@ -113,8 +127,9 @@ public class UNGP_Background {
 
         @Override
         public void createTooltip(TooltipMakerAPI tooltip, boolean expanded, Object tooltipParam) {
-            tooltip.setTitleFont(Fonts.ORBITRON_24AA);
-            tooltip.addTitle(background.getName());
+            tooltip.setParaFont(Fonts.ORBITRON_24AA);
+            tooltip.addPara(background.getName(), background.getNameColor(), 0f);
+            tooltip.setParaFontDefault();
             tooltip.addPara(background.getDescription(), 5f);
 
             UNGP_BackgroundPluginAPI plugin = background.getPlugin();
