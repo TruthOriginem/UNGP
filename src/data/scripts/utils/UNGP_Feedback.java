@@ -16,7 +16,7 @@ public class UNGP_Feedback {
     private static final String FEEDBACK_SENT_KEY = "UNGP_feedbackSent";
     private static final String FEEDBACK_LIST_KEY = "UNGP_feedbackList";
 
-    public static boolean getFeedbackSent() {
+    public static boolean isFeedbackSent() {
         return Global.getSector().getPersistentData().containsKey(FEEDBACK_SENT_KEY);
     }
 
@@ -47,8 +47,8 @@ public class UNGP_Feedback {
      * Send how players pick rules to certain server for analysis.
      * The server only runs one time per 5 seconds.
      * Player SHOULD be able to cancel this.
-     * <p>
-     * Has request times limitation
+     * <p></p>
+     * <p>Has request times limitation</p>
      *
      * @param rules
      */
@@ -88,6 +88,11 @@ public class UNGP_Feedback {
         thread.start();
     }
 
+    /**
+     * Set TLS 1.2 to ignore the certificate
+     *
+     * @param conn
+     */
     public static void setHttpProtocol(HttpsURLConnection conn) {
         SSLContext ctx = MyX509TrustManagerUtils();
         conn.setSSLSocketFactory(ctx.getSocketFactory());

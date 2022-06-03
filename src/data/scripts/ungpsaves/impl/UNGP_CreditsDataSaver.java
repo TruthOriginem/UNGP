@@ -45,7 +45,7 @@ public class UNGP_CreditsDataSaver implements UNGP_DataSaverAPI {
 
     @Override
     public void startInheritDataFromSaver(TooltipMakerAPI root, Map<String, Object> params) {
-        float inheritCreditsPercent = (float) params.get("background");
+        float inheritCreditsPercent = (float) params.get("inheritCreditsFactor");
         // Credits
         int creditsInherited = (int) (credits * inheritCreditsPercent);
         Global.getSector().getPlayerFleet().getCargo().getCredits().add(creditsInherited);

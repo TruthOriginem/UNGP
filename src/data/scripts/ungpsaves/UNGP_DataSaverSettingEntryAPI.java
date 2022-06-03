@@ -2,8 +2,6 @@ package data.scripts.ungpsaves;
 
 public interface UNGP_DataSaverSettingEntryAPI<T> {
 
-
-
     T confirmValue();
 
     void reset();

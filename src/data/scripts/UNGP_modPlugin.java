@@ -47,7 +47,13 @@ public class UNGP_modPlugin extends BaseModPlugin {
             Global.getSector().addScript(new UNGP_CampaignPlugin());
         }
         Global.getSector().addTransientScript(new UNGP_UITimeScript());
-        Global.getSector().addTransientScript(new UNGP_SpecialistWidgetPlugin());
+
+        if (!UNGP_Settings.isNoLeftTopSpecialistWidget()) {
+            UNGP_SpecialistWidgetPlugin widgetPlugin = new UNGP_SpecialistWidgetPlugin();
+            Global.getSector().addTransientScript(widgetPlugin);
+            Global.getSector().getListenerManager().addListener(widgetPlugin, true);
+        }
+
         if (!Global.getSector().getCharacterData().getAbilities().contains("UNGP_checkSavepoint")) {
             Global.getSector().getCharacterData().addAbility("UNGP_checkSavepoint");
         }

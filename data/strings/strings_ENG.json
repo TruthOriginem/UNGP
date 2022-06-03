@@ -61,13 +61,6 @@
     "d_inheritedBP": " You have inherited:\n %s ship blueprints\n %s fighter blueprints\n %s weapon blueprints\n %s hullmod blueprints",
     "d_inheritedPoints": "You have acquired %s skillpoints",
     "d_inherit_choose_background": "Choose your background",
-    "d_bg_bonus_skill": "Gain skill %s",
-    "d_bg_bonus_skill_elite": "Gain skill %s (Elite)",
-    "d_bg_bonus_item": "Gain item %s x %s",
-    "d_bg_bonus_ship": "Gain ship %s x %s",
-    "d_bg_bonus_skill_point": "Gain skill point x %s",
-    "d_bg_bonus_story_point": "Gain story point x %s",
-    "d_bg_bonus_cycle_unlock_tip": "Unlocked after GameCycle %s",
     "d_on": "enabled",
     "d_off": "disabled",
     "d_help": "Help",
@@ -82,6 +75,16 @@
     "c_no": "No",
     "c_hmbonus": "Specialist mode bonus",
     "specialist_mode_combat_loading": "Loading Specialist mode...Completed!",
+  },
+  "UNGP_backgrounds": {
+    "bonus_skill": "Gain skill %s",
+    "bonus_skill_elite": "Gain skill %s (Elite)",
+    "bonus_item": "Gain item %s x %s",
+    "bonus_ship": "Gain ship %s x %s",
+    "bonus_skill_point": "Gain skill point x %s",
+    "bonus_story_point": "Gain story point x %s",
+    "bonus_cycle_unlock_tip": "Unlocked after GameCycle %s",
+    "source": "This background is from:"
   },
   "UNGP_abilities": {
     "checkSavepoint_title": "UNGP-Open the main menu",
@@ -142,4 +145,4 @@
     "ct_77": "+77%!",
     "ct_777": "+777%!"
   }
-}
+},

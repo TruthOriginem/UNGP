@@ -1,15 +1,16 @@
 package data.scripts.campaign.background;
 
-import com.fs.starfarer.api.ui.Fonts;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
 import data.scripts.campaign.inherit.UNGP_InheritData;
 import data.scripts.ungpbackgrounds.UNGP_BackgroundPluginAPI;
+import data.scripts.utils.UNGPUtils;
 
 import java.awt.*;
 import java.util.List;
 
 import static data.scripts.campaign.UNGP_Settings.d_i18n;
+import static data.scripts.utils.Constants.backgrounds_i18n;
 
 public class UNGP_Background {
     private String id;
@@ -89,6 +90,24 @@ public class UNGP_Background {
         return Misc.getBasePlayerColor();
     }
 
+    public void addDescriptionTooltip(TooltipMakerAPI tooltip, UNGP_InheritData pickedInheritData) {
+        tooltip.setParaOrbitronLarge();
+        tooltip.addPara(getName(), getNameColor(), 0f);
+        if (!UNGPUtils.isEmpty(source)) {
+            tooltip.setParaSmallInsignia();
+            tooltip.addPara(backgrounds_i18n.get("source") + getSource(), Misc.getGrayColor(), 0f);
+        }
+        tooltip.setParaFontDefault();
+        tooltip.addPara(getDescription(), 5f);
+
+        UNGP_BackgroundPluginAPI plugin = getPlugin();
+        if (plugin != null) {
+            plugin.addPostDescTooltip(tooltip, pickedInheritData);
+            tooltip.addSpacer(10f);
+            addOverallBonusTooltip(tooltip, pickedInheritData, true);
+        }
+    }
+
     /**
      * credits & bps & other bonus
      */
@@ -102,6 +121,7 @@ public class UNGP_Background {
             tooltip.setParaFontDefault();
         }
     }
+
 
     public static class BackgroundTooltipCreator implements TooltipMakerAPI.TooltipCreator {
 
@@ -127,17 +147,7 @@ public class UNGP_Background {
 
         @Override
         public void createTooltip(TooltipMakerAPI tooltip, boolean expanded, Object tooltipParam) {
-            tooltip.setParaFont(Fonts.ORBITRON_24AA);
-            tooltip.addPara(background.getName(), background.getNameColor(), 0f);
-            tooltip.setParaFontDefault();
-            tooltip.addPara(background.getDescription(), 5f);
-
-            UNGP_BackgroundPluginAPI plugin = background.getPlugin();
-            if (plugin != null) {
-                plugin.addPostDescTooltip(tooltip, pickedInheritData);
-                tooltip.addSpacer(10f);
-                background.addOverallBonusTooltip(tooltip, pickedInheritData, true);
-            }
+            background.addDescriptionTooltip(tooltip, pickedInheritData);
         }
     }
 }

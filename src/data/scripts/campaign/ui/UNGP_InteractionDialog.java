@@ -72,7 +72,6 @@ public class UNGP_InteractionDialog implements InteractionDialogPlugin {
     private TextPanelAPI textPanel;
     private OptionPanelAPI options;
     private VisualPanelAPI visual;
-    private SectorAPI sector;
     private UNGP_InteractionPanelPlugin uiPanelPlugin;
 
     private UNGP_InGameData inGameData;
@@ -134,7 +133,6 @@ public class UNGP_InteractionDialog implements InteractionDialogPlugin {
         textPanel = dialog.getTextPanel();
         options = dialog.getOptionPanel();
         visual = dialog.getVisualPanel();
-        sector = Global.getSector();
 
         pregenInheritData = UNGP_InheritData.createInheritData(inGameData);
         UNGP_InheritManager.loadAllSlots();
@@ -597,7 +595,7 @@ public class UNGP_InteractionDialog implements InteractionDialogPlugin {
                     Color hl = Misc.getHighlightColor();
                     Color negative = Misc.getNegativeHighlightColor();
                     TooltipMakerAPI backgroundTip = info.beginImageWithText(pickedBackground.getSpritePath(), 64f);
-                    backgroundTip.setParaFont(Fonts.ORBITRON_24AA);
+                    backgroundTip.setParaOrbitronLarge();
                     backgroundTip.addPara(pickedBackground.getName(), pickedBackground.getNameColor(), 0f);
                     backgroundTip.setParaFontDefault();
                     backgroundTip.addSpacer(5f);
@@ -721,13 +719,11 @@ public class UNGP_InteractionDialog implements InteractionDialogPlugin {
 
             TooltipMakerAPI backgroundTitleTip = panel.createUIElement(width, backgroundTitleHeight, false);
             backgroundTitleTip.setParaOrbitronLarge();
-            backgroundTitleTip.setAreaCheckboxFont(Fonts.ORBITRON_24AA);
             backgroundTitleTip.addPara(d_i18n.get("inherit_choose_background"), Misc.getBasePlayerColor(), 0);
             panel.addUIElement(backgroundTitleTip).inTL(0f, 0f);
 
             TooltipMakerAPI backgroundTip = panel.createUIElement(width, backgroundHeight - backgroundTitleHeight, true);
             backgroundTip.setParaOrbitronLarge();
-            backgroundTip.setAreaCheckboxFont(Fonts.ORBITRON_24AA);
 
             final float backgroundBoxWidth = width - 10f;
             float spacerHeight = 5f;
@@ -737,7 +733,7 @@ public class UNGP_InteractionDialog implements InteractionDialogPlugin {
                 backgroundTip.addTooltipToPrevious(new UNGP_Background.BackgroundTooltipCreator(background, pickedInheritData, backgroundBoxWidth - 20f),
                                                    TooltipMakerAPI.TooltipLocation.BELOW);
                 TooltipMakerAPI imageWithText = backgroundTip.beginImageWithText(background.getSpritePath(), 64f);
-                imageWithText.setParaFont(Fonts.ORBITRON_24AA);
+                imageWithText.setParaOrbitronLarge();
                 imageWithText.addPara(background.getName(), background.getNameColor(), 10f);
                 imageWithText.getPrev().getPosition().setXAlignOffset(7f);
                 imageWithText.setParaFontDefault();

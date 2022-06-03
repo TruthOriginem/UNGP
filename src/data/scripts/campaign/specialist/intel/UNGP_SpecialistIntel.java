@@ -194,7 +194,7 @@ public class UNGP_SpecialistIntel extends BaseIntelPlugin {
                 float repickRectWidth = repickRect.getWidth();
                 float buttonPad = 10f;
                 ButtonAPI uploadButton = tooltip.addButton(Constants.rules_i18n.get("button_feedback"), FEED_BACK, Misc.getStoryOptionColor(), Misc.getStoryDarkColor(), Alignment.MID, CutStyle.C2_MENU, repickRectWidth * 0.3f, repickRect.getHeight() * 0.35f, 20f);
-                uploadButton.setEnabled(!UNGP_Feedback.getFeedbackSent());
+                uploadButton.setEnabled(!UNGP_Feedback.isFeedbackSent());
                 ButtonAPI repickButton = tooltip.addButton(Constants.rules_i18n.get("repick_rules"), KEY, buttonBase, buttonDark, Alignment.MID, CutStyle.C2_MENU, repickRectWidth * 0.7f - buttonPad, repickRect.getHeight() * 0.35f, 20f);
                 // 设置重选
                 repickButton.setEnabled(!lockedBecauseOfChallenges && inGameData.getTimesToChangeSpecialistMode() > 0);

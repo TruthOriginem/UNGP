@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.*;
 
 import static data.scripts.campaign.UNGP_Settings.d_i18n;
+import static data.scripts.utils.Constants.backgrounds_i18n;
 
 public abstract class UNGP_BaseBackgroundPlugin implements UNGP_BackgroundPluginAPI {
     protected interface BackgroundBonusScript {
@@ -141,9 +142,9 @@ public abstract class UNGP_BaseBackgroundPlugin implements UNGP_BackgroundPlugin
                                 level = 1;
                             }
                             if (level < 2) {
-                                tooltip.addPara(d_i18n.get("bg_bonus_skill"), pad, baseColor, highlightColor, skillSpec.getName());
+                                tooltip.addPara(backgrounds_i18n.get("bonus_skill"), pad, baseColor, highlightColor, skillSpec.getName());
                             } else {
-                                tooltip.addPara(d_i18n.get("bg_bonus_skill_elite"), pad, baseColor, isLimited ? gray : Misc.getStoryOptionColor(), skillSpec.getName());
+                                tooltip.addPara(backgrounds_i18n.get("bonus_skill_elite"), pad, baseColor, isLimited ? gray : Misc.getStoryOptionColor(), skillSpec.getName());
                             }
                             if (isActuallyLocked) {
                                 addUnlockCycleStringToTooltipAtRight(tooltip, cycle, gray, pad);
@@ -151,7 +152,7 @@ public abstract class UNGP_BaseBackgroundPlugin implements UNGP_BackgroundPlugin
                             break;
                         case CARGO_STACK:
                             CargoStackAPI stack = bonus.createCargoStack();
-                            tooltip.addPara(d_i18n.get("bg_bonus_item"), pad, baseColor, highlightColor, stack.getDisplayName(), (int) stack.getSize() + "");
+                            tooltip.addPara(backgrounds_i18n.get("bonus_item"), pad, baseColor, highlightColor, stack.getDisplayName(), (int) stack.getSize() + "");
                             if (isActuallyLocked) {
                                 addUnlockCycleStringToTooltipAtRight(tooltip, cycle, gray, pad);
                             }
@@ -166,19 +167,19 @@ public abstract class UNGP_BaseBackgroundPlugin implements UNGP_BackgroundPlugin
                             }
                             ShipVariantAPI variant = Global.getSettings().getVariant(variantId);
                             ShipHullSpecAPI hullSpec = variant.getHullSpec();
-                            tooltip.addPara(d_i18n.get("bg_bonus_ship"), pad, baseColor, highlightColor, hullSpec.getHullNameWithDashClass(), size + "");
+                            tooltip.addPara(backgrounds_i18n.get("bonus_ship"), pad, baseColor, highlightColor, hullSpec.getHullNameWithDashClass(), size + "");
                             if (isActuallyLocked) {
                                 addUnlockCycleStringToTooltipAtRight(tooltip, cycle, gray, pad);
                             }
                             break;
                         case SKILL_POINTS:
-                            tooltip.addPara(d_i18n.get("bg_bonus_skill_point"), pad, baseColor, highlightColor, (int) bonus.params[0] + "");
+                            tooltip.addPara(backgrounds_i18n.get("bonus_skill_point"), pad, baseColor, highlightColor, (int) bonus.params[0] + "");
                             if (isActuallyLocked) {
                                 addUnlockCycleStringToTooltipAtRight(tooltip, cycle, gray, pad);
                             }
                             break;
                         case STORY_POINTS:
-                            tooltip.addPara(d_i18n.get("bg_bonus_story_point"), pad, baseColor, highlightColor, (int) bonus.params[0] + "");
+                            tooltip.addPara(backgrounds_i18n.get("bonus_story_point"), pad, baseColor, highlightColor, (int) bonus.params[0] + "");
                             if (isActuallyLocked) {
                                 addUnlockCycleStringToTooltipAtRight(tooltip, cycle, gray, pad);
                             }
@@ -282,7 +283,7 @@ public abstract class UNGP_BaseBackgroundPlugin implements UNGP_BackgroundPlugin
 
 
     protected String getUnlockCycleString(int cycle) {
-        return d_i18n.format("bg_bonus_cycle_unlock_tip", "" + cycle);
+        return backgrounds_i18n.format("bonus_cycle_unlock_tip", "" + cycle);
     }
 
     protected void addUnlockCycleStringToTooltipAtRight(TooltipMakerAPI tooltip, int cycle, Color gray, float pad) {

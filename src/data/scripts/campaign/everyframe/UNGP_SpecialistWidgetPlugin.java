@@ -3,8 +3,12 @@ package data.scripts.campaign.everyframe;
 import com.fs.starfarer.api.EveryFrameScript;
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.CampaignUIAPI;
+import com.fs.starfarer.api.campaign.CoreUITabId;
+import com.fs.starfarer.api.campaign.listeners.CampaignInputListener;
 import com.fs.starfarer.api.graphics.SpriteAPI;
+import com.fs.starfarer.api.input.InputEventAPI;
 import com.fs.starfarer.api.util.Misc;
+import data.scripts.campaign.specialist.intel.UNGP_SpecialistIntel;
 import data.scripts.campaign.specialist.rules.UNGP_RulesManager;
 import data.scripts.campaign.specialist.rules.UNGP_RulesManager.URule;
 import data.scripts.utils.UNGP_Progress;
@@ -21,7 +25,7 @@ import java.util.List;
 
 import static data.scripts.campaign.specialist.UNGP_SpecialistSettings.Difficulty;
 
-public class UNGP_SpecialistWidgetPlugin implements EveryFrameScript {
+public class UNGP_SpecialistWidgetPlugin implements EveryFrameScript, CampaignInputListener {
     private static final float BASIC_ICON_ALPHA = 0.4f;
     private static final float SMALL_ICON_SIZE = 32f;
     private static final Rectangle WIDGET_RECT;
@@ -156,5 +160,33 @@ public class UNGP_SpecialistWidgetPlugin implements EveryFrameScript {
             icon.setAlphaMult(0.7f);
             icon.render(x, y);
         }
+    }
+
+    @Override
+    public int getListenerInputPriority() {
+        return 1000;
+    }
+
+    @Override
+    public void processCampaignInputPreCore(List<InputEventAPI> events) {
+    }
+
+    @Override
+    public void processCampaignInputPreFleetControl(List<InputEventAPI> events) {
+        if (UNGP_RulesManager.isSpecialistMode()) {
+            for (InputEventAPI event : events) {
+                if (event.isLMBDownEvent() && inWidgetRect(event.getX(), event.getY())) {
+                    Global.getSector().getCampaignUI().showCoreUITab(CoreUITabId.INTEL, UNGP_SpecialistIntel.getInstance());
+                    Global.getSoundPlayer().playUISound("ui_button_pressed", 1f, 1f);
+                    event.consume();
+                    break;
+                }
+            }
+        }
+    }
+
+    @Override
+    public void processCampaignInputPostCore(List<InputEventAPI> events) {
+
     }
 }
