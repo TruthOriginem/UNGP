@@ -12,7 +12,9 @@ import data.scripts.campaign.specialist.rules.UNGP_RulesManager.URule;
 import data.scripts.ungprules.impl.UNGP_BaseRuleEffect;
 import data.scripts.ungprules.tags.UNGP_CampaignTag;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import static data.scripts.campaign.specialist.rules.UNGP_RulesManager.getAllRulesCopy;
 
@@ -51,17 +53,29 @@ public class UNGP_StillGrowingUp extends UNGP_BaseRuleEffect implements UNGP_Cam
                 List<URule> activatedRules = inGameData.getActivatedRules();
                 List<URule> allRules = getAllRulesCopy();
                 WeightedRandomPicker<URule> picker = new WeightedRandomPicker<>(getRandom());
+                Set<String> addedRuleIDs = getDataInCampaign(1);
+                if (addedRuleIDs == null) {
+                    addedRuleIDs = new HashSet<>();
+                    saveDataInCampaign(1, addedRuleIDs);
+                }
                 // 不能roll到黄金规则
                 for (URule uRule : allRules) {
                     if (!uRule.isBonus() || activatedRules.contains(uRule)) continue;
                     if (uRule.isGolden()) continue;
                     if (!uRule.isRollable()) continue;
+                    int weight;
+                    if (addedRuleIDs.contains(uRule.getId())) {
+                        weight = 1;
+                    } else {
+                        weight = Math.min(6 - Math.abs(uRule.getCost()), 1);
+                    }
                     // 权重：cost点数越低越有可能
-                    picker.add(uRule, Math.min(6 - Math.abs(uRule.getCost()), 1));
+                    picker.add(uRule, weight);
                 }
                 URule toAdd = picker.pick();
                 if (toAdd != null) {
                     activatedRules.add(toAdd);
+                    addedRuleIDs.add(toAdd.getId());
                     MessageIntel intel = new MessageIntel(rule.getName(), toAdd.getCorrectColor());
                     intel.setIcon(toAdd.getSpritePath());
                     intel.addLine(rule.getExtra1(), Misc.getTextColor(), new String[]{toAdd.getName()}, toAdd.getCorrectColor());

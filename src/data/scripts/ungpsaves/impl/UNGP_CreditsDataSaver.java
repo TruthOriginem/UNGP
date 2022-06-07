@@ -12,7 +12,7 @@ import org.json.JSONObject;
 
 import java.util.Map;
 
-import static data.scripts.campaign.UNGP_Settings.d_i18n;
+import static data.scripts.utils.Constants.root_i18n;
 
 public class UNGP_CreditsDataSaver implements UNGP_DataSaverAPI {
     public int credits;
@@ -57,7 +57,7 @@ public class UNGP_CreditsDataSaver implements UNGP_DataSaverAPI {
     @Override
     public void addSaverInfo(TooltipMakerAPI root, String descKey) {
         TooltipMakerAPI section = root.beginImageWithText("graphics/icons/reports/generic_income.png", 24f);
-        section.addPara(d_i18n.get(descKey + "_2"), 3f);
+        section.addPara(root_i18n.get(descKey + "_2"), 3f);
         root.addImageWithText(5f);
         root.addPara(UNGP_InheritData.BULLETED_PREFIX + Misc.getDGSCredits(credits), Misc.getHighlightColor(), 5f);
     }

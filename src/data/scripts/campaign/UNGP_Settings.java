@@ -4,8 +4,6 @@ import com.fs.starfarer.api.Global;
 import org.json.JSONObject;
 import org.lwjgl.input.Keyboard;
 
-import static data.scripts.utils.SimpleI18n.I18nSection;
-
 public class UNGP_Settings {
     private static boolean NO_LEVEL_LIMIT = false;
     private static boolean NO_TIMES_LIMIT = false;
@@ -45,8 +43,6 @@ public class UNGP_Settings {
             throw new RuntimeException("Error loading UNGP_OPTIONS...");
         }
     }
-
-    public static final I18nSection d_i18n = new I18nSection("UNGP", "d", true);
 
     public static boolean reachMaxLevel() {
         int playerLevel = Global.getSector().getPlayerStats().getLevel();

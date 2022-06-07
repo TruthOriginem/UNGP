@@ -24,7 +24,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import static data.scripts.campaign.UNGP_Settings.d_i18n;
+import static data.scripts.utils.Constants.root_i18n;
 import static data.scripts.campaign.specialist.rules.UNGP_RulesManager.*;
 
 public class UNGP_RulePickListener implements CargoPickerListener {
@@ -109,15 +109,15 @@ public class UNGP_RulePickListener implements CargoPickerListener {
         TooltipMakerAPI imageTooltip = panel.beginImageWithText(difficulty.spritePath, 64f);
         imageTooltip.setParaOrbitronLarge();
         if (difficulty == Difficulty.OMEGA) {
-            imageTooltip.addPara(d_i18n.get("rulepick_level"), opad, negative, difficulty.color, difficulty.name);
+            imageTooltip.addPara(root_i18n.get("rulepick_level"), opad, negative, difficulty.color, difficulty.name);
         } else {
-            imageTooltip.addPara(d_i18n.get("rulepick_level"), opad, difficulty.color, difficulty.name);
+            imageTooltip.addPara(root_i18n.get("rulepick_level"), opad, difficulty.color, difficulty.name);
         }
         imageTooltip.setParaFontDefault();
         panel.addImageWithText(0);
 
         // 展示规则
-        LabelAPI desc = panel.addPara(d_i18n.get("rulepick_desc"), opad, highlight,
+        LabelAPI desc = panel.addPara(root_i18n.get("rulepick_desc"), opad, highlight,
                                       UNGP_RulesManager.getBonusString(true),
                                       UNGP_RulesManager.getBonusString(false),
                                       UNGP_RulesManager.getGoldenString());
@@ -146,12 +146,12 @@ public class UNGP_RulePickListener implements CargoPickerListener {
         panel.setParaOrbitronLarge();
         Color color = cost >= 0 ? highlight : negative;
         Color textColor = Misc.getBasePlayerColor();
-        panel.addPara(d_i18n.get("rulepick_cost"), pad, textColor, color, cost + "");
+        panel.addPara(root_i18n.get("rulepick_cost"), pad, textColor, color, cost + "");
         int maxAmount = difficulty.maxRules;
         int minAmount = difficulty.minRules;
         // 规则数目
         color = (amount >= minAmount && amount <= maxAmount) ? highlight : negative;
-        LabelAPI para = panel.addPara(d_i18n.get("rulepick_ruleAmount"), pad, textColor, color, amount + "", maxAmount + "", minAmount + "");
+        LabelAPI para = panel.addPara(root_i18n.get("rulepick_ruleAmount"), pad, textColor, color, amount + "", maxAmount + "", minAmount + "");
         para.setHighlightColors(color, highlight, highlight);
         panel.setParaFontDefault();
 
@@ -237,7 +237,7 @@ public class UNGP_RulePickListener implements CargoPickerListener {
         }
         if (!UNGP_SpecialistSettings.rulesMeetCondition(rules, this.difficulty)) {
             panel.setParaOrbitronLarge();
-            panel.addPara(d_i18n.get("rulepick_notMeet"), negative, small).setAlignment(Alignment.MID);
+            panel.addPara(root_i18n.get("rulepick_notMeet"), negative, small).setAlignment(Alignment.MID);
             panel.setParaFontDefault();
         }
     }
@@ -265,7 +265,7 @@ public class UNGP_RulePickListener implements CargoPickerListener {
     public void showCargoPickerDialog(InteractionDialogAPI baseDialog) {
         float width = Global.getSettings().getScreenWidth() * 0.8f;
         float height = Global.getSettings().getScreenHeight() * 0.8f;
-        baseDialog.showCargoPickerDialog(d_i18n.get("rulepick_title"), d_i18n.get("confirm"), d_i18n.get("cancel"), false,
+        baseDialog.showCargoPickerDialog(root_i18n.get("rulepick_title"), root_i18n.get("confirm"), root_i18n.get("cancel"), false,
                                          Math.max(280f, width * 0.2f),
                                          width,
                                          height,

@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import static data.scripts.campaign.UNGP_Settings.d_i18n;
+import static data.scripts.utils.Constants.root_i18n;
 
 public class UNGP_InheritData {
     private static final List<UNGP_DataSaverAPI> SAVER_INSTANCES = new ArrayList<>();
@@ -27,7 +27,7 @@ public class UNGP_InheritData {
     public String ungp_id;
     public String lastPlayerName;
     public int cycle;
-    public boolean isHardMode;
+    //    public boolean isHardMode;
     public List<String> completedChallenges;
     public List<UNGP_DataSaverAPI> dataSavers;
 
@@ -42,7 +42,7 @@ public class UNGP_InheritData {
         inheritData.ungp_id = UUID.randomUUID().toString();
         inheritData.lastPlayerName = Global.getSector().getPlayerPerson().getNameString();
         inheritData.cycle = inGameData.getCurCycle() + 1;
-        inheritData.isHardMode = inGameData.isHardMode();
+//        inheritData.isHardMode = inGameData.isHardMode();
         inheritData.completedChallenges = new ArrayList<>(inGameData.getCompletedChallenges());
         inheritData.dataSavers = new ArrayList<>();
         for (UNGP_DataSaverAPI saverInstance : SAVER_INSTANCES) {
@@ -59,9 +59,9 @@ public class UNGP_InheritData {
     public static UNGP_InheritData createEmptyData() {
         UNGP_InheritData inheritData = new UNGP_InheritData();
         inheritData.ungp_id = UUID.randomUUID().toString();
-        inheritData.lastPlayerName = "UNGP-NewFound";
+        inheritData.lastPlayerName = root_i18n.get("defaultSlotName");
         inheritData.cycle = 1;
-        inheritData.isHardMode = false;
+//        inheritData.isHardMode = false;
         inheritData.completedChallenges = new ArrayList<>();
         inheritData.dataSavers = new ArrayList<>();
         for (UNGP_DataSaverAPI saverInstance : SAVER_INSTANCES) {
@@ -76,13 +76,13 @@ public class UNGP_InheritData {
 
     public void addRecordTooltip(TooltipMakerAPI root, Difficulty difficulty) {
         addDescriptionTooltip(root, "inGameData");
-        if (isHardMode) {
-            TooltipMakerAPI section = root.beginImageWithText(difficulty.spritePath, 24f);
-            section.addPara(d_i18n.get("specialistMode"), Misc.getNegativeHighlightColor(), 0f);
-            section.addPara(d_i18n.get("hardmodeLevel") + ": %s", 0f, Misc.getGrayColor(),
-                            Misc.getHighlightColor(), difficulty.name);
-            root.addImageWithText(10f);
-        }
+//        if (isHardMode) {
+//            TooltipMakerAPI section = root.beginImageWithText(difficulty.spritePath, 24f);
+//            section.addPara(d_i18n.get("specialistMode"), Misc.getNegativeHighlightColor(), 0f);
+//            section.addPara(d_i18n.get("hardmodeLevel") + ": %s", 0f, Misc.getGrayColor(),
+//                            Misc.getHighlightColor(), difficulty.name);
+//            root.addImageWithText(10f);
+//        }
     }
 
     public void addDescriptionTooltip(TooltipMakerAPI root, String descKey) {
@@ -91,8 +91,8 @@ public class UNGP_InheritData {
         // Cycle Name
         if (!lastPlayerName.contentEquals(UNGP_InheritData.DEFAULT_NAME)) {
             section = root.beginImageWithText("graphics/icons/reports/officers24.png", 24f);
-            section.addPara(d_i18n.get(descKey + "_0") + "%s", 0f, hl, "" + (cycle));
-            section.addPara(d_i18n.get(descKey + "_1") + "%s", 3f, hl, lastPlayerName);
+            section.addPara(root_i18n.get(descKey + "_0") + "%s", 0f, hl, "" + (cycle));
+            section.addPara(root_i18n.get(descKey + "_1") + "%s", 3f, hl, lastPlayerName);
             root.addImageWithText(5f);
         }
 //        // Credits
@@ -106,11 +106,11 @@ public class UNGP_InheritData {
         }
         // Completed challenges
         section = root.beginImageWithText("graphics/icons/reports/hazard_pay2.png", 24f);
-        section.addPara(d_i18n.get(descKey + "_4"), 3f);
+        section.addPara(root_i18n.get(descKey + "_4"), 3f);
         root.addImageWithText(5f);
         root.setBulletedListMode(BULLETED_PREFIX);
         if (completedChallenges.isEmpty()) {
-            root.addPara(d_i18n.get("challenge_empty"), Misc.getGrayColor(), 5f);
+            root.addPara(root_i18n.get("challenge_empty"), Misc.getGrayColor(), 5f);
         } else {
             for (String challengeId : completedChallenges) {
                 UNGP_ChallengeInfo challengeInfo = UNGP_ChallengeManager.getChallengeInfo(challengeId);

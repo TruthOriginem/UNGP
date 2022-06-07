@@ -16,20 +16,19 @@ import data.scripts.campaign.ui.UNGP_InteractionDialog;
 import data.scripts.ungprules.tags.UNGP_CampaignTag;
 import data.scripts.ungprules.tags.UNGP_PlayerFleetMemberTag;
 import data.scripts.ungprules.tags.UNGP_PlayerFleetTag;
-import data.scripts.utils.SimpleI18n;
 import org.lwjgl.input.Keyboard;
 
 import java.util.List;
 
 import static com.fs.starfarer.api.campaign.BuffManagerAPI.Buff;
 import static data.scripts.campaign.specialist.rules.UNGP_RulesManager.*;
+import static data.scripts.utils.Constants.root_i18n;
 
 /**
  * 主要战役逻辑所在地
  */
 public class UNGP_CampaignPlugin implements EveryFrameScript {
     private static final String KEY = "UNGP_cam";
-    private static final SimpleI18n.I18nSection i18n = new SimpleI18n.I18nSection("UNGP", "c", true);
     private static final float BASE_BUFF_DURATION = 0.1f;
 
     /***
@@ -94,7 +93,7 @@ public class UNGP_CampaignPlugin implements EveryFrameScript {
                         newGameCheckDays -= days;
                     } else {
                         newGameChecked = true;
-                        sector.getCampaignUI().showConfirmDialog(i18n.get("message"), i18n.get("yes"), i18n.get("no"), new Script() {
+                        sector.getCampaignUI().showConfirmDialog(root_i18n.get("gameStartMessage"), root_i18n.get("confirm"), root_i18n.get("cancel"), new Script() {
                             @Override
                             public void run() {
                                 shouldShowDialog = true;

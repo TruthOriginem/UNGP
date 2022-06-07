@@ -25,7 +25,7 @@ import java.util.Set;
 import static com.fs.starfarer.api.campaign.comm.IntelInfoPlugin.IntelSortTier.TIER_0;
 import static com.fs.starfarer.api.ui.TooltipMakerAPI.TooltipCreator;
 import static com.fs.starfarer.api.ui.TooltipMakerAPI.TooltipLocation;
-import static data.scripts.campaign.UNGP_Settings.d_i18n;
+import static data.scripts.utils.Constants.root_i18n;
 import static data.scripts.campaign.specialist.rules.UNGP_RulesManager.*;
 
 public class UNGP_SpecialistIntel extends BaseIntelPlugin {
@@ -125,7 +125,7 @@ public class UNGP_SpecialistIntel extends BaseIntelPlugin {
                 UNGP_SpecialistSettings.Difficulty difficulty = inGameData.getDifficulty();
                 TooltipMakerAPI imageMaker = tooltip.beginImageWithText(difficulty.spritePath, 80f);
                 imageMaker.setParaOrbitronLarge();
-                imageMaker.addPara(d_i18n.get("rulepick_level"), 0, difficulty.color, difficulty.name);
+                imageMaker.addPara(root_i18n.get("rulepick_level"), 0, difficulty.color, difficulty.name);
                 imageMaker.setParaFontDefault();
                 tooltip.addImageWithText(0f);
                 levelTitle.addTooltip();

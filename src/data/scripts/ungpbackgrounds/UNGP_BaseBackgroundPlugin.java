@@ -20,7 +20,7 @@ import java.awt.*;
 import java.util.List;
 import java.util.*;
 
-import static data.scripts.campaign.UNGP_Settings.d_i18n;
+import static data.scripts.utils.Constants.root_i18n;
 import static data.scripts.utils.Constants.backgrounds_i18n;
 
 public abstract class UNGP_BaseBackgroundPlugin implements UNGP_BackgroundPluginAPI {
@@ -63,9 +63,7 @@ public abstract class UNGP_BaseBackgroundPlugin implements UNGP_BackgroundPlugin
     }
 
     @Override
-    public void initCycleBonus() {
-
-    }
+    public abstract void initCycleBonus();
 
     /**
      * @param cycle
@@ -97,8 +95,8 @@ public abstract class UNGP_BaseBackgroundPlugin implements UNGP_BackgroundPlugin
 
     @Override
     public void addInheritCreditsAndBPsTooltip(TooltipMakerAPI tooltip, @Nullable UNGP_InheritData pickedInheritData) {
-        tooltip.addPara(d_i18n.get("inheritCredits") + ": %s", 0f, Misc.getPositiveHighlightColor(), (int) (getInheritCreditsFactor() * 100f) + "%");
-        tooltip.addPara(d_i18n.get("inheritBPs") + ": %s", 0f, Misc.getPositiveHighlightColor(), (int) (getInheritBlueprintsFactor() * 100f) + "%");
+        tooltip.addPara(root_i18n.get("inheritCredits") + ": %s", 0f, Misc.getPositiveHighlightColor(), (int) (getInheritCreditsFactor() * 100f) + "%");
+        tooltip.addPara(root_i18n.get("inheritBPs") + ": %s", 0f, Misc.getPositiveHighlightColor(), (int) (getInheritBlueprintsFactor() * 100f) + "%");
     }
 
     @Override

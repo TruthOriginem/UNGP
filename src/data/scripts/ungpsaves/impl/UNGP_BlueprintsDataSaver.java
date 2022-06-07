@@ -21,7 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import static data.scripts.campaign.UNGP_Settings.d_i18n;
+import static data.scripts.utils.Constants.root_i18n;
 
 public class UNGP_BlueprintsDataSaver implements UNGP_DataSaverAPI {
 
@@ -174,7 +174,7 @@ public class UNGP_BlueprintsDataSaver implements UNGP_DataSaverAPI {
         }
 
         root.setParaSmallInsignia();
-        root.addPara(d_i18n.get("inheritedBP"), 0f, Misc.getPositiveHighlightColor(), Misc.getHighlightColor(),
+        root.addPara(root_i18n.get("inheritedBP"), 0f, Misc.getPositiveHighlightColor(), Misc.getHighlightColor(),
                      "" + inheritedShip,
                      "" + inheritedFighter,
                      "" + inheritedWeapon,
@@ -184,9 +184,9 @@ public class UNGP_BlueprintsDataSaver implements UNGP_DataSaverAPI {
     @Override
     public void addSaverInfo(TooltipMakerAPI root, String descKey) {
         TooltipMakerAPI section = root.beginImageWithText("graphics/icons/reports/exports24.png", 24f);
-        section.addPara(d_i18n.get(descKey + "_3"), 3f);
+        section.addPara(root_i18n.get(descKey + "_3"), 3f);
         root.addImageWithText(5f);
-        root.addPara(d_i18n.get("data_bps"), 5f, Misc.getHighlightColor(),
+        root.addPara(root_i18n.get("data_bps"), 5f, Misc.getHighlightColor(),
                      UNGP_InheritData.BULLETED_PREFIX + ships.size(),
                      UNGP_InheritData.BULLETED_PREFIX + fighters.size(),
                      UNGP_InheritData.BULLETED_PREFIX + weapons.size(),

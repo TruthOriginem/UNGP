@@ -4,9 +4,9 @@ import com.fs.starfarer.api.characters.MutableCharacterStatsAPI;
 import com.fs.starfarer.api.impl.campaign.ids.Stats;
 import data.scripts.campaign.specialist.UNGP_SpecialistSettings;
 import data.scripts.ungprules.impl.UNGP_BaseRuleEffect;
-import data.scripts.ungprules.tags.UNGP_CharacterTag;
+import data.scripts.ungprules.tags.UNGP_PlayerCharacterStatsSkillTag;
 
-public class UNGP_Besieged extends UNGP_BaseRuleEffect implements UNGP_CharacterTag {
+public class UNGP_Besieged extends UNGP_BaseRuleEffect implements UNGP_PlayerCharacterStatsSkillTag {
 
     private float dp;
 
@@ -22,20 +22,20 @@ public class UNGP_Besieged extends UNGP_BaseRuleEffect implements UNGP_Character
     }
 
     @Override
-    public void applyPlayerCharacterStats(MutableCharacterStatsAPI stats) {
+    public String getDescriptionParams(int index, UNGP_SpecialistSettings.Difficulty difficulty) {
+        if (index == 0) return getPercentString(getValueByDifficulty(index, difficulty) * 100f);
+        return super.getDescriptionParams(index, difficulty);
+    }
+
+    @Override
+    public void apply(MutableCharacterStatsAPI stats) {
         stats.getDynamic().getMod(Stats.DEPLOYMENT_POINTS_FRACTION_OF_BATTLE_SIZE_BONUS_MOD).modifyFlat(buffID, -dp);
         stats.getDynamic().getMod(Stats.DEPLOYMENT_POINTS_MIN_FRACTION_OF_BATTLE_SIZE_BONUS_MOD).modifyFlat(buffID, -dp);
     }
 
     @Override
-    public void unapplyPlayerCharacterStats(MutableCharacterStatsAPI stats) {
+    public void unapply(MutableCharacterStatsAPI stats) {
         stats.getDynamic().getMod(Stats.DEPLOYMENT_POINTS_FRACTION_OF_BATTLE_SIZE_BONUS_MOD).unmodifyFlat(buffID);
         stats.getDynamic().getMod(Stats.DEPLOYMENT_POINTS_MIN_FRACTION_OF_BATTLE_SIZE_BONUS_MOD).unmodifyFlat(buffID);
-    }
-
-    @Override
-    public String getDescriptionParams(int index, UNGP_SpecialistSettings.Difficulty difficulty) {
-        if (index == 0) return getPercentString(getValueByDifficulty(index, difficulty) * 100f);
-        return super.getDescriptionParams(index, difficulty);
     }
 }
