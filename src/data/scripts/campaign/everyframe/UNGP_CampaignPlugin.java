@@ -3,35 +3,32 @@ package data.scripts.campaign.everyframe;
 import com.fs.starfarer.api.EveryFrameScript;
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.Script;
-import com.fs.starfarer.api.campaign.*;
-import com.fs.starfarer.api.campaign.listeners.CampaignInputListener;
+import com.fs.starfarer.api.campaign.BuffManagerAPI;
+import com.fs.starfarer.api.campaign.CampaignClockAPI;
+import com.fs.starfarer.api.campaign.CampaignFleetAPI;
+import com.fs.starfarer.api.campaign.SectorAPI;
 import com.fs.starfarer.api.fleet.FleetMemberAPI;
-import com.fs.starfarer.api.input.InputEventAPI;
 import com.fs.starfarer.api.util.IntervalUtil;
 import data.scripts.campaign.UNGP_InGameData;
 import data.scripts.campaign.UNGP_Settings;
 import data.scripts.campaign.specialist.UNGP_PlayerFleetMemberBuff;
-import data.scripts.campaign.specialist.intel.UNGP_SpecialistIntel;
-import data.scripts.campaign.specialist.rules.UNGP_RulesManager;
 import data.scripts.campaign.ui.UNGP_InteractionDialog;
 import data.scripts.ungprules.tags.UNGP_CampaignTag;
 import data.scripts.ungprules.tags.UNGP_PlayerFleetMemberTag;
 import data.scripts.ungprules.tags.UNGP_PlayerFleetTag;
-import data.scripts.utils.SimpleI18n;
 import org.lwjgl.input.Keyboard;
 
 import java.util.List;
 
 import static com.fs.starfarer.api.campaign.BuffManagerAPI.Buff;
 import static data.scripts.campaign.specialist.rules.UNGP_RulesManager.*;
+import static data.scripts.utils.Constants.root_i18n;
 
 /**
  * 主要战役逻辑所在地
  */
-public class UNGP_CampaignPlugin implements EveryFrameScript, CampaignInputListener {
+public class UNGP_CampaignPlugin implements EveryFrameScript {
     private static final String KEY = "UNGP_cam";
-    private static final String ENTITY_ID = "ungp_ui_entity";
-    private static final SimpleI18n.I18nSection i18n = new SimpleI18n.I18nSection("UNGP", "c", true);
     private static final float BASE_BUFF_DURATION = 0.1f;
 
     /***
@@ -46,7 +43,6 @@ public class UNGP_CampaignPlugin implements EveryFrameScript, CampaignInputListe
     private float newGameCheckDays = 0.1f;
     private boolean newGameChecked = false;
     private boolean shouldShowDialog = false;
-    private SectorEntityToken uiEntity = null;
 
     public static UNGP_CampaignPlugin getInstance() {
         UNGP_CampaignPlugin plugin = (UNGP_CampaignPlugin) Global.getSector().getPersistentData().get(KEY);
@@ -57,24 +53,8 @@ public class UNGP_CampaignPlugin implements EveryFrameScript, CampaignInputListe
         }
     }
 
-    /**
-     * The entity loaded has a custom plugin {@link data.scripts.utils.UNGP_UIEntityPlugin}
-     */
-    @Deprecated
-    public static void loadUIEntity() {
-        UNGP_CampaignPlugin plugin = UNGP_CampaignPlugin.getInstance();
-        plugin.uiEntity = Global.getSector().getEntityById(ENTITY_ID);
-//        if (plugin.uiEntity == null) {
-//            plugin.uiEntity = Global.getSector().getCurrentLocation().addCustomEntity(ENTITY_ID, null, "ungp_ui", null);
-//        }
-        if (plugin.uiEntity != null) {
-            plugin.uiEntity.setExpired(true);
-        }
-    }
-
     public UNGP_CampaignPlugin() {
         inGameData = new UNGP_InGameData();
-        Global.getSector().getListenerManager().addListener(this);
         Global.getSector().getPersistentData().put(KEY, this);
         CampaignClockAPI clock = Global.getSector().getClock();
         oneDayChecker = clock.getDay();
@@ -113,7 +93,7 @@ public class UNGP_CampaignPlugin implements EveryFrameScript, CampaignInputListe
                         newGameCheckDays -= days;
                     } else {
                         newGameChecked = true;
-                        sector.getCampaignUI().showConfirmDialog(i18n.get("message"), i18n.get("yes"), i18n.get("no"), new Script() {
+                        sector.getCampaignUI().showConfirmDialog(root_i18n.get("gameStartMessage"), root_i18n.get("confirm"), root_i18n.get("cancel"), new Script() {
                             @Override
                             public void run() {
                                 shouldShowDialog = true;
@@ -142,14 +122,6 @@ public class UNGP_CampaignPlugin implements EveryFrameScript, CampaignInputListe
         }
         // 以下专家模式才可触发
         if (!inGameData.isHardMode()) return;
-
-//        // 调整专家模式UI的位置
-//        if (uiEntity != null && !uiEntity.isInCurrentLocation()) {
-//            LocationAPI currentLocation = sector.getCurrentLocation();
-//            uiEntity.getContainingLocation().removeEntity(uiEntity);
-//            currentLocation.addEntity(uiEntity);
-//            uiEntity.setContainingLocation(currentLocation);
-//        }
 
         int currentDay = clock.getDay();
         int currentYear = clock.getCycle();
@@ -233,34 +205,6 @@ public class UNGP_CampaignPlugin implements EveryFrameScript, CampaignInputListe
 
     public UNGP_InGameData getInGameData() {
         return inGameData;
-    }
-
-    @Override
-    public int getListenerInputPriority() {
-        return 1000;
-    }
-
-    @Override
-    public void processCampaignInputPreCore(List<InputEventAPI> events) {
-    }
-
-    @Override
-    public void processCampaignInputPreFleetControl(List<InputEventAPI> events) {
-        if (UNGP_RulesManager.isSpecialistMode()) {
-            for (InputEventAPI event : events) {
-                if (event.isLMBDownEvent() && UNGP_SpecialistWidgetPlugin.inWidgetRect(event.getX(), event.getY())) {
-                    Global.getSector().getCampaignUI().showCoreUITab(CoreUITabId.INTEL, UNGP_SpecialistIntel.getInstance());
-                    Global.getSoundPlayer().playUISound("ui_button_pressed", 1f, 1f);
-                    event.consume();
-                    break;
-                }
-            }
-        }
-    }
-
-    @Override
-    public void processCampaignInputPostCore(List<InputEventAPI> events) {
-
     }
 
 

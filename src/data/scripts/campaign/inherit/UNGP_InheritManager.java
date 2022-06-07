@@ -24,14 +24,16 @@ public class UNGP_InheritManager {
     /**
      * Called when {@link UNGP_modPlugin#onApplicationLoad()}
      */
-    public static void loadAllSlots() {
+    public static boolean loadAllSlots() {
         InheritData_slot0 = load(0);
         InheritData_slot1 = load(1);
         InheritData_slot2 = load(2);
         // Special Empty Data
         if (InheritData_slot0 == null && InheritData_slot1 == null && InheritData_slot2 == null) {
             InheritData_slot0 = createEmptyData();
+            return true;
         }
+        return false;
     }
 
     public static void clearSlots() {
@@ -68,8 +70,8 @@ public class UNGP_InheritManager {
             jsonObject.put("ungp_id", inheritData.ungp_id);
             jsonObject.put("lastPlayerName", inheritData.lastPlayerName);
             jsonObject.put("cycle", inheritData.cycle);
-            jsonObject.put("isHardMode", inheritData.isHardMode);
-            jsonObject.put("inheritCredits", inheritData.inheritCredits);
+//            jsonObject.put("isHardMode", inheritData.isHardMode);
+//            jsonObject.put("inheritCredits", inheritData.inheritCredits);
             jsonObject.put("completedChallenges", inheritData.completedChallenges);
 
             for (UNGP_DataSaverAPI dataSaver : inheritData.dataSavers) {
@@ -95,9 +97,6 @@ public class UNGP_InheritManager {
             inheritData.ungp_id = jsonObject.optString("ungp_id", "[Empty]");
             inheritData.lastPlayerName = jsonObject.optString("lastPlayerName", DEFAULT_NAME);
             inheritData.cycle = jsonObject.getInt("cycle");
-            inheritData.isHardMode = jsonObject.getBoolean("isHardMode");
-            inheritData.inheritCredits = jsonObject.getInt("inheritCredits");
-
             inheritData.completedChallenges = new ArrayList<>();
             inheritData.dataSavers = new ArrayList<>();
 

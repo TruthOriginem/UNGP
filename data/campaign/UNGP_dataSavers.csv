@@ -1,2 +1,3 @@
 id,saverClass
+UNGP_CreditsDataSaver,data.scripts.ungpsaves.impl.UNGP_CreditsDataSaver
 UNGP_BlueprintsDataSaver,data.scripts.ungpsaves.impl.UNGP_BlueprintsDataSaver

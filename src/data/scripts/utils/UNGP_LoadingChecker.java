@@ -7,7 +7,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UNGP_LoadingChecker {
-    private static final String ATTENTION_INFO = "Attention: Any unauthorized modifications to the mods will be considered as a blatant violation of the mod author's rights.";
+    private static final String ATTENTION_INFO = "Attention: Any unauthorized modifications to the mods will be considered as a blatant violation of the mod author's rights." +
+            "\nYes, UNGP is not compatible with Fairy Empire, you know what I mean.";
     private static boolean checkedMods;
 
     public static void runCheckProcess() {
@@ -115,8 +116,8 @@ public class UNGP_LoadingChecker {
     }
 
     private static boolean check() {
-        if (getCodeString().hashCode() != 1746522134) {
-            throw new RuntimeException("java:Null Pointer Exception...?");
+        if (getCodeString().hashCode() != -1475221603) {
+            throw new RuntimeException("Modifying the code? Are you actually doing this?");
         }
 
         if (Global.getSettings().getModManager().isModEnabled(BAN_MOD_CONSTANTS.get(0))) {

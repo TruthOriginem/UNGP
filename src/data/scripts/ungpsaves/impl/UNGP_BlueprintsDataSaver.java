@@ -21,7 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import static data.scripts.campaign.UNGP_Settings.d_i18n;
+import static data.scripts.utils.Constants.root_i18n;
 
 public class UNGP_BlueprintsDataSaver implements UNGP_DataSaverAPI {
 
@@ -94,11 +94,11 @@ public class UNGP_BlueprintsDataSaver implements UNGP_DataSaverAPI {
     @Override
     public void startInheritDataFromSaver(TooltipMakerAPI root, Map<String, Object> params) {
         FactionAPI player = Global.getSector().getPlayerFaction();
-        float inheritBPPercent = (float) params.get("inheritBPPercent");
-        int shipAmount = (int) (inheritBPPercent * ships.size());
-        int fighterAmount = (int) (inheritBPPercent * fighters.size());
-        int weaponAmount = (int) (inheritBPPercent * weapons.size());
-        int hullmodAmount = (int) (inheritBPPercent * hullmods.size());
+        float inheritBPFactor = (float) params.get("inheritBPFactor");
+        int shipAmount = (int) (inheritBPFactor * ships.size());
+        int fighterAmount = (int) (inheritBPFactor * fighters.size());
+        int weaponAmount = (int) (inheritBPFactor * weapons.size());
+        int hullmodAmount = (int) (inheritBPFactor * hullmods.size());
         List<String> curShipBps = new ArrayList<>();
         List<String> curFighterBps = new ArrayList<>();
         List<String> curWeaponBps = new ArrayList<>();
@@ -174,7 +174,7 @@ public class UNGP_BlueprintsDataSaver implements UNGP_DataSaverAPI {
         }
 
         root.setParaSmallInsignia();
-        root.addPara(d_i18n.get("inheritedBP"), 0f, Misc.getPositiveHighlightColor(), Misc.getHighlightColor(),
+        root.addPara(root_i18n.get("inheritedBP"), 0f, Misc.getPositiveHighlightColor(), Misc.getHighlightColor(),
                      "" + inheritedShip,
                      "" + inheritedFighter,
                      "" + inheritedWeapon,
@@ -184,9 +184,9 @@ public class UNGP_BlueprintsDataSaver implements UNGP_DataSaverAPI {
     @Override
     public void addSaverInfo(TooltipMakerAPI root, String descKey) {
         TooltipMakerAPI section = root.beginImageWithText("graphics/icons/reports/exports24.png", 24f);
-        section.addPara(d_i18n.get(descKey + "_3"), 3f);
+        section.addPara(root_i18n.get(descKey + "_3"), 3f);
         root.addImageWithText(5f);
-        root.addPara(d_i18n.get("data_bps"), 5f, Misc.getHighlightColor(),
+        root.addPara(root_i18n.get("data_bps"), 5f, Misc.getHighlightColor(),
                      UNGP_InheritData.BULLETED_PREFIX + ships.size(),
                      UNGP_InheritData.BULLETED_PREFIX + fighters.size(),
                      UNGP_InheritData.BULLETED_PREFIX + weapons.size(),

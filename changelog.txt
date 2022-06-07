@@ -1,6 +1,18 @@
-1.7.3 2022/5/1
+2.0.0 2022/6/3
+本次更新需要新存档，请用旧版重生记录重生点后再更新、开新档。
+继承方式重置：
+-取消多周目可额外获得的技能点/故事点。
+-取消自由选择星币/蓝图继承。
+-添加新机制：重生背景，通过选择重生背景来决定你星币/蓝图继承百分比，并根据全局周目数来获取额外奖励(额外技能点/故事点/物品/舰船等)。
+
 规则修正：
 多层装甲：cost点数3->4，数值曲线调整，现在战机收益仅为25%
+
+This update requires a new saving, please use the old version of the mod to record your savepoint before updating and starting a new game.
+Inheritance method reset:
+-Cancel the extra skill points/story points that can be obtained from multi-game-cycles.
+-Cancel the free choice of credits/blueprint inheritance.
+-Add new mechanism: Background, determine your credits/blueprint inheritance percentage by choosing background, and get extra bonus (extra skill points/story points/items/ships, etc.) based on the number of global game-cycle.
 
 Layered Armor: Cost +3 > +4, tweaked the value curve, now fighters only have 25% bonus.
 

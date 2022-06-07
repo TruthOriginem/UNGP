@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import static data.scripts.campaign.UNGP_Settings.d_i18n;
+import static data.scripts.utils.Constants.root_i18n;
 import static data.scripts.campaign.specialist.UNGP_SpecialistSettings.Difficulty;
 import static data.scripts.campaign.specialist.UNGP_SpecialistSettings.rulesMeetCondition;
 import static data.scripts.campaign.specialist.rules.UNGP_RulesManager.URule;
@@ -55,9 +55,9 @@ public class UNGP_RepickRulesDialog implements InteractionDialogPlugin {
         this.textPanel = dialog.getTextPanel();
 
         textPanel.addPara(rules_i18n.get("repick_desc"));
-        options.addOption(d_i18n.get("rulepick_button"), OptionRepick);
-        options.addOption(d_i18n.get("confirm"), OptionConfirm);
-        options.addOption(d_i18n.get("leave"), OptionLeave);
+        options.addOption(root_i18n.get("rulepick_button"), OptionRepick);
+        options.addOption(root_i18n.get("confirm"), OptionConfirm);
+        options.addOption(root_i18n.get("leave"), OptionLeave);
         dialog.setOptionOnEscape(null, OptionLeave);
     }
 
@@ -73,7 +73,7 @@ public class UNGP_RepickRulesDialog implements InteractionDialogPlugin {
                                                                            difficulty, new Script() {
                 @Override
                 public void run() {
-                    textPanel.addPara(d_i18n.get("hardmodeDes"));
+                    textPanel.addPara(root_i18n.get("hardmodeDes"));
                     TooltipMakerAPI tooltip = textPanel.beginTooltip();
                     for (URule rule : pickedList) {
                         TooltipMakerAPI imageMaker = tooltip.beginImageWithText(rule.getSpritePath(), 32f);
@@ -83,7 +83,7 @@ public class UNGP_RepickRulesDialog implements InteractionDialogPlugin {
                     }
                     couldRepick = true;
                     if (!rulesMeetCondition(pickedList, difficulty)) {
-                        tooltip.addPara(d_i18n.get("rulepick_notMeet"), Misc.getNegativeHighlightColor(), 5f);
+                        tooltip.addPara(root_i18n.get("rulepick_notMeet"), Misc.getNegativeHighlightColor(), 5f);
                         couldRepick = false;
                     }
                     textPanel.addTooltip();

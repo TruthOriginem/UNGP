@@ -9,7 +9,6 @@ import com.fs.starfarer.api.campaign.econ.MarketAPI;
 import com.fs.starfarer.api.campaign.rules.MemoryAPI;
 import com.fs.starfarer.api.combat.EngagementResultAPI;
 import com.fs.starfarer.api.fleet.FleetMemberAPI;
-import com.fs.starfarer.api.impl.campaign.rulecmd.AddRemoveCommodity;
 import com.fs.starfarer.api.input.InputEventAPI;
 import com.fs.starfarer.api.ui.*;
 import com.fs.starfarer.api.util.Misc;
@@ -19,6 +18,7 @@ import data.scripts.campaign.background.UNGP_Background;
 import data.scripts.campaign.background.UNGP_BackgroundManager;
 import data.scripts.campaign.inherit.UNGP_InheritData;
 import data.scripts.campaign.inherit.UNGP_InheritManager;
+import data.scripts.campaign.intel.UNGP_BackgroundIntel;
 import data.scripts.campaign.specialist.challenges.UNGP_ChallengeInfo;
 import data.scripts.campaign.specialist.challenges.UNGP_ChallengeManager;
 import data.scripts.campaign.specialist.intel.UNGP_ChallengeIntel;
@@ -30,6 +30,7 @@ import data.scripts.ungpbackgrounds.UNGP_BackgroundPluginAPI;
 import data.scripts.ungpsaves.UNGP_DataSaverAPI;
 import data.scripts.ungpsaves.UNGP_DataSaverSettingEntryAPI;
 import data.scripts.ungpsaves.impl.UNGP_BlueprintsDataSaver;
+import data.scripts.ungpsaves.impl.UNGP_CreditsDataSaver;
 import data.scripts.utils.UNGP_Feedback;
 import org.lwjgl.input.Keyboard;
 import ungp.ui.CheckBoxGroup;
@@ -42,7 +43,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static data.scripts.campaign.UNGP_Settings.d_i18n;
+import static data.scripts.utils.Constants.root_i18n;
 import static data.scripts.campaign.specialist.UNGP_SpecialistSettings.Difficulty;
 import static data.scripts.campaign.specialist.UNGP_SpecialistSettings.rulesMeetCondition;
 
@@ -72,11 +73,11 @@ public class UNGP_InteractionDialog implements InteractionDialogPlugin {
     private TextPanelAPI textPanel;
     private OptionPanelAPI options;
     private VisualPanelAPI visual;
-    private SectorAPI sector;
     private UNGP_InteractionPanelPlugin uiPanelPlugin;
 
     private UNGP_InGameData inGameData;
 
+    private boolean onlyDefaultSlot;
     private UNGP_InheritData pickedInheritData;
     private OptionID choseInheritSlotOptionID = null;
 
@@ -89,7 +90,7 @@ public class UNGP_InteractionDialog implements InteractionDialogPlugin {
     private InheritSettingEntry<Difficulty> settingEntry_difficulty = new InheritSettingEntry<Difficulty>(null, Difficulty.values().length + 1) {
         @Override
         public void initParams(int optionSize) {
-            entryTitle = d_i18n.get("hardmodeLevel");
+            entryTitle = root_i18n.get("hardmodeLevel");
             entryTitleColor = Misc.getNegativeHighlightColor();
             for (int i = 0; i < optionSize; i++) {
                 Difficulty difficulty;
@@ -134,10 +135,9 @@ public class UNGP_InteractionDialog implements InteractionDialogPlugin {
         textPanel = dialog.getTextPanel();
         options = dialog.getOptionPanel();
         visual = dialog.getVisualPanel();
-        sector = Global.getSector();
 
         pregenInheritData = UNGP_InheritData.createInheritData(inGameData);
-        UNGP_InheritManager.loadAllSlots();
+        onlyDefaultSlot = UNGP_InheritManager.loadAllSlots();
 
         // The right view of the interaction dialog
         uiPanelPlugin = new UNGP_InteractionPanelPlugin();
@@ -150,19 +150,19 @@ public class UNGP_InteractionDialog implements InteractionDialogPlugin {
      * The beginning of the page.
      */
     private void initMenu() {
-        textPanel.addPara(d_i18n.get("menu"));
-        options.addOption(d_i18n.get("checkInherit"), OptionID.CHECK_INHERIT_SLOTS);
-        options.addOption(d_i18n.get("checkRecord"), OptionID.CHECK_RECORD_SLOTS);
+        textPanel.addPara(root_i18n.get("menu"));
+        options.addOption(root_i18n.get("checkInherit"), OptionID.CHECK_INHERIT_SLOTS);
+        options.addOption(root_i18n.get("checkRecord"), OptionID.CHECK_RECORD_SLOTS);
         if (!inGameData.isInherited() && inGameData.isPassedInheritTime()) {
-            textPanel.addPara(d_i18n.get("hasPassedTime"), Misc.getNegativeHighlightColor());
+            textPanel.addPara(root_i18n.get("hasPassedTime"), Misc.getNegativeHighlightColor());
         }
         if (!inGameData.couldStartRecord()) {
             options.setEnabled(OptionID.CHECK_RECORD_SLOTS, false);
             if (inGameData.isRecorded()) {
-                textPanel.addPara(d_i18n.get("hasRecorded"), Misc.getNegativeHighlightColor());
+                textPanel.addPara(root_i18n.get("hasRecorded"), Misc.getNegativeHighlightColor());
             }
             if (!UNGP_Settings.reachMaxLevel()) {
-                textPanel.addPara(d_i18n.get("notMaxLevel"), Misc.getNegativeHighlightColor());
+                textPanel.addPara(root_i18n.get("notMaxLevel"), Misc.getNegativeHighlightColor());
             }
         }
         TooltipMakerAPI toRecordInfo = textPanel.beginTooltip();
@@ -172,7 +172,7 @@ public class UNGP_InteractionDialog implements InteractionDialogPlugin {
         }
         pregenInheritData.addRecordTooltip(toRecordInfo, difficulty);
         textPanel.addTooltip();
-        options.addOption(d_i18n.get("help"), OptionID.HELP);
+        options.addOption(root_i18n.get("help"), OptionID.HELP);
         addLeaveButton();
     }
 
@@ -202,29 +202,29 @@ public class UNGP_InteractionDialog implements InteractionDialogPlugin {
             //如果没有继承过或者没有超过时限
             if (!inGameData.isPassedInheritTime() && !inGameData.isInherited()) {
                 // 继承选项
-                String settingOptionStr = d_i18n.get("startSetting");
+                String settingOptionStr = root_i18n.get("startSetting");
                 options.addOption(settingOptionStr, OptionID.INHERIT_SETTINGS);
                 options.setShortcut(OptionID.INHERIT_SETTINGS, Keyboard.KEY_S, false, false, false, true);
 
                 if (isSpecialistMode) {
-                    options.addOption(d_i18n.get("rulepick_button") + (UNGP_ChallengeManager.isDifficultyEnough(settingEntry_difficulty.getValue()) ?
-                                                                       d_i18n.get("rulepick_couldChallenge") : ""), OptionID.PICK_RULES);
+                    options.addOption(root_i18n.get("rulepick_button") + (UNGP_ChallengeManager.isDifficultyEnough(settingEntry_difficulty.getValue()) ?
+                                                                          root_i18n.get("rulepick_couldChallenge") : ""), OptionID.PICK_RULES);
                     options.setShortcut(OptionID.PICK_RULES, Keyboard.KEY_R, false, false, false, true);
                     pickedRules.clear();
                 }
 
-                options.addOption(d_i18n.get("startInherit"), OptionID.INHERIT);
+                options.addOption(root_i18n.get("startInherit"), OptionID.INHERIT);
                 options.setShortcut(OptionID.INHERIT, Keyboard.KEY_SPACE, false, false, false, true);
                 updateOptionsFromSettings();
             } else {
                 if (inGameData.isInherited()) {
-                    textPanel.addPara(d_i18n.get("hasInherited"), nC);
+                    textPanel.addPara(root_i18n.get("hasInherited"), nC);
                 } else {
-                    textPanel.addPara(d_i18n.get("hasPassedTime"), nC);
+                    textPanel.addPara(root_i18n.get("hasPassedTime"), nC);
                 }
             }
         } else {
-            textPanel.addPara(d_i18n.get("noInherit"), nC);
+            textPanel.addPara(root_i18n.get("noInherit"), nC);
         }
     }
 
@@ -253,36 +253,40 @@ public class UNGP_InteractionDialog implements InteractionDialogPlugin {
         }
         switch (selectedOption) {
             case CHECK_INHERIT_SLOTS: {
-                textPanel.addPara(d_i18n.get("checkInherit"));
-                textPanel.addPara(d_i18n.get("checkInheritSlot"));
-                UNGP_InheritData curSlot = UNGP_InheritManager.InheritData_slot0;
-                if (curSlot == null) {
-                    options.addOption(d_i18n.get("emptySlot"), OptionID.CHOOSE_INHERIT_SLOT_0);
-                    options.setEnabled(OptionID.CHOOSE_INHERIT_SLOT_0, false);
-                } else {
-                    int curCycle = Math.max(0, curSlot.cycle);
-                    options.addOption(curSlot.getPrefixByCycle() + d_i18n.format("slotDes", curCycle + "", curSlot.lastPlayerName)
-                            , OptionID.CHOOSE_INHERIT_SLOT_0, curSlot.getColorByCycle(), null);
-                }
-                curSlot = UNGP_InheritManager.InheritData_slot1;
-                if (curSlot == null) {
-                    options.addOption(d_i18n.get("emptySlot"), OptionID.CHOOSE_INHERIT_SLOT_1);
-                    options.setEnabled(OptionID.CHOOSE_INHERIT_SLOT_1, false);
-                } else {
-                    int curCycle = Math.max(0, curSlot.cycle);
-                    options.addOption(curSlot.getPrefixByCycle() + d_i18n.format("slotDes", curCycle + "", curSlot.lastPlayerName)
-                            , OptionID.CHOOSE_INHERIT_SLOT_1, curSlot.getColorByCycle(), null);
-                }
-                curSlot = UNGP_InheritManager.InheritData_slot2;
-                if (curSlot == null) {
-                    options.addOption(d_i18n.get("emptySlot"), OptionID.CHOOSE_INHERIT_SLOT_2);
-                    options.setEnabled(OptionID.CHOOSE_INHERIT_SLOT_2, false);
-                } else {
-                    int curCycle = Math.max(0, curSlot.cycle);
-                    options.addOption(curSlot.getPrefixByCycle() + d_i18n.format("slotDes", curCycle + "", curSlot.lastPlayerName)
-                            , OptionID.CHOOSE_INHERIT_SLOT_2, curSlot.getColorByCycle(), null);
-                }
                 resetSettings();
+                if (!onlyDefaultSlot) {
+                    textPanel.addPara(root_i18n.get("checkInherit"));
+                    textPanel.addPara(root_i18n.get("checkInheritSlot"));
+                    UNGP_InheritData curSlot = UNGP_InheritManager.InheritData_slot0;
+                    if (curSlot == null) {
+                        options.addOption(root_i18n.get("emptySlot"), OptionID.CHOOSE_INHERIT_SLOT_0);
+                        options.setEnabled(OptionID.CHOOSE_INHERIT_SLOT_0, false);
+                    } else {
+                        int curCycle = Math.max(0, curSlot.cycle);
+                        options.addOption(curSlot.getPrefixByCycle() + root_i18n.format("slotDes", curCycle + "", curSlot.lastPlayerName)
+                                , OptionID.CHOOSE_INHERIT_SLOT_0, curSlot.getColorByCycle(), null);
+                    }
+                    curSlot = UNGP_InheritManager.InheritData_slot1;
+                    if (curSlot == null) {
+                        options.addOption(root_i18n.get("emptySlot"), OptionID.CHOOSE_INHERIT_SLOT_1);
+                        options.setEnabled(OptionID.CHOOSE_INHERIT_SLOT_1, false);
+                    } else {
+                        int curCycle = Math.max(0, curSlot.cycle);
+                        options.addOption(curSlot.getPrefixByCycle() + root_i18n.format("slotDes", curCycle + "", curSlot.lastPlayerName)
+                                , OptionID.CHOOSE_INHERIT_SLOT_1, curSlot.getColorByCycle(), null);
+                    }
+                    curSlot = UNGP_InheritManager.InheritData_slot2;
+                    if (curSlot == null) {
+                        options.addOption(root_i18n.get("emptySlot"), OptionID.CHOOSE_INHERIT_SLOT_2);
+                        options.setEnabled(OptionID.CHOOSE_INHERIT_SLOT_2, false);
+                    } else {
+                        int curCycle = Math.max(0, curSlot.cycle);
+                        options.addOption(curSlot.getPrefixByCycle() + root_i18n.format("slotDes", curCycle + "", curSlot.lastPlayerName)
+                                , OptionID.CHOOSE_INHERIT_SLOT_2, curSlot.getColorByCycle(), null);
+                    }
+                } else {
+                    optionSelectedChooseInherit(OptionID.CHOOSE_INHERIT_SLOT_0);
+                }
                 addBackButton(OptionID.BACK_TO_MENU);
             }
             break;
@@ -294,40 +298,40 @@ public class UNGP_InteractionDialog implements InteractionDialogPlugin {
                 break;
             case CHECK_RECORD_SLOTS: {
                 TooltipMakerAPI recordInfo = textPanel.beginTooltip();
-                textPanel.addPara(d_i18n.get("recordInfo"));
+                textPanel.addPara(root_i18n.get("recordInfo"));
                 pregenInheritData.addRecordTooltip(recordInfo, inGameData.getDifficulty());
                 textPanel.addTooltip();
-                textPanel.addPara(d_i18n.get("checkRecordSlot"));
+                textPanel.addPara(root_i18n.get("checkRecordSlot"));
                 // 三个重生槽位
                 UNGP_InheritData curSlot = UNGP_InheritManager.InheritData_slot0;
                 if (curSlot == null) {
-                    options.addOption(d_i18n.get("emptySlot"), OptionID.CHOOSE_RECORD_SLOT_0);
+                    options.addOption(root_i18n.get("emptySlot"), OptionID.CHOOSE_RECORD_SLOT_0);
                 } else {
                     int curCycle = Math.max(0, curSlot.cycle);
-                    options.addOption(curSlot.getPrefixByCycle() + d_i18n.format("slotDes", curCycle + "", curSlot.lastPlayerName)
+                    options.addOption(curSlot.getPrefixByCycle() + root_i18n.format("slotDes", curCycle + "", curSlot.lastPlayerName)
                             , OptionID.CHOOSE_RECORD_SLOT_0, curSlot.getColorByCycle(), null);
                 }
                 curSlot = UNGP_InheritManager.InheritData_slot1;
                 if (curSlot == null) {
-                    options.addOption(d_i18n.get("emptySlot"), OptionID.CHOOSE_RECORD_SLOT_1);
+                    options.addOption(root_i18n.get("emptySlot"), OptionID.CHOOSE_RECORD_SLOT_1);
                 } else {
                     int curCycle = Math.max(0, curSlot.cycle);
-                    options.addOption(curSlot.getPrefixByCycle() + d_i18n.format("slotDes", curCycle + "", curSlot.lastPlayerName)
+                    options.addOption(curSlot.getPrefixByCycle() + root_i18n.format("slotDes", curCycle + "", curSlot.lastPlayerName)
                             , OptionID.CHOOSE_RECORD_SLOT_1, curSlot.getColorByCycle(), null);
                 }
                 curSlot = UNGP_InheritManager.InheritData_slot2;
                 if (curSlot == null) {
-                    options.addOption(d_i18n.get("emptySlot"), OptionID.CHOOSE_RECORD_SLOT_2);
+                    options.addOption(root_i18n.get("emptySlot"), OptionID.CHOOSE_RECORD_SLOT_2);
                 } else {
                     int curCycle = Math.max(0, curSlot.cycle);
-                    options.addOption(curSlot.getPrefixByCycle() + d_i18n.format("slotDes", curCycle + "", curSlot.lastPlayerName)
+                    options.addOption(curSlot.getPrefixByCycle() + root_i18n.format("slotDes", curCycle + "", curSlot.lastPlayerName)
                             , OptionID.CHOOSE_RECORD_SLOT_2, curSlot.getColorByCycle(), null);
                 }
                 addBackButton(OptionID.BACK_TO_MENU);
             }
             break;
             case HELP:
-                textPanel.addPara(d_i18n.get("helpInfo"));
+                textPanel.addPara(root_i18n.get("helpInfo"));
                 addBackButton(OptionID.BACK_TO_MENU);
                 break;
             case PICK_RULES:
@@ -343,7 +347,7 @@ public class UNGP_InteractionDialog implements InteractionDialogPlugin {
                         setSpecialistModeToolTip();
                         uiPanelPlugin.update(visual);
                         TooltipMakerAPI tooltip = uiPanelPlugin.beginTooltip(0f, false);
-                        tooltip.addPara(d_i18n.get("hardmodeDes"), Misc.getHighlightColor(), 0f);
+                        tooltip.addPara(root_i18n.get("hardmodeDes"), Misc.getHighlightColor(), 0f);
                         uiPanelPlugin.addTooltip(20f, tooltip);
                         tooltip = uiPanelPlugin.beginTooltip(300f, true);
                         for (URule rule : pickedRules) {
@@ -357,14 +361,14 @@ public class UNGP_InteractionDialog implements InteractionDialogPlugin {
                         // 如果满足规则
                         if (!rulesMeetCondition(pickedRules, difficulty)) {
                             tooltip.setParaOrbitronLarge();
-                            tooltip.addPara(d_i18n.get("rulepick_notMeet"), Misc.getNegativeHighlightColor(), 5f);
+                            tooltip.addPara(root_i18n.get("rulepick_notMeet"), Misc.getNegativeHighlightColor(), 5f);
                             tooltip.setParaFontDefault();
                             uiPanelPlugin.addTooltip(10f, tooltip);
 
                         } else {
                             List<UNGP_ChallengeInfo> runnableChallenges = UNGP_ChallengeManager.getRunnableChallenges(difficulty, pickedRules, pickedInheritData.completedChallenges);
                             if (!runnableChallenges.isEmpty()) {
-                                tooltip.addPara(d_i18n.get("rulepick_runnableChallenges"), Misc.getHighlightColor(), 10f);
+                                tooltip.addPara(root_i18n.get("rulepick_runnableChallenges"), Misc.getHighlightColor(), 10f);
                                 uiPanelPlugin.addTooltip(20f, tooltip);
                                 tooltip = uiPanelPlugin.beginTooltip(300f, true);
                                 for (UNGP_ChallengeInfo challenge : runnableChallenges) {
@@ -417,20 +421,18 @@ public class UNGP_InteractionDialog implements InteractionDialogPlugin {
      * 继承重生点
      */
     private void inherit() {
-        float inherit_creditsFactor = 0f;
-        float inherit_bpsFactor = 0f;
+        TooltipMakerAPI backgroundTip = textPanel.beginTooltip();
+        pickedBackground.addShortDescTooltipWithIcon(backgroundTip, 0f);
+        textPanel.addTooltip();
         UNGP_BackgroundPluginAPI plugin = pickedBackground.getPlugin();
-        inherit_creditsFactor = plugin.getInheritCreditsFactor();
-        inherit_bpsFactor = plugin.getInheritBlueprintsFactor();
 
-        // Credits
-        int creditsInherited = (int) (pickedInheritData.inheritCredits * inherit_creditsFactor);
-        sector.getPlayerFleet().getCargo().getCredits().add(creditsInherited);
-        AddRemoveCommodity.addCreditsGainText(creditsInherited, textPanel);
-        // Blueprints
-        float inheritBPPercent = inherit_bpsFactor;
+        float inherit_creditsFactor = plugin.getInheritCreditsFactor();
+        float inherit_bpsFactor = plugin.getInheritBlueprintsFactor();
+
         Map<String, Object> dataSaverParams = new HashMap<>();
-        dataSaverParams.put("inheritBPPercent", inheritBPPercent);
+        dataSaverParams.put("inheritCreditsFactor", inherit_creditsFactor);
+        dataSaverParams.put("inheritBPFactor", inherit_bpsFactor);
+        dataSaverParams.put("background", pickedBackground);
         for (UNGP_DataSaverAPI dataSaver : pickedInheritData.dataSavers) {
             TooltipMakerAPI tooltip = textPanel.beginTooltip();
             dataSaver.startInheritDataFromSaver(tooltip, dataSaverParams);
@@ -438,17 +440,17 @@ public class UNGP_InteractionDialog implements InteractionDialogPlugin {
         }
 
         TooltipMakerAPI tooltip = textPanel.beginTooltip();
-
+        UNGP_BackgroundManager.setPlayerBackground(pickedBackground);
         plugin.afterConfirm(pickedInheritData);
         plugin.addAfterConfirmTooltip(tooltip, pickedInheritData);
-        UNGP_BackgroundManager.setPlayerBackground(pickedBackground);
-
+        UNGP_BackgroundIntel backgroundIntel = new UNGP_BackgroundIntel(Global.getSector().getPlayerFleet().getStarSystem());
+        Global.getSector().getIntelManager().addIntel(backgroundIntel);
         textPanel.addTooltip();
 
-        textPanel.setFontInsignia();
 
+        textPanel.setFontInsignia();
         if (isSpecialistMode)
-            textPanel.addPara(d_i18n.get("hardModeYes"), Misc.getNegativeHighlightColor());
+            textPanel.addPara(root_i18n.get("hardModeYes"), Misc.getNegativeHighlightColor());
 
         inGameData.setCurCycle(pickedInheritData.cycle);
         inGameData.setInherited(true);
@@ -503,7 +505,7 @@ public class UNGP_InteractionDialog implements InteractionDialogPlugin {
         inGameData.setRecorded(true);
         saveRecordByChosenOption(pregenInheritData, option);
         Global.getSoundPlayer().playUISound("ui_rep_raise", 1, 1);
-        textPanel.addPara(d_i18n.get("recordSuccess"));
+        textPanel.addPara(root_i18n.get("recordSuccess"));
     }
 
     @Override
@@ -516,7 +518,7 @@ public class UNGP_InteractionDialog implements InteractionDialogPlugin {
             if (!pickedRules.isEmpty()) {
                 String[] ruleNames = new String[pickedRules.size()];
                 Color[] ruleColors = new Color[pickedRules.size()];
-                StringBuilder result = new StringBuilder(d_i18n.get("hardmodeDes"));
+                StringBuilder result = new StringBuilder(root_i18n.get("hardmodeDes"));
                 for (int i = 0; i < pickedRules.size(); i++) {
                     URule rule = pickedRules.get(i);
                     result.append("\n  ");
@@ -551,8 +553,8 @@ public class UNGP_InteractionDialog implements InteractionDialogPlugin {
                 inherit_bpsFactor = pickedBackground.getPlugin().getInheritBlueprintsFactor();
             }
 
-            final int creditsInherited = (int) (pickedInheritData.inheritCredits * inherit_creditsFactor);
             int bpInheritGeneratedByDataSaver = 0;
+            int creditsInheritGeneratedByDataSaver = 0;
             for (UNGP_DataSaverAPI dataSaver : pickedInheritData.dataSavers) {
                 if (dataSaver instanceof UNGP_BlueprintsDataSaver) {
                     UNGP_BlueprintsDataSaver blueprintsDataSaver = (UNGP_BlueprintsDataSaver) dataSaver;
@@ -561,16 +563,21 @@ public class UNGP_InteractionDialog implements InteractionDialogPlugin {
                             blueprintsDataSaver.weapons.size() +
                             blueprintsDataSaver.hullmods.size())
                             * inherit_bpsFactor);
-//                            * setting_inheritBPsRatio.get());
+                }
+                if (dataSaver instanceof UNGP_CreditsDataSaver) {
+                    UNGP_CreditsDataSaver creditsDataSaver = (UNGP_CreditsDataSaver) dataSaver;
+                    creditsInheritGeneratedByDataSaver = (int) (creditsDataSaver.credits * inherit_creditsFactor);
                 }
             }
             final int bpInherited = bpInheritGeneratedByDataSaver;
+            final int creditsInherited = creditsInheritGeneratedByDataSaver;
+
             final boolean isSpecialistMode = this.isSpecialistMode;
             final Difficulty difficulty = settingEntry_difficulty.getValue();
 
             TooltipMakerAPI tooltip = textPanel.beginTooltip();
             TooltipMakerAPI section = tooltip.beginImageWithText("graphics/icons/reports/storage24.png", 24f);
-            section.addPara(d_i18n.get("inheritOptions"), Misc.getBasePlayerColor(), 0f);
+            section.addPara(root_i18n.get("inheritOptions"), Misc.getBasePlayerColor(), 0f);
             tooltip.addImageWithText(5f);
             tooltip.setBulletedListMode("       ");
             // background;
@@ -582,7 +589,7 @@ public class UNGP_InteractionDialog implements InteractionDialogPlugin {
             }
             tooltip.setBulletedListMode("       ");
             if (difficulty != null) {
-                tooltip.addPara(d_i18n.get("hardmodeLevel") + ": %s", 5f, difficulty.color, difficulty.name);
+                tooltip.addPara(root_i18n.get("hardmodeLevel") + ": %s", 5f, difficulty.color, difficulty.name);
             }
             tooltip.setBulletedListMode(null);
             textPanel.addTooltip();
@@ -590,7 +597,7 @@ public class UNGP_InteractionDialog implements InteractionDialogPlugin {
             options.addOptionConfirmation(OptionID.INHERIT, new CustomStoryDialogDelegate() {
                 @Override
                 public String getTitle() {
-                    return d_i18n.get("startInherit");
+                    return root_i18n.get("startInherit");
                 }
 
                 @Override
@@ -600,18 +607,18 @@ public class UNGP_InteractionDialog implements InteractionDialogPlugin {
                     Color hl = Misc.getHighlightColor();
                     Color negative = Misc.getNegativeHighlightColor();
                     TooltipMakerAPI backgroundTip = info.beginImageWithText(pickedBackground.getSpritePath(), 64f);
-                    backgroundTip.setParaFont(Fonts.ORBITRON_24AA);
+                    backgroundTip.setParaOrbitronLarge();
                     backgroundTip.addPara(pickedBackground.getName(), pickedBackground.getNameColor(), 0f);
                     backgroundTip.setParaFontDefault();
                     backgroundTip.addSpacer(5f);
                     pickedBackground.addOverallBonusTooltip(backgroundTip, pickedInheritData, false);
                     info.addImageWithText(0f);
                     info.addSpacer(pad);
-                    info.addPara(d_i18n.get("inheritConfirmInfo0"), 0f, hl, credits, "" + bpInherited);
+                    info.addPara(root_i18n.get("inheritConfirmInfo0"), 0f, hl, credits, "" + bpInherited);
                     info.addSpacer(pad);
                     if (difficulty != null && isSpecialistMode) {
-                        info.addPara(d_i18n.get("inheritConfirmInfo1"), negative, 0f).setAlignment(Alignment.MID);
-                        info.addSectionHeading(d_i18n.format("rulepick_level", difficulty.name), hl, Misc.scaleAlpha(negative, 0.2f), Alignment.MID, pad * 0.5f);
+                        info.addPara(root_i18n.get("inheritConfirmInfo1"), negative, 0f).setAlignment(Alignment.MID);
+                        info.addSectionHeading(root_i18n.format("rulepick_level", difficulty.name), hl, Misc.scaleAlpha(negative, 0.2f), Alignment.MID, pad * 0.5f);
                         float width = info.getPrev().getPosition().getWidth();
                         int ruleSize = pickedRules.size();
                         int itemsPerRow = (int) (width / 64f);
@@ -641,11 +648,11 @@ public class UNGP_InteractionDialog implements InteractionDialogPlugin {
     }
 
     private void addLeaveButton() {
-        options.addOption(d_i18n.get("leave"), OptionID.LEAVE);
+        options.addOption(root_i18n.get("leave"), OptionID.LEAVE);
     }
 
     private void addBackButton(OptionID warpOption) {
-        options.addOption(d_i18n.get("back"), warpOption);
+        options.addOption(root_i18n.get("back"), warpOption);
     }
 
     @Override
@@ -688,16 +695,16 @@ public class UNGP_InteractionDialog implements InteractionDialogPlugin {
         @Override
         public void createTooltip(TooltipMakerAPI tooltip, boolean expanded, Object tooltipParam) {
             if (difficulty == null) {
-                tooltip.addPara(d_i18n.get("difficulty_desc_null"), 0);
+                tooltip.addPara(root_i18n.get("difficulty_desc_null"), 0);
             } else {
                 Color hl = Misc.getHighlightColor();
-                tooltip.addPara(d_i18n.get("difficulty_desc_base") + "%s / %s", 0f, hl,
+                tooltip.addPara(root_i18n.get("difficulty_desc_base") + "%s / %s", 0f, hl,
                                 difficulty.minRules + "",
                                 difficulty.maxRules + "");
-                tooltip.addPara(d_i18n.get("difficulty_desc_value") + "%s", 0f, hl,
+                tooltip.addPara(root_i18n.get("difficulty_desc_value") + "%s", 0f, hl,
                                 (int) (difficulty.extraValueMultiplier * 100f) + "%");
                 if (UNGP_ChallengeManager.isDifficultyEnough(difficulty)) {
-                    tooltip.addPara(d_i18n.get("difficulty_desc_max"), hl, 5f);
+                    tooltip.addPara(root_i18n.get("difficulty_desc_max"), hl, 5f);
                 }
             }
         }
@@ -724,13 +731,11 @@ public class UNGP_InteractionDialog implements InteractionDialogPlugin {
 
             TooltipMakerAPI backgroundTitleTip = panel.createUIElement(width, backgroundTitleHeight, false);
             backgroundTitleTip.setParaOrbitronLarge();
-            backgroundTitleTip.setAreaCheckboxFont(Fonts.ORBITRON_24AA);
-            backgroundTitleTip.addPara(d_i18n.get("inherit_choose_background"), Misc.getBasePlayerColor(), 0);
+            backgroundTitleTip.addPara(root_i18n.get("inherit_choose_background"), Misc.getBasePlayerColor(), 0);
             panel.addUIElement(backgroundTitleTip).inTL(0f, 0f);
 
             TooltipMakerAPI backgroundTip = panel.createUIElement(width, backgroundHeight - backgroundTitleHeight, true);
             backgroundTip.setParaOrbitronLarge();
-            backgroundTip.setAreaCheckboxFont(Fonts.ORBITRON_24AA);
 
             final float backgroundBoxWidth = width - 10f;
             float spacerHeight = 5f;
@@ -739,14 +744,7 @@ public class UNGP_InteractionDialog implements InteractionDialogPlugin {
                 ButtonAPI checkbox = backgroundTip.addAreaCheckbox("", null, Misc.getBasePlayerColor(), Misc.getDarkPlayerColor(), Misc.getBrightPlayerColor(), 0, 0, 0f, true);
                 backgroundTip.addTooltipToPrevious(new UNGP_Background.BackgroundTooltipCreator(background, pickedInheritData, backgroundBoxWidth - 20f),
                                                    TooltipMakerAPI.TooltipLocation.BELOW);
-                TooltipMakerAPI imageWithText = backgroundTip.beginImageWithText(background.getSpritePath(), 64f);
-                imageWithText.setParaFont(Fonts.ORBITRON_24AA);
-                imageWithText.addPara(background.getName(), background.getNameColor(), 10f);
-                imageWithText.getPrev().getPosition().setXAlignOffset(7f);
-                imageWithText.setParaFontDefault();
-                imageWithText.addPara(background.getShortDescription(), 5f);
-                imageWithText.addSpacer(10f);
-                backgroundTip.addImageWithText(spacerHeight);
+                background.addShortDescTooltipWithIcon(backgroundTip, spacerHeight);
                 PositionAPI imageWithTextPosition = backgroundTip.getPrev().getPosition();
                 float imageWithTextHeight = imageWithTextPosition.getHeight();
                 float imageWithTextWidth = imageWithTextPosition.getWidth();
@@ -912,19 +910,19 @@ public class UNGP_InteractionDialog implements InteractionDialogPlugin {
             TooltipMakerAPI info = panel.createUIElement(width, height, true);
             panel.addUIElement(info);
             info.setParaOrbitronLarge();
-            info.addPara(d_i18n.get("recordConfirmInfo"), Misc.getNegativeHighlightColor(), 0f);
+            info.addPara(root_i18n.get("recordConfirmInfo"), Misc.getNegativeHighlightColor(), 0f);
             info.addSpacer(30f);
             info.setAreaCheckboxFont(Fonts.ORBITRON_24AA);
-            info.addPara(d_i18n.get("recordExtraCreditsTitle"), Misc.getHighlightColor(), 0f);
+            info.addPara(root_i18n.get("recordExtraCreditsTitle"), Misc.getHighlightColor(), 0f);
             info.addSpacer(pad);
             float buttonWidth = width / 3f - 10f;
             float buttonHeight = 30f;
             HorizontalButtonGroup buttonGroup = new HorizontalButtonGroup();
-            btn_recordCargo = info.addAreaCheckbox(d_i18n.get("recordExtraCredits_cargo"), null, Misc.getBasePlayerColor(),
+            btn_recordCargo = info.addAreaCheckbox(root_i18n.get("recordExtraCredits_cargo"), null, Misc.getBasePlayerColor(),
                                                    Misc.getDarkPlayerColor(), Misc.getBrightPlayerColor(), buttonWidth, buttonHeight, 0f);
-            btn_recordShip = info.addAreaCheckbox(d_i18n.get("recordExtraCredits_ship"), null, Misc.getBasePlayerColor(),
+            btn_recordShip = info.addAreaCheckbox(root_i18n.get("recordExtraCredits_ship"), null, Misc.getBasePlayerColor(),
                                                   Misc.getDarkPlayerColor(), Misc.getBrightPlayerColor(), buttonWidth, buttonHeight, 0f);
-            btn_recordColony = info.addAreaCheckbox(d_i18n.get("recordExtraCredits_colony"), null, Misc.getBasePlayerColor(),
+            btn_recordColony = info.addAreaCheckbox(root_i18n.get("recordExtraCredits_colony"), null, Misc.getBasePlayerColor(),
                                                     Misc.getDarkPlayerColor(), Misc.getBrightPlayerColor(), buttonWidth, buttonHeight, 0f);
             buttonGroup.addButton(btn_recordCargo);
             buttonGroup.addButton(btn_recordShip);
@@ -993,8 +991,12 @@ public class UNGP_InteractionDialog implements InteractionDialogPlugin {
                         extraCredits += member.getBaseValue();
                     }
             }
-            textPanel.addPara(d_i18n.get("recordExtraCredits_success") + " %s ", Misc.getHighlightColor(), Misc.getDGSCredits(extraCredits));
-            pregenInheritData.inheritCredits += extraCredits;
+            textPanel.addPara(root_i18n.get("recordExtraCredits_success") + " %s ", Misc.getHighlightColor(), Misc.getDGSCredits(extraCredits));
+            for (UNGP_DataSaverAPI dataSaver : pregenInheritData.dataSavers) {
+                if (dataSaver instanceof UNGP_CreditsDataSaver) {
+                    ((UNGP_CreditsDataSaver) dataSaver).credits += extraCredits;
+                }
+            }
             record(selectedOption);
         }
 
