@@ -1,4 +1,4 @@
-2.0.0 2022/6/3
+2.0.0 2022/6/7
 本次更新需要新存档，请用旧版重生记录重生点后再更新、开新档。
 继承方式重置：
 -取消多周目可额外获得的技能点/故事点。
@@ -7,6 +7,7 @@
 
 规则修正：
 多层装甲：数值曲线调整，且现在战机收益仅为25%
+科技革命：装配点提升总体下降1%
 
 This update requires a new saving, please use the old version of the mod to record your savepoint before updating and starting a new game.
 Inheritance method reset:
@@ -15,6 +16,7 @@ Inheritance method reset:
 -Add new mechanism: Background, determine your credits/blueprint inheritance percentage by choosing background, and get extra bonus (extra skill points/story points/items/ships, etc.) based on the number of global game-cycle.
 
 Layered Armor: Tweaked the value curve, and now fighters only have 25% bonus.
+Tech Revolution: OP bonus decreased by 1%
 
 1.7.2 2022/4/18
 危险战区调整，现在有隐藏的生成限制。

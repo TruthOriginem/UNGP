@@ -23,7 +23,7 @@ public class UNGP_FragmentGraveyard extends UNGP_BaseRuleEffect implements UNGP_
     public float getValueByDifficulty(int index, UNGP_SpecialistSettings.Difficulty difficulty) {
         if (index == 0) return difficulty.getLinearValue(4f, 2f);
         if (index == 1) return difficulty.getLinearValue(3f, 2f);
-		if (index == 1) return difficulty.getLinearValue(50f, 50f);
+		if (index == 2) return difficulty.getLinearValue(50f, 50f);
         return 1f;
     }
 

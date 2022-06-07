@@ -15,7 +15,7 @@ public class UNGP_TechRevolution extends UNGP_BaseRuleEffect implements UNGP_Pla
 
     @Override
     public float getValueByDifficulty(int index, UNGP_SpecialistSettings.Difficulty difficulty) {
-        if (index == 0) return difficulty.getLinearValue(0.08f, 0.02f);
+        if (index == 0) return difficulty.getLinearValue(0.07f, 0.02f);
         return super.getValueByDifficulty(index, difficulty);
     }
 
