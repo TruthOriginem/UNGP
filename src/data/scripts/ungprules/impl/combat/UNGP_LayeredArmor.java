@@ -18,7 +18,7 @@ public class UNGP_LayeredArmor extends UNGP_BaseRuleEffect implements UNGP_Comba
 
     @Override
     public float getValueByDifficulty(int index, UNGP_SpecialistSettings.Difficulty difficulty) {
-        if (index == 0) return difficulty.getLinearValue(140f, 120f);
+        if (index == 0) return difficulty.getLinearValue(100f, 100f);
         return 1f;
     }
 

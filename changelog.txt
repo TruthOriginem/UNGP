@@ -6,7 +6,7 @@
 -添加新机制：重生背景，通过选择重生背景来决定你星币/蓝图继承百分比，并根据全局周目数来获取额外奖励(额外技能点/故事点/物品/舰船等)。
 
 规则修正：
-多层装甲：cost点数3->4，数值曲线调整，现在战机收益仅为25%
+多层装甲：数值曲线调整，且现在战机收益仅为25%
 
 This update requires a new saving, please use the old version of the mod to record your savepoint before updating and starting a new game.
 Inheritance method reset:
@@ -14,7 +14,7 @@ Inheritance method reset:
 -Cancel the free choice of credits/blueprint inheritance.
 -Add new mechanism: Background, determine your credits/blueprint inheritance percentage by choosing background, and get extra bonus (extra skill points/story points/items/ships, etc.) based on the number of global game-cycle.
 
-Layered Armor: Cost +3 > +4, tweaked the value curve, now fighters only have 25% bonus.
+Layered Armor: Tweaked the value curve, and now fighters only have 25% bonus.
 
 1.7.2 2022/4/18
 危险战区调整，现在有隐藏的生成限制。
@@ -27,7 +27,7 @@ Tweaked Infighting book.
 
 1.7.1 2022/4/8
 积累修复。
-挑战：但他是绝对的 现在允许一个正面规则存在。
+挑战：但它是绝对的 现在允许一个正面规则存在。
 
 Bug fixes...
 Specialist challenge: But "it" is absolute now allow one positive rule.
