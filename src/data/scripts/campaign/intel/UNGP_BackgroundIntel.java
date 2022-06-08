@@ -16,32 +16,37 @@ import static data.scripts.utils.Constants.backgrounds_i18n;
 
 public class UNGP_BackgroundIntel extends BaseIntelPlugin {
     private SectorEntityToken systemLocation;
-    private transient UNGP_Background background;
 
     public UNGP_BackgroundIntel(StarSystemAPI system) {
-        readResolve();
         systemLocation = system == null ? null : system.getHyperspaceAnchor();
     }
 
-    void readResolve() {
-        background = UNGP_BackgroundManager.getPlayerBackground();
-    }
 
     @Override
     public void createSmallDescription(TooltipMakerAPI info, float width, float height) {
         info.addSectionHeading(backgrounds_i18n.get("background"), Misc.getBasePlayerColor(), Misc.getDarkPlayerColor(),
                                Alignment.MID, 0f);
-        background.addShortDescTooltipWithIcon(info, 10f);
+        UNGP_Background background = UNGP_BackgroundManager.getPlayerBackground();
+        if (background != null) {
+            background.addShortDescTooltipWithIcon(info, 10f);
+        }
     }
 
     @Override
     public void createIntelInfo(TooltipMakerAPI info, ListInfoMode mode) {
-        info.addPara(background.getName(), background.getNameColor(), 0f);
+        UNGP_Background background = UNGP_BackgroundManager.getPlayerBackground();
+        if (background != null) {
+            info.addPara(background.getName(), background.getNameColor(), 0f);
+        }
     }
 
     @Override
     public String getIcon() {
-        return background.getSpritePath();
+        UNGP_Background background = UNGP_BackgroundManager.getPlayerBackground();
+        if (background != null) {
+            return background.getSpritePath();
+        }
+        return null;
     }
 
     @Override
