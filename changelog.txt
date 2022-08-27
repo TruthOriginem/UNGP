@@ -1,3 +1,16 @@
+2.1.0 2022/8/20
+修复一些bug。
+添加新背景：资本家。
+添加新正面规则：猎头行动。
+优化重生背景的UI。
+现在记录重生点时可以保留被覆盖的重生点的蓝图了。
+
+Fixed some bugs.
+Add new background: Capitalist.
+Add new positive rules: Headhunting.
+Improved the UNGP background UI.
+Now you could choose to save the blueprints from the old save slot while recording the current game-cycle.
+
 2.0.0 2022/6/7
 本次更新需要新存档，请用旧版重生记录重生点后再更新、开新档。
 继承方式重置：

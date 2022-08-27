@@ -1,7 +1,8 @@
 package data.scripts.campaign.inherit;
 
 import com.fs.starfarer.api.Global;
-import data.scripts.UNGP_modPlugin;
+import com.fs.starfarer.api.campaign.InteractionDialogAPI;
+import data.scripts.campaign.ui.UNGP_InteractionDialog;
 import data.scripts.ungpsaves.UNGP_DataSaverAPI;
 import org.json.JSONArray;
 import org.lazywizard.lazylib.JSONUtils;
@@ -22,7 +23,7 @@ public class UNGP_InheritManager {
 
 
     /**
-     * Called when {@link UNGP_modPlugin#onApplicationLoad()}
+     * Called when {@link UNGP_InteractionDialog#init(InteractionDialogAPI)}
      */
     public static boolean loadAllSlots() {
         InheritData_slot0 = load(0);
@@ -70,8 +71,6 @@ public class UNGP_InheritManager {
             jsonObject.put("ungp_id", inheritData.ungp_id);
             jsonObject.put("lastPlayerName", inheritData.lastPlayerName);
             jsonObject.put("cycle", inheritData.cycle);
-//            jsonObject.put("isHardMode", inheritData.isHardMode);
-//            jsonObject.put("inheritCredits", inheritData.inheritCredits);
             jsonObject.put("completedChallenges", inheritData.completedChallenges);
 
             for (UNGP_DataSaverAPI dataSaver : inheritData.dataSavers) {
@@ -105,7 +104,6 @@ public class UNGP_InheritManager {
                 emptySaver.loadDataFromSavepointSlot(jsonObject);
                 inheritData.dataSavers.add(emptySaver);
             }
-
             JSONArray array;
             array = jsonObject.optJSONArray("completedChallenges");
             if (array != null) {

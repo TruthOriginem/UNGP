@@ -34,6 +34,12 @@
   "UNGP_staycalm_start": [
     {"file": "sounds/fx/trigger/UNGP_staycalm_start.ogg", "pitch": 1, "volume": 1},
   ],
+  "UNGP_headhunting_activate": [
+    {"file": "sounds/fx/trigger/UNGP_headhunting_activate.ogg", "pitch": 1, "volume": 1},
+  ],
+  "UNGP_headhunting_charge": [
+    {"file": "sounds/fx/trigger/UNGP_headhunting_charge.ogg", "pitch": 1, "volume": 1},
+  ],
   "UNGP_staycalm_end": [
     {"file": "sounds/fx/trigger/UNGP_staycalm_end.ogg", "pitch": 1, "volume": 1},
   ],

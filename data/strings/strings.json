@@ -30,6 +30,9 @@
     "recordExtraCredits_ship": "玩家拥有舰船",
     "recordExtraCredits_colony": "玩家殖民地建筑",
     "recordExtraCredits_success": "额外记录了",
+    "recordExtraBPsTitle": "选择额外蓝图",
+    "recordExtraBPs_selectedSlot": "已选择重生点槽位的蓝图",
+    "recordExtraBPs_success": "额外记录了 %s 张蓝图",
     "hasRecorded": "本存档已经记录过重生点！",
     "notMaxLevel": "您尚未满级，不能记录重生点！",
     "hasPassedTime": "重生点可继承时间已过！",
@@ -55,7 +58,8 @@
     "rulepick_runnableChallenges": "你将要启动的挑战",
     "hardModeYes": "开启专家模式！我太难了！",
     "startInherit": "开始继承",
-    "inheritConfirmInfo0": "您将获得{%s}星币与总计大约{%s}个蓝图，您目前就拥有的及因未加载mod而缺失的蓝图不会额外计算数目。",
+    "inheritConfirmHeading": "结算",
+    "inheritConfirmInfo0": "您将获得 %s 星币与总计大约 %s 个蓝图，您目前就拥有的及因未加载 mod 而缺失的蓝图不会额外计算数目。",
     "inheritConfirmInfo1": "您即将开启专家模式，专家等级在本次游戏内都无法变更，请谨慎选择！",
     "inheritedBP": "您获得了:\n %s 个舰船蓝图\n %s 个战机蓝图\n %s 个武器蓝图\n %s 个船体插件蓝图",
     "inheritedPoints": "您获得了 %s 个技能点",
@@ -83,6 +87,8 @@
     "bonus_story_point": "获得故事点 x %s",
     "bonus_cycle_unlock_tip": "%s 周目及之后解锁",
     "source": "这条背景来源于:",
+    "heading_basic": "基础继承",
+    "heading_bonus": "周目奖励"
   },
   "UNGP_abilities": {
     "checkSavepoint_title": "重生-打开继承/记录重生点界面",

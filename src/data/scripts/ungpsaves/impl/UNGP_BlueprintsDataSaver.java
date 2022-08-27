@@ -30,6 +30,7 @@ public class UNGP_BlueprintsDataSaver implements UNGP_DataSaverAPI {
     public List<String> weapons = new ArrayList<>();
     public List<String> hullmods = new ArrayList<>();
 
+    public int bpAmount = 0;
 
     @Override
     public UNGP_DataSaverAPI createSaverBasedOnCurrentGame(UNGP_InGameData inGameData) {
@@ -39,7 +40,29 @@ public class UNGP_BlueprintsDataSaver implements UNGP_DataSaverAPI {
         dataSaver.fighters = new ArrayList<>(playerFaction.getKnownFighters());
         dataSaver.weapons = new ArrayList<>(playerFaction.getKnownWeapons());
         dataSaver.hullmods = new ArrayList<>(playerFaction.getKnownHullMods());
+        updateBlueprintAmount();
         return dataSaver;
+    }
+
+    public void updateBlueprintAmount() {
+        bpAmount = ships.size() +
+                fighters.size() +
+                weapons.size() +
+                hullmods.size();
+    }
+
+    public int add(UNGP_BlueprintsDataSaver other) {
+        int lastBpAmount = bpAmount;
+        fighters.removeAll(other.fighters);
+        fighters.addAll(other.fighters);
+        ships.removeAll(other.ships);
+        ships.addAll(other.ships);
+        weapons.removeAll(other.weapons);
+        weapons.addAll(other.weapons);
+        hullmods.removeAll(other.hullmods);
+        hullmods.addAll(other.hullmods);
+        updateBlueprintAmount();
+        return bpAmount - lastBpAmount;
     }
 
     @Override
@@ -81,6 +104,7 @@ public class UNGP_BlueprintsDataSaver implements UNGP_DataSaverAPI {
                 hullmods.add(array.getString(i));
             }
         }
+        updateBlueprintAmount();
     }
 
     @Override

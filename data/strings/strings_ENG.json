@@ -31,6 +31,9 @@
     "recordExtraCredits_ship": "Convert owned ships",
     "recordExtraCredits_colony": "Convert owned Industries",
     "recordExtraCredits_success": "Additional record",
+    "recordExtraBPsTitle": "Choose extra blueprints",
+    "recordExtraBPs_selectedSlot": "Gain blueprints from selected slot",
+    "recordExtraBPs_success": "Additional record %s blueprints",
     "hasRecorded": "Savepoint has already been recorded!",
     "notMaxLevel": "Savepoint cannot be recorded because you have not reached max level.",
     "hasPassedTime": "You have missed the inheriting period!",
@@ -56,6 +59,7 @@
     "rulepick_notMeet": "Condition not met!",
     "rulepick_runnableChallenges": "Challenges going to run:",
     "startInherit": "Start Inheriting",
+    "inheritConfirmHeading": "Conclusion",
     "inheritConfirmInfo0": "You will inherit %s credits and about %s blueprints, while blueprints you already acquired or those missed due to not loading some mods doesn't count in that.",
     "inheritConfirmInfo1": "Please be CAREFUL that you're enabling specialist mode, the difficulty level cannot be changed in this gamecycle!",
     "inheritedBP": " You have inherited:\n %s ship blueprints\n %s fighter blueprints\n %s weapon blueprints\n %s hullmod blueprints",
@@ -83,7 +87,9 @@
     "bonus_skill_point": "Gain skill point x %s",
     "bonus_story_point": "Gain story point x %s",
     "bonus_cycle_unlock_tip": "Unlocked after GameCycle %s",
-    "source": "This background is from:"
+    "source": "This background is from:",
+    "heading_basic": "Basic Inherit",
+    "heading_bonus": "Gamecycle Bonus"
   },
   "UNGP_abilities": {
     "checkSavepoint_title": "UNGP-Open the main menu",
@@ -144,4 +150,4 @@
     "ct_77": "+77%!",
     "ct_777": "+777%!"
   }
-},
+}

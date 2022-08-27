@@ -16,33 +16,37 @@ public class UNGP_GLaDos extends UNGP_BaseRuleEffect implements UNGP_EconomyTag 
 
     @Override
     public void updateDifficultyCache(UNGP_SpecialistSettings.Difficulty difficulty) {
-        Global.getSector().addTransientScript(new EveryFrameScript() {
-            float duration = 2f + RANDOM.nextFloat();
-            boolean done = false;
+        Boolean sent = getDataInCampaign(0);
+        if (sent == null) {
+            Global.getSector().addTransientScript(new EveryFrameScript() {
+                float duration = 2f + RANDOM.nextFloat();
+                boolean done = false;
 
-            @Override
-            public boolean isDone() {
-                return done;
-            }
-
-            @Override
-            public boolean runWhilePaused() {
-                return false;
-            }
-
-            @Override
-            public void advance(float amount) {
-                duration -= amount;
-                if (duration <= 0f) {
-                    MessageIntel message = createMessage();
-                    message.addLine(rule.getExtra1(), Misc.getBasePlayerColor());
-                    message.setSound("UNGP_glados_chosen");
-                    showMessage(message);
-                    done = true;
-                    Global.getSector().removeTransientScript(this);
+                @Override
+                public boolean isDone() {
+                    return done;
                 }
-            }
-        });
+
+                @Override
+                public boolean runWhilePaused() {
+                    return false;
+                }
+
+                @Override
+                public void advance(float amount) {
+                    duration -= amount;
+                    if (duration <= 0f) {
+                        MessageIntel message = createMessage();
+                        message.addLine(rule.getExtra1(), Misc.getBasePlayerColor());
+                        message.setSound("UNGP_glados_chosen");
+                        showMessage(message);
+                        done = true;
+                        Global.getSector().removeTransientScript(this);
+                    }
+                }
+            });
+            saveDataInCampaign(0, true);
+        }
     }
 
     @Override

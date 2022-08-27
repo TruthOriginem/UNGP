@@ -11,7 +11,7 @@ admiral,0.07,Admiral,"The battlefield of gunfire often appears in your dreams, y
 #hothead,0.09,冒失鬼,你准备齐全，信心满满准备开启新旅程，只是，你忘了带走一些已经打包好的东西,,,,,,,,
 #administrator,0.1,资深管理员,在这个动荡的星域，一个稳固的殖民地是一切的基础,,,,,,,,一个纳米锻炉和两个A核
 #traverser,0.11,穿越者,传送门很窄，所以你带上了你所有的存储设备，和所有没时间限制的星币凭证,,,,,,,,
-#capitalist,0.12,资本家,你认为只要有钱就无所不能，所有事情都是,,,,,,,,
+capitalist,0.12,Capitalist,"You think that if you have money, you can do anything.",,graphics/icons/ungp_backgrounds/capitalist.png,data.scripts.ungpbackgrounds.impl.UNGP_Capitalist,,,,,
 #time_accident,0.13,时空事故,原本你只是想寻找一些余辉星系，但是那个新来的笨蛋把你传送过来了，只能认命了，不是吗,,,,,,,,填满油箱 出生在随机一个红信标余辉星系（怎么回核心看玩家造化）
 #pacifist,0.14,和平主义者,你曾无数次在战争中化为焦尸。追求和平，但可惜，卢德左径与余晖并不是很好的交涉对象。,,,,,,,,得知开局时所有左径基地与余晖母舰的位置。
 # 高难/特殊,,,,,,,,,,,

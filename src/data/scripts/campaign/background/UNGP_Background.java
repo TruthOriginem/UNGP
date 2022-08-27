@@ -9,8 +9,8 @@ import data.scripts.utils.UNGPUtils;
 import java.awt.*;
 import java.util.List;
 
-import static data.scripts.utils.Constants.root_i18n;
 import static data.scripts.utils.Constants.backgrounds_i18n;
+import static data.scripts.utils.Constants.root_i18n;
 
 public class UNGP_Background {
     private String id;
@@ -96,7 +96,7 @@ public class UNGP_Background {
         imageWithText.addPara(getName(), getNameColor(), 10f);
         imageWithText.getPrev().getPosition().setXAlignOffset(7f);
         imageWithText.setParaFontDefault();
-        imageWithText.addPara(getShortDescription(), 5f);
+        imageWithText.addPara(getShortDescription(), Misc.getGrayColor(), 5f);
         imageWithText.addSpacer(10f);
         tooltip.addImageWithText(pad);
     }
@@ -108,20 +108,26 @@ public class UNGP_Background {
 
 
     public void addDescriptionTooltip(TooltipMakerAPI tooltip, UNGP_InheritData pickedInheritData) {
-        tooltip.setParaOrbitronLarge();
-        tooltip.addPara(getName(), getNameColor(), 0f);
+        addDescriptionTooltip(tooltip, pickedInheritData, true);
+    }
+
+    public void addDescriptionTooltip(TooltipMakerAPI tooltip, UNGP_InheritData pickedInheritData, boolean showLimit) {
+        TooltipMakerAPI imageWithText = tooltip.beginImageWithText(getSpritePath(), 64f);
+        imageWithText.setParaOrbitronLarge();
+        imageWithText.addPara(getName(), getNameColor(), 0f);
         if (!UNGPUtils.isEmpty(source)) {
-            tooltip.setParaSmallInsignia();
-            tooltip.addPara(backgrounds_i18n.get("source") + getSource(), Misc.getGrayColor(), 0f);
+            imageWithText.setParaSmallInsignia();
+            imageWithText.addPara(backgrounds_i18n.get("source") + getSource(), Misc.getGrayColor(), 0f);
         }
-        tooltip.setParaFontDefault();
-        tooltip.addPara(getDescription(), 5f);
+        imageWithText.setParaFontDefault();
+        imageWithText.addPara(getDescription(), Misc.getBrightPlayerColor(), 5f).italicize();
+        tooltip.addImageWithText(0f);
 
         UNGP_BackgroundPluginAPI plugin = getPlugin();
         if (plugin != null) {
             plugin.addPostDescTooltip(tooltip, pickedInheritData);
             tooltip.addSpacer(10f);
-            addOverallBonusTooltip(tooltip, pickedInheritData, true);
+            addOverallBonusTooltip(tooltip, pickedInheritData, showLimit);
         }
     }
 
@@ -130,6 +136,7 @@ public class UNGP_Background {
      */
     public void addOverallBonusTooltip(TooltipMakerAPI tooltip, UNGP_InheritData pickedInheritData, boolean showLimit) {
         plugin.addInheritCreditsAndBPsTooltip(tooltip, pickedInheritData);
+        tooltip.addSpacer(5f);
         plugin.addBonusTooltip(tooltip, pickedInheritData, showLimit);
         if (showLimit) {
             tooltip.addSpacer(10f);
@@ -139,6 +146,11 @@ public class UNGP_Background {
         }
     }
 
+//    public static void addLine(TooltipMakerAPI tooltip, float height) {
+//        PositionAPI position = tooltip.addSectionHeading("", Misc.getDarkPlayerColor(), Misc.getDarkPlayerColor(), Alignment.MID, 0f).getPosition();
+//        tooltip.addSpacer(-position.getHeight() + height);
+//        position.setSize(position.getWidth(), height);
+//    }
 
     public static class BackgroundTooltipCreator implements TooltipMakerAPI.TooltipCreator {
 

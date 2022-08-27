@@ -14,14 +14,17 @@ import com.fs.starfarer.api.ui.Alignment;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
 import data.scripts.campaign.inherit.UNGP_InheritData;
+import data.scripts.ungpsaves.UNGP_DataSaverAPI;
+import data.scripts.ungpsaves.impl.UNGP_BlueprintsDataSaver;
+import data.scripts.ungpsaves.impl.UNGP_CreditsDataSaver;
 import org.jetbrains.annotations.Nullable;
 
 import java.awt.*;
 import java.util.List;
 import java.util.*;
 
-import static data.scripts.utils.Constants.root_i18n;
 import static data.scripts.utils.Constants.backgrounds_i18n;
+import static data.scripts.utils.Constants.root_i18n;
 
 public abstract class UNGP_BaseBackgroundPlugin implements UNGP_BackgroundPluginAPI {
     protected interface BackgroundBonusScript {
@@ -95,8 +98,46 @@ public abstract class UNGP_BaseBackgroundPlugin implements UNGP_BackgroundPlugin
 
     @Override
     public void addInheritCreditsAndBPsTooltip(TooltipMakerAPI tooltip, @Nullable UNGP_InheritData pickedInheritData) {
-        tooltip.addPara(root_i18n.get("inheritCredits") + ": %s", 0f, Misc.getPositiveHighlightColor(), (int) (getInheritCreditsFactor() * 100f) + "%");
-        tooltip.addPara(root_i18n.get("inheritBPs") + ": %s", 0f, Misc.getPositiveHighlightColor(), (int) (getInheritBlueprintsFactor() * 100f) + "%");
+        tooltip.addSectionHeading("  " + backgrounds_i18n.get("heading_basic"), Alignment.LMID, 0f);
+        tooltip.addSpacer(5f);
+
+        float inheritCreditsFactor = getInheritCreditsFactor();
+        float inheritBlueprintsFactor = getInheritBlueprintsFactor();
+        float mayInheritCreditsAmount = 0;
+        float mayInheritBlueprintsAmount = 0;
+
+        if (pickedInheritData != null) {
+            for (UNGP_DataSaverAPI dataSaver : pickedInheritData.dataSavers) {
+                if (dataSaver instanceof UNGP_BlueprintsDataSaver) {
+                    UNGP_BlueprintsDataSaver blueprintsDataSaver = (UNGP_BlueprintsDataSaver) dataSaver;
+                    mayInheritBlueprintsAmount = (int) (blueprintsDataSaver.bpAmount * inheritBlueprintsFactor);
+                }
+                if (dataSaver instanceof UNGP_CreditsDataSaver) {
+                    UNGP_CreditsDataSaver creditsDataSaver = (UNGP_CreditsDataSaver) dataSaver;
+                    mayInheritCreditsAmount = (int) (creditsDataSaver.credits * inheritCreditsFactor);
+                }
+            }
+        }
+
+        Color positiveHighlightColor = Misc.getPositiveHighlightColor();
+        Color grayColor = Misc.getGrayColor();
+
+        TooltipMakerAPI imageWithText = tooltip.beginImageWithText("graphics/icons/intel/income_report.png", 24f);
+        if (mayInheritCreditsAmount > 0) {
+            imageWithText.addPara(root_i18n.get("inheritCredits") + ": %s %s", 0f, new Color[]{positiveHighlightColor, grayColor}, (int) (inheritCreditsFactor * 100f) + "%", "(~" + Misc.getDGSCredits(mayInheritCreditsAmount) + ")");
+        } else {
+            imageWithText.addPara(root_i18n.get("inheritCredits") + ": %s %s", 0f, new Color[]{positiveHighlightColor, grayColor}, (int) (inheritCreditsFactor * 100f) + "%", "(-)");
+//            imageWithText.addPara(root_i18n.get("inheritCredits") + ": %s", 0f, Misc.getPositiveHighlightColor(), (int) (inheritCreditsFactor * 100f) + "%");
+        }
+        tooltip.addImageWithText(0f);
+        TooltipMakerAPI imageWithText2 = tooltip.beginImageWithText("graphics/icons/intel/fleet_log3.png", 24f);
+        if (mayInheritBlueprintsAmount > 0) {
+            imageWithText2.addPara(root_i18n.get("inheritBPs") + ": %s %s", 0f, new Color[]{positiveHighlightColor, grayColor}, (int) (inheritBlueprintsFactor * 100f) + "%", "(~" + (int) mayInheritBlueprintsAmount + ")");
+        } else {
+            imageWithText2.addPara(root_i18n.get("inheritBPs") + ": %s %s", 0f, new Color[]{positiveHighlightColor, grayColor}, (int) (inheritBlueprintsFactor * 100f) + "%", "(-)");
+//            imageWithText2.addPara(root_i18n.get("inheritBPs") + ": %s", 0f, Misc.getPositiveHighlightColor(), (int) (inheritBlueprintsFactor * 100f) + "%");
+        }
+        tooltip.addImageWithText(0f);
     }
 
     @Override
@@ -107,6 +148,9 @@ public abstract class UNGP_BaseBackgroundPlugin implements UNGP_BackgroundPlugin
     @Override
     public void addBonusTooltip(TooltipMakerAPI tooltip, @Nullable UNGP_InheritData pickedInheritData, boolean showLimit) {
         if (!cycleBonusMap.isEmpty()) {
+            tooltip.addSectionHeading("  " + backgrounds_i18n.get("heading_bonus"), Alignment.LMID, 0f);
+            tooltip.addSpacer(5f);
+
             Color hl = Misc.getHighlightColor();
             Color gray = Misc.getGrayColor();
             Color base = Misc.getTextColor();

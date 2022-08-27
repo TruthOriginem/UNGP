@@ -42,7 +42,6 @@ public class UNGP_InheritData {
         inheritData.ungp_id = UUID.randomUUID().toString();
         inheritData.lastPlayerName = Global.getSector().getPlayerPerson().getNameString();
         inheritData.cycle = inGameData.getCurCycle() + 1;
-//        inheritData.isHardMode = inGameData.isHardMode();
         inheritData.completedChallenges = new ArrayList<>(inGameData.getCompletedChallenges());
         inheritData.dataSavers = new ArrayList<>();
         for (UNGP_DataSaverAPI saverInstance : SAVER_INSTANCES) {
@@ -152,6 +151,15 @@ public class UNGP_InheritData {
         } else {
             return "Ψ - ";
         }
+    }
+
+    public <T extends UNGP_DataSaverAPI> T getFirstSaverOfClass(Class<T> saverClass) {
+        for (UNGP_DataSaverAPI dataSaver : dataSavers) {
+            if (saverClass.isInstance(dataSaver)) {
+                return (T) dataSaver;
+            }
+        }
+        return null;
     }
 
     public static List<UNGP_DataSaverAPI> getSaverInstancesCopy() {

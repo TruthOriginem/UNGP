@@ -29,7 +29,8 @@
       "UNGP_specialist_bg_seamless_ring1": "graphics/fx/UNGP_specialist_bg_seamless_ring1.png",
       "UNGP_specialist_bg_seamless_ring2": "graphics/fx/UNGP_specialist_bg_seamless_ring2.png",
       "UNGP_specialist_icon_layer0": "graphics/fx/UNGP_specialist_icon_layer0.png",
-      "UNGP_specialist_icon_layer1": "graphics/fx/UNGP_specialist_icon_layer1.png"
+      "UNGP_specialist_icon_layer1": "graphics/fx/UNGP_specialist_icon_layer1.png",
+      "UNGP_headhunting_target_edge": "graphics/fx/rules/UNGP_headhunting_target_edge.png"
     }
   }
 }

@@ -156,6 +156,7 @@ public abstract class UNGP_BaseRuleEffect implements UNGP_RuleEffectAPI {
 
     /**
      * 在文本框和生涯界面都显示信息
+     * Show message both in TextPanel and Campaign UI
      *
      * @param intel
      */
@@ -189,6 +190,14 @@ public abstract class UNGP_BaseRuleEffect implements UNGP_RuleEffectAPI {
         engine.getCustomData().put(key, t);
     }
 
+    /**
+     * Avoid exceeding CR modifications.
+     *
+     * @param memberStats
+     * @param id
+     * @param flat
+     * @param desc
+     */
     protected static void decreaseMaxCR(MutableShipStatsAPI memberStats, String id, float flat, String desc) {
         float curMaxCR = memberStats.getMaxCombatReadiness().getModifiedValue();
         float multiplier = memberStats.getMaxCombatReadiness().computeMultMod();
@@ -240,8 +249,8 @@ public abstract class UNGP_BaseRuleEffect implements UNGP_RuleEffectAPI {
      */
     protected Random getRandom() {
         final CampaignClockAPI clock = Global.getSector().getClock();
-        String sb = Global.getSector().getSeedString() + rule.getId() + clock.getCycle() + clock.getMonth();
-        return new Random(sb.hashCode());
+        return new Random((Global.getSector().getSeedString() + rule.getId() + clock.getCycle() + clock.getMonth())
+                                  .hashCode());
     }
 
     /**
@@ -249,8 +258,8 @@ public abstract class UNGP_BaseRuleEffect implements UNGP_RuleEffectAPI {
      */
     protected Random getRandomByDay() {
         final CampaignClockAPI clock = Global.getSector().getClock();
-        String sb = Global.getSector().getSeedString() + rule.getId() + clock.getCycle() + clock.getMonth() + clock.getDay();
-        return new Random(sb.hashCode());
+        return new Random((Global.getSector().getSeedString() + rule.getId() + clock.getCycle() + clock.getMonth() + clock.getDay())
+                                  .hashCode());
     }
 
     /**

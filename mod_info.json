@@ -2,7 +2,7 @@
   "id": "ungp",
   "name": "重生[UNGP]",
   "author": "主创:Originem\n代码协助:AnyIDElse\n翻译:RUA,Fax,ILLEXIUS\n图标提供:Originem,影之光,和莱\n建议及创意:海鲜群的诸位\n感谢:Game-icons.net,15.ai",
-  "version": {"major": 2, "minor": 0, "patch": 0},
+  "version": {"major": 2, "minor": 1, "patch": 0},
   "dependencies": [
     {"id": "lw_lazylib", "name": "LazyLib"},
   ],

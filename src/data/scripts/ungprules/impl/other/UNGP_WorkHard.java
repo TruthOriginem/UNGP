@@ -67,6 +67,10 @@ public class UNGP_WorkHard extends UNGP_BaseRuleEffect implements UNGP_CampaignT
                         deadCrew = notWorkHard.getCrewComposition().getCrewInt();
                     }
                     deadCrew = Math.max(1, (int) (deadCrew * CREW_LOSS));
+                    // Avoid zero crew
+                    if (crew - deadCrew <= 0) {
+                        return;
+                    }
                     notWorkHard.getRepairTracker().applyCREvent(-CR_LOSS, rule.getName());
                     fleet.getCargo().removeCrew(deadCrew);
                     RuleMessage message = new RuleMessage(rule, rule.getExtra1(), notWorkHard.getShipName(), deadCrew + "");
