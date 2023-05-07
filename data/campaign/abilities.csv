@@ -1,2 +1,2 @@
 name,id,type,tags,activationDays,activationCooldown,durationDays,deactivationDays,deactivationCooldown,unlockedAtStart,defaultForAIFleet,musicSuppression,uiOn,uiOff,uiLoop,worldOn,worldOff,worldLoop,icon,plugin,ai,desc,sortOrder
-Check Savepoint,UNGP_checkSavepoint,DURATION,,0,,0,0,0.2,TRUE,,,ui_scavenge_on,,,,,,graphics/icons/UNGP_intel_icon.png,data.scripts.campaign.ability.UNGP_CheckSavepointAbility,,,10000
+Check Savepoint,UNGP_checkSavepoint,DURATION,,0,,0,0,0.2,TRUE,,,ui_scavenge_on,,,,,,graphics/ungp/icons/UNGP_intel_icon.png,ungp.scripts.campaign.ability.UNGP_CheckSavepointAbility,,,10000

@@ -9,7 +9,7 @@
 			"requiredSkillLevel":1,
 			"effectBasedOnLevel":false,
 			"effects":[
-				{"type":"ALL_SHIPS_IN_FLEET", "script":"data.scripts.campaign.specialist.skills.UNGP_SpecialistSkills$UNGP_SpecialistShipSkill"},
+				{"type":"ALL_SHIPS_IN_FLEET", "script":"ungp.scripts.campaign.specialist.skills.UNGP_SpecialistSkills$UNGP_SpecialistShipSkill"},
 			]
 		},
 	],

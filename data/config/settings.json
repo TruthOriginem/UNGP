@@ -1,36 +1,37 @@
 {
   "plugins": {
-    "UNGP_SpecialistCombatPlugin": "data.scripts.plugins.UNGP_SpecialistCombatPlugin",
+    "UNGP_SpecialistCombatPlugin": "ungp.scripts.plugins.UNGP_SpecialistCombatPlugin",
   },
   "graphics": {
     "icons": {
-      "UNGP_specialist_mode_logo": "graphics/icons/UNGP_specialist_mode_logo.png",
-      "UNGP_intel_icon": "graphics/icons/UNGP_intel_icon.png",
-      "UNGP_itemBG": "graphics/icons/cargo/UNGP_ruleItemBG.png",
-      "UNGP_itemBG_mask": "graphics/icons/cargo/UNGP_ruleItemBG_mask.png",
-      "rule_negative": "graphics/icons/negative_icon.png",
-      "rule_positive": "graphics/icons/positive_icon.png",
-      "rule_golden": "graphics/icons/golden_icon.png",
-      "rule_milestone": "graphics/icons/milestone_icon.png",
-      "rule_default": "graphics/icons/ungp_rules/default.png",
-      "UNGP_difficulty_gamma": "graphics/icons/UNGP_difficulty_gamma.png",
-      "UNGP_difficulty_beta": "graphics/icons/UNGP_difficulty_beta.png",
-      "UNGP_difficulty_alpha": "graphics/icons/UNGP_difficulty_alpha.png",
-      "UNGP_difficulty_omega": "graphics/icons/UNGP_difficulty_omega.png"
+      "UNGP_specialist_mode_logo": "graphics/ungp/icons/UNGP_specialist_mode_logo.png",
+      "UNGP_intel_icon": "graphics/ungp/icons/UNGP_intel_icon.png",
+      "UNGP_itemBG": "graphics/ungp/icons/cargo/UNGP_ruleItemBG.png",
+      "UNGP_itemBG_mask": "graphics/ungp/icons/cargo/UNGP_ruleItemBG_mask.png",
+      "rule_negative": "graphics/ungp/icons/negative_icon.png",
+      "rule_positive": "graphics/ungp/icons/positive_icon.png",
+      "rule_golden": "graphics/ungp/icons/golden_icon.png",
+      "rule_milestone": "graphics/ungp/icons/milestone_icon.png",
+      "rule_golden_milestone": "graphics/ungp/icons/golden_milestone_icon.png",
+      "rule_default": "graphics/ungp/icons/ungp_rules/default.png",
+      "UNGP_difficulty_gamma": "graphics/ungp/icons/UNGP_difficulty_gamma.png",
+      "UNGP_difficulty_beta": "graphics/ungp/icons/UNGP_difficulty_beta.png",
+      "UNGP_difficulty_alpha": "graphics/ungp/icons/UNGP_difficulty_alpha.png",
+      "UNGP_difficulty_omega": "graphics/ungp/icons/UNGP_difficulty_omega.png"
     },
     "illustrations": {
-      "UNGP_logo": "graphics/illustrations/UNGP_logo.png"
+      "UNGP_logo": "graphics/ungp/illustrations/UNGP_logo.png"
     },
     "fx": {
-      "UNGP_frame": "graphics/fx/UNGP_frame.png",
-      "UNGP_specialist_bg_corner": "graphics/fx/UNGP_specialist_bg_corner.png",
-      "UNGP_specialist_bg_seamless": "graphics/fx/UNGP_specialist_bg_seamless.png",
-      "UNGP_specialist_bg_seamless_ring0": "graphics/fx/UNGP_specialist_bg_seamless_ring0.png",
-      "UNGP_specialist_bg_seamless_ring1": "graphics/fx/UNGP_specialist_bg_seamless_ring1.png",
-      "UNGP_specialist_bg_seamless_ring2": "graphics/fx/UNGP_specialist_bg_seamless_ring2.png",
-      "UNGP_specialist_icon_layer0": "graphics/fx/UNGP_specialist_icon_layer0.png",
-      "UNGP_specialist_icon_layer1": "graphics/fx/UNGP_specialist_icon_layer1.png",
-      "UNGP_headhunting_target_edge": "graphics/fx/rules/UNGP_headhunting_target_edge.png"
+      "UNGP_frame": "graphics/ungp/fx/UNGP_frame.png",
+      "UNGP_specialist_bg_corner": "graphics/ungp/fx/UNGP_specialist_bg_corner.png",
+      "UNGP_specialist_bg_seamless": "graphics/ungp/fx/UNGP_specialist_bg_seamless.png",
+      "UNGP_specialist_bg_seamless_ring0": "graphics/ungp/fx/UNGP_specialist_bg_seamless_ring0.png",
+      "UNGP_specialist_bg_seamless_ring1": "graphics/ungp/fx/UNGP_specialist_bg_seamless_ring1.png",
+      "UNGP_specialist_bg_seamless_ring2": "graphics/ungp/fx/UNGP_specialist_bg_seamless_ring2.png",
+      "UNGP_specialist_icon_layer0": "graphics/ungp/fx/UNGP_specialist_icon_layer0.png",
+      "UNGP_specialist_icon_layer1": "graphics/ungp/fx/UNGP_specialist_icon_layer1.png",
+      "UNGP_headhunting_target_edge": "graphics/ungp/fx/rules/UNGP_headhunting_target_edge.png"
     }
   }
 }

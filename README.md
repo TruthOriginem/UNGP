@@ -13,11 +13,11 @@ For modders who want to implement UNGP stuffs like rules and backgrounds, please
 Take these files as a template:
 
 * Rule items file(data/campaign/UNGP_rules.csv)
-* Rule plugin file(src/data/scripts/ungprules/impl/\*/\*)
+* Rule plugin file(src/ungp/impl/rules/\*/\*)
 
 ### How to implement backgrounds in your mod ### 
 
 Take these files as a template:
 
 * Background items file(data/campaign/UNGP_backgrounds.csv)
-* Background plugin file(src/data/scripts/ungpbackgrounds/impl/\*)
+* Background plugin file(src/ungp/impl/backgrounds/impl/\*)

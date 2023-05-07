@@ -1,3 +1,30 @@
+2.2.0 2023/5/7
+0.96兼容。
+修改包路径。请各位modder注意！
+    data.scripts变更为ungp.scripts
+    API移动至ungp.api
+    相关实现移动至ungp.impl
+现在在舰队界面自动显示现有舰队部署总和。
+支持黄金成就规则。
+仍在成长：
+    变为黄金成就规则。
+    不再能roll到成就规则了。
+贸易封锁 Cost点数 +1 -> +2。
+科技革命现在在舰队合计部署超过240时会降低效果，最多降低一半。
+
+0.96 compatible.
+Modify the package path, please notice:
+    data.scripts has been changed to ungp.scripts
+    The API is moved to ungp.api
+    The implementation is moved to ungp.impl
+Now UNGP will show the Fleet composition data automatically.(In fleet tab, like skill tips)
+Now support the Golden Milestone Rule.
+Still growing up:
+    Converted to Golden Milestone Rule.
+    Can not gain Milestone rules anymore.
+Trade Embargo: Cost +1 -> +2
+Technological Revolution now will have a 50% penalty at most while the total dp is above 240.
+
 2.1.0 2022/8/28
 修复一些bug。
 添加新背景：资本家。
@@ -261,7 +288,7 @@ Fixed the incorrect record bugs of rules contains random content.
 优化UI。
 注意：代码结构及内容有较大变化。
 
-Not save compatible, please inherit the data before loading the new version.
+Not save compatible, please inherit the ungp.data before loading the new version.
 
 Wide-area Radar: Sensor strength +15~30%->25%~50%
 Low Efficiency Repair: Fleetwide repair and combat readiness recover rate -10%~30%->15%~30%
@@ -315,7 +342,7 @@ There are more options for settings.json.
 可以通过更改data/settings.json里的switchLang来自由更换语言。（缺省值为default）
 Now could inherit 0~100% blue prints and credits.
 Specialist mode could be on and off freely.
-Change "switchLang" in data/settings.json to switch language.(default for English,zh-cn for Chinese)
+Change "switchLang" in ungp.data/settings.json to switch language.(default for English,zh-cn for Chinese)
 
 0.1.0
 初步完成。
