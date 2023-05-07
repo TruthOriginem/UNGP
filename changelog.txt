@@ -1,4 +1,4 @@
-2.2.0 2023/5/7
+2.2.0 2023/5/7 hotfix
 0.96兼容。
 修改包路径。请各位modder注意！
     data.scripts变更为ungp.scripts

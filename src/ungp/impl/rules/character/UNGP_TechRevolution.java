@@ -26,9 +26,11 @@ public class UNGP_TechRevolution extends UNGP_BaseRuleEffect implements UNGP_Pla
     public void apply(MutableCharacterStatsAPI stats) {
         float opMult = 1f;
         FleetDataAPI playerFleetData = getFleetData(null);
-        float totalFleetDP = getTotalOP(playerFleetData, stats);
-        if (totalFleetDP > OP_ALL_THRESHOLD) {
-            opMult = Math.max(0.5f, 1f - 0.5f * ((totalFleetDP - OP_ALL_THRESHOLD) / (OP_ALL_THRESHOLD)));
+        if (playerFleetData != null) {
+            float totalFleetDP = getTotalOP(playerFleetData, stats);
+            if (totalFleetDP > OP_ALL_THRESHOLD) {
+                opMult = Math.max(0.5f, 1f - 0.5f * ((totalFleetDP - OP_ALL_THRESHOLD) / (OP_ALL_THRESHOLD)));
+            }
         }
         stats.getShipOrdnancePointBonus().modifyPercent(buffID, bonus * 100f * opMult);
     }
