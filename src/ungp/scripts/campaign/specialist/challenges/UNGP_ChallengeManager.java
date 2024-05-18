@@ -75,7 +75,7 @@ public class UNGP_ChallengeManager {
     }
 
     /**
-     * Get challenge infos that meet the condition
+     * Get challenge info that meet the condition
      *
      * @return
      */
@@ -101,7 +101,7 @@ public class UNGP_ChallengeManager {
             }
             // 高于限制
             if (challengeInfo.isAbovePositiveLimitation(positiveRuleAmount)
-                    || !challengeInfo.isRulesContainRequired(activeRuleIds)) {
+                    || !challengeInfo.isRulesRequiredIncluded(activeRuleIds)) {
                 continue;
             }
             runnableChallenges.add(challengeInfo);

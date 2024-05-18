@@ -1,3 +1,20 @@
+2.3.0 2024/5/18
+重置专家模式UI。
+科技革命的效果衰减现在只计算非民用船。
+
+增加负面规则：疾速追杀
+增加正面规则：V键仇杀队，神说要有光
+
+Reset Specialist Mode picking UI.
+Technological Revolution's penalty only counts on the non-civilian ships now.
+
+Add new negative rules: John Wick
+
+2.2.1 2023/5/30
+兼容Lunalib，使用lunalib时，设置优先为lunalib。
+
+Now compatible with LunaLib. The Lunalib's settings will have the priority.
+
 2.2.0 2023/5/7 hotfix
 0.96兼容。
 修改包路径。请各位modder注意！

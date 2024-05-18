@@ -16,7 +16,7 @@ import java.util.Map;
 public interface UNGP_DataSaverAPI {
 
     /**
-     * Used for immediately create a ungp.data saver related to current game status for inherit ungp.data.
+     * Used for immediately createPlugin a ungp.data saver related to current game status for inherit ungp.data.
      *
      * @param inGameData
      * @return

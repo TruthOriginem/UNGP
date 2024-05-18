@@ -1,0 +1,8 @@
+fieldID,fieldName,fieldType,defaultValue,secondaryValue,fieldDescription,minValue,maxValue,tab
+ungp_generalHeader,General Header,Header,General,,,,,
+ungp_noLevelLimit,Cancel Record Level Limitation,Boolean,false,,Set to true to cancel the record level limit. You have to reach the [max player level] to unlock the savepoint recording by default.,,,
+ungp_noTimesLimit,Cancel Record Times Limitation,Boolean,false,,"Set to true to cancel the record times limit, which means you could record the savepoints [whenever you want] if you meet the record condition.",,,
+,,,,,,,,
+ungp_uiHeader,UI Header,Header,UI,,,,,
+ungp_noSpecialistWidget,Hide Left-Top Specialist Widget,Boolean,false,,Set to true to disable/hide the left top [specialist widget].,,,
+ungp_noRuleMessageWhileBattleStart,Hide Rule Message At the start of Battle,Boolean,false,,Set to true to disable/hide the left top rule messages shown [at the start of the battle].,,,

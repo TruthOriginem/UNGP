@@ -7,8 +7,6 @@ import java.awt.*;
 import java.util.List;
 
 public final class UNGP_SpecialistSettings {
-    @Deprecated
-    public static final int MAX_DIFFICULTY = Difficulty.ALPHA.legacyLevel;
     public static final String RULES_ENABLE_IN_SIMULATION = "UNGP_rulesEnableInSimulation";
 
     public enum Difficulty {

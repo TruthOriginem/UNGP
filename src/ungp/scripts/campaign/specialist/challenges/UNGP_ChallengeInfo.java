@@ -60,7 +60,7 @@ public final class UNGP_ChallengeInfo {
         return rulesRequired;
     }
 
-    public boolean isRulesContainRequired(List<String> rules) {
+    public boolean isRulesRequiredIncluded(List<String> rules) {
         List<String> rulesRequiredIDs = new ArrayList<>();
         for (URule rule : rulesRequired) {
             rulesRequiredIDs.add(rule.getId());
@@ -78,6 +78,10 @@ public final class UNGP_ChallengeInfo {
 
     public boolean isAbovePositiveLimitation(int ruleAmount) {
         return isPositiveLimited() && ruleAmount > positiveLimitation;
+    }
+
+    public boolean shouldBeCancelled(int positiveRuleAmount, List<String> currentRuleIDs) {
+        return isAbovePositiveLimitation(positiveRuleAmount) || !isRulesRequiredIncluded(currentRuleIDs);
     }
 
 
@@ -143,16 +147,16 @@ public final class UNGP_ChallengeInfo {
 
             Color grayColor = Misc.getGrayColor();
             showChallengeDetails(imageTooltip, grayColor);
-//            imageTooltip.addPara(getConnectedRuleNames(), grayColor, 5f);
-//
-//            if (durationByMonth != -1) {
-//                imageTooltip.addPara(Constants.rules_i18n.format("challenge_tip_desc0_0", "" + (durationByMonth - elapsedMonth)), grayColor, 5f);
-//            } else {
-//                imageTooltip.addPara(Constants.rules_i18n.get("challenge_tip_desc0_1"), grayColor, 5f);
-//            }
-//            if (!canReselectRules) {
-//                imageTooltip.addPara(Constants.rules_i18n.get("challenge_tip_desc3"), grayColor, 5f);
-//            }
+            //            imageTooltip.addPara(getConnectedRuleNames(), grayColor, 5f);
+            //
+            //            if (durationByMonth != -1) {
+            //                imageTooltip.addPara(Constants.rules_i18n.format("challenge_tip_desc0_0", "" + (durationByMonth - elapsedMonth)), grayColor, 5f);
+            //            } else {
+            //                imageTooltip.addPara(Constants.rules_i18n.get("challenge_tip_desc0_1"), grayColor, 5f);
+            //            }
+            //            if (!canReselectRules) {
+            //                imageTooltip.addPara(Constants.rules_i18n.get("challenge_tip_desc3"), grayColor, 5f);
+            //            }
             tooltip.addImageWithText(pad);
         }
     }

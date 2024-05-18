@@ -27,7 +27,7 @@ public class UNGP_TechRevolution extends UNGP_BaseRuleEffect implements UNGP_Pla
         float opMult = 1f;
         FleetDataAPI playerFleetData = getFleetData(null);
         if (playerFleetData != null) {
-            float totalFleetDP = getTotalOP(playerFleetData, stats);
+            float totalFleetDP = getTotalCombatOP(playerFleetData, stats);
             if (totalFleetDP > OP_ALL_THRESHOLD) {
                 opMult = Math.max(0.5f, 1f - 0.5f * ((totalFleetDP - OP_ALL_THRESHOLD) / (OP_ALL_THRESHOLD)));
             }

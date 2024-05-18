@@ -2,14 +2,18 @@ package ungp.scripts.ui;
 
 import com.fs.starfarer.api.campaign.CustomUIPanelPlugin;
 import com.fs.starfarer.api.ui.CustomPanelAPI;
+import com.fs.starfarer.api.ui.PositionAPI;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
+import com.fs.starfarer.api.ui.UIComponentAPI;
+
+import java.awt.*;
 
 public class UIRect {
     // top left = (0,0)
-    float x;
-    float y;
-    float width;
-    float height;
+    private float x;
+    private float y;
+    private float width;
+    private float height;
 
     public UIRect(float x, float y, float width, float height) {
         this.x = (int) x;
@@ -30,6 +34,10 @@ public class UIRect {
         return shrink(margin, margin, margin, margin);
     }
 
+    public UIRect shrink(float xMargin, float yMargin) {
+        return shrink(yMargin, yMargin, xMargin, xMargin);
+    }
+
     public UIRect[] splitHorizontally(float... weights) {
         if (weights == null || weights.length == 0) {
             return new UIRect[]{this};
@@ -45,6 +53,28 @@ public class UIRect {
                 newRects[i] = new UIRect(x + addOnX, y, curWidth, height);
                 addOnX += curWidth;
             }
+            return newRects;
+        }
+    }
+
+    public UIRect[] splitHorizontally(float splitWidth) {
+        if (splitWidth >= width) {
+            return new UIRect[]{this};
+        } else {
+            UIRect[] newRects = new UIRect[2];
+            newRects[0] = new UIRect(x, y, splitWidth, height);
+            newRects[1] = new UIRect(x + splitWidth, y, width - splitWidth, height);
+            return newRects;
+        }
+    }
+
+    public UIRect[] splitHorizontallyReverse(float splitWidth) {
+        if (splitWidth >= width) {
+            return new UIRect[]{this};
+        } else {
+            UIRect[] newRects = new UIRect[2];
+            newRects[0] = new UIRect(x, y, width - splitWidth, height);
+            newRects[1] = new UIRect(x + (width - splitWidth), y, splitWidth, height);
             return newRects;
         }
     }
@@ -79,6 +109,17 @@ public class UIRect {
         }
     }
 
+    public UIRect[] splitVerticallyReverse(float splitHeight) {
+        if (splitHeight >= height) {
+            return new UIRect[]{this};
+        } else {
+            UIRect[] newRects = new UIRect[2];
+            newRects[0] = new UIRect(x, y, width, height - splitHeight);
+            newRects[1] = new UIRect(x, y + (height - splitHeight), width, splitHeight);
+            return newRects;
+        }
+    }
+
     public float getX() {
         return x;
     }
@@ -96,23 +137,48 @@ public class UIRect {
     }
 
 
-    private TooltipMakerAPI startedTooltip;
-    private CustomPanelAPI linkedPanel;
+    private CustomPanelAPI rootPanel;
+    private TooltipMakerAPI latestTooltip;
+    private UIPanelManager latestSubPanelManager;
+
+    public void setRootPanel(CustomPanelAPI rootPanel) {
+        this.rootPanel = rootPanel;
+    }
 
     public TooltipMakerAPI beginTooltip(CustomPanelAPI rootPanel, boolean withSpoiler) {
-        startedTooltip = rootPanel.createUIElement(width, height, withSpoiler);
-        linkedPanel = rootPanel;
-        return startedTooltip;
+        latestTooltip = rootPanel.createUIElement(width, height, withSpoiler);
+        setRootPanel(rootPanel);
+        return latestTooltip;
     }
 
     public void addTooltip() {
-        if (linkedPanel != null)
-            linkedPanel.addUIElement(startedTooltip).inTL(x, y);
+        if (rootPanel != null)
+            rootPanel.addUIElement(latestTooltip).inTL(x, y);
     }
 
-    public CustomPanelAPI createPanel(CustomPanelAPI rootPanel, CustomUIPanelPlugin uiPlugin) {
-        CustomPanelAPI newPanel = rootPanel.createCustomPanel(width, height, uiPlugin);
-        rootPanel.addComponent(newPanel).inTL(x, y);
-        return newPanel;
+    public void removeLatestSubPanel() {
+        if (rootPanel != null && latestSubPanelManager != null) {
+            latestSubPanelManager.clearAllComponents();
+            rootPanel.removeComponent(latestSubPanelManager.getPanel());
+            latestSubPanelManager = null;
+        }
+    }
+
+    public void addBoarder(CustomPanelAPI rootPanel, Color color, float thickness) {
+        TooltipMakerAPI tooltipMaker = rootPanel.createUIElement(width, height, false);
+        UIComponentAPI boarder = tooltipMaker.createRect(color, thickness);
+        tooltipMaker.addCustomDoNotSetPosition(boarder).getPosition().inTL(0, 0).setSize(width, height);
+        rootPanel.addUIElement(tooltipMaker).inTL(x, y);
+    }
+
+    public PositionAPI syncPositionSize(PositionAPI position) {
+        return position.setSize(width, height);
+    }
+
+    public UIPanelManager createSubPanel(CustomPanelAPI rootPanel, CustomUIPanelPlugin uiPlugin) {
+        if (this.rootPanel == null) setRootPanel(rootPanel);
+        latestSubPanelManager = new UIPanelManager(rootPanel.createCustomPanel(width, height, uiPlugin), uiPlugin);
+        rootPanel.addComponent(latestSubPanelManager.getPanel()).inTL(x, y);
+        return latestSubPanelManager;
     }
 }

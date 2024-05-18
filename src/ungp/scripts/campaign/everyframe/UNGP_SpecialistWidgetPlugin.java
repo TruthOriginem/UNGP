@@ -15,6 +15,7 @@ import org.lazywizard.lazylib.MathUtils;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.Rectangle;
+import ungp.scripts.campaign.UNGP_Settings;
 import ungp.scripts.campaign.specialist.intel.UNGP_SpecialistIntel;
 import ungp.scripts.campaign.specialist.rules.UNGP_RulesManager;
 import ungp.scripts.campaign.specialist.rules.UNGP_RulesManager.URule;
@@ -38,6 +39,8 @@ public class UNGP_SpecialistWidgetPlugin implements EveryFrameScript, CampaignUI
     private float currentIconAlphaMult;
     private float elapsed = 0f;
 
+    private boolean enabled = true;
+
     static {
         WIDGET_RECT = new Rectangle(10, (int) (Global.getSettings().getScreenHeightPixels()) - 120, 80, 80);
     }
@@ -58,6 +61,18 @@ public class UNGP_SpecialistWidgetPlugin implements EveryFrameScript, CampaignUI
         currentIconAlphaMult = 0f;
         layer0 = Global.getSettings().getSprite("fx", "UNGP_specialist_icon_layer0");
         layer1 = Global.getSettings().getSprite("fx", "UNGP_specialist_icon_layer1");
+        Global.getSector().getListenerManager().addListener(this, true);
+        updateUI();
+    }
+
+    public static void updateUI() {
+        List<EveryFrameScript> transientScripts = Global.getSector().getTransientScripts();
+        for (EveryFrameScript script : transientScripts) {
+            if (script instanceof UNGP_SpecialistWidgetPlugin) {
+                ((UNGP_SpecialistWidgetPlugin) script).enabled = UNGP_Settings.isLeftTopSpecialistWidgetShown();
+                break;
+            }
+        }
     }
 
     public static boolean inWidgetRect(int x, int y) {
@@ -66,6 +81,7 @@ public class UNGP_SpecialistWidgetPlugin implements EveryFrameScript, CampaignUI
 
     @Override
     public void advance(float amount) {
+        if (!enabled) return;
         if (!UNGP_RulesManager.isSpecialistMode()) return;
         if (Global.getSector().isFastForwardIteration()) return;
         if (Global.getSector().isPaused()) return;
@@ -104,6 +120,7 @@ public class UNGP_SpecialistWidgetPlugin implements EveryFrameScript, CampaignUI
     public void processCampaignInputPreFleetControl(List<InputEventAPI> events) {
         if (UNGP_RulesManager.isSpecialistMode()) {
             for (InputEventAPI event : events) {
+                if (event.isConsumed()) continue;
                 if (event.isLMBDownEvent() && inWidgetRect(event.getX(), event.getY())) {
                     Global.getSector().getCampaignUI().showCoreUITab(CoreUITabId.INTEL, UNGP_SpecialistIntel.getInstance());
                     Global.getSoundPlayer().playUISound("ui_button_pressed", 1f, 1f);
@@ -131,6 +148,7 @@ public class UNGP_SpecialistWidgetPlugin implements EveryFrameScript, CampaignUI
 
     @Override
     public void renderInUICoordsAboveUIAndTooltips(ViewportAPI viewport) {
+        if (!enabled) return;
         if (!UNGP_RulesManager.isSpecialistMode()) return;
         final CampaignUIAPI campaignUI = Global.getSector().getCampaignUI();
         if (campaignUI.isShowingDialog() || campaignUI.isShowingMenu() || campaignUI.getCurrentCoreTab() != null)

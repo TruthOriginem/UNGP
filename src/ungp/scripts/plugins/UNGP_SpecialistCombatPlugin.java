@@ -6,6 +6,7 @@ import com.fs.starfarer.api.combat.ShipAPI;
 import com.fs.starfarer.api.input.InputEventAPI;
 import com.fs.starfarer.api.util.Misc;
 import ungp.scripts.campaign.UNGP_InGameData;
+import ungp.scripts.campaign.UNGP_Settings;
 import ungp.scripts.campaign.specialist.UNGP_SpecialistSettings;
 import ungp.api.rules.UNGP_RuleEffectAPI;
 import ungp.api.rules.tags.UNGP_CombatInitTag;
@@ -75,13 +76,15 @@ public class UNGP_SpecialistCombatPlugin extends BaseEveryFrameCombatPlugin {
         if (!init) {
             init = true;
             if (isSpecialistMode) {
-                for (Object[] messageArray : bonusMessages) {
-                    engine.getCombatUI().addMessage(0, messageArray);
+                if (!UNGP_Settings.isNoRuleMessageWhileBattleStart()){
+                    for (Object[] messageArray : bonusMessages) {
+                        engine.getCombatUI().addMessage(0, messageArray);
+                    }
+                    for (Object[] messageArray : notBonusMessages) {
+                        engine.getCombatUI().addMessage(0, messageArray);
+                    }
+                    engine.getCombatUI().addMessage(0, Misc.getHighlightColor(), Constants.root_i18n.get("specialist_mode_combat_loading"));
                 }
-                for (Object[] messageArray : notBonusMessages) {
-                    engine.getCombatUI().addMessage(0, messageArray);
-                }
-                engine.getCombatUI().addMessage(0, Misc.getHighlightColor(), Constants.root_i18n.get("specialist_mode_combat_loading"));
                 bonusMessages.clear();
                 notBonusMessages.clear();
             }

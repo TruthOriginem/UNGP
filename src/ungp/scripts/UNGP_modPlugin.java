@@ -15,14 +15,12 @@ import ungp.scripts.campaign.specialist.UNGP_PlayerFleetMemberBuff;
 import ungp.scripts.campaign.specialist.challenges.UNGP_ChallengeManager;
 import ungp.scripts.campaign.specialist.items.UNGP_RuleItem;
 import ungp.scripts.campaign.specialist.rules.UNGP_RulesManager;
-import ungp.scripts.utils.UNGP_LoadingChecker;
 import ungp.scripts.ui.UNGPFont;
 
 public class UNGP_modPlugin extends BaseModPlugin {
 
     @Override
     public void onApplicationLoad() {
-        UNGP_LoadingChecker.runCheckProcess();
         UNGP_Settings.loadSettings();
 
         UNGPFont.init();
@@ -48,16 +46,15 @@ public class UNGP_modPlugin extends BaseModPlugin {
         }
         Global.getSector().addTransientScript(new UNGP_UITimeScript());
 
-        if (!UNGP_Settings.isNoLeftTopSpecialistWidget()) {
-            UNGP_SpecialistWidgetPlugin widgetPlugin = new UNGP_SpecialistWidgetPlugin();
-            Global.getSector().addTransientScript(widgetPlugin);
-            Global.getSector().getListenerManager().addListener(widgetPlugin, true);
+        if (UNGP_Settings.isLeftTopSpecialistWidgetShown()) {
+            Global.getSector().addTransientScript(new UNGP_SpecialistWidgetPlugin());
         }
 
         if (!Global.getSector().getCharacterData().getAbilities().contains("UNGP_checkSavepoint")) {
             Global.getSector().getCharacterData().addAbility("UNGP_checkSavepoint");
         }
     }
+
 
     @Override
     public void configureXStream(XStream x) {

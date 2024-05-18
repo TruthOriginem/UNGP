@@ -1,6 +1,6 @@
-id,name,rulesRequired,positiveLimitation,durationByMonth,needMaxLevel,canReselectRules,milestoneToUnlock
-seafood_fleet,海鲜舰队的秘辛,"work_hard,order66",-1,-1,TRUE,TRUE,lobster_perday
-starfarer_alone,生而为远行者,"deep_space_fear,dangerous_sector,ancient_threat",3,-1,TRUE,FALSE,birthday_present
-dao_of_randomness,运道万古如长夜,"ying,yang,rain_pour,amnesia",3,-1,TRUE,FALSE,entropius_mind
-fortune_is_variant,莫欺少年穷,"techlock,galatia_underachiever,naval_treaty,low_repairtech",3,-1,TRUE,TRUE,still_growing_up
-7_kan,但它是绝对的,"edamage_increase,edamage_decrease,oppressive_distance,besieged,striker_school,layered_armor,danger_zone",1,-1,TRUE,FALSE,symbol_perseus
+id,name,rulesRequired,positiveLimitation,durationByMonth,dpToDefeat,needMaxLevel,canReselectRules,milestoneToUnlock
+seafood_fleet,海鲜舰队的秘辛,"work_hard,order66",-1,-1,,TRUE,TRUE,lobster_perday
+starfarer_alone,生而为远行者,"deep_space_fear,dangerous_sector,ancient_threat",3,-1,,TRUE,FALSE,birthday_present
+dao_of_randomness,运道万古如长夜,"ying,yang,rain_pour,amnesia",3,-1,,TRUE,FALSE,entropius_mind
+fortune_is_variant,莫欺少年穷,"techlock,galatia_underachiever,naval_treaty,low_repairtech",3,-1,,TRUE,TRUE,still_growing_up
+7_kan,但它是绝对的,"edamage_increase,edamage_decrease,oppressive_distance,besieged,striker_school,layered_armor,danger_zone",1,-1,,TRUE,FALSE,symbol_perseus

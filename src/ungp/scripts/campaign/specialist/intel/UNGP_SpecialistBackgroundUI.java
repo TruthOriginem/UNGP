@@ -3,7 +3,6 @@ package ungp.scripts.campaign.specialist.intel;
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.BaseCustomUIPanelPlugin;
 import com.fs.starfarer.api.graphics.SpriteAPI;
-import com.fs.starfarer.api.input.InputEventAPI;
 import com.fs.starfarer.api.ui.PositionAPI;
 import com.fs.starfarer.api.util.Misc;
 import org.lazywizard.lazylib.MathUtils;
@@ -25,6 +24,8 @@ public class UNGP_SpecialistBackgroundUI extends BaseCustomUIPanelPlugin {
     private SpriteAPI corner = Global.getSettings().getSprite("fx", "UNGP_specialist_bg_corner");
     private float halfSize = corner.getWidth() / 2f;
 
+    private float extraAlpha = 1f;
+
     public UNGP_SpecialistBackgroundUI() {
         ring_bg0.setSize(650f, 650f);
         ring_bg0.setAdditiveBlend();
@@ -32,6 +33,11 @@ public class UNGP_SpecialistBackgroundUI extends BaseCustomUIPanelPlugin {
         ring_bg1.setAdditiveBlend();
         ring_bg2.setSize(650f, 650f);
         ring_bg2.setAdditiveBlend();
+    }
+
+    public UNGP_SpecialistBackgroundUI(float extraAlpha) {
+        this();
+        this.extraAlpha = extraAlpha;
     }
 
     public static void cleanBGUI() {
@@ -53,6 +59,8 @@ public class UNGP_SpecialistBackgroundUI extends BaseCustomUIPanelPlugin {
         float y = p.getY();
         float w = p.getWidth();
         float h = p.getHeight();
+
+        alphaMult *= extraAlpha;
 
         // 属性入栈
         GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
@@ -140,17 +148,17 @@ public class UNGP_SpecialistBackgroundUI extends BaseCustomUIPanelPlugin {
         Color interpolateColor = Misc.interpolateColor(Color.cyan, Color.red, (float) ((Math.sin(uiElapsed * 0.5f) + 1f) / 2f));
         Color interpolateColor2 = Misc.interpolateColor(Color.red, Color.cyan, (float) ((Math.cos(uiElapsed * 0.5f) + 1f) / 2f));
 
-        ring_bg0.setAlphaMult(alphaMult * 0.6f);
+        ring_bg0.setAlphaMult(alphaMult * 0.4f);
         ring_bg0.setAngle(MathUtils.clampAngle(uiElapsed * 30f));
         ring_bg0.setColor(interpolateColor);
         ring_bg0.renderAtCenter(x + w * 0.9f, y + h * 0.2f);
 
-        ring_bg1.setAlphaMult(alphaMult * 0.6f);
+        ring_bg1.setAlphaMult(alphaMult * 0.4f);
         ring_bg1.setAngle(MathUtils.clampAngle(uiElapsed * -10f));
         ring_bg1.setColor(Color.cyan);
         ring_bg1.renderAtCenter(x + w * 0.9f, y + h * 0.2f);
 
-        ring_bg2.setAlphaMult(alphaMult * 0.6f);
+        ring_bg2.setAlphaMult(alphaMult * 0.4f);
         ring_bg2.setAngle(MathUtils.clampAngle(uiElapsed * -30f));
         ring_bg2.setColor(interpolateColor2);
         ring_bg2.renderAtCenter(x + w * 0.9f, y + h * 0.2f);
@@ -200,11 +208,6 @@ public class UNGP_SpecialistBackgroundUI extends BaseCustomUIPanelPlugin {
 
     public static void resumeTicking() {
         ticking = true;
-    }
-
-    @Override
-    public void processInput(java.util.List<InputEventAPI> events) {
-
     }
 
 }

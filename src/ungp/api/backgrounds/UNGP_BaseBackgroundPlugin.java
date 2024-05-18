@@ -114,7 +114,7 @@ public abstract class UNGP_BaseBackgroundPlugin implements UNGP_BackgroundPlugin
                 }
                 if (dataSaver instanceof UNGP_CreditsDataSaver) {
                     UNGP_CreditsDataSaver creditsDataSaver = (UNGP_CreditsDataSaver) dataSaver;
-                    mayInheritCreditsAmount = (int) (creditsDataSaver.credits * inheritCreditsFactor);
+                    mayInheritCreditsAmount = (int) (creditsDataSaver.getCredits() * inheritCreditsFactor);
                 }
             }
         }

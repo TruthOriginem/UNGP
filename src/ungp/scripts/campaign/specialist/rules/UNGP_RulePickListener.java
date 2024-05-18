@@ -11,12 +11,12 @@ import com.fs.starfarer.api.ui.LabelAPI;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.IntervalUtil;
 import com.fs.starfarer.api.util.Misc;
+import org.lwjgl.input.Keyboard;
 import ungp.scripts.campaign.everyframe.UNGP_UITimeScript;
 import ungp.scripts.campaign.specialist.UNGP_SpecialistSettings;
 import ungp.scripts.campaign.specialist.UNGP_SpecialistSettings.Difficulty;
 import ungp.scripts.campaign.specialist.challenges.UNGP_ChallengeManager;
 import ungp.scripts.campaign.specialist.items.UNGP_RuleItemConnectBGManager;
-import org.lwjgl.input.Keyboard;
 import ungp.scripts.ui.UNGPFont;
 
 import java.awt.*;
@@ -24,9 +24,13 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import static ungp.scripts.utils.Constants.root_i18n;
 import static ungp.scripts.campaign.specialist.rules.UNGP_RulesManager.*;
+import static ungp.scripts.utils.Constants.root_i18n;
 
+/**
+ * 选取规则的主逻辑
+ */
+@Deprecated
 public class UNGP_RulePickListener implements CargoPickerListener {
     private List<URule> pickedRules;
     private List<String> completedChallenges;

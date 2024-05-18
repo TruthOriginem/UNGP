@@ -143,7 +143,7 @@ public abstract class UNGP_BaseRuleEffect implements UNGP_RuleEffectAPI {
     }
 
     /**
-     * Used for create MessageIntel, should call {@link UNGP_BaseRuleEffect#showMessage(MessageIntel)} after.
+     * Used for createPlugin MessageIntel, should call {@link UNGP_BaseRuleEffect#showMessage(MessageIntel)} after.
      *
      * @return
      */

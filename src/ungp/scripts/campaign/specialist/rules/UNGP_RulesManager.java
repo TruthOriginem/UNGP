@@ -10,6 +10,11 @@ import com.fs.starfarer.api.ui.LabelAPI;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.ui.UIComponentAPI;
 import com.fs.starfarer.api.util.Misc;
+import org.apache.log4j.Logger;
+import org.json.JSONException;
+import org.json.JSONObject;
+import ungp.api.rules.UNGP_RuleEffectAPI;
+import ungp.api.rules.tags.*;
 import ungp.scripts.UNGP_modPlugin;
 import ungp.scripts.campaign.UNGP_InGameData;
 import ungp.scripts.campaign.specialist.UNGP_SpecialistSettings.Difficulty;
@@ -18,13 +23,8 @@ import ungp.scripts.campaign.specialist.challenges.UNGP_ChallengeManager;
 import ungp.scripts.campaign.specialist.economy.UNGP_EconomyListener;
 import ungp.scripts.campaign.specialist.items.UNGP_RuleItem;
 import ungp.scripts.campaign.specialist.rules.UNGP_RuleInfoLoader.UNGP_RuleInfo;
-import ungp.api.rules.UNGP_RuleEffectAPI;
-import ungp.api.rules.tags.*;
 import ungp.scripts.utils.UNGPUtils;
 import ungp.scripts.utils.UNGP_Feedback;
-import org.apache.log4j.Logger;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import javax.net.ssl.HttpsURLConnection;
 import java.awt.*;
@@ -343,7 +343,12 @@ public class UNGP_RulesManager {
             return UNGPUtils.isEmpty(ruleInfo.getSource());
         }
 
+        @Deprecated
         public boolean isBonus() {
+            return ruleInfo.isBonus();
+        }
+
+        public boolean isPositive() {
             return ruleInfo.isBonus();
         }
 
@@ -864,6 +869,33 @@ public class UNGP_RulesManager {
             cargo.addSpecial(new SpecialItemData(UNGP_RuleItem.getSpecialItemID(rule), rule.getId()), 1f);
         }
         return cargo;
+    }
+
+    public static List<URule> getAvailableRules(List<String> completedChallenges) {
+        List<String> unlockedRuleIds = new ArrayList<>();
+        // 检测完成的专家挑战
+        for (String completedChallenge : completedChallenges) {
+            UNGP_ChallengeInfo challengeInfo = UNGP_ChallengeManager.getChallengeInfo(completedChallenge);
+            if (challengeInfo != null) {
+                String mileStoneRuleId = challengeInfo.getMilestoneToUnlock().getId();
+                if (!mileStoneRuleId.isEmpty()) {
+                    unlockedRuleIds.add(mileStoneRuleId);
+                }
+            }
+        }
+        List<URule> availableRules = new ArrayList<>();
+        for (URule rule : ALL_RULES) {
+            // 如果是成就规则
+            if (rule.isMilestone()) {
+                // 如果已解锁
+                if (unlockedRuleIds.contains(rule.getId())) {
+                    availableRules.add(rule);
+                }
+            } else {
+                availableRules.add(rule);
+            }
+        }
+        return availableRules;
     }
 
     public static class UNGP_RuleSorter implements Comparator<URule> {

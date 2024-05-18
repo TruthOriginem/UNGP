@@ -1,0 +1,8 @@
+fieldID,fieldName,fieldType,defaultValue,secondaryValue,fieldDescription,minValue,maxValue,tab
+ungp_generalHeader,General Header,Header,通用,,,,,
+ungp_noLevelLimit,取消记录重生点的等级限制,Boolean,false,,设置为 [TRUE] 来取消重生点记录的等级限制，通常情况下你需要到达 [满级] 才能记录重生点。,,,
+ungp_noTimesLimit,取消记录重生点的次数限制,Boolean,false,,设置为 [TRUE] 来取消重生点记录的次数限制，通常情况下你只能记录一次。,,,
+,,,,,,,,
+ungp_uiHeader,UI Header,Header,UI,,,,,
+ungp_noSpecialistWidget,隐藏左上角的专家模式UI控件,Boolean,false,,设置为 [TRUE] 来隐藏专家模式开启时，左上角的专家模式UI控件。,,,
+ungp_noRuleMessageWhileBattleStart,隐藏战斗开始时的专家模式规则信息,Boolean,false,,设置为 [TRUE] 来隐藏 [战斗开始] 时的左上角出现的专家模式规则信息。,,,

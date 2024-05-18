@@ -7,15 +7,15 @@ import com.fs.starfarer.api.campaign.listeners.ColonyInteractionListener;
 import com.fs.starfarer.api.impl.campaign.intel.MessageIntel;
 import com.fs.starfarer.api.impl.campaign.submarkets.BlackMarketPlugin;
 import com.fs.starfarer.api.util.Misc;
-import ungp.scripts.campaign.specialist.UNGP_SpecialistSettings;
 import ungp.api.rules.UNGP_BaseRuleEffect;
-import ungp.impl.rules.economy.UNGP_Fraudulent.MarketTransactionListener;
 import ungp.api.rules.tags.UNGP_CampaignListenerTag;
+import ungp.impl.rules.economy.UNGP_Fraudulent.MarketTransactionListener;
+import ungp.scripts.campaign.specialist.UNGP_SpecialistSettings;
 
 public class UNGP_Fraudulent extends UNGP_BaseRuleEffect implements UNGP_CampaignListenerTag<MarketTransactionListener> {
     private static final float DROP_FACTOR = 0.2f;
 
-    protected class MarketTransactionListener implements ColonyInteractionListener {
+    public class MarketTransactionListener implements ColonyInteractionListener {
 
         @Override
         public void reportPlayerOpenedMarket(MarketAPI market) {

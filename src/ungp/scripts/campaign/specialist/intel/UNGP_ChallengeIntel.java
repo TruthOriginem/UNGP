@@ -83,7 +83,7 @@ public class UNGP_ChallengeIntel extends BaseIntelPlugin {
             // 如果可以重选，才考虑问题
             if (challengeInfo.canReselectRules()) {
                 // 如果需要被取消
-                if (challengeInfo.isAbovePositiveLimitation(positiveRuleAmount) || !challengeInfo.isRulesContainRequired(activeRuleIds)) {
+                if (challengeInfo.shouldBeCancelled(positiveRuleAmount, activeRuleIds)) {
                     progress.state = ProgressState.CANCELLED;
                 }
             }
