@@ -1,3 +1,10 @@
+2.3.0 2024/5/22 hotfix
+尝试修复疾速追杀的Bug。
+尝试修复必须前置Lunalib的Bug。
+
+Try fixing John Wick's NPE bug.
+Try fixing the lunalib bug.
+
 2.3.0 2024/5/18
 重置专家模式UI。
 科技革命的效果衰减现在只计算非民用船。
@@ -9,6 +16,7 @@ Reset Specialist Mode picking UI.
 Technological Revolution's penalty only counts on the non-civilian ships now.
 
 Add new negative rules: John Wick
+Add new positive rules: V for Vent, Let there be Light
 
 2.2.1 2023/5/30
 兼容Lunalib，使用lunalib时，设置优先为lunalib。

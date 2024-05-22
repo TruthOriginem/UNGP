@@ -1,11 +1,9 @@
 package ungp.scripts.campaign;
 
 import com.fs.starfarer.api.Global;
-import lunalib.lunaSettings.LunaSettings;
 import org.json.JSONObject;
 import org.lwjgl.input.Keyboard;
-import ungp.scripts.utils.Constants;
-import ungp.scripts.utils.lunalib.UNGP_SettingListener;
+import ungp.scripts.utils.lunalib.UNGP_LunaSettingCompatible;
 
 public class UNGP_Settings {
     private static boolean NO_LEVEL_LIMIT = false;
@@ -18,13 +16,13 @@ public class UNGP_Settings {
 
     public static boolean isNoLevelLimit() {
         if (LUNALIB_LOADED)
-            return Boolean.TRUE.equals(LunaSettings.getBoolean(Constants.MOD_ID, "ungp_noLevelLimit"));
+            return UNGP_LunaSettingCompatible.getBoolean("ungp_noLevelLimit");
         return NO_LEVEL_LIMIT;
     }
 
     public static boolean isNoTimesLimit() {
         if (LUNALIB_LOADED)
-            return Boolean.TRUE.equals(LunaSettings.getBoolean(Constants.MOD_ID, "ungp_noTimesLimit"));
+            return UNGP_LunaSettingCompatible.getBoolean("ungp_noTimesLimit");
         return NO_TIMES_LIMIT;
     }
 
@@ -38,19 +36,19 @@ public class UNGP_Settings {
 
     public static boolean isLeftTopSpecialistWidgetShown() {
         if (LUNALIB_LOADED)
-            return !Boolean.TRUE.equals(LunaSettings.getBoolean(Constants.MOD_ID, "ungp_noSpecialistWidget"));
+            return !UNGP_LunaSettingCompatible.getBoolean("ungp_noSpecialistWidget");
         return !NO_LEFT_TOP_SPECIALIST_WIDGET;
     }
 
     public static boolean isNoRuleMessageWhileBattleStart() {
         if (LUNALIB_LOADED)
-            return Boolean.TRUE.equals(LunaSettings.getBoolean(Constants.MOD_ID,"ungp_noRuleMessageWhileBattleStart"));
+            return UNGP_LunaSettingCompatible.getBoolean("ungp_noRuleMessageWhileBattleStart");
         return NO_RULE_MESSAGE_WHILE_BATTLE_START;
     }
 
     public static void loadSettings() {
+        LUNALIB_LOADED = Global.getSettings().getModManager().isModEnabled("lunalib");
         try {
-            LUNALIB_LOADED = Global.getSettings().getModManager().isModEnabled("lunalib");
             JSONObject settingIni = Global.getSettings().loadJSON("UNGP_OPTIONS.ini");
             NO_LEVEL_LIMIT = settingIni.optBoolean("noLevelLimit", false);
             NO_TIMES_LIMIT = settingIni.optBoolean("noTimesLimit", false);
@@ -59,7 +57,7 @@ public class UNGP_Settings {
             NO_LEFT_TOP_SPECIALIST_WIDGET = settingIni.optBoolean("noLeftTopSpecialistWidget", false);
             NO_RULE_MESSAGE_WHILE_BATTLE_START = settingIni.optBoolean("noRuleMessageWhileBattleStart", false);
             if (LUNALIB_LOADED) {
-                LunaSettings.addSettingsListener(new UNGP_SettingListener());
+                UNGP_LunaSettingCompatible.init();
             }
         } catch (Exception e) {
             throw new RuntimeException("Error loading UNGP_OPTIONS...");

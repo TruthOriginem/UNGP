@@ -22,13 +22,11 @@ public class UNGP_JohnWick extends UNGP_BaseRuleEffect implements UNGP_CampaignT
             if (MathUtils.getDistance(playerFleet, otherFleet) > 3000) continue;
             if (otherFleet.getAI() != null) {
                 FleetAssignmentDataAPI assignment = otherFleet.getAI().getCurrentAssignment();
-                if (assignment.getTarget() == playerFleet) {
+                if (assignment != null && assignment.getTarget() == playerFleet) {
                     otherFleet.getStats().addTemporaryModFlat(3f, buffID, 3, otherFleet.getStats().getFleetwideMaxBurnMod());
                 }
             }
-            //            if (otherFleet.getAI())
         }
-
     }
 
     @Override
