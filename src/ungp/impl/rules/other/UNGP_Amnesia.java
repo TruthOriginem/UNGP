@@ -16,7 +16,7 @@ public class UNGP_Amnesia extends UNGP_BaseRuleEffect implements UNGP_TweakBefor
     public void tweakBeforeApply(List<URule> activeRules, List<URule> originalActiveRules) {
         WeightedRandomPicker<URule> picker = new WeightedRandomPicker<>(getRandom());
         for (URule activeRule : activeRules) {
-            if (activeRule.isBonus()) {
+            if (activeRule.isPositive()) {
                 picker.add(activeRule);
             }
         }

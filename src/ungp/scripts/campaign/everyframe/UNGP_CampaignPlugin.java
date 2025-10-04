@@ -9,14 +9,15 @@ import com.fs.starfarer.api.campaign.CampaignFleetAPI;
 import com.fs.starfarer.api.campaign.SectorAPI;
 import com.fs.starfarer.api.fleet.FleetMemberAPI;
 import com.fs.starfarer.api.util.IntervalUtil;
-import ungp.scripts.campaign.UNGP_InGameData;
-import ungp.scripts.campaign.UNGP_Settings;
-import ungp.scripts.campaign.specialist.UNGP_PlayerFleetMemberBuff;
-import ungp.scripts.campaign.ui.UNGP_InteractionDialog;
+import org.lwjgl.input.Keyboard;
 import ungp.api.rules.tags.UNGP_CampaignTag;
 import ungp.api.rules.tags.UNGP_PlayerFleetMemberTag;
 import ungp.api.rules.tags.UNGP_PlayerFleetTag;
-import org.lwjgl.input.Keyboard;
+import ungp.scripts.campaign.UNGP_InGameData;
+import ungp.scripts.campaign.UNGP_Settings;
+import ungp.scripts.campaign.specialist.UNGP_PlayerFleetMemberBuff;
+import ungp.scripts.campaign.specialist.UNGP_SpecialistManager;
+import ungp.scripts.campaign.ui.UNGP_InteractionDialog;
 
 import java.util.List;
 
@@ -121,7 +122,7 @@ public class UNGP_CampaignPlugin implements EveryFrameScript {
             }
         }
         // 以下专家模式才可触发
-        if (!inGameData.isHardMode()) return;
+        if (!UNGP_SpecialistManager.isSpecialistMode()) return;
 
         int currentDay = clock.getDay();
         int currentYear = clock.getCycle();

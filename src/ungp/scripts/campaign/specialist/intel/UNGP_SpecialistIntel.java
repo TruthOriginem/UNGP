@@ -9,7 +9,6 @@ import ungp.scripts.campaign.UNGP_InGameData;
 import ungp.scripts.campaign.specialist.UNGP_SpecialistSettings;
 import ungp.scripts.campaign.specialist.challenges.UNGP_ChallengeManager;
 import ungp.scripts.campaign.specialist.dialog.UNGP_RepickRulesDialog;
-import ungp.scripts.campaign.specialist.items.UNGP_RuleItem;
 import ungp.scripts.campaign.specialist.rules.UNGP_RulesManager;
 import ungp.scripts.utils.Constants;
 import ungp.scripts.utils.UNGP_Feedback;
@@ -82,14 +81,14 @@ public class UNGP_SpecialistIntel extends BaseIntelPlugin {
         List<URule> bonusRules = new ArrayList<>();
         List<URule> notBonusRules = new ArrayList<>();
         for (URule rule : ACTIVATED_RULES_IN_THIS_GAME) {
-            if (rule.isBonus()) {
+            if (rule.isPositive()) {
                 bonusRules.add(rule);
             } else {
                 notBonusRules.add(rule);
             }
         }
-        Collections.sort(bonusRules, new UNGP_RulesManager.UNGP_RuleSorter());
-        Collections.sort(notBonusRules, new UNGP_RulesManager.UNGP_RuleSorter());
+        bonusRules.sort(new UNGP_RuleSorter());
+        notBonusRules.sort(new UNGP_RuleSorter());
 
         // 状态
         List<URule> combatRules = new ArrayList<>();
@@ -234,7 +233,7 @@ public class UNGP_SpecialistIntel extends BaseIntelPlugin {
                         if (showDetails) {
                             rule.addDesc(iconMaker, 0f);
                             tooltip.addImageWithText(10f);
-                            tooltip.addTooltipToPrevious(UNGP_RuleItem.createRuleItemTooltip(rule), TooltipLocation.BELOW);
+                            tooltip.addTooltipToPrevious(createRuleItemTooltip(rule), TooltipLocation.BELOW);
                         } else if (rule.getRuleEffect().addIntelTips(iconMaker)) {
                             tooltip.addImageWithText(10f);
                         }
@@ -265,7 +264,7 @@ public class UNGP_SpecialistIntel extends BaseIntelPlugin {
                         if (showDetails) {
                             rule.addDesc(iconMaker, 0f);
                             tooltip.addImageWithText(10f);
-                            tooltip.addTooltipToPrevious(UNGP_RuleItem.createRuleItemTooltip(rule), TooltipLocation.BELOW);
+                            tooltip.addTooltipToPrevious(createRuleItemTooltip(rule), TooltipLocation.BELOW);
                         } else if (rule.getRuleEffect().addIntelTips(iconMaker)) {
                             tooltip.addImageWithText(10f);
                         }

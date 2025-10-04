@@ -8,6 +8,7 @@ import java.util.Map;
 
 /**
  * Basically used in Rules data storage.
+ * 用于缓存规则数据，保存在每个存档里。
  */
 public class UNGP_SharedData {
     private static final String SHARED_DATA_KEY = "UNGP_sharedData";

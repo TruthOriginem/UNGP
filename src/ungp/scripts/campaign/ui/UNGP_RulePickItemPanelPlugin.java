@@ -8,7 +8,6 @@ import com.fs.starfarer.api.util.FaderUtil;
 import com.fs.starfarer.api.util.Misc;
 import org.lazywizard.lazylib.MathUtils;
 import org.lwjgl.opengl.GL11;
-import ungp.scripts.campaign.specialist.items.UNGP_RuleItem;
 import ungp.scripts.campaign.specialist.rules.UNGP_RulesManager;
 
 import java.awt.*;
@@ -46,9 +45,9 @@ public class UNGP_RulePickItemPanelPlugin extends BaseCustomUIPanelPlugin {
         linkedButton.setCustomData(rule);
         linkedButton.setButtonPressedSound(null);
         if (rule.isPositive()) {
-            element.addTooltipToPrevious(UNGP_RuleItem.createRuleItemTooltip(rule), TooltipMakerAPI.TooltipLocation.BELOW);
+            element.addTooltipToPrevious(UNGP_RulesManager.createRuleItemTooltip(rule), TooltipMakerAPI.TooltipLocation.BELOW);
         } else {
-            element.addTooltipToPrevious(UNGP_RuleItem.createRuleItemTooltip(rule), TooltipMakerAPI.TooltipLocation.ABOVE);
+            element.addTooltipToPrevious(UNGP_RulesManager.createRuleItemTooltip(rule), TooltipMakerAPI.TooltipLocation.ABOVE);
         }
         panel.addUIElement(element);
 

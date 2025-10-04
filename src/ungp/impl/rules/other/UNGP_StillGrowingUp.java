@@ -60,7 +60,7 @@ public class UNGP_StillGrowingUp extends UNGP_BaseRuleEffect implements UNGP_Cam
                 }
                 // 不能roll到成就及黄金规则
                 for (URule uRule : allRules) {
-                    if (!uRule.isBonus() || activatedRules.contains(uRule)) continue;
+                    if (!uRule.isPositive() || activatedRules.contains(uRule)) continue;
                     if (uRule.isGolden()) continue;
                     if (uRule.isMilestone()) continue;
                     if (!uRule.isRollable()) continue;

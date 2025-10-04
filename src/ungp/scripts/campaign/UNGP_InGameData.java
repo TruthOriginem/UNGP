@@ -21,7 +21,7 @@ public final class UNGP_InGameData {
     private Difficulty difficulty = null;
     private boolean isRecorded = false;//是否用这个记录了重生点
     private boolean inherited = false;//是否已经继承了上个重生点
-    private boolean passedInheritTime = false;
+    private boolean passedInheritTime = false; // 继承是否超时
     private boolean isHardMode = false;
     private float timesToChangeSpecialistMode = 0f; // 更换专家模式的次数
     private MutableStat changeTimeStat = new MutableStat(1f); // 用于标明每年可以获得多少次重启次数

@@ -11,12 +11,13 @@ public interface UNGP_RuleEffectAPI {
 
     /**
      * Will be called each time player loads game or changes the difficulty
+     * Used for update the rule cache(local variable in rule class)
      * 每次加载游戏存档/改变专家等级都会调用
+     * 用于刷新规则缓存(规则类的局部变量)
      *
      * @param difficulty
      */
     void updateDifficultyCache(Difficulty difficulty);
-//    void updateDifficultyCache(int difficulty);
 
     /**
      * Get the values depending on the difficulty level, these values should be saved in the object of the rule class.

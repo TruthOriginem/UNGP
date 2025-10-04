@@ -17,18 +17,20 @@ public final class UNGP_ChallengeInfo {
     private List<URule> rulesRequired;
     private int positiveLimitation;
     private int durationByMonth; //Month
+    private int dpToDefeat;
     private boolean needMaxLevel;
     private boolean canReselectRules;
     private URule milestoneToUnlock;
     private boolean isValid = true;
 
-    public UNGP_ChallengeInfo(String id, String name, List<String> rulesRequired, int positiveLimitation, int durationByMonth, boolean needMaxLevel, boolean canReselectRules, String milestoneToUnlock) {
+    public UNGP_ChallengeInfo(String id, String name, List<String> rulesRequired, int positiveLimitation, int durationByMonth, int dpToDefeat, boolean needMaxLevel, boolean canReselectRules, String milestoneToUnlock) {
         this.id = id;
         this.name = name;
         this.positiveLimitation = positiveLimitation;
         this.durationByMonth = durationByMonth;
         this.needMaxLevel = needMaxLevel;
         this.canReselectRules = canReselectRules;
+        this.dpToDefeat = dpToDefeat;
         this.rulesRequired = new ArrayList<>();
         for (String ruleID : rulesRequired) {
             URule rule = URule.getByID(ruleID);
@@ -89,6 +91,10 @@ public final class UNGP_ChallengeInfo {
         return durationByMonth;
     }
 
+    public int getDpToDefeat() {
+        return dpToDefeat;
+    }
+
     public boolean isNeedMaxLevel() {
         return needMaxLevel;
     }
@@ -139,29 +145,19 @@ public final class UNGP_ChallengeInfo {
         return array;
     }
 
-    public void createTooltip(TooltipMakerAPI tooltip, float pad, int elapsedMonth) {
+    public void createTooltip(TooltipMakerAPI tooltip, float pad, UNGP_ChallengeProgress progress) {
         URule unlockRule = milestoneToUnlock;
         if (unlockRule != null) {
             TooltipMakerAPI imageTooltip = tooltip.beginImageWithText(unlockRule.getSpritePath(), 64f);
             imageTooltip.addPara(name, getMilestoneColor(), 0);
 
             Color grayColor = Misc.getGrayColor();
-            showChallengeDetails(imageTooltip, grayColor);
-            //            imageTooltip.addPara(getConnectedRuleNames(), grayColor, 5f);
-            //
-            //            if (durationByMonth != -1) {
-            //                imageTooltip.addPara(Constants.rules_i18n.format("challenge_tip_desc0_0", "" + (durationByMonth - elapsedMonth)), grayColor, 5f);
-            //            } else {
-            //                imageTooltip.addPara(Constants.rules_i18n.get("challenge_tip_desc0_1"), grayColor, 5f);
-            //            }
-            //            if (!canReselectRules) {
-            //                imageTooltip.addPara(Constants.rules_i18n.get("challenge_tip_desc3"), grayColor, 5f);
-            //            }
+            showChallengeDetails(imageTooltip, grayColor, progress);
             tooltip.addImageWithText(pad);
         }
     }
 
-    public void showChallengeDetails(TooltipMakerAPI tooltip, Color color) {
+    public void showChallengeDetails(TooltipMakerAPI tooltip, Color color, UNGP_ChallengeProgress progress) {
         tooltip.addPara(rules_i18n.get("challenge_tip_rules_prefix")
                                 + getConnectedRuleNamesReplacedWithEscapeCharacter(),
                         5f,
@@ -175,6 +171,13 @@ public final class UNGP_ChallengeInfo {
             tooltip.addPara(rules_i18n.get("challenge_tip_desc0_0"), color, 0f);
             if (isNeedMaxLevel()) {
                 tooltip.addPara(rules_i18n.get("challenge_tip_desc1"), color, 0f);
+            }
+        }
+        if (getDpToDefeat() > 0) {
+            if (progress != null) {
+                tooltip.addPara(rules_i18n.format("challenge_tip_desc4", "" + getDpToDefeat()) + "(" + (int) progress.getDefeatedDp() + "/" + getDpToDefeat() + ")", color, 0f);
+            } else {
+                tooltip.addPara(rules_i18n.format("challenge_tip_desc4", "" + getDpToDefeat()), color, 0f);
             }
         }
         if (getPositiveLimitation() >= 0) {

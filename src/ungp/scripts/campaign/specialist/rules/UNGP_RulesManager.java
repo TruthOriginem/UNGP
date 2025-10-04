@@ -2,8 +2,6 @@ package ungp.scripts.campaign.specialist.rules;
 
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.CampaignFleetAPI;
-import com.fs.starfarer.api.campaign.CargoAPI;
-import com.fs.starfarer.api.campaign.SpecialItemData;
 import com.fs.starfarer.api.characters.MutableCharacterStatsAPI;
 import com.fs.starfarer.api.ui.Alignment;
 import com.fs.starfarer.api.ui.LabelAPI;
@@ -17,12 +15,14 @@ import ungp.api.rules.UNGP_RuleEffectAPI;
 import ungp.api.rules.tags.*;
 import ungp.scripts.UNGP_modPlugin;
 import ungp.scripts.campaign.UNGP_InGameData;
+import ungp.scripts.campaign.specialist.UNGP_SpecialistManager;
 import ungp.scripts.campaign.specialist.UNGP_SpecialistSettings.Difficulty;
 import ungp.scripts.campaign.specialist.challenges.UNGP_ChallengeInfo;
 import ungp.scripts.campaign.specialist.challenges.UNGP_ChallengeManager;
 import ungp.scripts.campaign.specialist.economy.UNGP_EconomyListener;
-import ungp.scripts.campaign.specialist.items.UNGP_RuleItem;
 import ungp.scripts.campaign.specialist.rules.UNGP_RuleInfoLoader.UNGP_RuleInfo;
+import ungp.scripts.codex.UNGP_RuleCodexEntryPlugin;
+import ungp.scripts.ui.RuleDescBackgroundPlugin;
 import ungp.scripts.utils.UNGPUtils;
 import ungp.scripts.utils.UNGP_Feedback;
 
@@ -150,7 +150,7 @@ public class UNGP_RulesManager {
                 }
             }
             // 不可更改的原记录内容
-            List<URule> originalActivatedRules = Collections.unmodifiableList(new ArrayList<>(activatedRules));
+            List<URule> originalActivatedRules = List.copyOf(activatedRules);
             for (UNGP_TweakBeforeApplyTag tag : beforeApplyTags) {
                 tag.tweakBeforeApply(activatedRules, originalActivatedRules);
             }
@@ -208,8 +208,8 @@ public class UNGP_RulesManager {
                 UNGP_EconomyListener.applyMarkets();
             }
             setStaticDifficulty(difficulty);
-            setStaticSpecialistMode(inGameData.isHardMode());
             inGameData.saveActivatedRules(activatedRules);
+            UNGP_SpecialistManager.updateCachedSpecialistMode(inGameData.isHardMode());
             UNGP_ChallengeManager.updateChallengeProgress(inGameData);
             updateSpecialistSkills(playerStats);
             if (playerFleet != null)
@@ -239,16 +239,11 @@ public class UNGP_RulesManager {
         stats.refreshCharacterStatsEffects();
     }
 
+    /**
+     * @return 主要用于UI显示
+     */
     public static Difficulty getGlobalDifficulty() {
         return globalDifficulty;
-    }
-
-    public static boolean isSpecialistMode() {
-        return isSpecialistMode;
-    }
-
-    public static void setStaticSpecialistMode(boolean isSpecialistMode) {
-        UNGP_RulesManager.isSpecialistMode = isSpecialistMode;
     }
 
     public static List<URule> getAllRulesCopy() {
@@ -269,6 +264,33 @@ public class UNGP_RulesManager {
                     rule.isMilestoneRollLocked = false;
             }
         }
+    }
+
+    public static void addRuleItemTooltip(TooltipMakerAPI tooltip, URule rule, boolean isExpanded) {
+        rule.addDetailsToTooltip(tooltip, isExpanded, false);
+    }
+
+    public static TooltipMakerAPI.TooltipCreator createRuleItemTooltip(final URule rule) {
+        return new TooltipMakerAPI.TooltipCreator() {
+            @Override
+            public boolean isTooltipExpandable(Object tooltipParam) {
+                return rule.isTooltipExpandable();
+            }
+
+            @Override
+            public float getTooltipWidth(Object tooltipParam) {
+                return getCommonWidth();
+            }
+
+            @Override
+            public void createTooltip(TooltipMakerAPI tooltip, boolean expanded, Object tooltipParam) {
+                addRuleItemTooltip(tooltip, rule, expanded);
+            }
+        };
+    }
+
+    public static float getCommonWidth() {
+        return 400f;
     }
 
     /**
@@ -321,6 +343,10 @@ public class UNGP_RulesManager {
             return ruleInfo.getId();
         }
 
+        public String getCodexEntryId() {
+            return UNGP_RuleCodexEntryPlugin.ID_PREFIX + getId();
+        }
+
         /**
          * Should just use buffID in Rule plugin.
          *
@@ -371,8 +397,12 @@ public class UNGP_RulesManager {
             if (isGolden()) {
                 return getGoldenColor();
             } else {
-                return UNGP_RulesManager.getPNColor(isBonus());
+                return UNGP_RulesManager.getPNColor(isPositive());
             }
+        }
+
+        public Color getTooltipTitleColor() {
+            return Misc.interpolateColor(getCorrectColor(), Misc.getTextColor(), 0.8f);
         }
 
         public Color getCostColor() {
@@ -380,17 +410,17 @@ public class UNGP_RulesManager {
         }
 
         public String getRuleTypeName() {
-            return UNGP_RulesManager.getRuleTypeName(isMilestone(), isGolden(), isBonus());
+            return UNGP_RulesManager.getRuleTypeName(isMilestone(), isGolden(), isPositive());
         }
 
         public String getRuleTypeCharacter() {
             if (isGolden()) return "G";
             if (isMilestone()) return "M";
-            return isBonus() ? "P" : "N";
+            return isPositive() ? "P" : "N";
         }
 
         public void addPreDesc(TooltipMakerAPI tooltip, float pad) {
-            TooltipMakerAPI image = tooltip.beginImageWithText(getRuleIconSpriteName(isMilestone(), isGolden(), isBonus()), 16f);
+            TooltipMakerAPI image = tooltip.beginImageWithText(getRuleIconSpriteName(isMilestone(), isGolden(), isPositive()), 16f);
             image.addPara(getRuleTypeName(), getCorrectColor(), 0f);
             tooltip.addImageWithText(pad * 0.5f);
             if (!isDefaultSource()) {
@@ -407,7 +437,7 @@ public class UNGP_RulesManager {
             } else {
                 values = getDescriptionParams(difficulty);
             }
-            Color highlightColor = isBonus() ? Misc.getHighlightColor() : Misc.getNegativeHighlightColor();
+            Color highlightColor = isPositive() ? Misc.getHighlightColor() : Misc.getNegativeHighlightColor();
             tooltip.addPara(prefix + ruleInfo.getDesc(), pad, highlightColor, values);
         }
 
@@ -480,7 +510,7 @@ public class UNGP_RulesManager {
             }
         }
 
-        public void addChallengeRelatedDesc(TooltipMakerAPI tooltip, float pad, String detailPrefix, boolean showMore) {
+        public void addChallengeRelatedDesc(TooltipMakerAPI tooltip, float pad, String prefix, boolean isExpanded, boolean isCodex) {
             Color grayColor = Misc.getGrayColor();
             // when the rule is milestone rule
             if (isMilestone()) {
@@ -494,7 +524,7 @@ public class UNGP_RulesManager {
                 if (!provider.isEmpty()) {
                     tooltip.addPara(rules_i18n.get("milestone_tip"), Misc.getBasePlayerColor(), pad);
                     tooltip.addSpacer(10f);
-                    tooltip.setBulletedListMode(detailPrefix);
+                    tooltip.setBulletedListMode(prefix);
                     for (UNGP_ChallengeInfo challengeInfo : provider) {
                         String sb = challengeInfo.getName() +
                                 " : " +
@@ -517,32 +547,64 @@ public class UNGP_RulesManager {
                     tooltip.addPara(rules_i18n.get("challenge_tip"), Misc.getBasePlayerColor(), pad);
                     tooltip.addSpacer(10f);
                     for (UNGP_ChallengeInfo challengeInfo : provider) {
-                        tooltip.setBulletedListMode(detailPrefix);
+                        tooltip.setBulletedListMode(prefix);
                         boolean isChallengeCompleted = !UNGP_ChallengeManager.getTemporaryCompletedChallenges().isEmpty() && UNGP_ChallengeManager.getTemporaryCompletedChallenges().contains(challengeInfo.getId());
                         tooltip.addSpacer(5f);
                         // 完成/未完成？
-                        if (isChallengeCompleted) {
-                            tooltip.addPara(challengeInfo.getName() + " - " + rules_i18n.get("challenge_tip_completed"),
-                                            grayColor, 0);
+                        if (isCodex) {
+                            tooltip.addPara(challengeInfo.getName(), getMilestoneColor(), 0);
                         } else {
-                            tooltip.addPara(challengeInfo.getName() + " - %s", 0, getMilestoneColor(), Misc.getNegativeHighlightColor(), rules_i18n.get("challenge_tip_uncompleted"));
-                            hasUncompletedChallenges = true;
+                            if (isChallengeCompleted) {
+                                tooltip.addPara(challengeInfo.getName() + " - " + rules_i18n.get("challenge_tip_completed"),
+                                                grayColor, 0);
+                            } else {
+                                tooltip.addPara(challengeInfo.getName() + " - %s", 0, getMilestoneColor(), Misc.getNegativeHighlightColor(), rules_i18n.get("challenge_tip_uncompleted"));
+                                hasUncompletedChallenges = true;
+                            }
                         }
                         // F1 信息
-                        if (showMore) {
-                            tooltip.setBulletedListMode(detailPrefix + "  -");
-                            challengeInfo.showChallengeDetails(tooltip, grayColor);
+                        if (isExpanded) {
+                            tooltip.setBulletedListMode(prefix + "  -");
+                            challengeInfo.showChallengeDetails(tooltip, grayColor,null);
                         }
                     }
-                    // 如果存在未完成挑战的同时，难度等级不够
-                    if (hasUncompletedChallenges && !difficultyEnough) {
-                        tooltip.setBulletedListMode(detailPrefix);
+                    // 如果存在未完成挑战的同时，难度等级不够，且不是数据库
+                    if (hasUncompletedChallenges && !difficultyEnough && !isCodex) {
+                        tooltip.setBulletedListMode(prefix);
                         tooltip.addPara(rules_i18n.get("challenge_tip_difficultyNotMeet"), 5f, Misc.getNegativeHighlightColor(), grayColor,
                                         Difficulty.ALPHA.name, Difficulty.OMEGA.name).setHighlightColors(Difficulty.ALPHA.color, Difficulty.OMEGA.color);
                     }
                 }
             }
             tooltip.setBulletedListMode(null);
+        }
+
+        public void addChallengeRelatedDesc(TooltipMakerAPI tooltip, float pad, String detailPrefix, boolean showMore) {
+            addChallengeRelatedDesc(tooltip, pad, detailPrefix, showMore, false);
+        }
+
+        /**
+         * 添加规则详情渲染
+         *
+         * @param tooltip
+         * @param isExpanded 是否展开
+         * @param isCodex    是否是数据库
+         */
+        public void addDetailsToTooltip(TooltipMakerAPI tooltip, boolean isExpanded, boolean isCodex) {
+            float pad = 18f;
+            String bulletPrefix = "        ";
+            RuleDescBackgroundPlugin.addToTooltip(tooltip, this, isCodex);
+            tooltip.setTitleOrbitronLarge();
+            tooltip.addTitle(getName(), getTooltipTitleColor());
+            addPreDesc(tooltip, pad);
+            addDescToItem(tooltip, pad, bulletPrefix, isExpanded);
+            addRollDesc(tooltip, pad, bulletPrefix);
+            addChallengeRelatedDesc(tooltip, pad, bulletPrefix, isExpanded, isCodex);
+            addCostAndPickTimes(tooltip, pad);
+
+            if (!isCodex) {
+                tooltip.setCodexEntryId(getId());
+            }
         }
 
         public boolean isTooltipExpandable() {
@@ -568,8 +630,8 @@ public class UNGP_RulesManager {
             List<Object> messageList = new ArrayList<>();
             String originDesc = ruleInfo.getDesc();
             String[] unformulatedDesc = originDesc.split("%s");
-            Color baseColor = getPNColor(isBonus());
-            Color hlColor = isBonus() ? Misc.getHighlightColor() : Misc.getNegativeHighlightColor();
+            Color baseColor = getPNColor(isPositive());
+            Color hlColor = isPositive() ? Misc.getHighlightColor() : Misc.getNegativeHighlightColor();
             for (int i = 0; i < unformulatedDesc.length; i++) {
                 String baseString = unformulatedDesc[i];
                 if (baseString != null && !baseString.isEmpty()) {
@@ -831,45 +893,6 @@ public class UNGP_RulesManager {
         globalDifficulty = difficulty;
     }
 
-    /**
-     * 基于完成的挑战创建规则货舱
-     * Create rules cargo based on completed challenges.
-     *
-     * @param completedChallenges
-     * @return
-     */
-    public static CargoAPI createRulesCargoBasedOnChallenges(List<String> completedChallenges) {
-        CargoAPI cargo = Global.getFactory().createCargo(true);
-        List<String> unlockedRuleIds = new ArrayList<>();
-        // 检测完成的专家挑战
-        for (String completedChallenge : completedChallenges) {
-            UNGP_ChallengeInfo challengeInfo = UNGP_ChallengeManager.getChallengeInfo(completedChallenge);
-            if (challengeInfo != null) {
-                String mileStoneRuleId = challengeInfo.getMilestoneToUnlock().getId();
-                if (!mileStoneRuleId.isEmpty()) {
-                    unlockedRuleIds.add(mileStoneRuleId);
-                }
-            }
-        }
-        List<URule> sortedRules = new ArrayList<>();
-        for (URule rule : ALL_RULES) {
-            // 如果是成就规则
-            if (rule.isMilestone()) {
-                // 如果已解锁
-                if (unlockedRuleIds.contains(rule.getId())) {
-                    sortedRules.add(rule);
-                }
-            } else {
-                sortedRules.add(rule);
-            }
-        }
-
-        Collections.sort(sortedRules, new UNGP_RuleSorter());
-        for (URule rule : sortedRules) {
-            cargo.addSpecial(new SpecialItemData(UNGP_RuleItem.getSpecialItemID(rule), rule.getId()), 1f);
-        }
-        return cargo;
-    }
 
     public static List<URule> getAvailableRules(List<String> completedChallenges) {
         List<String> unlockedRuleIds = new ArrayList<>();
@@ -910,7 +933,7 @@ public class UNGP_RulesManager {
          */
         @Override
         public int compare(URule o1, URule o2) {
-            int compare = Boolean.compare(!o1.isBonus(), !o2.isBonus());
+            int compare = Boolean.compare(!o1.isPositive(), !o2.isPositive());
             if (compare == 0) {
                 compare = Boolean.compare(o1.isGolden(), o2.isGolden());
                 if (compare == 0) {

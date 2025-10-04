@@ -36,10 +36,11 @@ public class UNGP_ChallengeLoader {
                 String name = row.optString("name", EMPTY);
                 int positiveLimitation = row.optInt("positiveLimitation", -1);
                 int durationByMonth = row.optInt("durationByMonth", -1);
+                int dpToDefeat = row.optInt("dpToDefeat", -1);
                 boolean needMaxLevel = row.optBoolean("needMaxLevel", true);
                 boolean canReselectRules = row.optBoolean("canReselectRules", true);
                 String milestoneToUnlock = row.optString("milestoneToUnlock", "");
-                UNGP_ChallengeInfo challengeInfo = new UNGP_ChallengeInfo(id, name, rulesRequiredList, positiveLimitation, durationByMonth, needMaxLevel, canReselectRules, milestoneToUnlock);
+                UNGP_ChallengeInfo challengeInfo = new UNGP_ChallengeInfo(id, name, rulesRequiredList, positiveLimitation, durationByMonth, dpToDefeat, needMaxLevel, canReselectRules, milestoneToUnlock);
                 if (challengeInfo.isValid()) {
                     challengeInfoMap.put(id, challengeInfo);
                 }

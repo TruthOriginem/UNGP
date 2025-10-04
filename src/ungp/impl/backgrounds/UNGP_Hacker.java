@@ -24,14 +24,14 @@ public class UNGP_Hacker extends UNGP_BaseBackgroundPlugin {
     public void initCycleBonus() {
         addCycleBonus(2, new BackgroundBonus(BackgroundBonusType.SKILL, Skills.NAVIGATION, 1));
         addCycleBonus(3, new BackgroundBonus(BackgroundBonusType.CARGO_STACK,
-                                             CargoAPI.CargoItemType.SPECIAL, new SpecialItemData(Items.MODSPEC, HullMods.INTEGRATED_TARGETING_UNIT), 1f));
+                                             CargoAPI.CargoItemType.SPECIAL, new SpecialItemData(Items.TAG_MODSPEC, HullMods.INTEGRATED_TARGETING_UNIT), 1f));
         addCycleBonus(3, new BackgroundBonus(BackgroundBonusType.SHIP,
                                              "omen_PD", 1f));
         addCycleBonus(4, new BackgroundBonus(BackgroundBonusType.SKILL, Skills.ELECTRONIC_WARFARE, 1));
         addCycleBonus(5, new BackgroundBonus(BackgroundBonusType.CARGO_STACK,
-                                             CargoAPI.CargoItemType.SPECIAL, new SpecialItemData(Items.MODSPEC, HullMods.ECCM), 1f));
+                                             CargoAPI.CargoItemType.SPECIAL, new SpecialItemData(Items.TAG_MODSPEC, HullMods.ECCM), 1f));
         addCycleBonus(6, new BackgroundBonus(BackgroundBonusType.CARGO_STACK,
-                                             CargoAPI.CargoItemType.SPECIAL, new SpecialItemData(Items.MODSPEC, HullMods.HARDENED_SHIELDS), 1f));
+                                             CargoAPI.CargoItemType.SPECIAL, new SpecialItemData(Items.TAG_MODSPEC, HullMods.HARDENED_SHIELDS), 1f));
         addCycleBonus(7, new BackgroundBonus(BackgroundBonusType.CARGO_STACK,
                                              CargoAPI.CargoItemType.RESOURCES, Commodities.ALPHA_CORE, 1f));
         addCycleBonus(9, new BackgroundBonus(BackgroundBonusType.SKILL, Skills.CYBERNETIC_AUGMENTATION, 1));

@@ -31,7 +31,7 @@ public class UNGP_Ying extends UNGP_BaseRuleEffect implements UNGP_TweakBeforeAp
 //    	int positive = 0;
         boolean containsYang = false;
         for (URule tmp : originalActiveRules) {
-//        	if (tmp.isBonus()) positive++;
+//        	if (tmp.isPositive()) positive++;
             if (tmp.getId().contentEquals("yang")) {
                 containsYang = true;
             }
@@ -47,7 +47,7 @@ public class UNGP_Ying extends UNGP_BaseRuleEffect implements UNGP_TweakBeforeAp
             if (!tmp.isRollable()) continue;
             if (containsYang) {
                 picker.add(tmp);
-            } else if (!tmp.isBonus()) {
+            } else if (!tmp.isPositive()) {
                 picker.add(tmp);
             }
         }
@@ -66,7 +66,7 @@ public class UNGP_Ying extends UNGP_BaseRuleEffect implements UNGP_TweakBeforeAp
 //
 //		if (challenge) {
 //			for (URule rule : new ArrayList<>(picker.getItems())) {
-//				if (rule.isBonus()) picker.remove(rule);
+//				if (rule.isPositive()) picker.remove(rule);
 //			}
 //		}
 

@@ -34,7 +34,7 @@ public class UNGP_RainPour extends UNGP_BaseRuleEffect implements UNGP_TweakBefo
         for (URule tmp : rulesToPick) {
             if (tmp == rule) continue;
             if (tmp.hasTag(URule.Tags.NO_ROLL)) continue;
-            if (!tmp.isBonus()) {
+            if (!tmp.isPositive()) {
                 picker.add(tmp);
             }
         }

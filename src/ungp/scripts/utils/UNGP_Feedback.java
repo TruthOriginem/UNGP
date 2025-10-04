@@ -1,8 +1,8 @@
 package ungp.scripts.utils;
 
 import com.fs.starfarer.api.Global;
-import ungp.scripts.campaign.specialist.rules.UNGP_RulesManager;
 import org.apache.log4j.Logger;
+import ungp.scripts.campaign.specialist.rules.UNGP_RulesManager;
 
 import javax.net.ssl.*;
 import java.net.Socket;
@@ -69,19 +69,16 @@ public class UNGP_Feedback {
         }
         final String url = sb.toString();
         LOGGER.info("Sending to " + url);
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    URL connURL = new URL(url);
-                    HttpsURLConnection conn = (HttpsURLConnection) connURL.openConnection();
-                    setHttpProtocol(conn);
-                    conn.getInputStream().close();
-                    LOGGER.info("Successfully send " + url);
-                } catch (Exception e) {
-                    LOGGER.info("Error connecting to " + apiUrl);
-                    LOGGER.info(e);
-                }
+        Thread thread = new Thread(() -> {
+            try {
+                URL connURL = new URL(url);
+                HttpsURLConnection conn = (HttpsURLConnection) connURL.openConnection();
+                setHttpProtocol(conn);
+                conn.getInputStream().close();
+                LOGGER.info("Successfully send " + url);
+            } catch (Exception e) {
+                LOGGER.info("Error connecting to " + apiUrl);
+                LOGGER.info(e);
             }
         });
         thread.setDaemon(true);

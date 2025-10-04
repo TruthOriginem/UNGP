@@ -12,6 +12,7 @@ john_wick,John Wick,Hostile fleet accelarating,"If the assignment target of host
 ,,,,,,,,,,,,,
 low_repairtech,Low Efficiency Repair,Reduce repair rate,Fleetwide repair and combat readiness recover rate - %s,1,FALSE,,graphics/ungp/icons/ungp_rules/low_repairtech.png,ungp.impl.rules.member.UNGP_LowRepairTech,,,,,
 dangerous_sector,Dangerous Sector,Increase special terrain effect,Special terrain effect to combat readiness decreases x %s,1,FALSE,,graphics/ungp/icons/ungp_rules/dangerous_sector.png,ungp.impl.rules.member.UNGP_DangerousSector,,,,,
+worse_for_use,Worse For Use,D Mods penalty,Each D-Mod installed in player's ships will cause hullpoints/armor/flux capacity/flux dissipation - %s,1,FALSE,,graphics/ungp/icons/ungp_rules/worse_for_use.png,ungp.impl.rules.member.UNGP_WorseForUse,,,,,议长
 ,,,,,,,,,,,,,
 edamage_increase,Naval Arms Race,Increase enemy damage,Enemy damage x %s,3,FALSE,,graphics/ungp/icons/ungp_rules/edamage_increase.png,ungp.impl.rules.combat.UNGP_EnemyDamageIncrease,,,,,
 edamage_decrease,Guard Fleet,Increase enemy resistance ,Enemy damage taken x %s,4,FALSE,,graphics/ungp/icons/ungp_rules/edamage_decrease.png,ungp.impl.rules.combat.UNGP_EnemyDamageTakenReduction,,,,,

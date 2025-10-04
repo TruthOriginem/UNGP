@@ -96,15 +96,15 @@
     "checkSavepoint_desc": "Activate this ability to open the main menu of UNGP.\n\nYou could also press %s + %s to open that menu."
   },
   "UNGP_rules": {
-    "pick_rule_basic":"What's the rules?",
-    "pick_rule_basic1":"%s consume cost points, providing buffs",
-    "pick_rule_basic2":"%s give cost points, making the game harder",
-    "pick_rule_basic3":"%s could be only chosen once",
-    "pick_rule_basic4":"%s could be chosen when the specific %s is done",
-    "pick_rule_basic5":"Specialist mode could be activated only if cost points are larger than %s",
-    "pick_rule_challenge":"How to run the Specialist Challenge?",
-    "pick_rule_challenge1":"Could be activated if specific rules are picked",
-    "pick_rule_challenge2":"Could be activated when the level is greater than %s",
+    "pick_rule_basic": "What's the rules?",
+    "pick_rule_basic1": "%s consume cost points, providing buffs",
+    "pick_rule_basic2": "%s give cost points, making the game harder",
+    "pick_rule_basic3": "%s could be only chosen once",
+    "pick_rule_basic4": "%s could be chosen when the specific %s is done",
+    "pick_rule_basic5": "Specialist mode could be activated only if cost points are larger than %s",
+    "pick_rule_challenge": "How to run the Specialist Challenge?",
+    "pick_rule_challenge1": "Could be activated if specific rules are picked",
+    "pick_rule_challenge2": "Could be activated when the level is greater than %s",
     "pick_rule_count": "%s of %s picked",
     "pick_rule_clear": "Clear All",
     "pick_rule_min_rule_count": "Minimum rule count",
@@ -149,6 +149,7 @@
     "challenge_tip_desc1": "Player reach max level",
     "challenge_tip_desc2": "The number of positive rules must not be greater than %s",
     "challenge_tip_desc3": "The challenge prohibits the repick of rules",
+    "challenge_tip_desc4": "The challenge requires defeating at least %s deployment points of ships in combat",
     "challenge_tip_completed": "Completed",
     "challenge_tip_uncompleted": "Uncompleted",
     "challenge_tip_rules_prefix": "Required rules:",
@@ -181,5 +182,11 @@
     "ct_7": "+7%",
     "ct_77": "+77%!",
     "ct_777": "+777%!"
+  },
+  "UNGP_codex": {
+    "root_title": "UNGP - Your Next Try",
+    "specialist_title": "Specialist Mode",
+    "rule_title": "Rules",
+    "all_tag": "All Rules"
   }
 }

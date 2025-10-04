@@ -12,6 +12,7 @@ john_wick,疾速追杀,敌对舰队疯狂加速,敌对舰队行动目标为玩�
 ,,,,,,,,,,,,,
 low_repairtech,低效维修技术,削弱舰船维护,玩家舰船的维修与战备恢复速度 - %s,1,FALSE,,graphics/ungp/icons/ungp_rules/low_repairtech.png,ungp.impl.rules.member.UNGP_LowRepairTech,,,,,和莱√
 dangerous_sector,危险星域,增强特殊地形负面效果,因特殊地形造成的战备CR下降效果x %s,1,FALSE,,graphics/ungp/icons/ungp_rules/dangerous_sector.png,ungp.impl.rules.member.UNGP_DangerousSector,,,,,影之光√
+worse_for_use,积弊尤深,D插削弱舰船,玩家舰船每有一个 D-插件，结构值/装甲值/幅能容量/幅能耗散 - %s,1,FALSE,,graphics/ungp/icons/ungp_rules/worse_for_use.png,ungp.impl.rules.member.UNGP_WorseForUse,,,,,议长
 ,,,,,,,,,,,,,
 edamage_increase,海军竞争,提高敌方输出,敌方输出伤害 x %s,3,FALSE,,graphics/ungp/icons/ungp_rules/edamage_increase.png,ungp.impl.rules.combat.UNGP_EnemyDamageIncrease,,,,,议长√
 edamage_decrease,近卫军团,提高敌方抗性,敌方承受伤害 x %s,4,FALSE,,graphics/ungp/icons/ungp_rules/edamage_decrease.png,ungp.impl.rules.combat.UNGP_EnemyDamageTakenReduction,,,,,和莱√

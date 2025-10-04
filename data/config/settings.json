@@ -6,8 +6,6 @@
     "icons": {
       "UNGP_specialist_mode_logo": "graphics/ungp/icons/UNGP_specialist_mode_logo.png",
       "UNGP_intel_icon": "graphics/ungp/icons/UNGP_intel_icon.png",
-      "UNGP_itemBG": "graphics/ungp/icons/cargo/UNGP_ruleItemBG.png",
-      "UNGP_itemBG_mask": "graphics/ungp/icons/cargo/UNGP_ruleItemBG_mask.png",
       "rule_negative": "graphics/ungp/icons/negative_icon.png",
       "rule_positive": "graphics/ungp/icons/positive_icon.png",
       "rule_golden": "graphics/ungp/icons/golden_icon.png",

@@ -423,7 +423,7 @@ public class UNGP_InteractionDialog implements InteractionDialogPlugin {
                                 uiPanelPlugin.addTooltip(20f, tooltip);
                                 tooltip = uiPanelPlugin.beginTooltip(300f, true);
                                 for (UNGP_ChallengeInfo challenge : runnableChallenges) {
-                                    challenge.createTooltip(tooltip, 5f, 0);
+                                    challenge.createTooltip(tooltip, 5f, null);
                                 }
                                 uiPanelPlugin.addTooltip(300f, tooltip);
                             }

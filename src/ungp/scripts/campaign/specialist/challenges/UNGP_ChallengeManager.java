@@ -4,7 +4,6 @@ import com.fs.starfarer.api.Global;
 import ungp.scripts.campaign.UNGP_InGameData;
 import ungp.scripts.campaign.specialist.UNGP_SpecialistSettings.Difficulty;
 import ungp.scripts.campaign.specialist.intel.UNGP_ChallengeIntel;
-import ungp.scripts.campaign.specialist.intel.UNGP_ChallengeIntel.UNGP_ChallengeProgress;
 import ungp.scripts.campaign.specialist.rules.UNGP_RulesManager;
 import ungp.scripts.campaign.specialist.rules.UNGP_RulesManager.URule;
 
@@ -26,6 +25,20 @@ public class UNGP_ChallengeManager {
             UNGP_ChallengeIntel challengeIntel = (UNGP_ChallengeIntel) Global.getSector().getIntelManager().getFirstIntel(UNGP_ChallengeIntel.class);
             challengeIntel.updateChallengeProgress(inGameData);
         }
+    }
+
+    /**
+     * 获取当前进行中的挑战
+     * Get the challenges that are undergoing.
+     *
+     * @return 进行中的挑战列表
+     */
+    public static List<UNGP_ChallengeProgress> getUndergoingChallenges() {
+        if (Global.getSector().getIntelManager().hasIntelOfClass(UNGP_ChallengeIntel.class)) {
+            UNGP_ChallengeIntel challengeIntel = (UNGP_ChallengeIntel) Global.getSector().getIntelManager().getFirstIntel(UNGP_ChallengeIntel.class);
+            return challengeIntel.getUnderGoingChallenges();
+        }
+        return new ArrayList<>();
     }
 
     /**
@@ -65,6 +78,7 @@ public class UNGP_ChallengeManager {
 
 
     /**
+     * 获取当前可进行的挑战列表
      * Get challenge infos that meet the condition
      *
      * @param inGameData
@@ -75,20 +89,25 @@ public class UNGP_ChallengeManager {
     }
 
     /**
-     * Get challenge info that meet the condition
+     * 获取当前可进行的挑战列表
+     * Get challenge infos that meet the condition
      *
-     * @return
+     * @param difficulty          当前难度
+     * @param rules               当前激活的规则
+     * @param completedChallenges 已完成的挑战
+     * @return 可进行的挑战列表
      */
     public static List<UNGP_ChallengeInfo> getRunnableChallenges(Difficulty difficulty, List<URule> rules, List<String> completedChallenges) {
+        // 复制一份规则，避免修改原始数据
         rules = new ArrayList<>(rules);
-        // 低于专20无法开启挑战
+        // 低于Alpha/Omega无法开启挑战
         if (!isDifficultyEnough(difficulty))
             return new ArrayList<>();
         List<String> activeRuleIds = new ArrayList<>();
         int positiveRuleAmount = 0;
         for (URule rule : rules) {
             activeRuleIds.add(rule.getId());
-            if (rule.isBonus()) {
+            if (rule.isPositive()) {
                 positiveRuleAmount++;
             }
         }
@@ -110,10 +129,11 @@ public class UNGP_ChallengeManager {
     }
 
     /**
-     * 专家挑战需要最顶级
+     * 专家挑战需要最顶级的难度(Alpha 或 Omega)才能进行
+     * The specialist challenge requires the highest difficulty (Alpha or Omega) to be completed.
      *
-     * @param difficulty
-     * @return
+     * @param difficulty 当前难度
+     * @return 是否足够
      */
     public static boolean isDifficultyEnough(Difficulty difficulty) {
         return difficulty == Difficulty.ALPHA || difficulty == Difficulty.OMEGA;
@@ -121,6 +141,7 @@ public class UNGP_ChallengeManager {
 
     /**
      * 判断挑战是否开始，如果挑战已经开始，那无法中途变更
+     * If the challenge has already started, it cannot be changed midway.
      *
      * @return
      */
@@ -129,9 +150,10 @@ public class UNGP_ChallengeManager {
     }
 
     /**
-     * 是否重选规则被锁
+     * 如果挑战已经开始，重选规则将被锁起来，无法变更
+     * If the challenge has already started, the repick lock will be set.
      *
-     * @return
+     * @return 是否锁重选
      */
     public static boolean isRepickLockedByChallenges() {
         Map<String, Object> persistentData = Global.getSector().getPersistentData();
@@ -141,6 +163,7 @@ public class UNGP_ChallengeManager {
 
     /**
      * 设置是否锁重选
+     * Set whether the repick lock is set.
      *
      * @param lock
      */

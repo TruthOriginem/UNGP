@@ -60,7 +60,7 @@ public class UNGP_SpecialistCombatPlugin extends BaseEveryFrameCombatPlugin {
                         addMessage = true;
                     }
                     if (addMessage) {
-                        if (rule.isBonus()) {
+                        if (rule.isPositive()) {
                             bonusMessages.add(rule.generateCombatTips(difficulty));
                         } else {
                             notBonusMessages.add(rule.generateCombatTips(difficulty));

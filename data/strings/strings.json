@@ -149,6 +149,7 @@
     "challenge_tip_desc1": "玩家满级",
     "challenge_tip_desc2": "正面规则数不得大于 %s",
     "challenge_tip_desc3": "该挑战禁止重选规则",
+    "challenge_tip_desc4": "该挑战需要至少在战斗中击败 %s 部署点的舰船",
     "challenge_tip_completed": "已完成",
     "challenge_tip_uncompleted": "未完成",
     "challenge_tip_rules_prefix": "前置规则:",
@@ -180,5 +181,11 @@
     "ct_7": "+7%",
     "ct_77": "+77%!",
     "ct_777": "+777%!"
+  },
+  "UNGP_codex": {
+    "root_title": "重生 - 你的下一次尝试",
+    "specialist_title": "专家模式",
+    "rule_title": "规则",
+    "all_tag": "所有规则"
   }
 }

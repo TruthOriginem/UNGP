@@ -1,3 +1,18 @@
+2.5.0 2025/10/4
+适配0.98。
+添加数据库，查看规则内容时按F2可跳转。
+代码结构进行了部分更改。
+现在部分专家挑战需要击败一定部署点的舰船才能完成。
+
+增加负面规则：积弊尤深
+
+0.98 compatible.
+Add rule's codex.
+Modified the code structure.
+Now some challenges require defeating a certain number of DP of ships to complete.
+
+Add new negative rule: Worse For Use
+
 2.4.0 2025/9/6
 科技革命:
     效果重置，现在提高装配点的效果根据选取规则的时间增强。

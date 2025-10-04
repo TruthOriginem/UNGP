@@ -22,12 +22,12 @@ public class UNGP_Seeker extends UNGP_BaseBackgroundPlugin {
     public void initCycleBonus() {
         addCycleBonus(2, new BackgroundBonus(BackgroundBonusType.SKILL, Skills.NAVIGATION, 1));
         addCycleBonus(3, new BackgroundBonus(BackgroundBonusType.CARGO_STACK,
-                                             CargoAPI.CargoItemType.SPECIAL, new SpecialItemData(Items.MODSPEC, HullMods.EFFICIENCY_OVERHAUL), 1));
+                                             CargoAPI.CargoItemType.SPECIAL, new SpecialItemData(Items.TAG_MODSPEC, HullMods.EFFICIENCY_OVERHAUL), 1));
         addCycleBonus(4, new BackgroundBonus(BackgroundBonusType.SKILL, Skills.SALVAGING, 1));
         addCycleBonus(4, new BackgroundBonus(BackgroundBonusType.SHIP, "shepherd_Starting", 2));
         addCycleBonus(9, new BackgroundBonus(BackgroundBonusType.SKILL, Skills.MAKESHIFT_EQUIPMENT, 1));
         addCycleBonus(9, new BackgroundBonus(BackgroundBonusType.CARGO_STACK,
-                                             CargoAPI.CargoItemType.SPECIAL, new SpecialItemData(Items.MODSPEC, HullMods.AUGMENTEDENGINES), 1));
+                                             CargoAPI.CargoItemType.SPECIAL, new SpecialItemData(Items.TAG_MODSPEC, HullMods.AUGMENTEDENGINES), 1));
         addCycleBonus(16, new BackgroundBonus(BackgroundBonusType.SKILL, Skills.HULL_RESTORATION, 1));
         addCycleBonus(25, new BackgroundBonus(BackgroundBonusType.SKILL, Skills.DERELICT_CONTINGENT, 1));
     }

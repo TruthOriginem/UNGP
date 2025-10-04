@@ -11,7 +11,8 @@ import ungp.scripts.campaign.UNGP_InGameData;
 import ungp.scripts.campaign.UNGP_Settings;
 import ungp.scripts.campaign.specialist.challenges.UNGP_ChallengeInfo;
 import ungp.scripts.campaign.specialist.challenges.UNGP_ChallengeManager;
-import ungp.scripts.campaign.specialist.intel.UNGP_ChallengeIntel.UNGP_ChallengeProgress.ProgressState;
+import ungp.scripts.campaign.specialist.challenges.UNGP_ChallengeProgress;
+import ungp.scripts.campaign.specialist.challenges.UNGP_ChallengeProgress.ProgressState;
 import ungp.scripts.campaign.specialist.rules.UNGP_RulesManager;
 import ungp.scripts.campaign.specialist.rules.UNGP_RulesManager.URule;
 import ungp.scripts.ui.UIRect;
@@ -25,21 +26,6 @@ import static com.fs.starfarer.api.campaign.comm.IntelInfoPlugin.IntelSortTier.T
 import static ungp.scripts.utils.Constants.rules_i18n;
 
 public class UNGP_ChallengeIntel extends BaseIntelPlugin {
-    public static final class UNGP_ChallengeProgress {
-        public enum ProgressState {
-            RUNNING,
-            CANCELLED,
-            COMPLETED
-        }
-
-        private String challenge_id;
-        private int elapsedMonth = 0;
-        private ProgressState state = ProgressState.RUNNING;
-
-        public UNGP_ChallengeProgress(String challenge_id) {
-            this.challenge_id = challenge_id;
-        }
-    }
 
     private List<UNGP_ChallengeProgress> underGoingChallenge;
     private int monthChecker;
@@ -70,42 +56,54 @@ public class UNGP_ChallengeIntel extends BaseIntelPlugin {
         List<URule> activatedRules = inGameData.getActivatedRules();
         for (URule rule : activatedRules) {
             activeRuleIds.add(rule.getId());
-            if (rule.isBonus()) {
+            if (rule.isPositive()) {
                 positiveRuleAmount++;
             }
         }
         boolean shouldLockRepick = false;
         for (UNGP_ChallengeProgress progress : underGoingChallenge) {
             // 只对正在进行中的挑战进行更新
-            if (progress.state != ProgressState.RUNNING) continue;
-            UNGP_ChallengeInfo challengeInfo = UNGP_ChallengeManager.getChallengeInfo(progress.challenge_id);
+            if (progress.getState() != ProgressState.RUNNING) continue;
+            UNGP_ChallengeInfo challengeInfo = UNGP_ChallengeManager.getChallengeInfo(progress.getChallengeId());
 
             // 如果可以重选，才考虑问题
             if (challengeInfo.canReselectRules()) {
                 // 如果需要被取消
                 if (challengeInfo.shouldBeCancelled(positiveRuleAmount, activeRuleIds)) {
-                    progress.state = ProgressState.CANCELLED;
+                    progress.setState(ProgressState.CANCELLED);
                 }
             }
             // 如果被取消了，发送更新信息
-            if (progress.state == ProgressState.CANCELLED) {
+            if (progress.getState() == ProgressState.CANCELLED) {
                 sendUpdateIfPlayerHasIntel(progress, false);
                 continue;
             }
 
             // 检测是否完成
-            if (challengeInfo.getDurationByMonth() <= progress.elapsedMonth) {
-                if (challengeInfo.isNeedMaxLevel()) {
-                    if (UNGP_Settings.reachMaxLevel()) {
-                        progress.state = ProgressState.COMPLETED;
-                    }
-                } else {
-                    progress.state = ProgressState.COMPLETED;
-                }
+            boolean isCompleted = true;
+            isCompleted &= challengeInfo.getDurationByMonth() <= progress.getElapsedMonth();
+            // 如果需要最大等级
+            if (challengeInfo.isNeedMaxLevel()) {
+                isCompleted &= UNGP_Settings.reachMaxLevel();
             }
+            if (challengeInfo.getDpToDefeat() > 0) {
+                isCompleted &= challengeInfo.getDpToDefeat() <= progress.getDefeatedDp();
+            }
+            if (isCompleted) {
+                progress.setState(ProgressState.COMPLETED);
+            }
+            //            if (challengeInfo.getDurationByMonth() <= progress.getElapsedMonth()) {
+            //                if (challengeInfo.isNeedMaxLevel()) {
+            //                    if (UNGP_Settings.reachMaxLevel()) {
+            //                        progress.setState(ProgressState.COMPLETED);
+            //                    }
+            //                } else {
+            //                    progress.setState(ProgressState.COMPLETED);
+            //                }
+            //            }
             // 如果成功挑战
-            if (progress.state == ProgressState.COMPLETED) {
-                inGameData.completeChallenge(progress.challenge_id);
+            if (isCompleted) {
+                inGameData.completeChallenge(progress.getChallengeId());
                 sendUpdateIfPlayerHasIntel(progress, false);
                 continue;
             }
@@ -125,8 +123,8 @@ public class UNGP_ChallengeIntel extends BaseIntelPlugin {
         if (curMonth != monthChecker) {
             monthChecker = curMonth;
             for (UNGP_ChallengeProgress progress : underGoingChallenge) {
-                if (progress.state == ProgressState.RUNNING) {
-                    progress.elapsedMonth++;
+                if (progress.getState() == ProgressState.RUNNING) {
+                    progress.advanceMonth();
                 }
             }
         }
@@ -151,7 +149,7 @@ public class UNGP_ChallengeIntel extends BaseIntelPlugin {
         List<UNGP_ChallengeProgress> cancelledProgress = new ArrayList<>();
         List<UNGP_ChallengeProgress> completedProgress = new ArrayList<>();
         for (UNGP_ChallengeProgress progress : underGoingChallenge) {
-            switch (progress.state) {
+            switch (progress.getState()) {
                 case RUNNING:
                     runningProgress.add(progress);
                     break;
@@ -169,8 +167,8 @@ public class UNGP_ChallengeIntel extends BaseIntelPlugin {
             tooltip.addPara(rules_i18n.get("challenge_intel_running"), Misc.getPositiveHighlightColor(), 0f);
             tooltip.setParaFontDefault();
             for (UNGP_ChallengeProgress progress : runningProgress) {
-                UNGP_ChallengeInfo challengeInfo = UNGP_ChallengeManager.getChallengeInfo(progress.challenge_id);
-                challengeInfo.createTooltip(tooltip, 10f, progress.elapsedMonth);
+                UNGP_ChallengeInfo challengeInfo = UNGP_ChallengeManager.getChallengeInfo(progress.getChallengeId());
+                challengeInfo.createTooltip(tooltip, 10f, progress);
             }
         }
         if (!cancelledProgress.isEmpty()) {
@@ -179,7 +177,7 @@ public class UNGP_ChallengeIntel extends BaseIntelPlugin {
             tooltip.addPara(rules_i18n.get("challenge_intel_cancelled"), Misc.getNegativeHighlightColor(), 0f);
             tooltip.setParaFontDefault();
             for (UNGP_ChallengeProgress progress : cancelledProgress) {
-                UNGP_ChallengeInfo challengeInfo = UNGP_ChallengeManager.getChallengeInfo(progress.challenge_id);
+                UNGP_ChallengeInfo challengeInfo = UNGP_ChallengeManager.getChallengeInfo(progress.getChallengeId());
                 URule unlockRule = challengeInfo.getMilestoneToUnlock();
                 if (unlockRule != null) {
                     TooltipMakerAPI imageTooltip = tooltip.beginImageWithText(unlockRule.getSpritePath(), 64f);
@@ -194,7 +192,7 @@ public class UNGP_ChallengeIntel extends BaseIntelPlugin {
             tooltip.addPara(rules_i18n.get("challenge_intel_completed"), Misc.getHighlightColor(), 0f);
             tooltip.setParaFontDefault();
             for (UNGP_ChallengeProgress progress : completedProgress) {
-                UNGP_ChallengeInfo challengeInfo = UNGP_ChallengeManager.getChallengeInfo(progress.challenge_id);
+                UNGP_ChallengeInfo challengeInfo = UNGP_ChallengeManager.getChallengeInfo(progress.getChallengeId());
                 URule unlockRule = challengeInfo.getMilestoneToUnlock();
                 if (unlockRule != null) {
                     TooltipMakerAPI imageTooltip = tooltip.beginImageWithText(unlockRule.getSpritePath(), 64f);
@@ -226,10 +224,10 @@ public class UNGP_ChallengeIntel extends BaseIntelPlugin {
 
         if (listInfoParam instanceof UNGP_ChallengeProgress) {
             UNGP_ChallengeProgress progress = (UNGP_ChallengeProgress) listInfoParam;
-            UNGP_ChallengeInfo challengeInfo = UNGP_ChallengeManager.getChallengeInfo(progress.challenge_id);
+            UNGP_ChallengeInfo challengeInfo = UNGP_ChallengeManager.getChallengeInfo(progress.getChallengeId());
             Color nameColor = c;
             String desc = "";
-            switch (progress.state) {
+            switch (progress.getState()) {
                 case RUNNING:
                     nameColor = UNGP_RulesManager.getMilestoneColor();
                     desc = rules_i18n.get("challenge_intel_running");
@@ -269,7 +267,7 @@ public class UNGP_ChallengeIntel extends BaseIntelPlugin {
     public String getIcon() {
         if (listInfoParam instanceof UNGP_ChallengeProgress) {
             UNGP_ChallengeProgress progress = (UNGP_ChallengeProgress) listInfoParam;
-            UNGP_ChallengeInfo challengeInfo = UNGP_ChallengeManager.getChallengeInfo(progress.challenge_id);
+            UNGP_ChallengeInfo challengeInfo = UNGP_ChallengeManager.getChallengeInfo(progress.getChallengeId());
             URule rule = challengeInfo.getMilestoneToUnlock();
             if (rule != null) {
                 return rule.getSpritePath();
@@ -288,5 +286,9 @@ public class UNGP_ChallengeIntel extends BaseIntelPlugin {
     @Override
     public IntelSortTier getSortTier() {
         return TIER_0;
+    }
+
+    public List<UNGP_ChallengeProgress> getUnderGoingChallenges() {
+        return underGoingChallenge;
     }
 }

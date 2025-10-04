@@ -16,6 +16,7 @@ import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.Rectangle;
 import ungp.scripts.campaign.UNGP_Settings;
+import ungp.scripts.campaign.specialist.UNGP_SpecialistManager;
 import ungp.scripts.campaign.specialist.intel.UNGP_SpecialistIntel;
 import ungp.scripts.campaign.specialist.rules.UNGP_RulesManager;
 import ungp.scripts.campaign.specialist.rules.UNGP_RulesManager.URule;
@@ -82,7 +83,7 @@ public class UNGP_SpecialistWidgetPlugin implements EveryFrameScript, CampaignUI
     @Override
     public void advance(float amount) {
         if (!enabled) return;
-        if (!UNGP_RulesManager.isSpecialistMode()) return;
+        if (!UNGP_SpecialistManager.isSpecialistMode()) return;
         if (Global.getSector().isFastForwardIteration()) return;
         if (Global.getSector().isPaused()) return;
         elapsed += amount;
@@ -118,7 +119,7 @@ public class UNGP_SpecialistWidgetPlugin implements EveryFrameScript, CampaignUI
 
     @Override
     public void processCampaignInputPreFleetControl(List<InputEventAPI> events) {
-        if (UNGP_RulesManager.isSpecialistMode()) {
+        if (UNGP_SpecialistManager.isSpecialistMode()) {
             for (InputEventAPI event : events) {
                 if (event.isConsumed()) continue;
                 if (event.isLMBDownEvent() && inWidgetRect(event.getX(), event.getY())) {
@@ -149,7 +150,7 @@ public class UNGP_SpecialistWidgetPlugin implements EveryFrameScript, CampaignUI
     @Override
     public void renderInUICoordsAboveUIAndTooltips(ViewportAPI viewport) {
         if (!enabled) return;
-        if (!UNGP_RulesManager.isSpecialistMode()) return;
+        if (!UNGP_SpecialistManager.isSpecialistMode()) return;
         final CampaignUIAPI campaignUI = Global.getSector().getCampaignUI();
         if (campaignUI.isShowingDialog() || campaignUI.isShowingMenu() || campaignUI.getCurrentCoreTab() != null)
             return;
@@ -193,7 +194,7 @@ public class UNGP_SpecialistWidgetPlugin implements EveryFrameScript, CampaignUI
                 List<URule> bonusRules = new ArrayList<>();
                 List<URule> notBonusRules = new ArrayList<>();
                 for (URule rule : UNGP_RulesManager.ACTIVATED_RULES_IN_THIS_GAME) {
-                    if (rule.isBonus()) {
+                    if (rule.isPositive()) {
                         bonusRules.add(rule);
                     } else {
                         notBonusRules.add(rule);

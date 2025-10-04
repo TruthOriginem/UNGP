@@ -12,9 +12,11 @@ import ungp.scripts.campaign.everyframe.UNGP_SpecialistWidgetPlugin;
 import ungp.scripts.campaign.everyframe.UNGP_UITimeScript;
 import ungp.scripts.campaign.inherit.UNGP_InheritData;
 import ungp.scripts.campaign.specialist.UNGP_PlayerFleetMemberBuff;
+import ungp.scripts.campaign.specialist.UNGP_SpecialistManager;
 import ungp.scripts.campaign.specialist.challenges.UNGP_ChallengeManager;
-import ungp.scripts.campaign.specialist.items.UNGP_RuleItem;
+import ungp.scripts.campaign.specialist.listeners.UNGP_CampaignEventListener;
 import ungp.scripts.campaign.specialist.rules.UNGP_RulesManager;
+import ungp.scripts.codex.UNGP_CodexManager;
 import ungp.scripts.ui.UNGPFont;
 
 public class UNGP_modPlugin extends BaseModPlugin {
@@ -24,7 +26,6 @@ public class UNGP_modPlugin extends BaseModPlugin {
         UNGP_Settings.loadSettings();
 
         UNGPFont.init();
-        UNGP_RuleItem.loadSprite();
         UNGP_InheritData.loadAllSavers();
         UNGP_BackgroundManager.loadAllBackgrounds();
         // 规则与挑战
@@ -35,6 +36,7 @@ public class UNGP_modPlugin extends BaseModPlugin {
 
     @Override
     public void onGameLoad(boolean newGame) {
+        UNGP_SpecialistManager.resetCache();
         UNGP_SharedData.initialize();
         addScriptsIfNeeded();
         UNGP_RulesManager.updateRulesCache();
@@ -45,6 +47,7 @@ public class UNGP_modPlugin extends BaseModPlugin {
             Global.getSector().addScript(new UNGP_CampaignPlugin());
         }
         Global.getSector().addTransientScript(new UNGP_UITimeScript());
+        Global.getSector().addTransientListener(new UNGP_CampaignEventListener());
 
         if (UNGP_Settings.isLeftTopSpecialistWidgetShown()) {
             Global.getSector().addTransientScript(new UNGP_SpecialistWidgetPlugin());
@@ -55,6 +58,15 @@ public class UNGP_modPlugin extends BaseModPlugin {
         }
     }
 
+    @Override
+    public void onAboutToStartGeneratingCodex() {
+        UNGP_CodexManager.init();
+    }
+
+    @Override
+    public void onAboutToLinkCodexEntries() {
+        UNGP_CodexManager.setRelatedEntries();
+    }
 
     @Override
     public void configureXStream(XStream x) {

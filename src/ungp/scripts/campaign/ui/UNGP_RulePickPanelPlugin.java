@@ -23,7 +23,6 @@ import ungp.scripts.ui.UIRect;
 
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import static ungp.scripts.campaign.specialist.UNGP_SpecialistSettings.Difficulty;
@@ -87,8 +86,6 @@ public class UNGP_RulePickPanelPlugin extends BaseCustomUIPanelPlugin {
         UNGP_ChallengeManager.setTemporaryCompletedChallenges(completedChallenges);
         // 初始化后增加基本内容
         createContent();
-
-
         // 添加背景
         CustomPanelAPI customPanel = panel.createCustomPanel(pos.getWidth(), pos.getHeight(),
                                                              new UNGP_SpecialistBackgroundUI(0.8f));
@@ -117,8 +114,8 @@ public class UNGP_RulePickPanelPlugin extends BaseCustomUIPanelPlugin {
                 negativeRules.add(rule);
             }
         }
-        Collections.sort(positiveRules, new UNGP_RulesManager.UNGP_RuleSorter());
-        Collections.sort(negativeRules, new UNGP_RulesManager.UNGP_RuleSorter());
+        positiveRules.sort(new UNGP_RulesManager.UNGP_RuleSorter());
+        negativeRules.sort(new UNGP_RulesManager.UNGP_RuleSorter());
 
         // UI构筑
         UIRect[] temp;
@@ -678,7 +675,7 @@ public class UNGP_RulePickPanelPlugin extends BaseCustomUIPanelPlugin {
             TooltipMakerAPI challengeTooltip = challengeCP.createUIElement(challengeContentSect.getWidth(), challengeContentSect.getHeight(), true);
             challengeTooltip.addSpacer(5f);
             for (UNGP_ChallengeInfo runnableChallenge : runnableChallenges) {
-                runnableChallenge.createTooltip(challengeTooltip, 0f, 0);
+                runnableChallenge.createTooltip(challengeTooltip, 0f, null);
             }
             challengeCP.addUIElement(challengeTooltip);
         } else {
