@@ -17,6 +17,8 @@ public class UNGP_WorseForUse extends UNGP_MemberBuffRuleEffect {
 
     @Override
     public void applyPlayerFleetMemberInCampaign(FleetMemberAPI member) {
+        if (member == null) return;
+        if (member.getVariant() == null) return;
         int numDMods = DModManager.getNumDMods(member.getVariant());
         float penaltyMultiplier = Math.max(0.01f, (100f - numDMods * PENALTY_PER_D_MOD) * 0.01f);
         MutableShipStatsAPI stats = member.getStats();
