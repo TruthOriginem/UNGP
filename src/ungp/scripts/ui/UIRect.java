@@ -176,7 +176,8 @@ public class UIRect {
     }
 
     public UIPanelManager createSubPanel(CustomPanelAPI rootPanel, CustomUIPanelPlugin uiPlugin) {
-        if (this.rootPanel == null) setRootPanel(rootPanel);
+        removeLatestSubPanel();
+        setRootPanel(rootPanel);
         latestSubPanelManager = new UIPanelManager(rootPanel.createCustomPanel(width, height, uiPlugin), uiPlugin);
         rootPanel.addComponent(latestSubPanelManager.getPanel()).inTL(x, y);
         return latestSubPanelManager;

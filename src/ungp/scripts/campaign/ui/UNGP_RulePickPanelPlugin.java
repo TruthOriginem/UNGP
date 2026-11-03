@@ -19,6 +19,7 @@ import ungp.scripts.campaign.specialist.rules.UNGP_RulePickPresetManager;
 import ungp.scripts.campaign.specialist.rules.UNGP_RulesManager;
 import ungp.scripts.campaign.specialist.rules.UNGP_RulesManager.URule;
 import ungp.scripts.ui.CheckBoxGroup;
+import ungp.scripts.ui.UIPanelManager;
 import ungp.scripts.ui.UIRect;
 
 import java.awt.*;
@@ -633,12 +634,12 @@ public class UNGP_RulePickPanelPlugin extends BaseCustomUIPanelPlugin {
         positiveRuleSummaryContentSect.removeLatestSubPanel();
         negativeRuleSummaryContentSect.removeLatestSubPanel();
         reasonUnmetSect.removeLatestSubPanel();
-        CustomPanelAPI positivePanel = positiveRuleSummaryContentSect.createSubPanel(panel, null).getPanel();
-        CustomPanelAPI negativePanel = negativeRuleSummaryContentSect.createSubPanel(panel, null).getPanel();
-        CustomPanelAPI reasonUnmetPanel = reasonUnmetSect.createSubPanel(panel, null).getPanel();
-        TooltipMakerAPI positiveTooltip = positivePanel.createUIElement(positiveRuleSummaryContentSect.getWidth(), positiveRuleSummaryContentSect.getHeight(), true);
-        TooltipMakerAPI negativeTooltip = negativePanel.createUIElement(negativeRuleSummaryContentSect.getWidth(), negativeRuleSummaryContentSect.getHeight(), true);
-        TooltipMakerAPI reasonUnmetTooltip = reasonUnmetPanel.createUIElement(reasonUnmetSect.getWidth(), reasonUnmetSect.getHeight(), true);
+        UIPanelManager positivePanel = positiveRuleSummaryContentSect.createSubPanel(panel, null);
+        UIPanelManager negativePanel = negativeRuleSummaryContentSect.createSubPanel(panel, null);
+        UIPanelManager reasonUnmetPanel = reasonUnmetSect.createSubPanel(panel, null);
+        TooltipMakerAPI positiveTooltip = positivePanel.getPanel().createUIElement(positiveRuleSummaryContentSect.getWidth(), positiveRuleSummaryContentSect.getHeight(), true);
+        TooltipMakerAPI negativeTooltip = negativePanel.getPanel().createUIElement(negativeRuleSummaryContentSect.getWidth(), negativeRuleSummaryContentSect.getHeight(), true);
+        TooltipMakerAPI reasonUnmetTooltip = reasonUnmetPanel.getPanel().createUIElement(reasonUnmetSect.getWidth(), reasonUnmetSect.getHeight(), true);
         positiveTooltip.addSpacer(5f);
         negativeTooltip.addSpacer(5f);
         for (ButtonAPI ruleButton : allRuleButtons) {
@@ -663,29 +664,29 @@ public class UNGP_RulePickPanelPlugin extends BaseCustomUIPanelPlugin {
                 }
             }
         }
-        positivePanel.addUIElement(positiveTooltip);
-        negativePanel.addUIElement(negativeTooltip);
+        positivePanel.addComponent(positiveTooltip);
+        negativePanel.addComponent(negativeTooltip);
         totalCount = positiveCount + negativeCount;
 
         // 更新专家挑战统计
         List<UNGP_ChallengeInfo> runnableChallenges = UNGP_ChallengeManager.getRunnableChallenges(difficulty, curPickedRules, completedChallenges);
         challengeContentSect.removeLatestSubPanel();
         if (!runnableChallenges.isEmpty()) {
-            CustomPanelAPI challengeCP = challengeContentSect.createSubPanel(panel, null).getPanel();
-            TooltipMakerAPI challengeTooltip = challengeCP.createUIElement(challengeContentSect.getWidth(), challengeContentSect.getHeight(), true);
+            UIPanelManager challengePanel = challengeContentSect.createSubPanel(panel, null);
+            TooltipMakerAPI challengeTooltip = challengePanel.getPanel().createUIElement(challengeContentSect.getWidth(), challengeContentSect.getHeight(), true);
             challengeTooltip.addSpacer(5f);
             for (UNGP_ChallengeInfo runnableChallenge : runnableChallenges) {
                 runnableChallenge.createTooltip(challengeTooltip, 0f, null);
             }
-            challengeCP.addUIElement(challengeTooltip);
+            challengePanel.addComponent(challengeTooltip);
         } else {
             if (!UNGP_ChallengeManager.isDifficultyEnough(difficulty)) {
-                CustomPanelAPI challengeCP = challengeContentSect.createSubPanel(panel, null).getPanel();
-                TooltipMakerAPI challengeTooltip = challengeCP.createUIElement(challengeContentSect.getWidth(), challengeContentSect.getHeight(), true);
+                UIPanelManager challengePanel = challengeContentSect.createSubPanel(panel, null);
+                TooltipMakerAPI challengeTooltip = challengePanel.getPanel().createUIElement(challengeContentSect.getWidth(), challengeContentSect.getHeight(), true);
                 challengeTooltip.setParaOrbitronLarge();
                 challengeTooltip.addPara(rules_i18n.format("challenge_tip_difficultyNotMeet", Difficulty.ALPHA.name, Difficulty.OMEGA.name), Misc.getNegativeHighlightColor(), 10f
                                         ).setAlignment(Alignment.MID);
-                challengeCP.addUIElement(challengeTooltip);
+                challengePanel.addComponent(challengeTooltip);
             }
         }
 
@@ -722,7 +723,7 @@ public class UNGP_RulePickPanelPlugin extends BaseCustomUIPanelPlugin {
         if (isConfirmBtnEnabled) {
             reasonUnmetTooltip.addPara(rules_i18n.get("unmet_none"), Misc.getPositiveHighlightColor(), 5f);
         }
-        reasonUnmetPanel.addUIElement(reasonUnmetTooltip);
+        reasonUnmetPanel.addComponent(reasonUnmetTooltip);
         confirmBtn.setEnabled(isConfirmBtnEnabled);
     }
 

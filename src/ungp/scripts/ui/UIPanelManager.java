@@ -2,10 +2,12 @@ package ungp.scripts.ui;
 
 import com.fs.starfarer.api.campaign.CustomUIPanelPlugin;
 import com.fs.starfarer.api.ui.CustomPanelAPI;
+import com.fs.starfarer.api.ui.PositionAPI;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.ui.UIComponentAPI;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class UIPanelManager {
@@ -27,20 +29,25 @@ public class UIPanelManager {
     }
 
     public List<UIComponentAPI> getComponents() {
-        return components;
+        return Collections.unmodifiableList(components);
     }
 
-    public void addComponent(UIComponentAPI component) {
+    public PositionAPI addComponent(UIComponentAPI component) {
+        PositionAPI position;
         if (component instanceof TooltipMakerAPI) {
-            panel.addUIElement((TooltipMakerAPI) component);
+            TooltipMakerAPI tooltip = (TooltipMakerAPI) component;
+            position = panel.addUIElement(tooltip);
+            UIComponentAPI scroller = tooltip.getExternalScroller();
+            components.add(scroller != null ? scroller : component);
         } else {
-            panel.addComponent(component);
+            position = panel.addComponent(component);
+            components.add(component);
         }
+        return position;
     }
 
     public void clearAllComponents() {
         for (UIComponentAPI component : components) {
-            panel.bringComponentToTop(component);
             panel.removeComponent(component);
         }
         components.clear();

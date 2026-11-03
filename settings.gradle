@@ -1,0 +1,25 @@
+import groovy.json.JsonParserType
+import groovy.json.JsonSlurper
+
+pluginManagement {
+    repositories {
+        gradlePluginPortal()
+    }
+}
+
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        mavenCentral()
+    }
+}
+
+def modInfoFile = file("mod_info.json")
+def modInfoText = modInfoFile.readLines("UTF-8")
+        .findAll { !it.trim().startsWith("#") }
+        .join("\n")
+def modInfo = new JsonSlurper()
+        .setType(JsonParserType.LAX)
+        .parseText(modInfoText)
+
+rootProject.name = modInfo.id ?: rootDir.name

@@ -1,0 +1,176 @@
+import groovy.json.JsonParserType
+import groovy.json.JsonSlurper
+
+plugins {
+    id "java"
+}
+
+def gameRoot = rootDir.parentFile.parentFile
+def modsDir = rootDir.parentFile
+def formatterScriptsDir = file("tools/formatter")
+def pythonCommand = providers.gradleProperty("pythonCommand").getOrElse("python")
+def modInfoFile = file("mod_info.json")
+def modInfoText = modInfoFile.readLines("UTF-8")
+        .findAll { !it.trim().startsWith("#") }
+        .join("\n")
+def modInfo = new JsonSlurper()
+        .setType(JsonParserType.LAX)
+        .parseText(modInfoText)
+def modJarName = modInfo.jars ? file(modInfo.jars[0]).name : "${project.name}.jar"
+def modVersion = modInfo.version
+def modVersionName = modVersion
+        ? "${modVersion.major}.${modVersion.minor}.${modVersion.patch}"
+        : "dev"
+
+def modJarDirs = [
+    "${modsDir}/LazyLib/jars",
+    "${modsDir}/Lunalib/jars",
+    "${modsDir}/MagicLib/jars",
+]
+
+sourceSets {
+    main {
+        java {
+            srcDirs = [file("src")]
+        }
+    }
+}
+
+dependencies {
+    compileOnly fileTree(dir: "${gameRoot}/starsector-core", include: ["*.jar"])
+    modJarDirs.each { dir ->
+        compileOnly fileTree(dir: dir, include: ["*.jar"])
+    }
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = "UTF-8"
+    options.release = 17
+}
+
+tasks.named("jar") {
+    archiveFileName = modJarName
+    destinationDirectory = file("jars")
+}
+
+tasks.register("distZip", Zip) {
+    group = "distribution"
+    description = "Builds a distributable mod archive under dist."
+    dependsOn "jar"
+    archiveFileName = "${project.name}-${modVersionName}.zip"
+    destinationDirectory = file("dist")
+    from(rootDir) {
+        include "data/**"
+        include "graphics/**"
+        include "jars/**"
+        include "sounds/**"
+        include "mod_info.json"
+        include "mod_info_ENG.json"
+        include "*.txt"
+        include "*.version"
+        include "*.ini"
+        exclude "**/*.7z"
+    }
+}
+
+tasks.named("clean") {
+    delete "dist"
+}
+
+def formatterScript = { String scriptName ->
+    file("${formatterScriptsDir.path}/${scriptName}")
+}
+
+tasks.register("removeUtf8Bom", Exec) {
+    group = "formatting"
+    description = "Removes UTF-8 BOM markers from project files."
+    environment "PYTHONDONTWRITEBYTECODE", "1"
+    commandLine pythonCommand, formatterScript.call("utf8_no_bom.py")
+}
+
+tasks.register("formatLf", Exec) {
+    group = "formatting"
+    description = "Converts project text files to LF line endings."
+    dependsOn "removeUtf8Bom"
+    environment "PYTHONDONTWRITEBYTECODE", "1"
+    commandLine pythonCommand, formatterScript.call("to_lf.py")
+}
+
+tasks.register("formatJavaSpaces", Exec) {
+    group = "formatting"
+    description = "Converts Java indentation to 4 spaces."
+    dependsOn "formatLf"
+    environment "PYTHONDONTWRITEBYTECODE", "1"
+    commandLine pythonCommand, formatterScript.call("java_spaces.py")
+}
+
+tasks.register("formatJavaEof", Exec) {
+    group = "formatting"
+    description = "Normalizes Java file endings."
+    dependsOn "formatJavaSpaces"
+    environment "PYTHONDONTWRITEBYTECODE", "1"
+    commandLine pythonCommand, formatterScript.call("java_single_final_blank_line.py")
+}
+
+tasks.register("removePycache", Exec) {
+    group = "formatting"
+    description = "Removes Python __pycache__ directories."
+    dependsOn "formatJavaEof"
+    environment "PYTHONDONTWRITEBYTECODE", "1"
+    commandLine pythonCommand, formatterScript.call("remove_pycache.py")
+}
+
+tasks.register("checkUtf8Bom", Exec) {
+    group = "verification"
+    description = "Checks project files for UTF-8 BOM markers."
+    environment "PYTHONDONTWRITEBYTECODE", "1"
+    commandLine pythonCommand, formatterScript.call("utf8_no_bom.py"), "--check"
+}
+
+tasks.register("checkLf", Exec) {
+    group = "verification"
+    description = "Checks project text files for LF line endings."
+    dependsOn "checkUtf8Bom"
+    environment "PYTHONDONTWRITEBYTECODE", "1"
+    commandLine pythonCommand, formatterScript.call("to_lf.py"), "--check"
+}
+
+tasks.register("checkJavaSpaces", Exec) {
+    group = "verification"
+    description = "Checks Java indentation (4 spaces)."
+    dependsOn "checkLf"
+    environment "PYTHONDONTWRITEBYTECODE", "1"
+    commandLine pythonCommand, formatterScript.call("java_spaces.py"), "--check"
+}
+
+tasks.register("checkJavaEof", Exec) {
+    group = "verification"
+    description = "Checks Java file endings."
+    dependsOn "checkJavaSpaces"
+    environment "PYTHONDONTWRITEBYTECODE", "1"
+    commandLine pythonCommand, formatterScript.call("java_single_final_blank_line.py"), "--check"
+}
+
+tasks.register("checkPycache", Exec) {
+    group = "verification"
+    description = "Checks for Python __pycache__ directories."
+    dependsOn "checkJavaEof"
+    environment "PYTHONDONTWRITEBYTECODE", "1"
+    commandLine pythonCommand, formatterScript.call("remove_pycache.py"), "--check"
+}
+
+tasks.register("formatProject") {
+    group = "formatting"
+    description = "Formats project files."
+    dependsOn "removePycache"
+}
+
+tasks.register("verifyFormat") {
+    group = "verification"
+    description = "Checks project file formatting."
+    dependsOn "checkPycache"
+}
+
+tasks.named("check") {
+    dependsOn "verifyFormat"
+}
