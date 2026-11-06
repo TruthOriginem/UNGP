@@ -77,6 +77,7 @@
     "defaultSlotName": "Player Preset",
     "gameStartMessage": "You have loaded the UNGP Mod. Would you like to check the savepoint? (you can also use the given ability to call out the UNGP menu)",
     "specialist_mode_combat_loading": "Loading Specialist mode...Completed!",
+    "specialist_mode_combat_blocked": "Specialist rules are blocked in this battle.",
   },
   "UNGP_backgrounds": {
     "background": "Background",

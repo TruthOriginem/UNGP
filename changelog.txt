@@ -1,7 +1,23 @@
 2.6.0 2026/11/3
 修复收集者的自循环bug。
+新增正面规则：我已启动、赏金猎人、好狗不挡道。
+新增负面规则：人性考验、手滑改装、复仇之魂。
+新增成就规则：传奇技工，以及对应的专家挑战。
+新增 UNGP_CombatRulesAPI，可屏蔽下一场生涯战斗中的战斗类专家规则。
+修复“仍在成长”抽选规则时低 Cost 权重未生效的问题。
+修复英文挑战数据缺少 dpToDefeat 列，导致挑战字段错位或无法加载的问题。
+优化专家规则刷新与卸载流程，减少规则切换时的全量清理和重复开销。
+改进本地化缺失、规则缓存异常、赏金记录及持久化数据的容错与存档兼容性。
 
 Fixed the Collector's self-loop bug.
+Added positive rules: I Have Activated, Bounty Hunter, and Keep the Way Clear.
+Added negative rules: Human Nature Test, Slippery Modification, and Vengeful Spirit.
+Added the Legendary Mechanic milestone rule and its specialist challenge.
+Added UNGP_CombatRulesAPI to block combat specialist rules in the next campaign battle.
+Fixed the rule-selection weighting of Still Growing Up.
+Fixed the missing dpToDefeat column in the English challenge data, which caused challenge fields to shift or fail to load.
+Optimized specialist rule cache refresh and cleanup to reduce full sweeps and repeated work when rules change.
+Improved localization fallback, rule-cache error recovery, bounty bookkeeping, and persistent-data save compatibility.
 
 2.5.0 2025/10/4
 适配0.98。

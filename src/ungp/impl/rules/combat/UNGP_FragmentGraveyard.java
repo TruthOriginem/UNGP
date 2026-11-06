@@ -16,14 +16,14 @@ public class UNGP_FragmentGraveyard extends UNGP_BaseRuleEffect implements UNGP_
     public void updateDifficultyCache(UNGP_SpecialistSettings.Difficulty difficulty) {
         this.velBonus = getValueByDifficulty(0, difficulty);
         this.massBonus = getValueByDifficulty(1, difficulty);
-		this.breakProbBonus = getValueByDifficulty(2, difficulty);
+        this.breakProbBonus = getValueByDifficulty(2, difficulty);
     }
 
     @Override
     public float getValueByDifficulty(int index, UNGP_SpecialistSettings.Difficulty difficulty) {
         if (index == 0) return difficulty.getLinearValue(4f, 2f);
         if (index == 1) return difficulty.getLinearValue(3f, 2f);
-		if (index == 2) return difficulty.getLinearValue(50f, 50f);
+        if (index == 2) return difficulty.getLinearValue(50f, 50f);
         return 1f;
     }
 
@@ -54,6 +54,6 @@ public class UNGP_FragmentGraveyard extends UNGP_BaseRuleEffect implements UNGP_
 
     @Override
     public void applyPlayerShipInCombat(float amount, CombatEngineAPI engine, ShipAPI ship) {
-		ship.getMutableStats().getBreakProb().modifyPercent(buffID, breakProbBonus);
+        ship.getMutableStats().getBreakProb().modifyPercent(buffID, breakProbBonus);
     }
 }

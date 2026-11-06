@@ -27,6 +27,12 @@ public final class UNGP_InGameData {
     private MutableStat changeTimeStat = new MutableStat(1f); // 用于标明每年可以获得多少次重启次数
     private List<String> activatedRuleIDs = new ArrayList<>();
     private List<String> completedChallenges = new ArrayList<>();
+    // 是否在下一场生涯战斗中屏蔽战斗类专家规则，只生效一次
+    private boolean blockCombatRulesInNextBattle = false;
+    // 上一次真正写进 stats 的规则 id，卸载时据此判断需要撤回哪些规则
+    private List<String> appliedRuleIDs = new ArrayList<>();
+    // 上一次刷新规则缓存是否中途失败；为真时下一次刷新会退回全量卸载
+    private boolean ruleCacheDirty = false;
 
     public UNGP_InGameData() {
     }
@@ -36,6 +42,14 @@ public final class UNGP_InGameData {
      */
     public static UNGP_InGameData getDataInSave() {
         return UNGP_CampaignPlugin.getInstance().getInGameData();
+    }
+
+    /**
+     * @return 当前存档中的数据，不在生涯中（如主菜单的战斗任务）时返回 null
+     */
+    public static UNGP_InGameData getDataInSaveOrNull() {
+        UNGP_CampaignPlugin plugin = UNGP_CampaignPlugin.getInstanceOrNull();
+        return plugin == null ? null : plugin.getInGameData();
     }
 
     /**
@@ -99,9 +113,52 @@ public final class UNGP_InGameData {
      * @return
      */
     public List<URule> getActivatedRules() {
+        return rulesFromIds(activatedRuleIDs);
+    }
+
+    /**
+     * 上一次真正写进 stats 的规则。旧存档没有 appliedRuleIDs 字段，此时退回 activatedRuleIDs
+     * —— 旧存档里两者本来就是同一批。
+     *
+     * @return
+     */
+    public List<URule> getPreviouslyAppliedRules() {
+        // 旧存档的 XML 里没有这个字段,而 XStream 不走构造器与字段初始化器,读出来是 null
+        List<String> ids = (appliedRuleIDs == null || appliedRuleIDs.isEmpty()) ? activatedRuleIDs : appliedRuleIDs;
+        return rulesFromIds(ids);
+    }
+
+    /**
+     * 规则缓存刷新成功之后调用，记录这一轮真正 apply 的规则。
+     * 卸载阶段只撤这批规则，而不是把 86 条规则全扫一遍。
+     *
+     * @param rules
+     */
+    public void setAppliedRules(List<URule> rules) {
+        if (appliedRuleIDs == null) {
+            appliedRuleIDs = new ArrayList<>();
+        }
+        appliedRuleIDs.clear();
+        for (URule rule : rules) {
+            appliedRuleIDs.add(rule.getId());
+        }
+    }
+
+    public boolean isRuleCacheDirty() {
+        return ruleCacheDirty;
+    }
+
+    public void setRuleCacheDirty(boolean ruleCacheDirty) {
+        this.ruleCacheDirty = ruleCacheDirty;
+    }
+
+    private List<URule> rulesFromIds(List<String> ids) {
         List<URule> results = new ArrayList<>();
+        if (ids == null) {
+            return results;
+        }
         for (URule rule : UNGP_RulesManager.getAllRulesCopy()) {
-            if (activatedRuleIDs.contains(rule.getId())) {
+            if (ids.contains(rule.getId())) {
                 results.add(rule);
             }
         }
@@ -180,5 +237,21 @@ public final class UNGP_InGameData {
 
     public void setCompletedChallenges(List<String> completedChallenges) {
         this.completedChallenges = new ArrayList<>(completedChallenges);
+    }
+
+    /**
+     * 是否屏蔽下一场生涯战斗中的战斗类专家规则。
+     * 该标记保存在存档中，并且只会被下一场生涯战斗消耗一次。
+     */
+    public boolean isBlockCombatRulesInNextBattle() {
+        return blockCombatRulesInNextBattle;
+    }
+
+    /**
+     * 设置是否屏蔽下一场生涯战斗中的战斗类专家规则。
+     * 一般请使用 {@link ungp.api.UNGP_CombatRulesAPI#blockInNextBattle()}。
+     */
+    public void setBlockCombatRulesInNextBattle(boolean blockCombatRulesInNextBattle) {
+        this.blockCombatRulesInNextBattle = blockCombatRulesInNextBattle;
     }
 }

@@ -60,15 +60,30 @@ tasks.register("distZip", Zip) {
     archiveFileName = "${project.name}-${modVersionName}.zip"
     destinationDirectory = file("dist")
     from(rootDir) {
+
         include "data/**"
         include "graphics/**"
-        include "jars/**"
+        include "jars/${modJarName}"
         include "sounds/**"
+        include "src/**"
         include "mod_info.json"
         include "mod_info_ENG.json"
         include "*.txt"
         include "*.version"
         include "*.ini"
+
+        // 开发脚本、缓存与美术源文件不进发布包：它们没有被 git 追踪，
+        // 留着会让同一版本在不同机器上打出内容不同的包
+        exclude "**/*.py"
+        exclude "**/__pycache__/**"
+        exclude "**/*.zip"
+        exclude "**/*.7z"
+    }
+    from("tools/icon_tint") {
+        into "tools/icon_tint"
+        exclude "**/*.pyc"
+        exclude "**/__pycache__/**"
+        exclude "**/*.zip"
         exclude "**/*.7z"
     }
 }

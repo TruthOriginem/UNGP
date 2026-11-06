@@ -8,7 +8,7 @@ import ungp.api.rules.tags.UNGP_PlayerFleetTag;
 
 public class UNGP_Sneaker extends UNGP_BaseRuleEffect implements UNGP_PlayerFleetTag {
 
-	public static final float BONUS = 1f;
+    public static final float BONUS = 1f;
 
     @Override
     public void updateDifficultyCache(UNGP_SpecialistSettings.Difficulty difficulty) {
@@ -20,15 +20,15 @@ public class UNGP_Sneaker extends UNGP_BaseRuleEffect implements UNGP_PlayerFlee
         return 0;
     }
 
-	@Override
-	public void applyPlayerFleetStats(CampaignFleetAPI fleet) {
-		fleet.getStats().getDynamic().getMod(Stats.MOVE_SLOW_SPEED_BONUS_MOD).modifyFlat(buffID, BONUS, rule.getName());
-	}
+    @Override
+    public void applyPlayerFleetStats(CampaignFleetAPI fleet) {
+        fleet.getStats().getDynamic().getMod(Stats.MOVE_SLOW_SPEED_BONUS_MOD).modifyFlat(buffID, BONUS, rule.getName());
+    }
 
-	@Override
-	public void unapplyPlayerFleetStats(CampaignFleetAPI fleet) {
-		fleet.getStats().getDynamic().getMod(Stats.MOVE_SLOW_SPEED_BONUS_MOD).unmodifyFlat(buffID);
-	}
+    @Override
+    public void unapplyPlayerFleetStats(CampaignFleetAPI fleet) {
+        fleet.getStats().getDynamic().getMod(Stats.MOVE_SLOW_SPEED_BONUS_MOD).unmodifyFlat(buffID);
+    }
 
     @Override
     public String getDescriptionParams(int index, UNGP_SpecialistSettings.Difficulty difficulty) {

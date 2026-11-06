@@ -76,6 +76,7 @@
     "defaultSlotName": "玩家预设",
     "gameStartMessage": "您已成功加载重生(UNGP)Mod，请问您是否要立即检查并继承？\n(您也可以使用能力在游戏中呼出菜单)",
     "specialist_mode_combat_loading": "专家模式加载中...加载成功!",
+    "specialist_mode_combat_blocked": "本场战斗已屏蔽专家规则。",
   },
   "UNGP_backgrounds": {
     "background": "重生背景",

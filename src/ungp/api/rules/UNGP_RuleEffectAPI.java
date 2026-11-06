@@ -54,6 +54,9 @@ public interface UNGP_RuleEffectAPI {
      * Would be called when the rule was removed after reselection or other reasons like rules which may remove others.
      * Should only put some global cleansing code here.
      * 该规则被移除时会被调用，一般往里放清理全局数据的代码
+     * <p>
+     * 默认实现是空的：规则在 UNGP_SharedData 里保存的数据默认**不会**随卸载删除，
+     * 需要清理的规则自行覆盖本方法。
      */
     void cleanUp();
 

@@ -68,4 +68,3 @@ public class UNGP_CloseFormation extends UNGP_BaseRuleEffect implements UNGP_Com
     }
 
 }
-

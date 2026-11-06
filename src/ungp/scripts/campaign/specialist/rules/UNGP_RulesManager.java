@@ -101,6 +101,16 @@ public class UNGP_RulesManager {
      * 2.刷新玩家状态
      */
     public static void updateRulesCache() {
+        try {
+            updateRulesCacheInternal();
+        } finally {
+            // 中途抛异常时也必须复位：否则 UNGP_CampaignPlugin.advance 每帧重试、每帧再抛，
+            // 且静态缓存停在"已 clear / 已 removeListener，但新规则没 apply 完"的半清理半应用状态
+            needUpdateCache = false;
+        }
+    }
+
+    private static void updateRulesCacheInternal() {
         UNGP_InGameData inGameData = UNGP_InGameData.getDataInSave();
         if (inGameData != null) {
             LOGGER.info("Start updating rule caches...");
@@ -118,18 +128,30 @@ public class UNGP_RulesManager {
             List<URule> activatedRules = inGameData.getActivatedRules();
             CampaignFleetAPI playerFleet = Global.getSector().getPlayerFleet();
             MutableCharacterStatsAPI playerStats = Global.getSector().getPlayerStats();
-            //unapply All stats
+            // 首先锁住成就规则的随机pick，并清掉所有规则的listener
             for (URule rule : ALL_RULES) {
-                // 首先锁住成就规则的随机pick
                 rule.isMilestoneRollLocked = true;
                 UNGP_RuleEffectAPI effect = rule.getRuleEffect();
-                effect.unapplyGlobalStats();
-
-                // 清理listener
+                // listener 对全部规则清一遍：对话框流程会先 saveActivatedRules 再刷新缓存，
+                // 那时"上次生效"的记录已经变成新集合，只能靠这里兜底
                 if (effect instanceof UNGP_CampaignListenerTag) {
                     Class<?> listenerClass = ((UNGP_CampaignListenerTag<?>) effect).getClassOfListener();
                     Global.getSector().getListenerManager().removeListenerOfClass(listenerClass);
                 }
+            }
+            // 只需要卸载"可能已经写进 stats 的规则"：上次真正 apply 的 ∪ 本次记录的。
+            // 全量清扫原本是为了兜住"不知道哪些规则写进过 stats"，现在由存档里的记录来回答；
+            // 唯一例外是上次刷新中途抛过异常，那批规则只写了一半，用 ruleCacheDirty 标记来回退到全量
+            Set<URule> rulesToUnapply = new LinkedHashSet<>(inGameData.getPreviouslyAppliedRules());
+            rulesToUnapply.addAll(activatedRules);
+            if (inGameData.isRuleCacheDirty()) {
+                LOGGER.warn("Last rule cache update was interrupted; falling back to a full unapply sweep.");
+                rulesToUnapply.addAll(ALL_RULES);
+            }
+            //unapply stats
+            for (URule rule : rulesToUnapply) {
+                UNGP_RuleEffectAPI effect = rule.getRuleEffect();
+                effect.unapplyGlobalStats();
 
                 // 清理舰队rule
                 if (effect instanceof UNGP_PlayerFleetTag) {
@@ -162,6 +184,8 @@ public class UNGP_RulesManager {
             activatedRules.addAll(activatedRulesSet);
             //apply stats
             Difficulty difficulty = inGameData.getDifficulty();
+            // 先立旗：apply 期间抛异常的话，这批规则只写了一半，下一次刷新必须全量卸载
+            inGameData.setRuleCacheDirty(true);
             for (URule rule : activatedRules) {
                 ACTIVATED_RULES_IN_THIS_GAME.add(rule);
 
@@ -209,6 +233,9 @@ public class UNGP_RulesManager {
             }
             setStaticDifficulty(difficulty);
             inGameData.saveActivatedRules(activatedRules);
+            // stats 已经写完，记下这一轮真正生效的规则，下一次刷新只卸载它们
+            inGameData.setAppliedRules(activatedRules);
+            inGameData.setRuleCacheDirty(false);
             UNGP_SpecialistManager.updateCachedSpecialistMode(inGameData.isHardMode());
             UNGP_ChallengeManager.updateChallengeProgress(inGameData);
             updateSpecialistSkills(playerStats);
@@ -216,7 +243,6 @@ public class UNGP_RulesManager {
                 playerFleet.forceSync();
             LOGGER.info("Rule caches update completed.");
         }
-        needUpdateCache = false;
     }
 
     /**

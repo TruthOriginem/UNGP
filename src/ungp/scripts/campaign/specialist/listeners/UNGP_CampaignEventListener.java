@@ -2,11 +2,15 @@ package ungp.scripts.campaign.specialist.listeners;
 
 import com.fs.starfarer.api.campaign.BaseCampaignEventListener;
 import com.fs.starfarer.api.campaign.EngagementResultForFleetAPI;
+import com.fs.starfarer.api.campaign.InteractionDialogAPI;
 import com.fs.starfarer.api.combat.EngagementResultAPI;
 import com.fs.starfarer.api.fleet.FleetMemberAPI;
+import ungp.impl.rules.member.UNGP_LegendaryMechanic;
 import ungp.scripts.campaign.specialist.UNGP_SpecialistManager;
 import ungp.scripts.campaign.specialist.challenges.UNGP_ChallengeManager;
 import ungp.scripts.campaign.specialist.challenges.UNGP_ChallengeProgress;
+import ungp.scripts.campaign.specialist.rules.UNGP_RulesManager;
+import ungp.scripts.campaign.specialist.rules.UNGP_RulesManager.URule;
 
 import java.util.HashSet;
 
@@ -36,6 +40,15 @@ public class UNGP_CampaignEventListener extends BaseCampaignEventListener {
         // 自动记录击败舰船总计DP
         for (UNGP_ChallengeProgress progress : UNGP_ChallengeManager.getUndergoingChallenges()) {
             if (progress.getState() == UNGP_ChallengeProgress.ProgressState.RUNNING) progress.addDefeatedDp(damagedDp);
+        }
+    }
+
+    @Override
+    public void reportShownInteractionDialog(InteractionDialogAPI dialog) {
+        for (URule rule : UNGP_RulesManager.ACTIVATED_RULES_IN_THIS_GAME) {
+            if (rule.getRuleEffect() instanceof UNGP_LegendaryMechanic legendaryMechanic) {
+                legendaryMechanic.reportShownInteractionDialog(dialog);
+            }
         }
     }
 }

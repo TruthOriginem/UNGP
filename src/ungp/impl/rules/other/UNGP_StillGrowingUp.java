@@ -68,7 +68,7 @@ public class UNGP_StillGrowingUp extends UNGP_BaseRuleEffect implements UNGP_Cam
                     if (addedRuleIDs.contains(uRule.getId())) {
                         weight = 1;
                     } else {
-                        weight = Math.min(6 - Math.abs(uRule.getCost()), 1);
+                        weight = Math.max(6 - Math.abs(uRule.getCost()), 1);
                     }
                     // 权重：cost点数越低越有可能
                     picker.add(uRule, weight);

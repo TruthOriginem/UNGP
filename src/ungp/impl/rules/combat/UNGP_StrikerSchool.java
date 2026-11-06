@@ -28,7 +28,7 @@ public class UNGP_StrikerSchool extends UNGP_BaseRuleEffect implements UNGP_Comb
     @Override
     public String getDescriptionParams(int index, UNGP_SpecialistSettings.Difficulty difficulty) {
         if (index == 0) return getPercentString(getValueByDifficulty(index, difficulty));
-		if (index == 1) return getPercentString(getValueByDifficulty(0, difficulty));
+        if (index == 1) return getPercentString(getValueByDifficulty(0, difficulty));
         if (index == 2) return getPercentString(getValueByDifficulty(1, difficulty));
         return super.getDescriptionParams(index, difficulty);
     }
@@ -40,10 +40,10 @@ public class UNGP_StrikerSchool extends UNGP_BaseRuleEffect implements UNGP_Comb
 
     @Override
     public void applyEnemyShipInCombat(float amount, ShipAPI enemy) {
-		MutableShipStatsAPI stats = enemy.getMutableStats();
-		stats.getDynamic().getMod(Stats.REPLACEMENT_RATE_INCREASE_MULT).modifyPercent(buffID, rateMultiplier);
-		stats.getDynamic().getMod(Stats.REPLACEMENT_RATE_DECREASE_MULT).modifyMult(buffID, 1f - rateMultiplier * 0.01f);
-		stats.getFighterRefitTimeMult().modifyMult(buffID, 1f - replacementMultiplier * 0.01f);
+        MutableShipStatsAPI stats = enemy.getMutableStats();
+        stats.getDynamic().getMod(Stats.REPLACEMENT_RATE_INCREASE_MULT).modifyPercent(buffID, rateMultiplier);
+        stats.getDynamic().getMod(Stats.REPLACEMENT_RATE_DECREASE_MULT).modifyMult(buffID, 1f - rateMultiplier * 0.01f);
+        stats.getFighterRefitTimeMult().modifyMult(buffID, 1f - replacementMultiplier * 0.01f);
     }
 
     @Override

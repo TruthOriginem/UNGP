@@ -3,8 +3,16 @@
 .idea
 .build
 .gradle
+.bbcode
 build/
 !tools/
 !tools/formatter/
 !tools/formatter/*.py
-!UnofficialNewGamePlus.iml
+!tools/icon_tint/
+!tools/icon_tint/*.py
+!swapLangFile-切换语言.py
+
+# 构建产物：jar 由 gradle jar 生成，分发 zip 由 gradle distZip 生成，均不入库
+jars
+dist/
+__pycache__/

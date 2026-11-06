@@ -1,0 +1,25 @@
+# 统一行尾：工作区与仓库内一律 LF（Windows 检出不再转 CRLF）
+* text=auto eol=lf
+
+# 二进制：禁止行尾规范化
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.webp binary
+*.bmp binary
+*.tga binary
+*.ico binary
+*.psd binary
+*.ogg binary
+*.wav binary
+*.mp3 binary
+*.flac binary
+*.wma binary
+*.jar binary
+*.class binary
+*.zip binary
+*.7z binary
+*.rar binary
+*.docx binary
+*.lnk binary

@@ -27,9 +27,9 @@ public class UNGP_Thermodynamics extends UNGP_BaseRuleEffect implements UNGP_Cam
         	boolean burn = playerFleet.getAbility(Abilities.EMERGENCY_BURN) != null && playerFleet.getAbility(Abilities.EMERGENCY_BURN).isInProgress();
             if (burn) {
             	playerFleet.getStats().getFleetwideMaxBurnMod().modifyFlat(buffID, 100f, rule.getName());
-			} else {
-				playerFleet.getStats().getFleetwideMaxBurnMod().unmodifyFlat(buffID);
-			}
+            } else {
+                playerFleet.getStats().getFleetwideMaxBurnMod().unmodifyFlat(buffID);
+            }
         }
     }
 

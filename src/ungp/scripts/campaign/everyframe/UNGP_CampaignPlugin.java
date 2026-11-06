@@ -46,12 +46,22 @@ public class UNGP_CampaignPlugin implements EveryFrameScript {
     private boolean shouldShowDialog = false;
 
     public static UNGP_CampaignPlugin getInstance() {
-        UNGP_CampaignPlugin plugin = (UNGP_CampaignPlugin) Global.getSector().getPersistentData().get(KEY);
+        UNGP_CampaignPlugin plugin = getInstanceOrNull();
         if (plugin != null) {
             return plugin;
         } else {
             throw new RuntimeException("Something wrong with UNGP, you may best reboot your game...");
         }
+    }
+
+    /**
+     * @return 当前存档中的 UNGP 插件，不在生涯中（如主菜单）时返回 null
+     */
+    public static UNGP_CampaignPlugin getInstanceOrNull() {
+        if (Global.getSector() == null) {
+            return null;
+        }
+        return (UNGP_CampaignPlugin) Global.getSector().getPersistentData().get(KEY);
     }
 
     public UNGP_CampaignPlugin() {

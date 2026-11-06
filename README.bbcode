@@ -1,0 +1,164 @@
+[postbg]bg10.png[/postbg]
+
+[align=center][attachimg]19636[/attachimg][/align]
+[align=center][font=微软雅黑][size=7][b]重生 · UNGP[/b][/size][/font][/align]
+[align=center][font=Orbitron][size=4][color=#696969]Unofficial New Game Plus · 2.6.0 · Starsector 0.98a-RC8[/color][/size][/font][/align]
+
+[align=center][font=REEJI-BigYoung][size=4][b][color=#ff0000]重要提示[/color][/b][/size][/font][/align]
+[align=center][font=REEJI-BigYoung][b]本 mod 一旦加入存档，[color=#ff0000]中途不可移除[/color]。[/b][/font][/align]
+[align=center][font=REEJI-BigYoung][b][color=#2e8b57]支持更新或替换 mod 后，再使用已有重生点进行继承。[/color][/b][/font][/align]
+
+[align=center][font=REEJI-BigYoung][size=4]使用 [font=Orbitron][size=5][color=#008080][b][u]左 Ctrl + P[/u][/b][/color][/size][/font] 打开重生界面。[/size][/font][/align]
+[align=center][font=REEJI-BigYoung][size=3]也可以通过游戏内的重生能力打开该界面。[/size][/font][/align]
+
+[align=center][font=REEJI-BigYoung][b]本 mod 在一定程度上补足了旧 mod [u]SaveTransfer[/u] 的空位。[/b][/font][/align]
+[align=center][font=REEJI-BigYoung][b]开源地址：[font=Orbitron][url=https://github.com/TruthOriginem/UNGP]GitHub[/url][/font][/b][/font][/align]
+
+[align=center][font=微软雅黑][size=6][color=#a0522d][b]功能速览[/b][/color][/size][/font][/align]
+[align=left][font=REEJI-BigYoung]
+[list]
+[*][color=#800080][b]多周目继承：[/b][/color]满级后记录重生点，把资金、蓝图、周目进度和已完成的专家挑战带到下一次游戏。
+[*][color=#800080][b]重生背景：[/b][/color]新档开始后，在限定时间内选择背景，决定资金与蓝图的继承比例，并获得技能、技能点、故事点、物品或舰船等奖励。
+[*][color=#800080][b]专家模式：[/b][/color]通过 Cost 点数组合正面规则、负面规则、黄金规则和成就规则，定制每一周目的玩法。
+[*][color=#800080][b]专家挑战：[/b][/color]完成指定规则组合与挑战条件，解锁新的成就规则。
+[*][color=#800080][b]规则数据库：[/b][/color]查看规则的详细效果、来源和生涯提示；查看规则时可按 F2 跳转到对应条目。
+[*][color=#800080][b]规则预设：[/b][/color]保存并读取常用的专家模式规则组合。
+[*][color=#800080][b]Mod 联动：[/b][/color]其他 mod 可以通过公开 API 添加规则、背景，或控制下一场战斗中的战斗类专家规则。
+[/list]
+[/font][/align]
+
+[align=center][font=微软雅黑][size=6][color=#a0522d][b]一、记录重生点与开启新周目[/b][/color][/size][/font][/align]
+[align=center][spoiler=点击展开：重生界面与继承流程]
+[align=center][attachimg]19639[/attachimg][attachimg]19640[/attachimg][/align]
+[/spoiler][/align]
+
+[align=left][font=REEJI-BigYoung]
+[list]
+[*]玩家达到满级后，可以在重生菜单中记录重生点；每个存档只能记录一次。
+[*]最多可以同时保存 [color=#ff0000][b]三个重生点槽位[/b][/color]，并可在记录时选择要覆盖的槽位。
+[*]重生点会记录当前周目、玩家名称、资金、蓝图，以及已经完成的专家挑战。
+[*]默认记录舰船、战机、武器和船体插件蓝图；记录时还可以按照界面提示处理额外资金与额外蓝图。
+[*]重生点保存在游戏的 [font=Orbitron]saves/common[/font] 目录中，与普通存档分开保存。
+[*]开始新游戏后，在前 [color=#ff0000][b]1 天[/b][/color] 内打开重生菜单，即可检查并选择是否继承。
+[*]选择重生背景后，可以继承 [color=#008000][b]0%～100%[/b][/color] 的资金与蓝图，并获得对应的周目奖励。
+[*]可获得的奖励包括指定技能、技能点、故事点、特殊物品、舰船等；如果技能已经学习，会返还技能点作为补偿。
+[*]重生点在继承后不会销毁，同一个重生点可以被之后的新存档再次继承；只有达到满级后，当前存档才能再次记录新的重生点。
+[*]重生点只记录可继承的数据，不是整份存档；继承时会检查相关内容，未加载的 mod 蓝图不会计入实际获得数量。
+[/list]
+[/font][/align]
+
+[align=center][font=微软雅黑][size=6][color=#a0522d][b]二、专家模式[/b][/color][/size][/font][/align]
+[align=center][spoiler=点击展开：专家模式界面]
+[align=center][attachimg]19643[/attachimg][attachimg]46628[/attachimg][/align]
+[/spoiler][/align]
+
+[align=left][font=REEJI-BigYoung]
+[list]
+[*]在新档的继承设置中，可以选择是否开启专家模式，并为本周目配置规则。
+[*]专家等级分为 [color=#ff0000][b]Gamma、Beta、Alpha、Omega[/b][/color] 四级；不同等级对应不同的规则数量和效果范围。
+[*]专家模式会限制可选规则的最小数量与最大数量；所有规则的 Cost 合计必须大于等于 0 才能确认。
+[/list]
+
+[align=center][font=微软雅黑][size=4][b]规则类型[/b][/size][/font][/align]
+[list]
+[*][color=#008000][b]正面规则：[/b][/color]消耗 Cost 点数，为之后的游戏提供增益。
+[*][color=#ff0000][b]负面规则：[/b][/color]提供 Cost 点数，为游戏增加限制和风险。
+[*][color=#daa520][b]黄金规则：[/b][/color]同一时间只能选择一条，通常拥有独特效果。
+[*][color=#800080][b]成就规则：[/b][/color]完成专家挑战后解锁的特殊规则。
+[/list]
+
+[align=center][font=微软雅黑][size=4][b]专家挑战[/b][/size][/font][/align]
+[list]
+[*]专家等级为 Alpha 或 Omega 时，可以根据当前规则组合开启专家挑战。
+[*]挑战条件可能包括：维持指定规则数月、保持规则直到满级、限制正面规则数量、挑战期间不能重选规则，或在战斗中击败指定部署点的舰船。
+[*]完成挑战后，会在之后的周目中解锁对应的成就规则。
+[*]专家模式每年可以获得一次重选规则的机会，但专家等级在当前周目内固定；重选规则也可能导致进行中的专家挑战失败。
+[/list]
+
+[align=center][font=微软雅黑][size=4][b]规则查看与管理[/b][/size][/font][/align]
+[list]
+[*]在规则选择界面查看详细效果、生涯提示、规则来源和当前周目的适用情况。
+[*]通过规则数据库浏览规则内容；查看规则时按 [font=Orbitron][b]F2[/b][/font] 可跳转到对应条目。
+[*]使用规则预设保存或读取常用的规则组合。
+[*]战斗类规则可以单独设置是否在模拟战中生效。
+[/list]
+[/font][/align]
+
+[align=center][font=微软雅黑][size=6][color=#a0522d][b]三、专家模式规则联动 Mod[/b][/color][/size][/font][/align]
+[align=center][font=REEJI-BigYoung][size=3][color=#696969][b]专家模式提供公开 API，其他 mod 可以接入并添加自己的规则或背景。[/b][/color][/size][/font][/align]
+[align=center][font=REEJI-BigYoung][size=3][color=#696969][b]规则详情与接入示例请参阅 GitHub 源码。[/b][/color][/size][/font][/align]
+
+[align=center]
+[url=https://www.fossic.org/thread-3680-1-1.html]势力争霸（Nexerelin）[/url]
+[url=https://www.fossic.org/thread-12850-1-1.html]重生拓展－前世阵营重生（UNGP-PreviousLife）[/url]
+[url=https://www.fossic.org/thread-9460-1-1.html]重生规则拓展（Unofficial Rule Book）[/url]
+[url=https://www.fossic.org/forum.php?mod=viewthread&tid=236]趋光议会（ApproLight）[/url]
+[url=https://www.fossic.org/forum.php?mod=viewthread&tid=2607&fromuid=2]海鲜船包（Seafood Shipworks）[/url]
+[url=https://www.fossic.org/forum.php?mod=viewthread&tid=273]地质协会（Kantech-Terraform-Association）[/url]
+[url=https://www.fossic.org/forum.php?mod=viewthread&tid=780]北极星之首（Polaris Prime）[/url]
+[url=https://www.fossic.org/thread-1429-1-1.html]伊甸流亡舰队（Idoneus Citadel Exiles）[/url]
+[/align]
+
+[align=center][font=微软雅黑][size=6][color=#a0522d][b]四、存档迁移[/b][/color][/size][/font][/align]
+[align=left][font=REEJI-BigYoung]
+重生点和预设都保存在游戏根目录的 [font=Orbitron]saves/common[/font] 中。
+
+在不同游戏版本之间迁移时，将旧版游戏根目录下的 [font=Orbitron]saves/common[/font] 文件夹复制到新版游戏根目录的相同位置即可。
+[/font][/align]
+
+[align=center][font=微软雅黑][size=6][color=#a0522d][b]五、下载与版本记录[/b][/color][/size][/font][/align]
+[align=left][font=REEJI-BigYoung][b]当前版本：0.98a-RC8 / 2.6.0[/b][/font][/align]
+[align=left][font=REEJI-BigYoung]前置 Mod：LazyLib、MagicLib[/font][/align]
+[align=left][attach]69946[/attach][/align]
+
+[align=left][spoiler=点击展开：旧版下载]
+[align=left][b]0.97[/b][/align]
+[align=left][attach]46627[/attach][/align]
+[align=left][b]0.96[/b][/align]
+[align=left][attach]30302[/attach][/align]
+[align=left][b]0.951[/b][/align]
+[align=left][attach]19634[/attach][/align]
+[align=left][b]上版本[/b][/align]
+[align=left][attach]15505[/attach][/align]
+[align=left][b]0.95[/b][/align]
+[align=left][attach]13058[/attach][/align]
+[align=left][b]0.9.1[/b][/align]
+[align=left][attach]1728[/attach][/align]
+[/spoiler][/align]
+
+[align=left][spoiler=点击展开：更新记录]
+[align=left][b]2.6.0 · 2026/11/3[/b][/align]
+[list]
+[*]修复“收集者”规则的自循环问题。
+[/list]
+
+[align=left][b]2.5.0 · 2025/10/4[/b][/align]
+[list]
+[*]适配 Starsector 0.98。
+[*]添加规则数据库，查看规则内容时可按 F2 跳转。
+[*]调整代码结构。
+[*]部分专家挑战现在要求在战斗中击败指定部署点的舰船。
+[*]增加负面规则“积弊尤深”。
+[/list]
+
+[align=left][b]2.4.0 · 2025/9/6[/b][/align]
+[list]
+[*]重做“科技革命”的效果曲线：从规则选取时的 25% 开始，在之后 4 年内逐渐提升至 100%。
+[*]“伏击艺术家”的基础维持时间增加 2 秒。
+[/list]
+[/spoiler][/align]
+
+[align=center][font=微软雅黑][size=6][color=#a0522d][b]参与人员[/b][/color][/size][/font][/align]
+[align=center][font=REEJI-BigYoung]
+主创：Originem　　代码协助：AnyIDElse
+
+翻译：RUA、Fax、ILLEXIUS
+
+图标提供：Originem、影之光、和莱
+
+建议及创意：海鲜群的诸位
+
+感谢：Game-icons.net、15.ai
+[/font][/align]
+
+[align=center][font=Orbitron][url=https://github.com/TruthOriginem/UNGP][b]GitHub 开源地址[/b][/url][/font][/align]
